@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>請假系統 DEMO</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+ 
+  
+<!-- Select2 -->
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="plugins/iCheck/all.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+<!-- Bootstrap time Picker -->
+<link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css"> 
+<!-- Bootstrap fileupload -->
+<link href="plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/skins/skin-blue-light.min.css">
+  <link rel="stylesheet" href="dist/css/footable.bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/wabow.css?v=7">
+  
+  <!-- REQUIRED JS SCRIPTS -->
+  <!-- jQuery 2.2.3 -->
+  <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+	<script src="dist/js/footable.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+	<script src="dist/js/app.min.js"></script>
+
+	
+
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- date-range-picker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap time picker -->
+<script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- Bootstrap fileupload -->
+<script src="plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
+
+<!-- Page script -->
+<script>
+  $(function () {
+    $(".clickable-row").click(function(e) {
+      if($(e.target).hasClass('ignore')) return;
+
+      var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+      var clicked = e.target.nodeName.toLowerCase();
+      if($.inArray(clicked, ignore) > -1) return;
+
+      if($(e.target).hasClass('footable-toggle')) return;
+      
+      window.location = $(this).data('href');
+    });
+
+    //注意 footable 與 icheck 若同時用，程式有順序問題，icheck script 必須在 footable 之後
+    $('.table').footable();
+    $('.footable-toggle').on('click',function(){
+      if($(this).hasClass('fooicon-plus')) {
+        $(this).removeClass('fooicon-plus').addClass('fooicon-minus');
+        return;
+      }
+      if($(this).hasClass('fooicon-minus')) {
+        $(this).removeClass('fooicon-minus').addClass('fooicon-plus');
+        return;
+      }
+    });
+
+    $('#checkall').on('ifChecked ifUnchecked',function(evant){
+      if(evant.type == 'ifChecked')
+        $('.check').iCheck('check');
+      else
+        $('.check').iCheck('uncheck');
+    });
+    
+    var $leave_dayrange           = $('#leave_dayrange');
+    var $leave_timepicker         = $('#leave_timepicker');
+    var $leave_dayrange_allday    = $('#leave_dayrange_allday');
+    var $leave_dayrange_morning   = $('#leave_dayrange_morning');
+    var $leave_dayrange_afternoon = $('#leave_dayrange_afternoon');
+    var $leave_spent_hours        = $('#leave_spent_hours');
+    var $label_leave_spent_hours  = $('#label_leave_spent_hours');
+    var $label_leave_dayrange     = $('#label_leave_dayrange');
+    var $div_leave_spent_hours    = $('#div_leave_spent_hours');
+    var $div_leave_dayrange       = $('#div_leave_dayrange');
+    var $input_leave_type_id      = $("input[name='leave\[type_id\]']");
+    var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+    var $div_leave_notic_person   = $("#div_leave_notic_person");
+
+    var leave_type_arr = ['kindness-leave','birthday-leave','annual-leave','special-leave'];
+    var leave_type_single_arr = ['kindness-leave','birthday-leave','special-leave'];
+    var daterangepicker_type = 'isDate';
+    
+    //Flat red color scheme for iCheck
+    $('input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    //通知對象
+    $div_leave_notic_person.hide();
+    $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    $input_leave_notic_person.on('ifChanged', function(event){
+      if(event.target.value == 'none') {
+        if(event.target.checked == true)
+          $div_leave_notic_person.hide();
+        else
+          $div_leave_notic_person.show();
+
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+        });
+      } else if (event.target.value == 'all') {
+        if(event.target.checked == true){
+          $input_leave_notic_person.each(function(){
+            if($(this).val() != 'none') $(this).iCheck('check');
+          });
+        }else{
+          $input_leave_notic_person.each(function(){
+            $(this).iCheck('uncheck');
+          });
+        }
+      }
+    });
+
+    //檢查哪些假別已用完
+    $input_leave_type_id.each(function(){
+      if($(this).attr('hour') == 0) $(this).iCheck('disable');
+      if($(this).iCheck('update')[0].checked === true){
+        fetchDaterangepicker();
+        if($.inArray($(this).val(), leave_type_arr) !== -1){
+          $div_leave_spent_hours.hide();
+          $label_leave_spent_hours.hide();
+        }else{
+          $div_leave_dayrange.hide();
+          $label_leave_dayrange.hide();
+        }
+      }
+    });
+
+    //請假類別檢查
+    $input_leave_type_id.on('ifChecked', function(event){
+      var mydata = $(this).val();
+      if($.inArray(mydata, leave_type_arr) !== -1) {
+        daterangepicker_type = 'isDate';
+        if($.inArray(mydata, leave_type_single_arr) !== -1) daterangepicker_type = 'isSingleDate';
+
+        //只要選到單一天，則將請假時段全開，並預設選擇 allday
+        $("input[name='leave\[dayrange\]']").iCheck('enable'); 
+        $leave_dayrange_allday.iCheck('check');
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == 'kindness-leave') {
+          $leave_dayrange_allday.iCheck('disable');
+          $leave_dayrange_allday.iCheck('uncheck');
+          $leave_dayrange_morning.iCheck('check');
+        }
+
+        $div_leave_spent_hours.hide();
+        $label_leave_spent_hours.hide();
+
+        $div_leave_dayrange.show();
+        $label_leave_dayrange.show();
+      }else{
+        $div_leave_spent_hours.show();
+        $label_leave_spent_hours.show();
+
+        $div_leave_dayrange.hide();
+        $label_leave_dayrange.hide();
+
+        daterangepicker_type = 'isDatetime';
+      }
+
+      fetchDaterangepicker();
+    });
+
+    //代理人、通知對象
+    $(".select2").select2({width: '100%'});
+
+    //日期選擇器
+    function fetchDaterangepicker(){
+      var options = {};
+      
+      options.locale = {format: 'YYYY-MM-DD'};
+      if(daterangepicker_type == 'isSingleDate') options.singleDatePicker = true;
+      if(daterangepicker_type == 'isDatetime') {
+        options.timePicker = true;
+        options.timePickerIncrement = 30;
+        options.timePicker24Hour = true;
+        options.locale = {format: 'YYYY-MM-DD HH:mm'};
+      }
+
+      $leave_timepicker.daterangepicker(options);
+      $leave_timepicker.val('');
+      $leave_spent_hours.val('');
+
+      $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
+        var myStartDate = new Date(picker.startDate);
+        var myEndDate = new Date(picker.endDate);
+
+        //計算小時
+        var hour = Math.round((myEndDate - myStartDate) / (1000*60*60));
+        $leave_spent_hours.val(hour);
+
+        //若天數 > 1則，不給選擇上午與下午
+        if(daterangepicker_type == 'isDate') {
+          var day = Math.round((myEndDate - myStartDate)/(24*60*60*1000));
+
+          if(day > 1) {
+            $leave_dayrange_morning.iCheck('disable');
+            $leave_dayrange_afternoon.iCheck('disable');
+            $leave_dayrange_allday.iCheck('check');
+          }else{
+            $leave_dayrange_morning.iCheck('enable');
+            $leave_dayrange_afternoon.iCheck('enable');
+          }
+        }
+      });
+
+      $leave_timepicker.on('show.daterangepicker', function(ev, picker) {
+          $('.hourselect option').each(function(){
+            if($(this).val() < 9 || $(this).val() > 18) $(this).remove(); 
+          });
+      });
+
+      $leave_timepicker.on('cancel.daterangepicker', function(ev, picker) {
+          $(this).val('');
+      });
+    }
+  });
+</script>
+
+
+
+
+
+
+
+  
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini">
+<div class="wrapper">
+
+  <!-- Main Header -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><img src="dist/img/wabow_logo.png"></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>哇寶</b>請假系統</span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- Notifications Menu -->
+          <li class="dropdown notifications-menu">
+            <!-- Menu toggle button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">10</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 10 notifications</li>
+              <li>
+                <!-- Inner Menu: contains the notifications -->
+                <ul class="menu">
+                  <li><!-- start notification -->
+                    <a href="#">
+                      <i class="fa fa-users text-aqua"></i> 5 張假單尚未審核
+                    </a>
+                  </li>
+                  <!-- end notification -->
+                </ul>
+              </li>
+              <li class="footer"><a href="#">View all</a></li>
+            </ul>
+          </li>
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- The user image in the navbar-->
+              <img src="dist/img/dio.png" class="user-image" alt="Dio">
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span class="hidden-xs">Dio</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- The user image in the menu -->
+              <li class="user-header">
+                <img src="dist/img/dio.png" class="img-circle" alt="Dio">
+
+                <p>
+                  Dio
+                  <small>Member since 09 Oct. 2013</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <li class="user-body">
+                <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">待審核<br><span class="label label-danger">100小時</span></a>
+                  </div>
+                </div>
+                <!-- /.row -->
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-right">
+                  <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="dist/img/dio.png" class="img-circle" alt="Dio">
+        </div>
+        <div class="pull-left info">
+          <p>Dio</p>
+          <!-- Status -->
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu">
+        <li class="">
+          <a href="./index.html"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+        </li>
+        <li class="header">PERSONAL</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class=""><a href="leave_form2.html"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class="">
+          <a href="leave.html"><i class="fa fa-calendar"></i> <span>我的假單</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="header">Agent</li>
+        <li class="">
+          <a href="leave_agent_prove.html">
+            <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="">
+          <a href="leave_agent.html">
+            <i class="fa fa-github-alt"></i> <span>我是代理人</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="header">MINI-MANAGER</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">3</small>
+          </span>
+              </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="header">MANAGER</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">3</small>
+          </span>
+              </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="header">BOSS</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">1</small>
+          </span>
+              </a>
+        </li>
+        <li class="header">HUMAN-RESOURCE</li>
+        <li class="">
+          <a href="leave_hr.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">2</small>
+            </span>
+          </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="natural_disaster.html"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
+        </li>
+      <!--<li class="">
+          <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
+        </li>-->
+        <li class="treeview ">
+          <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="system_conf.html"><i class="fa fa-circle-o"></i>系統設定</a></li>
+            <li class=""><a href="teams.html"><i class="fa fa-circle-o"></i>團隊設定</a></li>
+            <li class=""><a href="users.html"><i class="fa fa-circle-o"></i>員工管理</a></li>
+          </ul>
+        </li>
+        <li class="treeview ">
+          <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="leave_type.html"><i class="fa fa-circle-o"></i>假別管理</a></li>
+            <li class=""><a href="holidies.html"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+          </ul>
+        </li>
+		    <li class="treeview ">
+          <a href="#"><i class="fa fa-bar-chart"></i> <span>月/年報表</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="report.html"><i class="fa fa-circle-o"></i>報表</a></li>
+            <li class=""><a href="report-annual-leave.html"><i class="fa fa-circle-o"></i>特休報表</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<link rel="stylesheet" type="text/css" href="../../../examples/resources/syntax/shCore.css">
+	<link rel="stylesheet" type="text/css" href="../../../examples/resources/demo.css">
+	<script type="text/javascript" language="javascript" src="../../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../examples/resources/syntax/shCore.js"></script>
+	<script type="text/javascript" language="javascript" src="../../../examples/resources/demo.js"></script>
+
+	<title>FixedHeader examples - FixedHeader examples</title>
+</head>
+
+<body class="dt-example">
+	<div class="container">
+		<section>
+			<h1>FixedHeader example <span>FixedHeader examples</span></h1>
+
+			<div class="info">
+				<p>At times it can be useful to ensure that column titles will remain always visible on a table, even
+				when a user scrolls down a table. The FixedHeader plug-in for DataTables will float the <code class=
+				"tag" title="HTML tag">thead</code> element above the table at all times to help address this issue.
+				The column titles also remain click-able to perform sorting. Key features include:</p>
+
+				<ul class="markdown">
+					<li>Fix the header to the top of the window</li>
+					<li>Ability to fix the footer and left / right columns as well</li>
+					<li>z-Index ordering options</li>
+				</ul>
+			</div>
+		</section>
+	</div>
+
+	<section>
+		<div class="footer">
+			<div class="gradient"></div>
+
+			<div class="liner">
+				<div class="toc">
+					<div class="toc-group">
+						<h3><a href="./index.html">Examples</a></h3>
+						<ul class="toc">
+							<li><a href="./simple.html">Basic initialisation</a></li>
+							<li><a href="./header_footer.html">Header and footer fixed</a></li>
+							<li><a href="./top_left_right.html">Header, left and right all fixed</a></li>
+							<li><a href="./two_tables.html">Multiple tables</a></li>
+							<li><a href="./zIndexes.html">z-index order control</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="epilogue">
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full
+					information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and
+					<a href="http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of
+					DataTables.</p>
+
+					<p class="copyright">DataTables designed and created by <a href=
+					"http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2014<br>
+					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.0
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2016-2017 <a href="http://www.wabow.com" target="_blank">WABOW</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane active" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:;">
+              <i class="menu-icon fa fa-file-text-o bg-blue"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">人事規章</h4>
+
+                <p>Rules</p>
+              </div>
+            </a>
+          </li>
+		  <li>
+            <a href="javascript:;">
+              <i class="menu-icon fa fa-wrench bg-red"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">異常回報</h4>
+
+                <p>Error Report</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

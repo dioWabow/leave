@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>請假系統 DEMO</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+ 
+  
+<!-- Select2 -->
+<link rel="stylesheet" href="plugins/select2/select2.min.css">
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="plugins/iCheck/all.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+<!-- Bootstrap time Picker -->
+<link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css"> 
+<!-- Bootstrap fileupload -->
+<link href="plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
+
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/skins/skin-blue-light.min.css">
+  <link rel="stylesheet" href="dist/css/footable.bootstrap.min.css">
+  <link rel="stylesheet" href="dist/css/wabow.css?v=7">
+  
+  <!-- REQUIRED JS SCRIPTS -->
+  <!-- jQuery 2.2.3 -->
+  <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+	<script src="dist/js/footable.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+	<script src="dist/js/app.min.js"></script>
+
+	
+
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- date-range-picker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap time picker -->
+<script src="plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- Bootstrap fileupload -->
+<script src="plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
+
+<!-- Page script -->
+<script>
+  $(function () {
+    $(".clickable-row").click(function(e) {
+      if($(e.target).hasClass('ignore')) return;
+
+      var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+      var clicked = e.target.nodeName.toLowerCase();
+      if($.inArray(clicked, ignore) > -1) return;
+
+      if($(e.target).hasClass('footable-toggle')) return;
+      
+      window.location = $(this).data('href');
+    });
+
+    //注意 footable 與 icheck 若同時用，程式有順序問題，icheck script 必須在 footable 之後
+    $('.table').footable();
+    $('.footable-toggle').on('click',function(){
+      if($(this).hasClass('fooicon-plus')) {
+        $(this).removeClass('fooicon-plus').addClass('fooicon-minus');
+        return;
+      }
+      if($(this).hasClass('fooicon-minus')) {
+        $(this).removeClass('fooicon-minus').addClass('fooicon-plus');
+        return;
+      }
+    });
+
+    $('#checkall').on('ifChecked ifUnchecked',function(evant){
+      if(evant.type == 'ifChecked')
+        $('.check').iCheck('check');
+      else
+        $('.check').iCheck('uncheck');
+    });
+    
+    var $leave_dayrange           = $('#leave_dayrange');
+    var $leave_timepicker         = $('#leave_timepicker');
+    var $leave_dayrange_allday    = $('#leave_dayrange_allday');
+    var $leave_dayrange_morning   = $('#leave_dayrange_morning');
+    var $leave_dayrange_afternoon = $('#leave_dayrange_afternoon');
+    var $leave_spent_hours        = $('#leave_spent_hours');
+    var $label_leave_spent_hours  = $('#label_leave_spent_hours');
+    var $label_leave_dayrange     = $('#label_leave_dayrange');
+    var $div_leave_spent_hours    = $('#div_leave_spent_hours');
+    var $div_leave_dayrange       = $('#div_leave_dayrange');
+    var $input_leave_type_id      = $("input[name='leave\[type_id\]']");
+    var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+    var $div_leave_notic_person   = $("#div_leave_notic_person");
+
+    var leave_type_arr = ['kindness-leave','birthday-leave','annual-leave','special-leave'];
+    var leave_type_single_arr = ['kindness-leave','birthday-leave','special-leave'];
+    var daterangepicker_type = 'isDate';
+    
+    //Flat red color scheme for iCheck
+    $('input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    //通知對象
+    $div_leave_notic_person.hide();
+    $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    $input_leave_notic_person.on('ifChanged', function(event){
+      if(event.target.value == 'none') {
+        if(event.target.checked == true)
+          $div_leave_notic_person.hide();
+        else
+          $div_leave_notic_person.show();
+
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+        });
+      } else if (event.target.value == 'all') {
+        if(event.target.checked == true){
+          $input_leave_notic_person.each(function(){
+            if($(this).val() != 'none') $(this).iCheck('check');
+          });
+        }else{
+          $input_leave_notic_person.each(function(){
+            $(this).iCheck('uncheck');
+          });
+        }
+      }
+    });
+
+    //檢查哪些假別已用完
+    $input_leave_type_id.each(function(){
+      if($(this).attr('hour') == 0) $(this).iCheck('disable');
+      if($(this).iCheck('update')[0].checked === true){
+        fetchDaterangepicker();
+        if($.inArray($(this).val(), leave_type_arr) !== -1){
+          $div_leave_spent_hours.hide();
+          $label_leave_spent_hours.hide();
+        }else{
+          $div_leave_dayrange.hide();
+          $label_leave_dayrange.hide();
+        }
+      }
+    });
+
+    //請假類別檢查
+    $input_leave_type_id.on('ifChecked', function(event){
+      var mydata = $(this).val();
+      if($.inArray(mydata, leave_type_arr) !== -1) {
+        daterangepicker_type = 'isDate';
+        if($.inArray(mydata, leave_type_single_arr) !== -1) daterangepicker_type = 'isSingleDate';
+
+        //只要選到單一天，則將請假時段全開，並預設選擇 allday
+        $("input[name='leave\[dayrange\]']").iCheck('enable'); 
+        $leave_dayrange_allday.iCheck('check');
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == 'kindness-leave') {
+          $leave_dayrange_allday.iCheck('disable');
+          $leave_dayrange_allday.iCheck('uncheck');
+          $leave_dayrange_morning.iCheck('check');
+        }
+
+        $div_leave_spent_hours.hide();
+        $label_leave_spent_hours.hide();
+
+        $div_leave_dayrange.show();
+        $label_leave_dayrange.show();
+      }else{
+        $div_leave_spent_hours.show();
+        $label_leave_spent_hours.show();
+
+        $div_leave_dayrange.hide();
+        $label_leave_dayrange.hide();
+
+        daterangepicker_type = 'isDatetime';
+      }
+
+      fetchDaterangepicker();
+    });
+
+    //代理人、通知對象
+    $(".select2").select2({width: '100%'});
+
+    //日期選擇器
+    function fetchDaterangepicker(){
+      var options = {};
+      
+      options.locale = {format: 'YYYY-MM-DD'};
+      if(daterangepicker_type == 'isSingleDate') options.singleDatePicker = true;
+      if(daterangepicker_type == 'isDatetime') {
+        options.timePicker = true;
+        options.timePickerIncrement = 30;
+        options.timePicker24Hour = true;
+        options.locale = {format: 'YYYY-MM-DD HH:mm'};
+      }
+
+      $leave_timepicker.daterangepicker(options);
+      $leave_timepicker.val('');
+      $leave_spent_hours.val('');
+
+      $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
+        var myStartDate = new Date(picker.startDate);
+        var myEndDate = new Date(picker.endDate);
+
+        //計算小時
+        var hour = Math.round((myEndDate - myStartDate) / (1000*60*60));
+        $leave_spent_hours.val(hour);
+
+        //若天數 > 1則，不給選擇上午與下午
+        if(daterangepicker_type == 'isDate') {
+          var day = Math.round((myEndDate - myStartDate)/(24*60*60*1000));
+
+          if(day > 1) {
+            $leave_dayrange_morning.iCheck('disable');
+            $leave_dayrange_afternoon.iCheck('disable');
+            $leave_dayrange_allday.iCheck('check');
+          }else{
+            $leave_dayrange_morning.iCheck('enable');
+            $leave_dayrange_afternoon.iCheck('enable');
+          }
+        }
+      });
+
+      $leave_timepicker.on('show.daterangepicker', function(ev, picker) {
+          $('.hourselect option').each(function(){
+            if($(this).val() < 9 || $(this).val() > 18) $(this).remove(); 
+          });
+      });
+
+      $leave_timepicker.on('cancel.daterangepicker', function(ev, picker) {
+          $(this).val('');
+      });
+    }
+  });
+</script>
+
+
+
+
+
+
+
+  
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini">
+<div class="wrapper">
+
+  <!-- Main Header -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><img src="dist/img/wabow_logo.png"></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>哇寶</b>請假系統</span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- Notifications Menu -->
+          <li class="dropdown notifications-menu">
+            <!-- Menu toggle button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning">10</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 10 notifications</li>
+              <li>
+                <!-- Inner Menu: contains the notifications -->
+                <ul class="menu">
+                  <li><!-- start notification -->
+                    <a href="#">
+                      <i class="fa fa-users text-aqua"></i> 5 張假單尚未審核
+                    </a>
+                  </li>
+                  <!-- end notification -->
+                </ul>
+              </li>
+              <li class="footer"><a href="#">View all</a></li>
+            </ul>
+          </li>
+          <!-- User Account Menu -->
+          <li class="dropdown user user-menu">
+            <!-- Menu Toggle Button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <!-- The user image in the navbar-->
+              <img src="dist/img/dio.png" class="user-image" alt="Dio">
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span class="hidden-xs">Dio</span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- The user image in the menu -->
+              <li class="user-header">
+                <img src="dist/img/dio.png" class="img-circle" alt="Dio">
+
+                <p>
+                  Dio
+                  <small>Member since 09 Oct. 2013</small>
+                </p>
+              </li>
+              <!-- Menu Body -->
+              <li class="user-body">
+                <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
+                  </div>
+                  <div class="col-xs-4 text-center">
+                    <a href="#">待審核<br><span class="label label-danger">100小時</span></a>
+                  </div>
+                </div>
+                <!-- /.row -->
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <div class="pull-right">
+                  <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="dist/img/dio.png" class="img-circle" alt="Dio">
+        </div>
+        <div class="pull-left info">
+          <p>Dio</p>
+          <!-- Status -->
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu">
+        <li class="">
+          <a href="./index.html"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+        </li>
+        <li class="header">PERSONAL</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class=""><a href="leave_form2.html"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class="">
+          <a href="leave.html"><i class="fa fa-calendar"></i> <span>我的假單</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="header">Agent</li>
+        <li class="">
+          <a href="leave_agent_prove.html">
+            <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="">
+          <a href="leave_agent.html">
+            <i class="fa fa-github-alt"></i> <span>我是代理人</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">3</small>
+            </span>
+          </a>
+        </li>
+        <li class="header">MINI-MANAGER</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">3</small>
+          </span>
+              </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="header">MANAGER</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">3</small>
+          </span>
+              </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="header">BOSS</li>
+        <li class="">
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+                <span class="pull-right-container">
+            <small class="label pull-right bg-red">1</small>
+          </span>
+              </a>
+        </li>
+        <li class="header">HUMAN-RESOURCE</li>
+        <li class="">
+          <a href="leave_hr.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-red">2</small>
+            </span>
+          </a>
+        </li>
+        <li class="">
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="natural_disaster.html"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
+        </li>
+      <!--<li class="">
+          <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
+        </li>-->
+        <li class="treeview ">
+          <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="system_conf.html"><i class="fa fa-circle-o"></i>系統設定</a></li>
+            <li class=""><a href="teams.html"><i class="fa fa-circle-o"></i>團隊設定</a></li>
+            <li class=""><a href="users.html"><i class="fa fa-circle-o"></i>員工管理</a></li>
+          </ul>
+        </li>
+        <li class="treeview ">
+          <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="leave_type.html"><i class="fa fa-circle-o"></i>假別管理</a></li>
+            <li class=""><a href="holidies.html"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+          </ul>
+        </li>
+		    <li class="treeview ">
+          <a href="#"><i class="fa fa-bar-chart"></i> <span>月/年報表</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class=""><a href="report.html"><i class="fa fa-circle-o"></i>報表</a></li>
+            <li class=""><a href="report-annual-leave.html"><i class="fa fa-circle-o"></i>特休報表</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <h1 id="change-log-bootstrap-fileinput">Change Log: <code>bootstrap-fileinput</code></h1>
+
+<h2 id="version-443-under-development">version 4.4.3 (<em>under development</em>)</h2>
+
+<p><strong>Date:</strong> 28-Jun-2017</p>
+
+<ul>
+  <li>(enh #1006): Update Farsi Translations.</li>
+</ul>
+
+<h2 id="version-442">version 4.4.2</h2>
+
+<p><strong>Date:</strong> 24-Jun-2017</p>
+
+<ul>
+  <li>(enh #1005): Update Dutch Translations.</li>
+  <li>(enh #1004): New Krajee Explorer Font Awesome Theme.</li>
+  <li>(bug #995): Correct and fix image load jquery event triggering for browser cache scenarios.</li>
+  <li>(enh #991): Add Azerbaijan Translations.</li>
+  <li>(enh #990): Ability to hide thumbnail content (<code>hideThumbnailContent</code>) and display only file name/size.</li>
+  <li>(enh #989): Update Chinese Translations.</li>
+  <li>(enh #987): Zoom preview arrows orientation for RTL.</li>
+  <li>(enh #986): Image width parsing and styling enhancements.</li>
+  <li>(enh #985): Do not reset input when upload fails (single-upload mode).</li>
+  <li>(enh #981): Update Hungarian Translations.</li>
+  <li>(enh #977): Add RTL capability (new property <code>rtl</code> to be set) - includes new <code>fileinput-rtl.css</code> (to be loaded after <code>fileinput.css</code> for RTL styling).</li>
+  <li>(enh #973): Add SCSS image path variable and file-image alt style updates.</li>
+</ul>
+
+<h2 id="version-441">version 4.4.1</h2>
+
+<p><strong>Date:</strong> 25-May-2017</p>
+
+<ul>
+  <li>(enh #980): Add new method <code>getFrames</code> to get all thumbnail frames as jQuery objects.</li>
+  <li>(enh #979): Add new method <code>getExif</code> to retrieve exif data for a selected jpeg image.</li>
+  <li>(enh #978, #974): Implement exif restoration for resized images via <a href="https://github.com/hMatoba/piexifjs"><code>piexif</code> plugin</a>.</li>
+  <li>(enh #968): Update Turkish Translations.</li>
+  <li>(enh #967): Correct file caption display for ajax upload mode when <code>showPreview</code> is <code>false</code>.</li>
+</ul>
+
+<h2 id="version-440">version 4.4.0</h2>
+
+<p><strong>Date:</strong> 13-May-2017</p>
+
+<ul>
+  <li>(enh #966): Add Estonian Translations.</li>
+  <li>(enh #965): New <code>required</code> and <code>msgFileRequired</code> properties.</li>
+  <li>(bug #958): Create <code>setTokens</code> string helper for easier replacement of tokens.</li>
+  <li>(bug #956): Correct initial preview file thumb deletions.</li>
+  <li>(bug #955): Remove unnecessary <code>sourceMappingUrl</code> in <code>purify.min.js</code>.</li>
+  <li>(enh #954): Add minified theme assets.</li>
+  <li>(enh #952): Auto orientation of image based on EXIF data (new property <code>autoOrientImage</code>).</li>
+  <li>(enh #950, #930): Add responsive support for Krajee Explorer theme for mobile devices.</li>
+  <li>(enh #949): Sortable plugin enhancements and prevent scroll when dragging on mobile devices.</li>
+  <li>Chronological ordering of issues for change log.</li>
+  <li>(enh #947): Correct <code>showDelete</code> validation in <code>fileActionSettings</code>.</li>
+  <li>(enh #946): Enhance iconic preview validation to ignore extension case if possible.</li>
+  <li>(enh #944): Publish v4.3.9 release to NPM.</li>
+  <li>(enh #942): Enhance indicator and drag templates. New layout template <code>indicator</code>.</li>
+  <li>(enh #941): Correct <code>data-fileindex</code> validation.</li>
+  <li>(bug #940): Correct validation of <code>initialPreviewShowDelete</code>.</li>
+  <li>(enh #936): Enhance custom validation when ajax abort is triggered via event manipulation.</li>
+  <li>(enh #934): Update Russian translations.</li>
+  <li>(enh #929): Add Norwegian translations.</li>
+  <li>(enh #926): Add Galician translations and update Spanish translations.</li>
+  <li>(enh #924): Update Farsi Translations.</li>
+  <li>(enh #921): Enhance zoom preview slide-show to show loading indicator during image change.</li>
+  <li>(enh #920): Cancel ajax abort action more correctly.</li>
+  <li>(bug #919): Fix resize validation.</li>
+  <li>Parse all numeric properties correctly.</li>
+  <li>(enh #915): Update default styling for zoom preview for object.</li>
+  <li>(enh #910): New property <code>resizeIfMoreThan</code> to control image resize conditionally.</li>
+  <li>(bug #899): Fix multiple file selection for non-ajax scenario.</li>
+  <li>(enh #477): Enhance and correct IE10 fileinput click misbehavior.</li>
+</ul>
+
+<h2 id="version-439">version 4.3.9</h2>
+
+<p><strong>Date:</strong> 02-Apr-2017</p>
+
+<ul>
+  <li>(enh #914): Update Portuguese BR translations.</li>
+  <li>(enh #913): Better id parsing and resetting of uploaded file thumbnails.</li>
+  <li>Enhance zoom preview styling for Krajee Explorer theme.</li>
+  <li>More correct validation of <code>allowedFileTypes</code> to accept null values.</li>
+  <li>(enh #909): Update German Translations.</li>
+  <li>(enh #906): Add Swedish Translations.</li>
+  <li>(enh #905): Prevent duplicate files to be dragged and dropped.</li>
+  <li>(enh #902): Enhance zoom preview styling for large height images.</li>
+  <li>(bug #900): Correct <code>overwriteInitial</code> validation for async batch uploads returning dynamic initial preview post upload.</li>
+  <li>(enh #898): New plugin method to get files in preview and config.</li>
+  <li>(enh #894, #895): Correct file size validation for empty files.</li>
+  <li>(bug #893): Correct <code>file-success-remove</code> event handling.</li>
+  <li>(bug #890): Fix doubling of images for async bulk uploads when initial preview is returned via ajax response.</li>
+  <li>Enhance uploaded thumb frames to not reset or change the frame identifier after successful upload.</li>
+  <li>(enh #887): New properties <code>msgUploadBegin</code> and <code>msgUploadEnd</code> to display a better progress status. The <code>layoutTemplates.progress</code> will support a new token <code>{status}</code>.</li>
+  <li>Enhance events like <code>fileclear</code> and <code>filepreajax</code> to be aborted via <code>event.preventDefault()</code>.</li>
+  <li>(enh #886): Append zoom modal dialog to <code>body</code> element if available to avoid multiple BS modals conflict. </li>
+  <li>(bug #885): Correct validation for <code>allowedFileTypes</code>. </li>
+  <li>(enh #875): Reset form based events more correctly to allow multiple bootstrap file inputs within forms.</li>
+  <li>(bug #882): Correct image resize validation.</li>
+  <li>(enh #881): Update Spanish Translations.</li>
+  <li>(enh #863): New plugin method <code>zoom</code> with parameter <code>frameId</code> to allow custom triggering of zoomed preview for each thumbnail frame.</li>
+</ul>
+
+<h2 id="version-438">version 4.3.8</h2>
+
+<p><strong>Date:</strong> 21-Feb-2017</p>
+
+<ul>
+  <li>(enh #879): Update Russian Translations.</li>
+  <li>(enh #876): Update Spanish Translations.</li>
+  <li>(enh #874): Enhance/Standardize CSS Styles for Krajee Default Theme.</li>
+  <li>(bug #872): Correct typo in <code>bootstrap.min.css</code>.</li>
+  <li>(bug #870): Correct config.width parsing.</li>
+</ul>
+
+<h2 id="version-437">version 4.3.7</h2>
+
+<p><strong>Date:</strong> 11-Feb-2017</p>
+
+<ul>
+  <li>(enh #862): Launch a brand new Krajee theme: <code>explorer</code>.</li>
+  <li>(enh #861): New properties within <code>layoutTemplates</code>.</li>
+  <li>(enh #860): Initialize template defaults in a better manner.</li>
+  <li>(enh #859): Enhance and revamp preview caching.</li>
+  <li>(enh #858): Thumb Frame CSS class as configurable property.</li>
+  <li>(enh #857): Default error handling for unknown ajax errors.</li>
+  <li>(enh #854): Better file size calculation and display.</li>
+  <li>(bug #852): Ensure <code>frameClass</code> setting in <code>initialPreviewConfig</code> is considered. </li>
+  <li>(enh #851): Create Kazakh Translations. </li>
+  <li>(enh #847): Update German Translations. </li>
+  <li>(enh #662, #725): Enhance preview modal to be appended to body before each zoom action (if <code>body</code> tag exists). </li>
+  <li>(enh #844): Display zoom preview navigation buttons only when multiple files exist.</li>
+  <li>(bug #839): Correct <code>initialPreview</code> generation and sortable behavior for async uploads.</li>
+  <li>(enh #837): Update Czech Translations.</li>
+  <li>(enh #835): Update Polish Translations.</li>
+  <li>(bug #834): Correct clearing of file preview including zoom cache.</li>
+  <li>(bug #833): Correct validation and defaults init for <code>allowedPreviewTypes</code>.</li>
+  <li>(enh #831): Update Finnish Translations.</li>
+  <li>(enh #828): Allow drag sort of single uploaded thumbnails with <code>initialPreview</code> config set (post upload).</li>
+  <li>(bug #826): Extend language configuration to consider defaults.</li>
+  <li>(bug #825): Correct <code>fileimagesresized</code> event triggering.</li>
+  <li>(enh #824): Add Korean Translations.</li>
+  <li>(enh #823): Correct file indices assignment during validation of images.</li>
+  <li>(enh #822): Enhancement for preventing upload when data is empty. New property <code>msgUploadEmpty</code> has been incorporated.</li>
+  <li>(enh #820): Prevent resize if image is smaller than allowed dimensions.</li>
+  <li>(bug #819): Correct init preview auto replace post <code>uploadSingle</code> action in thumbnails.</li>
+  <li>(enh #816): New property <code>msgFileTypes</code> to control descriptions/localizations of file types displayed.</li>
+  <li>(enh #815): Enhance parsing of thumbnails that are visible in preview (will allow plugin to be 
+ initialized in hidden containers like tabs).</li>
+  <li>(enh #812): Update Greek Translations.</li>
+</ul>
+
+<h2 id="version-436">version 4.3.6</h2>
+
+<p><strong>Date:</strong> 17-Dec-2016</p>
+
+<ul>
+  <li>(enh #809): Various enhancements for preview control and iconic thumbnails.
+    <ul>
+      <li>add ability to control and render different previews for file thumbnails and zoomed preview content</li>
+      <li>new property <code>preferIconicPreview</code> will try to parse the <code>previewFileIconSettings</code> and <code>previewFileExtSettings</code> to automatically force iconic previews for file thumbnails.</li>
+      <li>new property <code>preferIconicZoomPreview</code> will try to parse the <code>previewFileIconSettings</code> and <code>previewFileExtSettings</code> to automatically force iconic previews in the zoomed content.</li>
+      <li>the above properties will be applied and parsed for <code>initialPreview</code> content as well.</li>
+    </ul>
+  </li>
+  <li>(enh #804): Add Slovenian Translations.</li>
+  <li>(enh #803): Update Hungarian Translations.</li>
+  <li>(enh #802): Allow MOV files preview for supported devices and browsers.</li>
+  <li>(enh #800): Update Spanish Translations.</li>
+  <li>(enh #799): Fix IE memory issue on image load.</li>
+  <li>(enh #791): Auto orientation of images based on EXIF data.</li>
+  <li>(enh #788): New validation for minimum file size:
+    <ul>
+      <li>new property <code>minFileSize</code> which validates the minimum file size in KB for upload, else throws
+a validation error using <code>msgSizeTooSmall</code>. This defaults to <code>0</code>.</li>
+      <li>if <code>minFileSize</code> is set to <code>null</code>, then above validation is skipped and no minimum file size 
+check is performed.</li>
+    </ul>
+  </li>
+  <li>(enh #782): New validation for invalid slug file name (caption):
+    <ul>
+      <li>if slug callback returns an empty string, then an error will be thrown using <code>msgInvalidFileName</code>.</li>
+      <li>if slug callback returns <code>false</code> then the next file will be read and current file skipped.</li>
+    </ul>
+  </li>
+  <li>(enh #779, #789): More correct thumbnail identification post rearrange.</li>
+  <li>(enh #769, #785, #786, #787): Better image resized event handling.</li>
+  <li>(enh #771): Update Chinese Translations.</li>
+  <li>(enh #764): Update Russian Translations.</li>
+  <li>(enh #696): Better default preview zoom settings.</li>
+</ul>
+
+<h2 id="version-435">version 4.3.5</h2>
+
+<p><strong>Date:</strong> 20-Sep-2016</p>
+
+<ul>
+  <li>(bug #758): Correct file slug name parsing for an invalid file extension.</li>
+  <li>(bug #753): Correct IE11 file clear bug when using without ajax.</li>
+  <li>(enh #745): Update Russian Translations.</li>
+  <li>(enh #741): Update Vietnamese Translations.</li>
+  <li>(enh #736): Update Portugese Brazilian Translations.</li>
+  <li>(bug #734): Correct right parsing of <code>fileuploaded</code> event params.</li>
+</ul>
+
+<h2 id="version-434">version 4.3.4</h2>
+
+<p><strong>Date:</strong> 07-Aug-2016</p>
+
+<ul>
+  <li>(enh #731): New method <code>getFilesCount</code> for returning upl + non-upl files count.</li>
+  <li>(enh #730): Correct Romanian Translations.</li>
+  <li>(enh #729): Implement <code>progressUploadThreshold</code> to show processing when waiting for server response.</li>
+  <li>(enh #728): Change sortable plugin name to avoid conflict with JUI Sortable.</li>
+  <li>(bug #722): Correctly concat ajax output in initial preview.</li>
+  <li>(enh #721): Update Turkish Translations.</li>
+  <li>(enh #719): Pass right <code>previewId</code> to <code>fileuploaded</code> event.</li>
+  <li>(enh #718): Update Japanese Translations.</li>
+  <li>(enh #715): Reset caption correctly on clear.</li>
+  <li>Add contribution templates.</li>
+  <li>(bug #710): Fix bug for <code>ifSet</code> validation.</li>
+</ul>
+
+<h2 id="version-433">version 4.3.3</h2>
+
+<p><strong>Date:</strong> 09-Jul-2016</p>
+
+<ul>
+  <li>(enh #706): Remove invalid files from filestack correctly for validation errors.</li>
+  <li>(enh #704): Add grammatically correct &quot;No files selected&quot; message.</li>
+  <li>(enh #702): Add files to stack correctly for max &amp; min preview size validation.</li>
+  <li>(bug #700): Fix custom preview icons to be displayed and validated correctly.</li>
+  <li>(enh #698): Re-enable drag and drop support for IE Edge.</li>
+  <li>(enh #695): Update Spanish Translations.</li>
+  <li>(enh #680): Populate filestack for files greater than maxFilePreviewSize.</li>
+</ul>
+
+<h2 id="version-432">version 4.3.2</h2>
+
+<p><strong>Date:</strong> 11-Jun-2016</p>
+
+<ul>
+  <li>(enh #674): Organize all themes in a separate <code>themes</code> folder.</li>
+  <li>(enh #666): Update sortable draggable selector.</li>
+  <li>(enh #655): Include sass styling configuration.</li>
+  <li>(enh #654): Update Spanish Translations.</li>
+  <li>(enh #650, #676): Ability to configure browse button display and file select via zone click.
+    <ul>
+      <li>New boolean property <code>showBrowse</code> that allows you to control the display of the browse button</li>
+      <li>New boolean property <code>browseOnZoneClick</code> that allows you to select a file:
+        <ul>
+          <li><strong>for ajax uploads</strong> - by clicking on the preview drag/drop zone </li>
+          <li><strong>for form based/non-ajax uploads</strong> - by setting <code>defaultPreviewContent</code> and that will be clickable to browse files</li>
+        </ul>
+      </li>
+      <li>New string message property <code>dropZoneClickTitle</code> that will be appended to the <code>dragZoneTitle</code> for ajax uploads when <code>browseOnZoneClick</code> is <code>true</code>.</li>
+      <li>New template <code>actionDrag</code> will be available within <code>layoutTemplates</code> to configure your drag indicator markup.</li>
+    </ul>
+  </li>
+  <li>(enh #647): Display file size in previews and templates.</li>
+  <li>Enhancements to file preview icons (<code>other</code> template).</li>
+  <li>Simpler naming for files in locales and themes folders.</li>
+  <li>(enh #643):Implement rearranging / sorting functionality for initial preview. 
+    <ul>
+      <li>Add ability to rearrange and sort thumbnails by drag &amp; drop. This feature will use the <a href="https://github.com/RubaXa/Sortable">Sortable plugin</a> which will be included in the <code>js/plugins</code> folder.</li>
+      <li>This feature will be available only for <strong>initial preview thumbnails</strong> for both ajax and form uploads.</li>
+      <li>New property for drag indicator and drag behavior configurations will be included in <code>fileActionSettings</code>:
+        <ul>
+          <li><code>showDrag</code></li>
+          <li><code>dragIcon</code></li>
+          <li><code>dragClass</code></li>
+          <li><code>dragTitle</code></li>
+          <li><code>dragSettings</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>(enh #642): Reorganize JS code into proper folders. Following folders will be added/maintained
+    <ul>
+      <li><code>locales</code>: all translation JS files will be located here</li>
+      <li><code>themes</code>: all theme JS files will be located here</li>
+      <li><code>plugins</code>: third party JS plugins that will be used to work with bootstrap-fileinput</li>
+    </ul>
+  </li>
+  <li>(enh #641): Wrap readFile(index + 1) in a function to prevent 'unsafe-eval' blocking with CSP.</li>
+  <li>(enh #640): Ability to theme and provide font awesome theme. New property <code>theme</code> added.</li>
+  <li>(enh #639): Add ability to just require package in nodejs</li>
+  <li>(enh #636): File action enhancements.
+    <ul>
+      <li>Zoom and Drag buttons will be shown as an additional file action buttons in addition to <code>upload</code> and <code>remove</code></li>
+      <li>New boolean properties <code>showZoom</code>, <code>showDrag</code>, <code>showRemove</code>, <code>showUpload</code> are now added to <code>fileActionSettings</code> to control display of these buttons</li>
+      <li>New properties <code>zoomIcon</code>, <code>zoomClass</code>, <code>zoomTitle</code> are available within <code>fileActionSettings</code> for controlling the zoom button styles and display.</li>
+      <li>New properties <code>dragIcon</code>, <code>dragClass</code>, <code>dragTitle</code> are available within <code>fileActionSettings</code> for controlling the drag indicator styles and display.</li>
+      <li>New properties <code>actionZoom</code> and <code>actionDrag</code> are available within <code>layoutTemplates</code> to configure the markup of the zoom and drag buttons.</li>
+    </ul>
+  </li>
+  <li>(enh #635): Various preview enhancements. Previews will be revamped with various functionality:
+    <ul>
+      <li>Add ability to zoom every thumbnail to a modal preview. So all types of files (images, videos, pdf, text etc) can be previewed in a larger zoom dialog window.</li>
+      <li>Automatic slideshow like interface for zoom preview modal. One can navigate left or right to view previous or next content in the preview. In addition to button navigation, keyboard navigation (via left/right arrow keys) is also available.</li>
+      <li>Borderless maximized mode and Full Screen mode available for preview.</li>
+      <li>Auto disable the previous or next button when the first or last file/image is reached.</li>
+      <li>Now <code>initialPreview</code> can be setup MORE easier without writing or returning entire markup. Thus the new functionality will enable to use built in <code>previewTemplates</code>.  </li>
+      <li>A new boolean property <code>initialPreviewAsData</code> is available to control the above. If set to <code>true</code>, it will allow developers to now pass just the data within <code>initialPreview</code> (instead of complete markup) and the markup will be auto generated using <code>previewTemplates</code>.</li>
+      <li>New property <code>initialPreviewFileType</code> to set the default file type for initial preview. Defaults to <code>image</code>. Must be on of the keys in <code>fileTypeSettings</code>.</li>
+      <li>All the other settings can be controlled via <code>initialPreviewConfig</code>. The new properties available within <code>initialPreviewConfig</code> are:
+        <ul>
+          <li><code>type</code>: Override <code>initialPreviewFileType</code> at global level and set a separate type for each file in the initial preview.</li>
+          <li><code>previewAsData</code>: boolean property to override the <code>initialPreviewAsData</code> setting at global level</li>
+        </ul>
+      </li>
+      <li>New zoom preview control buttons:
+        <ul>
+          <li><code>prev</code></li>
+          <li><code>next</code></li>
+          <li><code>fullscreen</code></li>
+          <li><code>borderless</code></li>
+          <li><code>toggleheader</code></li>
+          <li><code>close</code></li>
+        </ul>
+      </li>
+      <li>The other new settings to control zoomed preview:
+        <ul>
+          <li><code>previewZoomSettings</code>: Will allow to set the CSS style (e.g. width, height and other CSS style settings) for each zoomed content type (i.e. <code>image</code>, <code>pdf</code>, <code>video</code> etc.).</li>
+          <li><code>previewZoomButtonIcons</code>: Ability to set the labels for previous, next, fullscreen, borderless, and close buttons.</li>
+          <li><code>previewZoomButtonTitles</code>: Ability to set the titles for previous, next,  fullscreen, borderless, and close buttons.</li>
+          <li><code>previewZoomButtonClasses</code>:  Ability to set the CSS classes for previous, next,  fullscreen, borderless, and close buttons.</li>
+        </ul>
+      </li>
+      <li>Modifications to all language locales JS for accomodating new translations</li>
+    </ul>
+  </li>
+  <li>(enh #634): Enhance ability for PDF and HTML preview.
+    <ul>
+      <li>Enhanced PDF support as PDF embedding is now possible for <code>initialPreview</code>. In addition a new template for PDF is available within <code>previewTemplates</code>.</li>
+      <li>HTML Preview is enhanced with a better template. The plugin also now includes support for <code>DOMPurify</code> plugin (and available in plugins folder). This processes and cleans the HTML from XSS before previewing. This behavior can be controlled via <code>purifyHtml</code> property that defaults to <code>true</code>.</li>
+    </ul>
+  </li>
+  <li>(enh #633): New property <code>maxFilePreviewSize</code> to control preview of large size files.</li>
+  <li>(enh #632): Find correct filename in IE9.</li>
+  <li>(enh #618): Update German Translations.</li>
+  <li>(enh #615): Correct Finnish Localizations.</li>
+  <li>(enh #605): Fixed previewCache tags reset.</li>
+  <li>(enh #604): Fixed unset method in deleting previewCache index.</li>
+  <li>(enh #600): Synchronize latest package on NuGet.</li>
+  <li>(bug #595): Correct initialization of <code>allowedPreviewTypes</code>.</li>
+</ul>
+
+<h2 id="version-431">version 4.3.1</h2>
+
+<p><strong>Date:</strong> 28-Feb-2016</p>
+
+<ul>
+  <li>(bug #577): Better label spacing for default browse icon.</li>
+  <li>(bug #576): Correct previewCache initialization.</li>
+  <li>(enh #575): Implement public method chaining and update docs for methods.</li>
+  <li>(enh #574): Change naming convention for private / internal methods. Prepend internal plugin methods with underscore <code>_</code>.</li>
+  <li>(enh #573): Update package.json to include <code>peerDependencies</code>.</li>
+  <li>(enh #572): Add Finnish Translations.</li>
+  <li>(enh #567): New properties and improved messages.</li>
+  <li>(enh #565): Enhance progress bar display when upload is aborted or cancelled.</li>
+  <li>(enh #560): Update French Translations.</li>
+  <li>(enh #559): Allow custom error display styles (e.g. via bootstrap dialog) through these changes:
+    <ul>
+      <li>added <code>msg</code> param in <code>fileerror</code>, <code>fileuploaderror</code>, and <code>filefoldererror</code> events.</li>
+    </ul>
+  </li>
+  <li>(enh #557): Enhance default file type parsing to intelligently not render unpreviewable content.</li>
+  <li>(enh #555): Set default value for <code>removeFromPreviewOnError</code> to <code>false</code>.</li>
+  <li>(enh #554): Update documentation and demos to include <code>webkitdirectory</code> for upload.</li>
+  <li>(enh #514): Set default value for <code>removeFromPreviewOnError</code> to <code>false</code>.</li>
+</ul>
+
+<h2 id="version-430">version 4.3.0</h2>
+
+<p><strong>Date:</strong> 25-Jan-2016</p>
+
+<ul>
+  <li>(enh #550): Correct Drag and drop issue with v4.2.9.</li>
+</ul>
+
+<h2 id="version-429">version 4.2.9</h2>
+
+<p><strong>Date:</strong> 22-Jan-2016</p>
+
+<ul>
+  <li>(enh #545): Refactor code to deep extend options correctly.</li>
+  <li>(enh #541): Improve default slug callback to accept most characters.</li>
+  <li>(enh #534, enh #535): Ability to remove errored file thumbnails via <code>removeFromPreviewOnError</code>.</li>
+  <li>(enh #531): Enhance/Fix typos of Arabic translation.</li>
+  <li>(enh #530): Error alert box and preview thumbnail styling enhancements.</li>
+  <li>(enh #523): Add new branch <code>sass</code> for <code>bootstrap-sass-official</code> support.</li>
+  <li>(enh #521): Update Dutch Translations.</li>
+  <li>(enh #489): Update documentation for <code>change</code> and <code>fileselect</code> events.</li>
+</ul>
+
+<h2 id="version-428">version 4.2.8</h2>
+
+<p><strong>Date:</strong> 18-Nov-2015</p>
+
+<ul>
+  <li>(enh #494): Add Indonesian translations.</li>
+  <li>(enh #490): Fix <code>zh-TW</code> translation <code>browseLabel</code> wording.</li>
+  <li>(enh #488): Publish to npm.</li>
+  <li>(bug #483): Clear and reset native input after uploading each single file thumbnail.</li>
+  <li>(enh #481): Universal Module Definition for use with CommonJS, AMD or browser globals.</li>
+  <li>(enh #474): Upload via button within each preview thumbnail skips last file for async uploads.</li>
+  <li>(enh #477): Fix IE10 specific styling bug for file input block button.</li>
+  <li>(enh #465): Add Català translations.</li>
+  <li>(enh #462): Responsive buttons and new property <code>buttonLabelClass</code>.</li>
+  <li>(enh #460): Update CSS selectors prefix to start with <code>file</code>.</li>
+  <li>(enh #454): Update Turkish Translations.</li>
+  <li>(enh #449): Add Arabic Translations.</li>
+  <li>Implement package.json.</li>
+  <li>Update bootstrap bower version to support only 3.x variants.</li>
+</ul>
+
+<h2 id="version-427">version 4.2.7</h2>
+
+<p><strong>Date</strong>: 13-Sep-2015</p>
+
+<ul>
+  <li>(bug #442); Enhance the filenames parsing in the filestack and slug conversion.</li>
+  <li>(enh #437): New property <code>defaultPreviewContent</code> to control a default preview.</li>
+  <li>(enh #436): New property <code>showClose</code> and new layout template <code>close</code> to control close icon display.</li>
+  <li>(enh #434): Added Japanese translations.</li>
+  <li>(enh #433): Added new events for image handling.
+    <ul>
+      <li><code>fileimageloaded</code> (fires after each image is loaded in preview) - this is an existing event</li>
+      <li><code>fileimagesloaded</code> (fires after all images are loaded in preview)</li>
+      <li><code>fileimageresized</code> (fires after each image in preview is resized)</li>
+      <li><code>fileimagesresized</code> (fires after all images in preview are resized)</li>
+      <li><code>fileimageresizeerror</code> (fires when any image resize error is faced)</li>
+    </ul>
+  </li>
+  <li>(enh #432): Send slugged file names with the file blob when uploading via ajax.</li>
+  <li>(enh #431): Add Danish locale translations.</li>
+  <li>(bug #429): Fix for MS Edge bug that does not support drag and drop.</li>
+  <li>(enh #428): Enhancements to asynchronous uploads when <code>showPreview</code> is <code>false</code>.</li>
+  <li>(enh #427): Add image resizing capability before upload.</li>
+  <li>(bug #420): Revamp file status progress and positioning updates for asynchronous upload.</li>
+</ul>
+
+<h2 id="version-426">version 4.2.6</h2>
+
+<p><strong>Date</strong>: 26-Aug-2015</p>
+
+<ul>
+  <li>(enh #426): Enhancements to progress bar and display thumbnail specific progress.</li>
+  <li>(enh #413): Various updates to translations.</li>
+  <li>(enh #412): Enhancements to file upload cancellation.</li>
+  <li>(enh #410): Better validation for IE 10 and below.</li>
+  <li>(enh #405): Create traditional Chinese translations.</li>
+  <li>(enh #401): Various enhancements to preview file thumbnails and error validations.</li>
+  <li>(bug #398): Validate <code>data.errorkeys</code> more correctly.</li>
+  <li>(enh #393): Minor enhancements to abort events before upload.</li>
+  <li>(enh #392): Enhancements to allow using plugin functions directly.</li>
+  <li>(enh #391): Thumbnail styling enhancements for flash, html, and object types.</li>
+  <li>(enh #390): Thumbnail error display enhancements.</li>
+  <li>(enh #389): New templates and styling enhancements to caption and main buttons.</li>
+  <li>(enh #387): Reset <code>initialCaption</code> better when preview is cleared.</li>
+  <li>(enh #385): Updated Russian &amp; Ukranian translations.</li>
+  <li>(enh #382): Better implementation for parsing text in <code>parseError</code> method.</li>
+  <li>Update translations to include <code>fileActionSettings</code>.</li>
+  <li>(enh #380, #381): Consistent styling for thumbnails.</li>
+  <li>(enh #379): Combine more translatable settings and update locale js files.</li>
+  <li>(enh #378): Ability to configure different icon thumbnails for preview files.</li>
+  <li>(enh #377): Various enhancements to text preview.</li>
+  <li>(enh #373): Default delete ajax request type to POST (instead of DELETE).</li>
+</ul>
+
+<h2 id="version-425">version 4.2.5</h2>
+
+<p><strong>Date</strong>: 27-Jul-2015</p>
+
+<ul>
+  <li>(enh #372): Create new event <code>filepreajax</code>.</li>
+  <li>(enh #371): Ability to replace files in the preview. New <code>autoReplace</code> property.</li>
+  <li>(bug #370): Reverts #342 with better fix.</li>
+  <li>(enh #362): Add Bulgarian translations.</li>
+</ul>
+
+<h2 id="version-424">version 4.2.4</h2>
+
+<p><strong>Date</strong>: 22-Jul-2015</p>
+
+<ul>
+  <li>(enh #358): Implement event namespaces and enhance event handling process.</li>
+  <li>(enh #357): Enhanced and better <code>refresh</code> method.</li>
+  <li>(enh #356): Implement <code>destroy</code> method.</li>
+  <li>(enh #351): Updates to Ukranian &amp; Russian translations.</li>
+  <li>(enh #342): Add ability to modify extra data before ajax upload in <code>beforeSend</code> events.</li>
+  <li>(enh #340): Receive <code>previewId</code> and <code>index</code> in extra data for individual thumbnail uploads (ajax).</li>
+</ul>
+
+<h2 id="version-423">version 4.2.3</h2>
+
+<p><strong>Date</strong>: 21-Jun-2015</p>
+
+<ul>
+  <li>(enh #336): Fixes to reset preview via <code>initUploadSuccess</code>.</li>
+</ul>
+
+<h2 id="version-422">version 4.2.2</h2>
+
+<p><strong>Date</strong>: 18-Jun-2015</p>
+
+<ul>
+  <li>(enh #332): Bump nuget and bower package versions.</li>
+</ul>
+
+<h2 id="version-421">version 4.2.1</h2>
+
+<p><strong>Date</strong>: 15-Jun-2015</p>
+
+<ul>
+  <li>(enh #330): Minor enhancements in validating preview and progress bar display.</li>
+  <li>(enh #329): Message translation updates.</li>
+  <li>(bug #328): Implement image dimension validations.
+    <ul>
+      <li>New properties added to the plugin:
+        <ul>
+          <li><code>minImageWidth</code></li>
+          <li><code>minImageHeight</code></li>
+          <li><code>maxImageWidth</code></li>
+          <li><code>maxImageHeight</code></li>
+          <li><code>msgImageWidthSmall</code></li>
+          <li><code>msgImageHeightSmall</code></li>
+          <li><code>msgImageWidthLarge</code></li>
+          <li><code>msgImageHeightLarge</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>(bug #327): More correct clearing of preview.</li>
+  <li>(bug #315): Fix parsing of preview settings for default (other) preview.</li>
+  <li>(bug #310): Set missing caption icon on error.</li>
+  <li>(enh #309): Fixes for older browsers.</li>
+  <li>(enh #308): Better check for <code>data.error</code> being empty.</li>
+  <li>(enh #307): Allow setting thumbnail frame css class and attributes via <code>initialPreviewConfig</code>.</li>
+  <li>(enh #305): Implement better cleanup of memory with <code>revokeObjectURL</code>.</li>
+  <li>(enh #303): Validate only files to be dragged and dropped.</li>
+  <li>(enh #302): Add Greek (el) translations.</li>
+  <li>(enh #299): Enhancements for displaying uploaded file thumbnails.
+    <ul>
+      <li>New property <code>showUploadedThumbs</code> that will display uploaded thumbnails until the remove/clear button is explicitly pressed.</li>
+      <li>New event <code>filesuccessremove</code>. This will be triggered on removing the uploaded thumbnail using the thumbnail delete button. The event shares the following parameters:
+        <ul>
+          <li><code>id</code>: the HTML id attribute of the thumbnail container 
+The <code>event</code> can be set to return <code>false</code> to abort the thumbnail removal.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>(enh #297): Add Romanian translations.</li>
+  <li>(enh #296): Fixed license identifiers in bower.json and composer.json.</li>
+  <li>(bug #295): Validate <code>overwriteInitial</code> correctly for ajax uploads.</li>
+  <li>(enh #287): Add Brazilian Portugese (pt-BR) translations.</li>
+  <li>(enh #279, #280): Fixed error for failed response types.</li>
+</ul>
+
+<h2 id="version-420">version 4.2.0</h2>
+
+<p><strong>Date</strong>: 11-May-2015</p>
+
+<ul>
+  <li>(enh #277): New <code>language</code> property to allow configuring multi lang widgets on same page.</li>
+  <li>(enh #275): Add Czech &amp; Slovakian translations.</li>
+</ul>
+
+<h2 id="version-419">version 4.1.9</h2>
+
+<p><strong>Date</strong>: 02-May-2015</p>
+
+<ul>
+  <li>(bug #273): Reset caption correctly after all initial preview is deleted.</li>
+  <li>(enh #271): Add Dutch translations.</li>
+  <li>(enh #270): Add Portugese translations.</li>
+  <li>(enh #269, #272): Add Turkish translations.</li>
+  <li>(enh #264): Validate input type of file before initializing plugin.</li>
+  <li>(enh #263): Enhance parsing of file preview thumbnails and actions.</li>
+  <li>(enh #259): Add Polish translations.</li>
+  <li>(enh #258): Enhance messages to include file plural and single.</li>
+  <li>(bug #257): Fix upload single to replace thumbs correctly.</li>
+  <li>(bug #253): Fix initial preview delete cache initialization.</li>
+  <li>(enh #252): Enhance async batch completion.</li>
+  <li>(enh #251): Add Italian localizations.</li>
+  <li>(enh #250): Change default slug routine to allow umlauts in filenames.</li>
+  <li>(bug #249): Fix error message content display.</li>
+  <li>(enh #248): keep chinese characters in file caption.</li>
+  <li>(bug #247): Correct mime types validation.</li>
+  <li>(enh #245): Allow initial caption to be set without initial preview.</li>
+  <li>(enh #244): Add Serbian translations.</li>
+  <li>(bug #243): Correct sending of <code>deleteExtraData</code>.</li>
+  <li>(enh #241): Enhancements to initial preview delete to perform validations before delete.</li>
+  <li>(bug #238): Correct initialization of plugin variables when other than maxFileCount &amp; maxFileSize.</li>
+  <li>(enh #237): Better styling of file caption icon.</li>
+  <li>(enh #232): Update docs to reflect updated bootstrap CDN domain.</li>
+</ul>
+
+<h2 id="version-418">version 4.1.8</h2>
+
+<p><strong>Date</strong>: 30-Mar-2015</p>
+
+<ul>
+  <li>(enh #230): More correct initial preview delete reset.</li>
+  <li>(enh #229): Created French translations.</li>
+  <li>(enh #228): Created Thai translations.</li>
+  <li>(enh #227): Created Ukranian translations and updated Russian translations.</li>
+  <li>(enh #226): Create Spanish (Latin American) translations.</li>
+  <li>(enh #225): Create Russian translations.</li>
+  <li>(enh #222): Enhance to include dynamically replaceable thumbnail tags. Two new properties <code>previewThumbTags</code> and <code>initialPreviewThumbTags</code> will be available for configuration.</li>
+  <li>(enh #218): Do not clear preview for ajaxuploads until remove button clicked.</li>
+  <li>(enh #217): Ensure <code>filebatchselected</code> event is triggered after FileReader completes reading files selected.</li>
+  <li>(enh #216): Add Hungarian Translations.</li>
+  <li>(enh #215): Set default delete method REST compliant.</li>
+  <li>(enh #213): Code cleanup, eliminate change event on clear and properly reset preview cache after ajax deletes.</li>
+  <li>(enh #212): Revamp preview to use a new preview caching object.</li>
+  <li>(enh #211): Add ability to show detailed server error stack via <code>showAjaxErrorDetails</code>.</li>
+  <li>(enh #209): Better validation for folder drag and drop and auto-skip any dropped folders. New property <code>msgFoldersNotAllowed</code> added to the plugin to allow configuring the message shown. The event <code>filefoldererror</code> is triggered when a folder is dragged.</li>
+  <li>(enh #206): Ability to add custom validation and trigger custom error to abort upload.
+    <ul>
+      <li>This enhancement will enable you to add your additional custom validations to enhance the fileinput to be used for innumerous scenarios. It will allow an ability to return an associative object with any of the fileinput events (except the error events and the <code>filebatchuploadsuccess</code> or <code>filebatchuploadcomplete</code>) e.g. <code>change</code>, <code>fileselect</code>, <code>filepreupload</code>, <code>filebatchpreupload</code> etc. The object can return the following keys:
+        <ul>
+          <li><code>message</code>: <em>string</em>, the validation error message to be displayed before upload. If this is set the plugin will automatically abort the upload whenever called and display this as an error message. You can use this property for example to read a file and perform your own custom validation.</li>
+          <li><code>data</code>: <em>object</em>, an optional associative array of additional data that you can pass for usage later. </li>
+        </ul>
+      </li>
+      <li>You can get this data by reading <code>abortData</code> in the parameters for the new <code>filecustomerror</code> event. This new event will be triggered during upload, when  you have triggered an abort from any of the other events.</li>
+    </ul>
+  </li>
+  <li>(enh #205): Allow to auto set initialPreview within <code>filebatchuploadcomplete</code> &amp; <code>filebatchuploadsuccess</code>.
+    <ul>
+      <li>Allows you to auto define the <code>initialPreview</code> and  <code>initialPreviewConfig</code> after an ajax upload by returning these within the data object from your ajax response on <code>fileuploaded</code> &amp; <code>filebatchuploadsuccess</code>.  </li>
+    </ul>
+  </li>
+  <li>(enh #204): New properties <code>fileMinCount</code> and <code>msgFilesTooLess</code> (useful to make file input mandatory).
+    <ul>
+      <li>The <code>fileMinCount</code> property will allow to set the minimum file count needed before triggering upload. It will work for both <code>ajax</code> uploads and <code>normal form based submission</code>.</li>
+      <li>This will enable you to set the file input to be a mandatory / required input. (e.g. <code>fileMinCount</code> = <code>1</code>). The <code>msgFilesTooLess</code> will be displayed and error raised.</li>
+      <li>If <code>fileMinCount</code> is set to <code>0</code> it will be treated as files are optional and no error will be triggered.</li>
+    </ul>
+  </li>
+  <li>(enh #203): Enhancements and revamp of all error events.
+    <ul>
+      <li>fileerror</li>
+      <li>fileuploaderror</li>
+      <li>filebatchuploaderror</li>
+      <li>filedeleteerror</li>
+      <li>filefoldererror (new event - see #209)</li>
+      <li>filecustomerror (new event - see #206)</li>
+    </ul>
+  </li>
+  <li>(enh #202): Ability to add Translations / Locales.
+    <ul>
+      <li>Identify and group all messages that need to be translated configurable via <code>$.fn.fileinput.locales['&lt;lang-code&gt;']</code></li>
+      <li>Set default english messages configuration <code>$.fn.fileinput.locales['en']</code> within the plugin core code</li>
+      <li>Individual locale files need to be created as separate js files e.g. <code>&lt;lang&gt;.js</code></li>
+    </ul>
+  </li>
+  <li>(bug #193): Better validation for triggering <code>filebatchuploadcomplete</code> on async batch upload completion.</li>
+  <li>(enh #192): Ability to extend and add one's own ajax settings.
+    <ul>
+      <li>New property <code>ajaxDeleteSettings</code> to help extend and add to delete ajax settings. </li>
+      <li><code>ajaxSettings</code> to help extend and add upload ajax settings</li>
+    </ul>
+  </li>
+  <li>(enh #189): Reinitialize initial preview delete events correctly on file selection.</li>
+  <li>(enh #188): Clear fileinput more correctly for all browsers when initialPreview is set enhancement</li>
+  <li>(enh #187): New property <code>previewFileIcon</code> to configure file icon shown in preview for unreadable file types.</li>
+  <li>(enh #184): Fix documentation for filedeleted event.</li>
+  <li>(enh #183): Delete extra data enhancements.</li>
+  <li>(enh #181): Fix change event triggered for IE 11 when file input is set to empty.</li>
+  <li>(enh #179): Validate and cast <code>maxFileSize</code> and <code>maxFileCount</code> to numeric - even if they have been setup as a string.</li>
+  <li>(enh #178): Updated README for cancel button configuration.</li>
+  <li>(enh #177): Trigger filebatchpreupload if showPreview is <code>false</code>.</li>
+  <li>(enh #176): Wrong file in README installation steps fixed.</li>
+  <li>(enh #175): Ability to override delete extra data in <code>initialPreviewConfig</code>.</li>
+  <li>(enh #174): New <code>deleteUrl</code> property.</li>
+  <li>(enh #167, #173): New <code>deleteExtraData</code> property for ajax deletions.</li>
+  <li>(bug #171): Fix typo for files validation.</li>
+</ul>
+
+<h2 id="version-417">version 4.1.7</h2>
+
+<p><strong>Date</strong>: 13-Feb-2015</p>
+
+<ul>
+  <li>Relocate sample files from examples directory to <a href="https://github.com/kartik-v/bootstrap-fileinput-samples">bootstrap-fileinput-samples</a> repo.</li>
+  <li>Set copyright year to current.</li>
+  <li>(enh #162): New property ajaxSettings to allow configuring ajax params.</li>
+  <li>(bug #160): Correct documentation typo for usage.</li>
+  <li>(bug #159): Ensure filestack is passed correctly with <code>outData</code> for events.</li>
+  <li>(enh #157): Upload progress bar styling enhancements.
+    <ul>
+      <li>Allow upload progress bar css class to be configurable </li>
+      <li>Create and allow two different styles/css classes for progress bar
+        <ul>
+          <li><code>progressClass</code>: styling for progress bar when upload is in process</li>
+          <li><code>progressCompleteClass</code>: styling for progress bar when upload is complete</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>(enh #156): Fix reset of file stack for various upload modes (single, batch async and batch sync).</li>
+  <li>(enh #155): Allow display of long file names without spaces/word breaks.</li>
+  <li>(enh #154): Code cleanup and restructure for JS lint changes (using JSHint Code cleanup library).</li>
+  <li>(enh #153): Improve error handler for trapping FileReader security exceptions and new property <code>msgFileSecured</code> will display the security exception message.</li>
+  <li>(enh #152): New faster <code>replaceAll</code> method instead of regexp parsing to replace tags in templates.</li>
+  <li>(enh #151): New <code>filebatchselected</code> event triggered after every batch of files are selected.</li>
+  <li>(enh #149): Custom tags support for layoutTemplates and previewTemplates (new properties <code>customLayoutTags</code> and <code>customPreviewTags</code> included).</li>
+</ul>
+
+<h2 id="version-416">version 4.1.6</h2>
+
+<p><strong>Date:</strong> 20-Jan-2015</p>
+
+<ul>
+  <li>(enh #139): Reset file stack correctly on ajax upload completion.</li>
+  <li>(enh #137): Trigger new events - <code>filedisabled</code> and <code>fileenabled</code>.</li>
+  <li>(enh #136):Create new upload method that can be called externally.</li>
+  <li>(enh #131): Allow empty values in extra data to be submitted.</li>
+</ul>
+
+<h2 id="version-415">version 4.1.5</h2>
+
+<p><strong>Date:</strong> 12-Jan-2015</p>
+
+<ul>
+  <li>(enh #121): Animate progress bars by default for upload progress.</li>
+  <li>(bug #120): Correct multiple iterations of upload for async batch uploads.</li>
+  <li>(enh #119): Enhance caption to include ellipsis for long file names</li>
+  <li>(enh #116): Hide remove and upload buttons until unless file(s) are selected.</li>
+  <li>(enh #115): Autosize file caption responsively on window resize.</li>
+  <li>(bug #114): Prevent multiple file selection when using single file configuration.</li>
+  <li>(bug #113): Icon layout template undefined when using user template.</li>
+  <li>(bug #112): Fix undefined filestack for individual file upload within preview.</li>
+  <li>(enh #108): Add nuget package.</li>
+  <li>(enh #106): Enhance events for ajax requests and enable cancelling sync uploads</li>
+  <li>(enh #105): Expose current jqXHR object on ajax events.</li>
+  <li>(bug #104): Fix formdata not defined.</li>
+  <li>(bug #100, #101): Set right params for error thrown during reading of files.</li>
+</ul>
+
+<h2 id="version-414">version 4.1.4</h2>
+
+<p><strong>Date:</strong> 26-Dec-2014</p>
+
+<ul>
+  <li>(bug #97): Reset events correctly with plugin refresh method.</li>
+  <li>(bug #95): Correct event off for drag &amp; drop in plugin refresh method.</li>
+  <li>Code cleanup with reusable methods for event raising and outData generation.</li>
+  <li>(enh #93): Better styling of file upload icon indicators in thumbnails.</li>
+  <li>(enh #92): Realign event triggering timing for batch uploads to ensure outData is available.</li>
+  <li>(enh #91): Pass FileReader instance with outData in events.</li>
+  <li>(enh #90): New event <code>filebatchpreupload</code> for both synchronous and asynchronous batch uploads.</li>
+  <li>(enh #89): New <code>otherActionButtons</code> to allow adding customized initial preview content actions.</li>
+  <li>(enh #88): Allow uploadExtraData to be passed as a callback.</li>
+</ul>
+
+<h2 id="version-413">version 4.1.3</h2>
+
+<p><strong>Date:</strong> 20-Dec-2014</p>
+
+<ul>
+  <li>(enh #87): More correct progress indicator percentage for asynchronous upload.
+    <ul>
+      <li><code>filepreupload</code></li>
+      <li><code>fileuploaded</code></li>
+      <li><code>fileuploaderror</code></li>
+      <li><code>filebatchuploaderror</code></li>
+      <li><code>filebatchuploadsuccess</code></li>
+      <li><code>filebatchuploadcomplete</code></li>
+    </ul>
+  </li>
+  <li>(enh #86): Disable thumbnail action buttons when upload is in progress.</li>
+  <li>(enh #85): Combine output data as a single object, that is sent for various file upload events. </li>
+</ul>
+
+<h2 id="version-412">version 4.1.2</h2>
+
+<p><strong>Date:</strong> 19-Dec-2014</p>
+
+<ul>
+  <li>(enh #81): Add new events:
+    <ul>
+      <li><code>filebatchuploadsuccess</code></li>
+      <li><code>filebatchuploadcomplete</code> </li>
+    </ul>
+  </li>
+  <li>(enh #80): Allow access to <code>uploadExtraData</code> and <code>responseData</code> to following events
+    <ul>
+      <li><code>filepreupload</code></li>
+      <li><code>fileuploaded</code></li>
+      <li><code>fileuploaderror</code></li>
+      <li><code>filebatchuploaderror</code></li>
+      <li><code>filebatchuploadsuccess</code></li>
+      <li><code>filebatchuploadcomplete</code></li>
+      <li><code>filelock</code></li>
+      <li><code>fileunlock</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="version-411">version 4.1.1</h2>
+
+<p><strong>Date:</strong> 18-Dec-2014</p>
+
+<ul>
+  <li>(bug #78): Set uploadExtraData parameters to be correctly sent via POST.</li>
+  <li>(bug #76): Update filestack when <code>showPreview</code> is false.</li>
+  <li>(enh #58): Set a new property <code>textEncoding</code> for reading the text files with right encoding.</li>
+</ul>
+
+<h2 id="version-410">version 4.1.0</h2>
+
+<p><strong>Date:</strong> 17-Dec-2014</p>
+
+<ul>
+  <li>(enh #75): Better validation of browser support for drag and drop.</li>
+  <li>(enh #74): Enhancements to file validation errors for both FORM and AJAX uploads.
+    <ul>
+      <li>For normal Form based uploads automatically disable the Upload button</li>
+      <li>Display a separate error styled thumbnail for the file that faced the validation error.</li>
+      <li>Reset errors correctly to overwrite files with a new change or drag/drop</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="version-400">version 4.0.0</h2>
+
+<p><strong>Date:</strong> 14-Dec-2014</p>
+
+<ul>
+  <li>(bug #72): Fix bootstrap ## version constraint.</li>
+  <li>Renamed <code>initialDelimiter</code> to <code>initialPreviewDelimiter</code></li>
+  <li>(enh #70): Version 4.0 enhancements.</li>
+</ul>
+
+<h3 id="version-40-features">Version 4.0 Features</h3>
+
+<ul>
+  <li>Add functionality for AJAX based UPLOAD using HTML5 FormData (most modern browsers support it). Will degrade to normal Form Based File submission if this is not supported.</li>
+  <li>To use AJAX Upload, the <code>uploadUrl</code> property is MANDATORY and must be set.</li>
+  <li>Enhance plugin to now allow files to be added, appended, removed (based on FEEDBACK from many). Thus one can append files to preview.</li>
+  <li>New DRAG &amp; DROP zone available in preview to drag and drop files and append.</li>
+  <li>Delete or upload files one by one OR in batch.</li>
+  <li>If <code>showPreview</code> is set to false, or uploadUrl is not supported plugin will degrade to normal form based upload.</li>
+  <li>Configurable indicators for file awaiting upload, file successfully uploaded, files errored in upload.</li>
+  <li>Ability to add extra form data with ajax based uploads.</li>
+  <li>Upload progress bar and individual thumbnail upload indicators.</li>
+  <li>Ability to cancel and abort ongoing AJAX uploads.</li>
+  <li>Templates have been revamped and enhanced for each file type.</li>
+  <li>Ensure plugin is still lean in size and optimized for performance inspite of the above features by optimally utilizing HTML5 &amp; jquery features only.</li>
+</ul>
+
+<h3 id="new-properties-added">New properties added</h3>
+
+<ul>
+  <li><code>showCancel</code>: shows a cancel button for aborting ajax uploads (defaults to <code>true</code>).</li>
+  <li><code>cancelLabel</code>: label for the cancel button.</li>
+  <li><code>cancelTitle</code>: title for the cancel button on hover.</li>
+  <li><code>cancelIcon</code>: icon markup for the cancel button</li>
+  <li><code>cancelClass</code>: CSS class for the cancel button.</li>
+  <li><code>removeTitle</code>: title for the remove button on hover.</li>
+  <li><code>uploadTitle</code>: title for the upload button on hover.</li>
+  <li><code>uploadUrl</code>: the url that will be used to process AJAX based uploads (using FormData XHR2).</li>
+  <li><code>uploadExtraData</code>: extra data that will be passed as data to the url/AJAX server call via POST</li>
+  <li><code>uploadAsync</code>: whether the batch upload of multiple files will be asynchronous/in parallel. Defaults to <code>true</code>.</li>
+  <li><code>initialPreviewShowDelete</code>:  shows a delete button for each initial preview content's thumbnail (defaults to <code>true</code>).</li>
+  <li><code>initialPreviewConfig</code>: configuration for setting up each <code>initialPreviewContent</code> item (associative array/object)
+    <ul>
+      <li><code>caption</code>: The caption or filename to display for each initial preview item content.</li>
+      <li><code>width</code>: The CSS width of the image/content displayed.</li>
+      <li><code>url</code>: The URL for deleting the image/content via AJAX (shown only for <code>initialPreviewContent</code>).</li>
+      <li><code>key</code>: The key that will be passed to the URL via POST (shown only for <code>initialPreviewContent</code>).</li>
+    </ul>
+  </li>
+  <li><code>dropZoneEnabled</code>: Enable a drag and drop zone for dragging files and is available only for ajax based uploads (defaults to <code>true</code>). </li>
+  <li><code>dropZoneTitle</code>: Title to be displayed in the drag &amp; drop zone. </li>
+  <li><code>dropZoneTitleClass</code>: CSS class for the drag &amp; drop zone title.</li>
+  <li><code>fileActionSettings</code>: configuration for setting up actions for newly selected file thumbnails in the preview (associative array/object)
+    <ul>
+      <li><code>removeIcon</code>: icon for remove button to be displayed in each file thumbnail.</li>
+      <li><code>removeClass</code>: CSS class for the remove button in each file thumbnail.</li>
+      <li><code>removeTitle</code>: title for remove button in each file thumbnail.</li>
+      <li><code>uploadIcon</code>: icon for upload button to be displayed in each file thumbnail.</li>
+      <li><code>uploadClass</code>: CSS class for the remove button in each file thumbnail.</li>
+      <li><code>uploadTitle</code>: title for remove button in each file thumbnail.</li>
+      <li><code>indicatorNew</code>: an indicator (HTML markup) for new pending upload displayed in each file thumbnail.</li>
+      <li><code>indicatorSuccess</code>: an indicator (HTML markup) for successful upload displayed in each file thumbnail.</li>
+      <li><code>indicatorError</code>: an indicator (HTML markup) for error in upload displayed in each file thumbnail.</li>
+      <li><code>indicatorLoading</code>: an indicator (HTML markup) for ongoing upload displayed in each file thumbnail.</li>
+      <li><code>indicatorNewTitle</code>: title to display on hover of indicator for new pending upload in each file thumbnail.</li>
+      <li><code>indicatorSuccessTitle</code>: title to display on hover of indicator for successful in each file thumbnail.</li>
+      <li><code>indicatorErrorTitle</code>: title to display on hover of indicator for error in upload in each file thumbnail.</li>
+      <li><code>indicatorLoadingTitle</code>: title to display on hover of indicator for ongoing upload in each file thumbnail.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="version-300">version 3.0.0</h2>
+
+<p><strong>Date:</strong> 08-Dec-2014</p>
+
+<ul>
+  <li>(bug #68): Fix refresh method of the fileinput to trigger change correctly.</li>
+  <li>(enh #67): Enhance support for IE browsers
+    <ul>
+      <li>Add specific validations for parsing IE versions rightly</li>
+      <li>Enhance plugin to extend styling support to IE 9 (with the limitation that IE 9 does not support HTML 5 features like multiple file upload)</li>
+      <li>Fix clearing of file input rightly for IE 9 &amp; IE 10</li>
+      <li>Degrade plugin automatically to a native file input for older IE versions</li>
+      <li>Prevent change method firing twice when file is cleared after error is encountered in IE 11.</li>
+    </ul>
+  </li>
+  <li>(enh #65): Correct validation of <code>refreshPreview</code> using <code>updateFileDetails</code>.</li>
+  <li>(enh #64): Add ability to override the slug method with a <code>slugCallback</code> property.</li>
+  <li>(bug #61): Refresh preview to show errors correctly after each file is validated.</li>
+  <li>(enh #60): Enhance upload button for disable/enable when used with <code>&lt;a&gt;</code> tag.</li>
+</ul>
+
+<h2 id="version-290">version 2.9.0</h2>
+
+<p><strong>Date:</strong> 23-Nov-2014</p>
+
+<ul>
+  <li>(enh #56): Trigger new events <code>filebrowse</code> and <code>fileselectnone</code>.</li>
+  <li>(enh #55): Clear the files when file browse dialog is cancelled only if the browser clears the native file input.</li>
+  <li>(enh #53): Validations and events for right reset of files when browse button is clicked.</li>
+</ul>
+
+<h2 id="version-280">version 2.8.0</h2>
+
+<p><strong>Date:</strong> 13-Nov-2014</p>
+
+<ul>
+  <li>(enh #52): Raise new <code>fileimageloaded</code> event.</li>
+  <li>(enh #51): Autosize preview images when they exceed the size of the preview container.</li>
+  <li>(enh #50): Dynamically auto size file captions for long file names exceeding container width. New property <code>autoFitCaption</code> 
+ is added which defaults to <code>true</code>. When this is <code>true</code> the plugin will auto fit caption text within the container dynamically
+ and responsively based on window size.</li>
+</ul>
+
+<h2 id="version-270">version 2.7.0</h2>
+
+<p><strong>Date:</strong> 11-Nov-2014</p>
+
+<ul>
+  <li>(enh #49): Set image preview dimensions to auto fit and center</li>
+  <li>(enh #48): Trigger <code>fileloaded</code> event when <code>showPreview</code> is <code>false</code>.</li>
+  <li>Set release to stable in composer.json.</li>
+</ul>
+
+<h2 id="version-260">version 2.6.0</h2>
+
+<p><strong>Date:</strong> 15-Oct-2014</p>
+
+<ul>
+  <li>(bug #44): Browser IE10 hangs on file clear.</li>
+  <li>(bug #43): Validate special characters in filename before generating caption.</li>
+  <li>(enh #42): Enhance plugin to configure the <code>elErrorContainer</code> for displaying validation errors.</li>
+  <li>Templatize errorContainer for display within the preview window.</li>
+  <li>(bug #40): More correct fix for IE (ver &lt; 11) inability to clear fileinput values.</li>
+</ul>
+
+<h2 id="version-250">version 2.5.0</h2>
+
+<p><strong>Date:</strong> 09-Oct-2014</p>
+
+<ul>
+  <li>(bug #40): Fix IE (ver &lt; 11) inability to clear fileinput values.</li>
+  <li>(bug #39): HTML encode caption hover title.</li>
+  <li>(enh #38): Highlight error CSS in file caption on validation error.</li>
+  <li>(bug #37): HTML encode text content for preview in modal.</li>
+  <li>(enh #36): New feature. Validation routine for checking allowed file types and extensions.</li>
+</ul>
+
+<h2 id="version-240">version 2.4.0</h2>
+
+<p><strong>Date:</strong> 20-Sep-2014</p>
+
+<ul>
+  <li>(enh #33): Better text format validation and correct modal preview.</li>
+  <li>(enh #32): Added checks for file api support.</li>
+  <li>(enh #31): Better control and configuration of preview templates.</li>
+  <li>(enh #30): Enhanced generic support for more preview formats (audio, video, html, flash, and other objects).</li>
+</ul>
+
+<blockquote>
+  <p><strong>Note:</strong> There are BC Breaking Changes with release v2.4.0.</p>
+</blockquote>
+
+<p>With release v2.4.0, the plugin has been revamped to support and configure a wide variety of file formats for preview. This may break some
+backward compatibility (BC) for older versions that use custom templates. </p>
+
+<p>The following are the major changes with release v2.4.0:</p>
+
+<ul>
+  <li>Plugin has been revamped to build preview intelligence based on various file preview types. The inbuilt file support types are categorized as 
+<code>image</code>, <code>text</code>, <code>html</code>, <code>video</code>,  <code>audio</code>, <code>flash</code>, <code>object</code>, and <code>other</code>.</li>
+  <li><code>allowedPreviewTypes</code>: You can now configure which all file types are allowed to be shown as a preview. This defaults to <code>['image', 'html', 'text', 'video', 'audio', 'flash', 'object']</code>.
+ Thus all file types are treated as an object to preview by default. For exampleTo preview only <code>image</code> and <code>video</code>, you can set this to <code>['image', 'video']</code>.</li>
+  <li><code>allowedPreviewMimeTypes</code>: In addition to <code>allowedPreviewTypes</code>, you can also control which all mime types can be displayed for preview. This defaults to null,
+ meaning all mime types are supported.</li>
+  <li><code>layoutTemplates</code>: Allows you to configure all layout template settings within one property. The layout objects that can be configured are: <code>main1</code>, <code>main2</code>,
+ <code>preview</code>, <code>caption</code>, and <code>modal</code>.</li>
+  <li><code>previewTemplates</code>: All preview templates for <strong>each preview type</strong> have been combined into one property, instead of separate templates for image, text etc. 
+ The keys are the formats as set in <code>allowedPreviewTypes</code> and values are the templates used for previewing. There are default prebuilt templates for each 
+ preview file type (<code>generic</code>, <code>image</code>, <code>text</code>, <code>html</code>, <code>video</code>,  <code>audio</code>, <code>flash</code>, <code>object</code>, and <code>other</code>). The <code>generic</code> template is used only for displaying
+ <code>initialPreview</code> content using direct markup.</li>
+  <li><code>previewSettings</code>: Allows you to configure width and height for each preview image type. The plugin has default widths and heights predefined for each type i.e
+ <code>image</code>, <code>text</code>, <code>html</code>, <code>video</code>,  <code>audio</code>, <code>flash</code>, and <code>object</code>.</li>
+  <li><code>fileTypeSettings</code>: Allows you to configure and identify each preview file type using a callback. The plugin has default callbacks predefined to identify each type i.e
+ <code>image</code>, <code>text</code>, <code>html</code>, <code>video</code>,  <code>audio</code>, <code>flash</code>, and <code>object</code>.</li>
+  <li>Replacing tags within templates has been enhanced. With this release it will automatically check for multiple occurrences of each tag to replace within a template string.</li>
+</ul>
+
+<blockquote>
+  <p>NOTE: Flash preview will require Shockwave flash to be installed and supported by the client browser. The flash preview currently works successfully with webkit browsers only. Video &amp; Audio formats are however supported by all modern browsers 
+that support the HTML5 <code>video</code>/<code>audio</code> tags. Note that browsers have limited number of video/audio formats supported by the HTML5 video element (e.g. mp4, webm, ogg, mp3, wav). The size of video files are recommended to be small (to be controlled 
+through <code>maxFileSize</code> property) so that it does not affect the preview performance. You can copy a few files from the <code>examples</code> directory of this plugin repo, to test a few examples of flash and video files.</p>
+</blockquote>
+
+<h2 id="version-230">version 2.3.0</h2>
+
+<p><strong>Date:</strong> 19-Sep-2014</p>
+
+<ul>
+  <li>Better replacement of tags in templates. Replaces all tag occurences with this new release.</li>
+  <li>(enh #28, #29): Added support for previewing flash and video files.</li>
+</ul>
+
+<h2 id="version-220">version 2.2.0</h2>
+
+<p><strong>Date:</strong> 19-Aug-2014</p>
+
+<ul>
+  <li>(enh #25): Graceful degrade to normal file input for older browsers (including previous versions of Safari).</li>
+  <li>(enh #24): Update readAsBinaryString to readAsArrayBuffer</li>
+</ul>
+
+<h2 id="version-210">version 2.1.0</h2>
+
+<p><strong>Date:</strong> 11-Aug-2014</p>
+
+<ul>
+  <li>Other minor bug fixes.</li>
+  <li>(enh #22): Enhance file caption message display for validation errors.</li>
+  <li>(enh #21): Enhance loading progress message and message templates for multiple file uploads.</li>
+  <li>(enh #21): Enhance multiple file upload and preview performance using setTimeout.</li>
+  <li>(enh #20): Fix <code>fileloaded</code> event to increment <code>previewId</code> and enhance to return file index.</li>
+  <li>(enh #19): Synchronize preview with file browse dialog behavior, when cancel button is pressed in file dialog window.</li>
+  <li>(enh #18): Better validation for older browsers (not supporting HTML5) to degrade to normal file input.</li>
+  <li>Enhanced plugin to improve browser performance when loading and previewing multiple image files.</li>
+  <li>New configurable error messages added: <code>msgFilesTooMany</code>, <code>msgFileNotFound</code>, <code>msgFileNotReadable</code>, <code>msgFilePreviewAborted</code>, and <code>msgFilePreviewError</code>.</li>
+  <li>New configuration property added: <code>maxFilesCount</code>. Defaults to <code>0</code> which means unlimited.</li>
+  <li>(enh #16, #17): Added exception handling for trapping FileReader API errors</li>
+</ul>
+
+<h2 id="version-200">version 2.0.0</h2>
+
+<p><strong>Date:</strong> 25-Jul-2014</p>
+
+<ul>
+  <li>Added delimiter option for <code>initialPreview</code> to pass multiple content delimited as a string.</li>
+  <li>Automatic scale images for preview, when images are too wide to fit in container.</li>
+  <li>Correct calculation of files selected when <code>initPreview</code> is false.</li>
+  <li>Make caption text configurable through a new parameter <code>msgSelected</code>.</li>
+  <li>Enhanced configurable templates for previewing image, text, and other files (and a generic template).</li>
+  <li>New plugin methods added: <code>disable</code>, <code>enable</code></li>
+  <li>New plugin events added: <code>fileerror</code>, <code>fileloaded</code>, <code>filecleared</code>.</li>
+  <li>(enh #15): Enhanced validation of file size through <code>maxFileSize</code> configuration.</li>
+  <li>(enh #12, #13, #14): Various enhancements and fixes.</li>
+</ul>
+
+<h2 id="version-190">version 1.9.0</h2>
+
+<p><strong>Date:</strong> 21-Jul-2014</p>
+
+<ul>
+  <li>(enh #10): Ability to display initial caption, when initialPreview is false.</li>
+  <li>(enh #9): Enhanced caption template and styling for captions to prevent overflow of long file names out of the caption container.</li>
+</ul>
+
+<h2 id="version-180">version 1.8.0</h2>
+
+<p><strong>Date:</strong> 15-Jul-2014</p>
+
+<ul>
+  <li>(enh #9): Enhanced caption template and styling for captions to prevent overflow of long file names out of the caption container.</li>
+</ul>
+
+<h2 id="version-170">version 1.7.0</h2>
+
+<p><strong>Date:</strong> 02-Jul-2014</p>
+
+<ul>
+  <li>The plugin now offers an additional <code>overwriteInitial</code> option. This is by default set to <code>true</code>, whereby, any <code>initialPreview</code>
+ content set will be overwritten, when new file is uploaded or when files are cleared. Setting it to <code>false</code> will help displaying 
+ a saved image or file from database always - useful especially when using the <code>multiple</code> file upload feature.</li>
+</ul>
+
+<h2 id="version-160">version 1.6.0</h2>
+
+<p><strong>Date:</strong> 03-Jun-2014</p>
+
+<ul>
+  <li>The plugin now offers an additional <code>refresh</code> method. This enables you to dynamically change element attributes or plugin options
+ at runtime and refresh the widget.</li>
+</ul>
+
+<h2 id="version-150">version 1.5.0</h2>
+
+<p><strong>Date:</strong> 23-May-2014</p>
+
+<ul>
+  <li>The plugin now offers an option to display initial preview of images/text/other files. This is useful
+ for record update scenarios. This can be a single image/file or an array of images/files.</li>
+  <li>Extending to the above feature, the plugin also allows you to set a preview caption for the initial preview field.</li>
+  <li>The following element identifiers need to be passed as a string like '#id' instead of a JQuery object:
+    <ul>
+      <li>elCaptionContainer</li>
+      <li>elCaptionText</li>
+      <li>elPreviewContainer</li>
+      <li>elPreviewImage</li>
+      <li>elPreviewStatus</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="version-100">version 1.0.0</h2>
+
+<p><strong>Date:</strong> 01-Jan-2014 </p>
+
+<p>Initial release. The following features are included in this release:</p>
+
+<ul>
+  <li>The plugin will convert a simple HTML file input to an advanced file picker control. Will help fallback to a file input for browsers not supporting JQuery or Javascript.</li>
+  <li>The file input consists of the following three sections with options and templates to control the display:
+    <ul>
+      <li>file caption section: to display a brief information of the file(s) selected</li>
+      <li>file action buttons section: to browse, remove, and upload files.</li>
+      <li>file preview section: to display the selected files on client for preview (supports images and text file types). Other file types will be displayed as normal thumbnails.</li>
+    </ul>
+  </li>
+  <li>The plugin automatically converts an input with <code>type = file</code> to an advanced file picker input if you set its <code>class = file</code>. All options to the input can be passed as HTML5 <code>data</code> attributes.</li>
+  <li>Ability to select and preview multiple files. Uses HTML 5 File reader API to read and preview files. Displays the progress of files being being loaded onto the preview zone, in case many files are chosen.</li>
+  <li>Offers predefined templates and CSS classes which can be changed to style your file-input display as per your needs.</li>
+  <li>Option to show/hide any or all of the following:
+    <ul>
+      <li>caption section</li>
+      <li>preview section</li>
+      <li>upload button</li>
+      <li>remove button</li>
+    </ul>
+  </li>
+  <li>Customise the location of the target container elements to display the entire plugin, the caption container, the caption text, the preview container, preview image, and preview status.</li>
+  <li>For text file previews, autowrap the text to the thumbnail width, and show a wrap indicator link to display complete text on hover. You can customize the wrap indicator (which defaults to …).</li>
+  <li>Customise the messages for preview, progress, and files selected.</li>
+  <li>Upload action defaults to form submit. Supports an upload route/server action parameter for custom ajax based upload.</li>
+  <li>Triggers JQuery events for advanced development. Events currently available are <code>filereset</code> and <code>fileclear</code>.</li>
+  <li>Disabled and readonly file input support.</li>
+  <li>Size of the entire plugin is less than 11KB (about 9KB for the minified JS and 2KB for the minified CSS).</li>
+</ul>
+
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      <b>Version</b> 2.0
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2016-2017 <a href="http://www.wabow.com" target="_blank">WABOW</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Create the tabs -->
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <!-- Home tab content -->
+      <div class="tab-pane active" id="control-sidebar-home-tab">
+        <h3 class="control-sidebar-heading">Recent Activity</h3>
+        <ul class="control-sidebar-menu">
+          <li>
+            <a href="javascript:;">
+              <i class="menu-icon fa fa-file-text-o bg-blue"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">人事規章</h4>
+
+                <p>Rules</p>
+              </div>
+            </a>
+          </li>
+		  <li>
+            <a href="javascript:;">
+              <i class="menu-icon fa fa-wrench bg-red"></i>
+
+              <div class="menu-info">
+                <h4 class="control-sidebar-subheading">異常回報</h4>
+
+                <p>Error Report</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- /.control-sidebar-menu -->
+
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  </aside>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+</body>
+</html>
