@@ -97,3 +97,9 @@ Route::get('/users.html', function () {
 Route::get('/users_form.html', function () {
     return view('users_form');
 })->name('users_form');
+
+
+Route::match(['get', 'post'], '/demo/image',[
+    'uses'=> 'DemoControllor@getImage',
+    'as'=>'demo_image',
+]);
