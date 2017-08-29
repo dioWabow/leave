@@ -60,7 +60,6 @@ class User extends Model
             }
         }
 
-
         $result =  $query->paginate($this->pagesize);
         return $result;
     }

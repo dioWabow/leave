@@ -17,8 +17,9 @@
 </section>
 
 <!-- Main content -->
-<form action="{{route('root_path')}}/user/edit/{{$model->id}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('root_path')}}/user/update" method="POST" enctype="multipart/form-data">
 {!!csrf_field()!!}
+<input type="hidden" id="user_id" name="user[id]" value="{{$model->id}}">
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
@@ -148,7 +149,7 @@
               <optgroup label="{{$team->name}}">
                 @foreach($team_users as $team_user)
                     @if($team->id==$team_user->team_id)
-                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->user->name}}</option>
+                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->user->nickname}}</option>
                     @endif
                 @endforeach
               </optgroup>
@@ -209,7 +210,7 @@ $(function () {
 
     $("#user_fileupload").fileinput({
         initialPreview: [
-            '{{route("root_path")}}/storage/avatar/{{$model->avatar}}'
+            '{{route("root_path")}}/storage/avatar/{{$model->avatar}}?v=' + Math.random()
         ],
         initialPreviewAsData: true,
     });

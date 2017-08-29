@@ -13,11 +13,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        // if($request->isMethod('post')) {
-            return true;
-        // } else {
-        //     return false;
-        // }
+        return true;
     }
 
     /**

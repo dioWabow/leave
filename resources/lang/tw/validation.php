@@ -101,7 +101,22 @@ return [
 
     'custom' => [
         'user.employee_no' => [
-            'required' => '員工編號一定要填',
+            'required' => '請輸入員工編號',
+            'numeric' => '員工編號僅限數字',
+        ],
+        'user.birthday' => [
+            'required' => '請輸入生日',
+            'Date' => '生日請填入日期',
+        ],
+        'user.enter_date' => [
+            'required' => '請輸入到職時間',
+            'Date' => '到職時間請填入日期',
+        ],
+        'user.leave_date' => [
+            'Date' => '離職時間請填入日期',
+        ],
+        'user.avatar' => [
+            'image' => '大頭貼請選擇圖片',
         ],
     ],
 
