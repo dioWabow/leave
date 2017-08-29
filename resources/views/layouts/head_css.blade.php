@@ -313,3 +313,17 @@ $(function () {
     });
 });
 </script>
+
+<!-- 假別管理與修改頁面用 -->
+<script>
+$(function () {
+$('.types-single-date').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+});
+
+$('.types-single-date').each(function(){$(this).val($(this).attr('date'));});
+
+});
+</script>

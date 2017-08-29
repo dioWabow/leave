@@ -120,16 +120,16 @@
 					<div class="col-md-1">
 						<label>開始時間</label>
 					</div>
-					<div class="col-md-11">
-						<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right" value="{{ $model->start_time }}">
+					<div class="col-md-3">
+						<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{$model->start_time}}" >
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>結束時間</label>
 					</div>
-					<div class="col-md-11">
-						<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right" value="{{ $model->end_time }}">
+					<div class="col-md-3">
+						<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{$model->end_time}}" >
 					</div>
 				</div></div>
 
@@ -179,17 +179,4 @@
     @endif
 
 <!-- /.content -->
-<script>
-$(function () {
-    $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
-
-    $('.single-date').each(function(){
-        $(this).val($(this).attr('date'));
-    });
-});
-</script>
 @stop

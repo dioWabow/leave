@@ -17,12 +17,15 @@ class Type extends Model
         'reason',
         'prove',
         'available',
+        'order_by',
+        'order_way',
+        'pagesize',
     ];
     
     protected $attributes = [
         'order_by' => "id",
         'order_way' => "DESC",
-        'pagesize' => '2',
+        'pagesize' => '25',
     ];
 
 
@@ -37,20 +40,16 @@ class Type extends Model
      */
     public function search( $where = [] )
     {
-        
         $query = $this->OrderedBy();
-
-        if (count($where) > 0 ) {
-            foreach ($where as $key => $val) {
-                if (isset($val) && $val != "") {
+            foreach ($where as $key => $value) {
+                if (isset($value) && $value != "") {
                     if ($key == 'keywords') {
-                        $query->orWhere('name', 'LIKE', '%'. $val .'%');
+                        $query->where('name', 'LIKE', '%'. $value .'%');
                     } else {
-                        $query->where($key, $val);
+                        $query->where($key, $value);
                     }
                 }
             }
-        }
        
         $result =  $query->paginate($this->pagesize);
         
@@ -62,4 +61,19 @@ class Type extends Model
         return $query->orderBy($this->order_by, $this->order_way);
     }
 
+    public function saveOriginalOnly()
+    {
+        $dirty = $this->getDirty();
+
+        foreach ($this->getAttributes() as $key => $value) {
+            if(in_array($key, array_keys($this->getOriginal()))) unset($this->$key);
+        }
+
+        $isSaved = $this->save();
+        foreach($dirty as $key => $value) {
+            $this->setAttribute($key, $value);
+        }
+
+        return $isSaved;
+    }
 }

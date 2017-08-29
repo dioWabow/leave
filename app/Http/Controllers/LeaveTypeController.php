@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use DB;
-use Auth;
 use Session;
 use App\Type;
 
@@ -36,7 +35,7 @@ class LeaveTypeController extends Controller
 
         } else {
 
-            if (!empty($request->input('page'))) {
+            if (!empty($request->input('page') && !empty($request->session()->get('leave_type')))) {
 
                 $search = $request->session()->get('leave_type.search.0');
                 $order_by = $request->session()->get('leave_type.order_by.0');
@@ -44,7 +43,6 @@ class LeaveTypeController extends Controller
             } else {
 
                 $request->session()->forget('leave_type');
-
             }
 
         }
@@ -60,17 +58,27 @@ class LeaveTypeController extends Controller
         ));
     }
 
-
     /**
      * 新增
      *
      * @return \Illuminate\Http\Response
      */
-    public function getCreate()
+    public function getCreate(Request $request)
     {
 
         $model = new Type;
-        
+
+        $input = $request->old('leave_type');
+
+        if ($input) {
+            
+            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
+            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
+            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+            $model->fill($input);
+
+        }
+
         return  view('leave_type_form', compact(
             'model'
         ));
@@ -85,6 +93,16 @@ class LeaveTypeController extends Controller
     {
 
         $model = $this->loadModel($id);
+
+        $input = $request->old('leave_type');
+        if ($input) {
+            
+            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
+            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
+            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+            $model->fill($input);
+
+        }
         
         return  view('leave_type_form', compact(
             'model'
@@ -112,23 +130,22 @@ class LeaveTypeController extends Controller
      */
      public function postInsert(LeaveTypeRequest $request)
      {
- 
-         $input = $request->input('leave_type');
- 
-         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-         $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
-         
-         //儲存資料
-         $model = new Type();
-         $model->fill($input);
-         
-         dd($model);
-         if($model->save()) {
-             return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
-         }else{
-             return Redirect::to(route('leave_type_create'))->withErrors(['msg' => '新增失敗']);
-         }
+
+        $input = $request->input('leave_type');
+
+        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
+        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
+        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+
+        //儲存資料
+        $model = new Type();
+        $model->fill($input);
+
+        if($model->saveOriginalOnly()) {
+            return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
+        }else{
+            return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+        }
      }
 
     /**
@@ -139,6 +156,7 @@ class LeaveTypeController extends Controller
      */
     public function postUpdate(LeaveTypeRequest $request)
     {
+        
         $input = $request->input('leave_type');
         
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
@@ -153,7 +171,7 @@ class LeaveTypeController extends Controller
         if ($model->save()) {
             return Redirect::to(route('leave_type_edit', [ 'id' => $input['id']]))->withErrors(['msg' => '更新成功']);
         }else{
-            return Redirect::to(route('leave_type_edit', [ 'id' => $input['id']]))->withErrors(['msg' => '更新失敗']);
+            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);;
         }
     }
 

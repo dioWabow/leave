@@ -100,8 +100,8 @@
 												<th width="15%"><a onclick="changeSort('exception');">類型</a></th>
 												<th width="15%"><a onclick="changeSort('reset_time');">重置形式</a></th>
 												<th width="15%"><a onclick="changeSort('hours');">上限(HR)</a></th>
-												<th width="15%">開始時間</a></th>
-												<th width="15%">結束時間</a></th>
+												<th width="15%"><a onclick="changeSort('reset_time');">開始時間</a></th>
+												<th width="15%"><a onclick="changeSort('reset_time');">結束時間</a></th>
 												<th width="10%"><a onclick="changeSort('reason');">理由</a></th>
 												<th width="10%"><a onclick="changeSort('prove');">證明</a></th>
 												<th width="10%"><a onclick="changeSort('available');">狀態</a></th>
@@ -158,9 +158,7 @@
                                 <ul class="pagination">
                                     <li class="paginate_button previous disabled">
                                         </li>
-                                            @if (count($dataProvider) > 0)
-                                                {{ $dataProvider->links() }}
-                                            @endif
+                                            {{ $dataProvider->links() }}
                                         </li>
                                     </li>
                                     </ul>
