@@ -68,10 +68,14 @@ class HolidayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function getCreate()
+    public static function getCreate(Request $request)
     {
         $model = new Holiday;
         $type_judge = 0;
+
+        if ($request->old('holidies')) {
+            $model->fill($request->old('holidies'));
+        }
 
         return view('holidies_form', compact(
             'type_judge', 'model'
@@ -83,12 +87,15 @@ class HolidayController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public static function getEdit($id)
+    public static function getEdit(Request $request, $id)
     {
         $model = Holiday::find($id);
         $type_judge = ($model->type == 'holiday') ? '1' : '0';
 
-        $name = $model->name;
+        if ($request->old('holidies')) {
+            $model->fill($request->old('holidies'));
+        }
+
         $model->date = date('Y-m-d', strtotime($model->date));
 
         return view('holidies_form', compact(
@@ -113,7 +120,7 @@ class HolidayController extends Controller
         if($model->saveOriginalOnly()) {
             return Redirect::to('holidies')->withErrors(['msg' => '新增成功']);
         }else{
-            return Redirect::to('holidies')->withErrors(['msg' => '新增失敗']);
+            return Redirect::back()->withInput();
         }
     }
 
@@ -129,12 +136,13 @@ class HolidayController extends Controller
 
         //儲存資料
         $holiday = self::loadModel($input['id']);
+
         $holiday->fill($input['holidies']);
 
         if($holiday->save()) {
             return Redirect::to('holidies')->withErrors(['msg' => '更新成功']);
         } else {
-            return Redirect::to('holidies')->withErrors(['msg' => '更新失敗']);
+            return Redirect::back()->withInput();
         }
     }
 
