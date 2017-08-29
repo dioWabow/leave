@@ -25,9 +25,8 @@ class LeaveTypeController extends Controller
     
     public function getIndex(Request $request)
     {
-        $search = $request->input('search');
-        $order_by = $request->input('order_by');
-        
+        $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by'):[];
+        $search = (!empty($request->input('search'))) ? $request->input('search'):[];
         
         if (!empty($search)|| !empty($order_by)) {
 
@@ -38,21 +37,26 @@ class LeaveTypeController extends Controller
         } else {
 
             if (!empty($request->input('page'))) {
+
                 $search = $request->session()->get('leave_type.search.0');
                 $order_by = $request->session()->get('leave_type.order_by.0');
+
             } else {
+
                 $request->session()->forget('leave_type');
+
             }
 
         }
 
         $model = new Type;
-        $dataProvider = empty($order_by) ? $model->search($search) : $model->fill($order_by)->search($search);
+
+        $model->fill($order_by);
+        
+        $dataProvider = $model->search($search);
 
         return  view('leave_type', compact(
-            'dataProvider', 
-            'search', 
-            'order_by'
+            'dataProvider', 'search', 'model'
         ));
     }
 
@@ -66,8 +70,10 @@ class LeaveTypeController extends Controller
     {
 
         $model = new Type;
-
-        return  view('leave_type_form', compact('model'));
+        
+        return  view('leave_type_form', compact(
+            'model'
+        ));
     }
 
     /**
@@ -80,7 +86,9 @@ class LeaveTypeController extends Controller
 
         $model = $this->loadModel($id);
         
-        return  view('leave_type_form', compact('model'));
+        return  view('leave_type_form', compact(
+            'model'
+        ));
     }
 
     /**
@@ -102,26 +110,26 @@ class LeaveTypeController extends Controller
      * @param Request $request
      * @return Redirect
      */
-    public function postInsert(LeaveTypeRequest $request)
-    {
-
-    $input = $request->input('leave_type');
-
-    $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-    $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-    $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
-
-    //儲存資料
-    $model = new Type;
-    $model->fill($input);
-
-    if ($model->save()) {
-        return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
-    }else{
-        return Redirect::to(route('leave_type_create'))->withErrors(['msg' => '新增失敗']);
-    }
-    
-    }
+     public function postInsert(LeaveTypeRequest $request)
+     {
+ 
+         $input = $request->input('leave_type');
+ 
+         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
+         $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
+         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+         
+         //儲存資料
+         $model = new Type();
+         $model->fill($input);
+         
+         dd($model);
+         if($model->save()) {
+             return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
+         }else{
+             return Redirect::to(route('leave_type_create'))->withErrors(['msg' => '新增失敗']);
+         }
+     }
 
     /**
      * 更新

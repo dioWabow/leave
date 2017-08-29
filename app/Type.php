@@ -12,19 +12,19 @@ class Type extends Model
         'reset_time',
         'hours',
         'exception',
+        'start_time',
+        'end_time',
         'reason',
         'prove',
         'available',
-        'pagesize',
-        'order_by',
-        'order_way',
-        'pagesize',
     ];
     
-    
-    public $pagesize = 25;
-    public $order_by = "id";
-    public $order_way = "DESC";
+    protected $attributes = [
+        'order_by' => "id",
+        'order_way' => "DESC",
+        'pagesize' => '2',
+    ];
+
 
     /**
      * 搜尋table多個資料
@@ -35,7 +35,7 @@ class Type extends Model
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function search($where = [])
+    public function search( $where = [] )
     {
         
         $query = $this->OrderedBy();
@@ -44,32 +44,22 @@ class Type extends Model
             foreach ($where as $key => $val) {
                 if (isset($val) && $val != "") {
                     if ($key == 'keywords') {
-                        $query->Where(function ($query1) use ($val) {
-                            $query1->orWhere('name', 'LIKE', '%'. $val .'%');
-                        });
+                        $query->orWhere('name', 'LIKE', '%'. $val .'%');
                     } else {
                         $query->where($key, $val);
                     }
                 }
             }
         }
-        
-        if (!empty($this->attributes['pagesize'])) {
-            $result =  $query->paginate($this->attributes['pagesize']);
-        } else {
-            $result =  $query->paginate($this->pagesize);
-        }
+       
+        $result =  $query->paginate($this->pagesize);
         
         return $result;
     }
 
     public function scopeOrderedBy($query)
     {
-        if (!empty($this->attributes['order_by']) && !empty($this->attributes['order_way'])) {
-            return $query->orderBy($this->attributes['order_by'], $this->attributes['order_way']);
-        } else {
-            return $query->orderBy($this->order_by, $this->order_way);
-        }
+        return $query->orderBy($this->order_by, $this->order_way);
     }
 
 }
