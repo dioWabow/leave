@@ -54,16 +54,15 @@ class SystemConfController extends Controller
             }
 
             if($results) {
-                return Redirect::to('/system_conf.html',)->withErrors(['msg' => '更新成功']);
+                return Redirect::to('/config')->withErrors(['msg' => '更新成功']);
             }else{
-                return Redirect::to('/system_conf.html',)->withErrors(['msg' => '更新失敗']);
+                return Redirect::to('/config')->withErrors(['msg' => '更新失敗']);
             }
         }
     }
 
     public function getIndex(Request $reques) {
         $config = new Config();
-        // $view =  view('system_conf', ['config' => $configs]);
         return view('system_conf', compact('config'));
     }
    

@@ -79,10 +79,11 @@ Route::get('/report.html', function () {
 Route::get('/report-annual-leave.html', function () {
     return view('report-annual-leave');
 })->name('report-annual-leave');
-Route::get('/system_conf.html', function () {
-    return view('system_conf');
-})->name('system_conf');
 
+Route::get('/config',[
+    'uses'=> 'SystemConfController@getIndex',
+    'as'=>'system_conf',
+]);
 Route::get('/teams.html', function () {
     return view('teams');
 })->name('teams');
