@@ -201,7 +201,7 @@
           <ul class="treeview-menu">
             <li class=""><a href="{{ route('system_conf') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
             <li class=""><a href="{{ route('teams') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
-            <li class=""><a href="{{ route('users') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
+            <li class=""><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>
         <li class="treeview ">

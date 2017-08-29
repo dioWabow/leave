@@ -293,23 +293,3 @@ $('#nestable').nestable({
   maxDepth: 5
 });
 </script>
-
-<!-- 員工管理與修改頁面用 -->
-<script>
-$(function () {
-  $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
-
-    $('.single-date').each(function(){$(this).val($(this).attr('date'));});
-
-    $("#user_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/users/vic.png'
-        ],
-        initialPreviewAsData: true,
-    });
-});
-</script>

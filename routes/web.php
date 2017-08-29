@@ -91,13 +91,18 @@ Route::get('/system_conf.html', function () {
 Route::get('/teams.html', function () {
     return view('teams');
 })->name('teams');
-Route::get('/users.html', function () {
-    return view('users');
-})->name('users');
-Route::get('/users_form.html', function () {
-    return view('users_form');
-})->name('users_form');
 
+Route::any('user/index',[
+        'uses' => 'UserController@getIndex',
+        'as' => 'user/index',
+        ]);
+
+Route::any('user/search',['uses' => 'UserController@getIndex',]);
+
+Route::any('user/edit/{id}', [
+        'uses' => 'UserController@getEdit',
+        'as' => 'user/edit',
+        ]);
 
 Route::match(['get', 'post'], '/demo/image',[
     'uses'=> 'DemoControllor@getImage',
