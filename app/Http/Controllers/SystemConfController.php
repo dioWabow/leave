@@ -22,7 +22,20 @@ class SystemConfController extends Controller
 
      public function postUpdate(Request $request)
      {
-        $configs = new Config();
+        $input = $request->input('config');
+
+        $model = new Config();
+        $error = false;
+        foreach ($input as $key => $value) {
+            if (!$model->updateConfigValueByKey($key,$value)) {
+                $error = true;
+            }
+        }
+        dd($results);
+
+        $model->save();
+
+
         $record = array();
         $config_key = array();
         $input = $request->all();
@@ -52,7 +65,7 @@ class SystemConfController extends Controller
             foreach ($config_key as $key => $value) {
                 $record['config_value'] = $value;
                 $configs->fill($record);
-                $results = $configs->where('config_key', $key)->update($record);
+                $results = $configs->where('config_key', $key)->update($value);
             }
 
             if($results) {

@@ -56,13 +56,13 @@
                             @endif
 						</div>
 						<div class="form-group">
-							<label for="config_company_rules" class="col-sm-2 control-label">人事規章</label>
+							<label for="config_company_rules" class="col-sm-2 control-label">人事規章Url</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="config_company_rules" name="config[company_rules]" placeholder="URL" value="{{ $config->getConfigValueByKey('company_rules') }}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="config_company_domamin" class="col-sm-2 control-label">異常回報</label>
+							<label for="config_company_domamin" class="col-sm-2 control-label">異常回報Email</label>
 							<div class="col-sm-10">
 								<input type="text" class="form-control" id="config_company_mail" name="config[company_mail]" placeholder="E-MAIL" value="{{ $config->getConfigValueByKey('company_mail') }}">
 							</div>
@@ -180,21 +180,21 @@
 							<label for="config_google_json" class="col-sm-3 control-label">Google認證用client_id</label>
 
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="config_google_client_id" name="config[google_google_client_id]" placeholder="Google client_id" value="{{ $config->getConfigValueByKey('google_client_id') }}">
+								<input type="text" class="form-control" id="config_google_client_id" name="config[google_client_id]" placeholder="Google client_id" value="{{ $config->getConfigValueByKey('google_client_id') }}">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="config_google_json" class="col-sm-3 control-label">Google認證用client_secret</label>
 
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="config_google_json" name="config[google_json]" placeholder="Google client_secret" value="{{ $config->getConfigValueByKey('google_client_secret') }}">
+								<input type="text" class="form-control" id="config_google_client_secret" name="config[google_client_secret]" placeholder="Google client_secret" value="{{ $config->getConfigValueByKey('google_client_secret') }}">
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="config_google_json" class="col-sm-3 control-label">Google認證用回傳網址</label>
 
 							<div class="col-sm-9">
-								<input type="text" class="form-control" id="config_google_json" name="config[google_json]" placeholder="Google return url" value="{{ $config->getConfigValueByKey('google_redirect') }}">
+								<input type="text" class="form-control" id="config_google_redirect" name="config[google_redirect]" placeholder="Google return url" value="{{ $config->getConfigValueByKey('google_redirect') }}">
 							</div>
 						</div>
 					</div>
@@ -252,10 +252,39 @@
 						<button type="reset" class="btn btn-default reset">重置</button>
 						<button type="submit" class="btn btn-danger pull-right">送出</button>
 					</div>
+
 				<!-- /.box-footer -->
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 				</form>
           	</div>
+          	<div class="box box-default">
+			  <div class="box-header with-border">
+			  <h3 class="box-title">其他設定</h3>
+			  </div>
+			  <form id="form_config_other" action="" class="form-horizontal" method="POST" enctype="multipart/form-data" _lpchecked="1">
+				  <div class="box-body">
+					  <div class="form-group">
+						  <label for="form_config_google_login" class="col-sm-3 control-label">大BOSS天數</label>
+						  <div class="col-sm-9">
+						  	<input type="text" class="form-control" id="config_boss_days" name="config[boss_days]" placeholder="需要大BOSS審核的天數" value="{{ $config->getConfigValueByKey('boss_days') }}">
+						  </div>
+					  </div>
+					  <div class="form-group">
+						  <label for="config_google_json" class="col-sm-3 control-label">董事天數</label>
+
+						  <div class="col-sm-9">
+						  <input type="text" class="form-control" id="config_boss_days" name="config[director_days]" placeholder="需要董事審核的天數" value="{{ $config->getConfigValueByKey('director_days') }}">
+						  </div>
+					  </div>
+				  </div>
+				  <!-- /.box-body -->
+				  <div class="box-footer">
+					  <button type="reset" class="btn btn-default">重置</button>
+					  <button type="submit" class="btn btn-default pull-right">送出</button>
+				  </div>
+			  <!-- /.box-footer -->
+			  </form>
+			</div>
 		</div>
 	</div>
 <!-- /.content -->

@@ -21,8 +21,13 @@ class Config extends Model
      */
     public static function getConfigValueByKey($key = "")
     {
-
         $result = self::where("config_key", $key)->pluck('config_value')->first();
+        return $result;
+    }
+
+    public static function updateConfigValueByKey($key = "",$value = "")
+    {
+        $result = self::where('config_key', $key)->update(['config_value' => $value]);
         return $result;
     }
 
