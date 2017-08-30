@@ -12,11 +12,4 @@ class Leave extends Model
      * @var string
      */
     protected $table = 'leaves';
-
-    public function testDate()
-    {
-    	$result = $this->get();
-    	return $result;
-    	// dd($result);
-    }
 }
