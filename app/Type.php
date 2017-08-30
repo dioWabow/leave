@@ -70,7 +70,8 @@ class Type extends Model
         }
 
         $isSaved = $this->save();
-        foreach($dirty as $key => $value) {
+        
+        foreach ($dirty as $key => $value) {
             $this->setAttribute($key, $value);
         }
 

@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-anchor"></i> 假別資料@if ( $model->id > 0 )修改 @else 新增 @endif
+	<i class="fa fa-anchor"></i> 假別資料@if ($model->id > 0)修改 @else 新增 @endif
 	<small>Vacation Category Management</small>
   </h1>
   <ol class="breadcrumb">
@@ -16,8 +16,8 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route( $model->id > 0 ? 'leave_type_update' : 'leave_type_insert' ) }}" method="POST" enctype="multipart/form-data">
-{{ csrf_field() }}
+<form action="{{ route($model->id > 0 ? 'leave_type_update' : 'leave_type_insert') }}" method="POST" enctype="multipart/form-data">
+{!!csrf_field()!!}
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
@@ -121,7 +121,7 @@
 						<label>開始時間</label>
 					</div>
 					<div class="col-md-3">
-						<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{$model->start_time}}" >
+						<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{ $model->start_time }}" >
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -129,7 +129,7 @@
 						<label>結束時間</label>
 					</div>
 					<div class="col-md-3">
-						<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{$model->end_time}}" >
+						<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{ $model->end_time }}" >
 					</div>
 				</div></div>
 
@@ -172,11 +172,10 @@
 <!-- 出現訊息 -->
     @if ($errors->any())
         <div class="alert alert-danger">
-            @foreach($errors->all() as $error)
+            @foreach ($errors->all() as $error)
                 <p>{{ $error }}</p>
             @endforeach
         </div>
     @endif
-
 <!-- /.content -->
 @stop

@@ -25,8 +25,8 @@
 							<div class="col-sm-3">
                              <form name="frmSearch" id="frmSearch" action="{{ route('search') }}" method="POST">
                                 @if(count($model->order_by)>0)
-                                    <input id="order_by" type="hidden" name="order_by[order_by]" value="{{$model->order_by}}">
-                                    <input id="order_way" type="hidden" name="order_by[order_way]" value="{{$model->order_way}}">
+                                    <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+                                    <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
                                 @else
                                     <input id="order_by" type="hidden" name="order_by[order_by]" value="">
                                     <input id="order_way" type="hidden" name="order_by[order_way]" value="">
@@ -82,8 +82,8 @@
 											&nbsp;
 											<label>
 												關鍵字：
-												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[keywords]" style="width:270px">
-												<button type="submit" class="btn btn-default" ><i class="fa fa-search"></i></button>
+												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[keywords]" style="width:270px" value="@if(count($search)>0){{$search['keywords']}}@endif" >
+												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                                                 <button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
 											</label>
 										</div>
@@ -96,12 +96,12 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th><a onclick="changeSort('name');">名稱</></th>
+												<th><a onclick="changeSort('name');">名稱</a></th>
 												<th width="15%"><a onclick="changeSort('exception');">類型</a></th>
 												<th width="15%"><a onclick="changeSort('reset_time');">重置形式</a></th>
 												<th width="15%"><a onclick="changeSort('hours');">上限(HR)</a></th>
-												<th width="15%"><a onclick="changeSort('reset_time');">開始時間</a></th>
-												<th width="15%"><a onclick="changeSort('reset_time');">結束時間</a></th>
+												<th width="15%"><a onclick="changeSort('start_time');">開始時間</a></th>
+												<th width="15%"><a onclick="changeSort('end_time');">結束時間</a></th>
 												<th width="10%"><a onclick="changeSort('reason');">理由</a></th>
 												<th width="10%"><a onclick="changeSort('prove');">證明</a></th>
 												<th width="10%"><a onclick="changeSort('available');">狀態</a></th>
@@ -109,8 +109,8 @@
 											</tr>
 										</thead>
 										<tbody>
-                                        @foreach($dataProvider as $value)
-                                            <tr class='clickable-row' data-href="{{ route('leave_type_edit', [ 'id' => $value->id ]) }}">
+                                        @foreach ($dataProvider as $value)
+                                            <tr class="clickable-row" data-href="{{ route('leave_type_edit', [ 'id' => $value->id ]) }}">
                                                 <td>{{ $value->name }}</td>
 												<td>
                                                     @if ($value->exception == 'normal') 一般假別
@@ -171,27 +171,25 @@
 	</div>
 </section>
 <script>
-
 function changePageSize(pagesize){
     $("#frmSearch").submit();
 }
 
 function changeSort(sort){
 
-    order_by = '{{ $model->order_by }}';
-    order_way = '{{ $model->order_way }}';
+    order_by = "{{ $model->order_by }}";
+    order_way = "{{ $model->order_way }}";
 
-    $('#order_by').val(sort);
+    $("#order_by").val(sort);
 
     if (order_by == sort && order_way == "DESC") {
-        $('#order_way').val("ASC");
+        $("#order_way").val("ASC");
     } else {
-        $('#order_way').val("DESC");
+        $("#order_way").val("DESC");
     }
 
     $("#frmSearch").submit();
 
 }
-
 </script>
 @stop

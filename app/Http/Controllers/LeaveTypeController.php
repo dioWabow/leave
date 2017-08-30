@@ -24,10 +24,10 @@ class LeaveTypeController extends Controller
     
     public function getIndex(Request $request)
     {
-        $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by'):[];
-        $search = (!empty($request->input('search'))) ? $request->input('search'):[];
+        $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
+        $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         
-        if (!empty($search)|| !empty($order_by)) {
+        if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leave_type');
             $request->session()->push('leave_type.search', $search);
@@ -43,8 +43,8 @@ class LeaveTypeController extends Controller
             } else {
 
                 $request->session()->forget('leave_type');
-            }
 
+            }
         }
 
         $model = new Type;
@@ -72,9 +72,9 @@ class LeaveTypeController extends Controller
 
         if ($input) {
             
-            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
+            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
+            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
             $model->fill($input);
 
         }
@@ -93,13 +93,14 @@ class LeaveTypeController extends Controller
     {
 
         $model = $this->loadModel($id);
-
+        
         $input = $request->old('leave_type');
+
         if ($input) {
             
-            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
+            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
+            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
             $model->fill($input);
 
         }
@@ -138,12 +139,12 @@ class LeaveTypeController extends Controller
         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
 
         //儲存資料
-        $model = new Type();
+        $model = new Type;
         $model->fill($input);
 
-        if($model->saveOriginalOnly()) {
+        if ($model->saveOriginalOnly()) {
             return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
-        }else{
+        } else {
             return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
         }
      }
@@ -159,18 +160,18 @@ class LeaveTypeController extends Controller
         
         $input = $request->input('leave_type');
         
-        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
+        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
+        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
 
-        //儲存資料
+        //更新資料
         $model = new Type;
         $model = $this->loadModel($input['id']);
         $model->fill($input);
         
         if ($model->save()) {
             return Redirect::to(route('leave_type_edit', [ 'id' => $input['id']]))->withErrors(['msg' => '更新成功']);
-        }else{
+        } else {
             return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);;
         }
     }
