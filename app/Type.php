@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Type extends Model
 {
@@ -41,24 +43,32 @@ class Type extends Model
     public function search( $where = [] )
     {
         $query = $this->OrderedBy();
-            foreach ($where as $key => $value) {
-                if (isset($value) && $value != "") {
-                    if ($key == 'keywords') {
-                        $query->where('name', 'LIKE', '%'. $value .'%');
-                    } else {
-                        $query->where($key, $value);
-                    }
+        foreach ($where as $key => $value) {
+
+            if (Schema::hasColumn('types', $key) && !empty($value)) {
+
+                if ($key == 'name') {
+
+                    $query->where('name', 'LIKE', '%'. $value .'%');
+
+                }  else {
+
+                    $query->where($key, $value);
+                    
                 }
+
             }
+
+        }
        
-        $result =  $query->paginate($this->pagesize);
-        
+        $result = $query->paginate($this->pagesize);
         return $result;
     }
 
     public function scopeOrderedBy($query)
     {
-        return $query->orderBy($this->order_by, $this->order_way);
+        $result = $query->orderBy($this->order_by, $this->order_way);
+        return $result;
     }
 
     public function saveOriginalOnly()
@@ -66,15 +76,19 @@ class Type extends Model
         $dirty = $this->getDirty();
 
         foreach ($this->getAttributes() as $key => $value) {
+
             if(in_array($key, array_keys($this->getOriginal()))) unset($this->$key);
+
         }
 
         $isSaved = $this->save();
         
         foreach ($dirty as $key => $value) {
+
             $this->setAttribute($key, $value);
+        
         }
 
         return $isSaved;
-    }
+    }   
 }

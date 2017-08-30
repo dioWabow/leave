@@ -23,26 +23,26 @@
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
 						<div class="row">
 							<div class="col-sm-3">
-                             <form name="frmSearch" id="frmSearch" action="{{ route('search') }}" method="POST">
-                                @if(count($model->order_by)>0)
-                                    <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
-                                    <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
-                                @else
-                                    <input id="order_by" type="hidden" name="order_by[order_by]" value="">
-                                    <input id="order_way" type="hidden" name="order_by[order_way]" value="">
-                                @endif
-								<div class="dataTables_length">
-									<label>
-										每頁
-                                        <select name="order_by[pagesize]" class="form-control input-sm" onchange="changePageSize(this.value);">
-                                            <option value="25"@if(count($model->order_by) >0 && $model->pagesize == "25") selected="selected" @endif>25</option>
-                                            <option value="50"@if(count($model->order_by) >0 && $model->pagesize == "50") selected="selected" @endif>50</option>
-                                            <option value="100"@if(count($model->order_by) >0 && $model->pagesize == "100") selected="selected" @endif>100</option>
-                                        </select>
-									    筆</label>
+								<form name="frmSearch" id="frmSearch" action="{{ route('search') }}" method="POST">
+									@if(count($model->order_by)>0)
+											<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+											<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
+									@else
+											<input id="order_by" type="hidden" name="order_by[order_by]" value="">
+											<input id="order_way" type="hidden" name="order_by[order_way]" value="">
+									@endif
+									<div class="dataTables_length">
+										<label>
+											每頁
+												<select name="order_by[pagesize]" class="form-control input-sm" onchange="changePageSize(this.value);">
+														<option value="25"@if(count($model->order_by) >0 && $model->pagesize == "25") selected="selected" @endif>25</option>
+														<option value="50"@if(count($model->order_by) >0 && $model->pagesize == "50") selected="selected" @endif>50</option>
+														<option value="100"@if(count($model->order_by) >0 && $model->pagesize == "100") selected="selected" @endif>100</option>
+												</select>
+											筆</label>
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-9">
+									<div class="col-sm-9">
 										<div class="pull-right">
 											<label>
 												形式：
@@ -82,12 +82,12 @@
 											&nbsp;
 											<label>
 												關鍵字：
-												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[keywords]" style="width:270px" value="@if(count($search)>0){{$search['keywords']}}@endif" >
+												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" value="@if(count($search)>0){{$search['name']}}@endif" >
 												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                                <button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
+																								<button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
 											</label>
 										</div>
-                                        {!!csrf_field()!!}
+											{!!csrf_field()!!}
 									</form>
 								</div>
 							</div>
@@ -109,58 +109,58 @@
 											</tr>
 										</thead>
 										<tbody>
-                                        @foreach ($dataProvider as $value)
-                                            <tr class="clickable-row" data-href="{{ route('leave_type_edit', [ 'id' => $value->id ]) }}">
-                                                <td>{{ $value->name }}</td>
-												<td>
-                                                    @if ($value->exception == 'normal') 一般假別
-                                                    @elseif ($value->exception == 'job_seek') 謀職假
-                                                    @elseif ($value->exception == 'paid_sick') 有薪病假
-                                                    @elseif ($value->exception == 'sick') 無薪病假
-                                                    @elseif ($value->exception == 'entertain') 善待假
-                                                    @elseif ($value->exception == 'annaul_leave') 特休
-                                                    @elseif ($value->exception == 'lone_stay') 久任假
-                                                    @elseif ($value->exception == 'birthday') 生日假
-                                                    @endif
-                                                </td>
-												<td>
-                                                    @if ($value->reset_time == 'none') 不重置
-                                                    @elseif ($value->reset_time == 'week') 每週重置
-                                                    @elseif ($value->reset_time == 'month') 每月重置
-                                                    @elseif ($value->reset_time == 'season') 每季重置
-                                                    @elseif ($value->reset_time == 'year') 每年重置
-                                                    @endif
-                                                </td>
-												<td>{{ $value->hours }}</td>
-												<td>{{ $value->start_time }}</td>
-												<td>{{ $value->end_time }}</td>
-												<td>
-													<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
-												</td>
-												<td>
-													<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是"  data-off="否" @if ($value->prove == 1) checked="checked" @endif>
-												</td>
-												<td>
-													<input type="checkbox" name="leave_type[available]" class="leave_type_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
-												</td>
-												<td>
-													<button type="submit"  class="btn btn-danger" @if($value->available == '1') disabled="disabled" @endif onclick="location.href='{{ route('leave_type_delete', [ 'id' => $value->id ]) }}'"><i class="fa fa-trash-o"></i></button>
-												</td>
-											</tr>
-											</tr>
-                                            @endforeach
-										</tbody>
+											@foreach ($dataProvider as $value)
+												<tr class="clickable-row" data-href="{{ route('leave_type_edit', [ 'id' => $value->id ]) }}">
+													<td>{{ $value->name }}</td>
+														<td>
+															@if ($value->exception == 'normal') 一般假別
+															@elseif ($value->exception == 'job_seek') 謀職假
+															@elseif ($value->exception == 'paid_sick') 有薪病假
+															@elseif ($value->exception == 'sick') 無薪病假
+															@elseif ($value->exception == 'entertain') 善待假
+															@elseif ($value->exception == 'annaul_leave') 特休
+															@elseif ($value->exception == 'lone_stay') 久任假
+															@elseif ($value->exception == 'birthday') 生日假
+															@endif
+														</td>
+														<td>
+															@if ($value->reset_time == 'none') 不重置
+															@elseif ($value->reset_time == 'week') 每週重置
+															@elseif ($value->reset_time == 'month') 每月重置
+															@elseif ($value->reset_time == 'season') 每季重置
+															@elseif ($value->reset_time == 'year') 每年重置
+															@endif
+														</td>
+													<td>{{ $value->hours }}</td>
+													<td>{{ $value->start_time }}</td>
+													<td>{{ $value->end_time }}</td>
+													<td>
+														<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
+													</td>
+													<td>
+														<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是"  data-off="否" @if ($value->prove == 1) checked="checked" @endif>
+													</td>
+													<td>
+														<input type="checkbox" name="leave_type[available]" class="leave_type_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
+													</td>
+													<td>
+														<button type="submit"  class="btn btn-danger" @if($value->available == '1') disabled="disabled" @endif onclick="location.href='{{ route('leave_type_delete', [ 'id' => $value->id ]) }}'"><i class="fa fa-trash-o"></i></button>
+													</td>
+                                                </tr>
+                                            </tr>
+                                        @endforeach
+									</tbody>
 									</table>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
-                                <ul class="pagination">
-                                    <li class="paginate_button previous disabled">
+									<ul class="pagination">
+                                        <li class="paginate_button previous disabled">
+                                            </li>
+                                                {{ $dataProvider->links() }}
+                                            </li>
                                         </li>
-                                            {{ $dataProvider->links() }}
-                                        </li>
-                                    </li>
                                     </ul>
 								</div>
 							</div>
@@ -171,25 +171,25 @@
 	</div>
 </section>
 <script>
-function changePageSize(pagesize){
+function changePageSize(pagesize)
+{
     $("#frmSearch").submit();
 }
 
-function changeSort(sort){
+function changeSort(sort)
+{
+	order_by = "{{ $model->order_by }}";
+	order_way = "{{ $model->order_way }}";
 
-    order_by = "{{ $model->order_by }}";
-    order_way = "{{ $model->order_way }}";
+	$("#order_by").val(sort);
 
-    $("#order_by").val(sort);
+	if (order_by == sort && order_way == "DESC") {
+			$("#order_way").val("ASC");
+	} else {
+			$("#order_way").val("DESC");
+	}
 
-    if (order_by == sort && order_way == "DESC") {
-        $("#order_way").val("ASC");
-    } else {
-        $("#order_way").val("DESC");
-    }
-
-    $("#frmSearch").submit();
-
+	$("#frmSearch").submit();
 }
 </script>
 @stop

@@ -4,14 +4,14 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-anchor"></i> 假別資料@if ($model->id > 0)修改 @else 新增 @endif
-	<small>Vacation Category Management</small>
+    <i class="fa fa-anchor"></i> 假別資料@if ($model->id > 0)修改 @else 新增 @endif
+    <small>Vacation Category Management</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>假期設定</li>
-	<li><a href="./users.html">假別管理</a></li>
-	<li class="active">資料修改</li>
+    <li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li>假期設定</li>
+    <li><a href="./users.html">假別管理</a></li>
+    <li class="active">資料修改</li>
   </ol>
 </section>
 
@@ -138,7 +138,7 @@
 						<label>理由</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($model->reason == 1 || $model->reason == '') checked="checked" @endif>
+						<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($model->reason == 1) checked="checked" @endif>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -146,7 +146,7 @@
 						<label>證明</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是" data-off="否" @if ($model->prove == 1 || $model->prove == '') checked="checked" @endif>
+						<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是" data-off="否" @if ($model->prove == '1') checked="checked" @endif>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -154,7 +154,7 @@
 						<label>狀態</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[available]" class="leave_type_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($model->available == 1 || $model->available == '') checked="checked" @endif>
+						<input type="checkbox" name="leave_type[available]" class="leave_type_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($model->available == 0) checked="checked" @endif>
 					</div>
 
 				</div></div>
@@ -168,14 +168,6 @@
 		</div>
 	</section>
         <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
-    </form>
-<!-- 出現訊息 -->
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        </div>
-    @endif
+</form>
 <!-- /.content -->
 @stop

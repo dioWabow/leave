@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Session;
 use App\Type;
-
-use Redirect;
-use Illuminate\Support\Facades\Input;
-
-use Illuminate\Http\Request;
 use App\Http\Requests\LeaveTypeRequest;
-use App\Http\Controllers\Controller;
 
+use Session;
+use Redirect;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Controller;
 
 class LeaveTypeController extends Controller
 {
@@ -21,7 +18,6 @@ class LeaveTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    
     public function getIndex(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
@@ -48,9 +44,7 @@ class LeaveTypeController extends Controller
         }
 
         $model = new Type;
-
         $model->fill($order_by);
-        
         $dataProvider = $model->search($search);
 
         return  view('leave_type', compact(
@@ -65,16 +59,16 @@ class LeaveTypeController extends Controller
      */
     public function getCreate(Request $request)
     {
-
         $model = new Type;
 
         $input = $request->old('leave_type');
 
-        if ($input) {
+        if (!empty($input)) {
             
             $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
             $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
             $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
+
             $model->fill($input);
 
         }
@@ -91,16 +85,16 @@ class LeaveTypeController extends Controller
      */
     public function getEdit(Request $request, $id)
     {
-
         $model = $this->loadModel($id);
-        
+
         $input = $request->old('leave_type');
 
-        if ($input) {
+        if (!empty($input)) {
             
             $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
             $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
             $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
+
             $model->fill($input);
 
         }
@@ -117,21 +111,19 @@ class LeaveTypeController extends Controller
      */
     public function postDelete(Request $request, $id)
     {
-
         $model = $this->loadModel($id)->delete();
         
-        return Redirect::to(route('leave_type'))->withErrors(['msg'=>'刪除完畢。']);
+        return Redirect::to(route('leave_type'))->withErrors(['msg' => '刪除完畢。']);
     }
-
+    
     /**
      * 新增
      *
      * @param Request $request
      * @return Redirect
      */
-     public function postInsert(LeaveTypeRequest $request)
-     {
-
+    public function postInsert(LeaveTypeRequest $request)
+    {
         $input = $request->input('leave_type');
 
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
@@ -143,11 +135,15 @@ class LeaveTypeController extends Controller
         $model->fill($input);
 
         if ($model->saveOriginalOnly()) {
+
             return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
+
         } else {
+
             return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+
         }
-     }
+    }
 
     /**
      * 更新
@@ -157,7 +153,6 @@ class LeaveTypeController extends Controller
      */
     public function postUpdate(LeaveTypeRequest $request)
     {
-        
         $input = $request->input('leave_type');
         
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
@@ -170,19 +165,26 @@ class LeaveTypeController extends Controller
         $model->fill($input);
         
         if ($model->save()) {
+
             return Redirect::to(route('leave_type_edit', [ 'id' => $input['id']]))->withErrors(['msg' => '更新成功']);
+
         } else {
-            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);;
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);
+
         }
     }
-
 
     private function loadModel($id)
     {
         $model = Type::find($id);
 
-        if ($model===false)
+        if ($model===false) {
+
             throw new CHttpException(404,'資料不存在');
+
+        }
+            
         return $model;
     }
 }
