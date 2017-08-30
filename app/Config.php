@@ -19,13 +19,10 @@ class Config extends Model
      * @param  array   $where     搜尋條件
      * @return 資料object/false
      */
-    public static function getConfigByKey($key = "")
+    public static function getConfigValueByKey($key = "")
     {
 
-        $query = self::where("config_key", $key);
-
-        $result = $query->pull('config_value');
-        dd($result);
+        $result = self::where("config_key", $key)->pluck('config_value')->first();
         return $result;
     }
 

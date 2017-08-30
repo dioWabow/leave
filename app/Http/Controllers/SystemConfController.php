@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 
 class SystemConfController extends Controller
@@ -19,7 +20,8 @@ class SystemConfController extends Controller
      * @return Redirect
      */
 
-     public function setConfig(Request $request) {
+     public function postUpdate(Request $request)
+     {
         $configs = new Config();
         $record = array();
         $config_key = array();
@@ -54,14 +56,15 @@ class SystemConfController extends Controller
             }
 
             if($results) {
-                return Redirect::to('/config')->withErrors(['msg' => '更新成功']);
+                return Redirect::to('/config/edit')->withErrors(['msg' => '更新成功']);
             }else{
-                return Redirect::to('/config')->withErrors(['msg' => '更新失敗']);
+                return Redirect::to('/config/edit')->withErrors(['msg' => '更新失敗']);
             }
         }
     }
 
-    public function getIndex(Request $reques) {
+    public function getIndex(Request $reques)
+    {
         $config = new Config();
         return view('system_conf', compact('config'));
     }

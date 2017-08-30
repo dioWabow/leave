@@ -80,10 +80,6 @@ Route::get('/report-annual-leave.html', function () {
     return view('report-annual-leave');
 })->name('report-annual-leave');
 
-Route::get('/config',[
-    'uses'=> 'SystemConfController@getIndex',
-    'as'=>'system_conf',
-]);
 Route::get('/teams.html', function () {
     return view('teams');
 })->name('teams');
@@ -130,7 +126,16 @@ Route::get('/leave_type/delete/{id}',[
     'as'=>'leave_type_delete',
 ]);
 
+Route::get('/config/edit',[
+    'uses'=> 'SystemConfController@getIndex',
+    'as'=>'config_edit',
+]);
 
+
+Route::post('/config/update',[
+    'uses'=> 'SystemConfController@postUpdate',
+    'as'=>'config_update',
+]);
 
 
 
