@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+// 自行載入
 use Redirect;
-use Validator;
-
-use Illuminate\Http\Request;
+use App\Holiday;
+use App\Http\Requests\HolidayPostRequest;
 use Illuminate\Support\Facades\Input;
 
-use App\Holiday;
+// 預設載入
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HolidayPostRequest;
+
 
 
 class HolidayController extends Controller
@@ -22,44 +23,48 @@ class HolidayController extends Controller
      */
     public static function getIndex (Request $request)
     {
-        $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by'):[];
-        $where = (!empty($request->input('search'))) ? $request->input('search'):[];
+        $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
+        $search = (!empty($request->input('search'))) ? $request->input('search') : [];
 
-        if (!empty($order_by) || !empty($where)) {
+        if (!empty($order_by) || !empty($search)) {
 
             $request->session()->forget('holidays');
-            $request->session()->push('holidays.where', $where);
+            $request->session()->push('holidays.search', $search);
             $request->session()->push('holidays.order_by', $order_by);
+
         } else {
 
             if (!empty($request->input('page')) && !empty(session()->get('holidays'))) {
 
-                $where = $request->session()->get('holidays.where.0');
+                $search = $request->session()->get('holidays.search.0');
                 $order_by = $request->session()->get('holidays.order_by.0');
+
             } else {
 
                 $request->session()->forget('holidays');
+
             }
         }
 
-        if (!empty($where['daterange'])) {
+        if (!empty($search['daterange'])) {
 
-            $daterange = explode(" - ", $where['daterange']);
+            $daterange = explode(" - ", $search['daterange']);
 
-            $where['startTime'] = $daterange[0];
-            $where['endTime'] = $daterange[1];
+            $search['startTime'] = $daterange[0];
+            $search['endTime'] = $daterange[1];
+
         }
 
         $model = new Holiday;
 
         $model->fill($order_by);
 
-        $dataProvider = $model->search($where);
+        $dataProvider = $model->search($search);
 
         $dataProvider = self::changeTypeName($dataProvider);
 
         return view('holidies', compact(
-            'dataProvider', 'where', 'model'
+            'dataProvider', 'search', 'model'
         ));
     }
 
@@ -71,14 +76,19 @@ class HolidayController extends Controller
     public static function getCreate(Request $request)
     {
         $model = new Holiday;
-        $type_judge = 0;
 
-        if ($request->old('holidies')) {
+        $holidies = $request->old('holidies');
+
+        if (!empty($holidies)) {
+
             $model->fill($request->old('holidies'));
+
         }
 
+        $type_judge = $model->type;
+
         return view('holidies_form', compact(
-            'type_judge', 'model'
+            'model'
         ));
     }
 
@@ -89,17 +99,22 @@ class HolidayController extends Controller
      */
     public static function getEdit(Request $request, $id)
     {
-        $model = Holiday::find($id);
-        $type_judge = ($model->type == 'holiday') ? '1' : '0';
+        $model = self::loadModel($id);
 
-        if ($request->old('holidies')) {
-            $model->fill($request->old('holidies'));
+        $holidies = $request->old('holidies');
+
+        if (!empty($holidies)) {
+
+            $model->fill($holidies);
+
         }
+
+        // dd($holidies);
 
         $model->date = date('Y-m-d', strtotime($model->date));
 
         return view('holidies_form', compact(
-            'type_judge', 'model'
+            'model'
         ));
     }
 
@@ -117,10 +132,14 @@ class HolidayController extends Controller
         $model = new Holiday;
         $model->fill($input);
 
-        if($model->saveOriginalOnly()) {
+        if ($model->saveOriginalOnly()) {
+
             return Redirect::to('holidies')->withErrors(['msg' => '新增成功']);
-        }else{
-            return Redirect::back()->withInput();
+
+        } else {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+
         }
     }
 
@@ -139,10 +158,14 @@ class HolidayController extends Controller
 
         $holiday->fill($input['holidies']);
 
-        if($holiday->save()) {
+        if ($holiday->save()) {
+
             return Redirect::to('holidies')->withErrors(['msg' => '更新成功']);
+
         } else {
-            return Redirect::back()->withInput();
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);
+
         }
     }
 
@@ -153,9 +176,9 @@ class HolidayController extends Controller
      */
     public static function postDelete ($id)
     {
-        $result = Holiday::find($id)->delete();
+        $result = self::loadModel($id)->delete();
 
-        return redirect('holidies');
+        return Redirect::to('holidies')->withErrors(['msg' => '刪除成功']);
 
     }
 
@@ -168,9 +191,10 @@ class HolidayController extends Controller
     {
         foreach ($data as $value) {
 
-            ($value['type'] == 'holiday') ? $value['type'] = "國定假日" : $value['type'] = '上班日';
+            $value['type'] = ($value['type'] == 'holiday') ? "國定假日" : "上班日";
 
             $value['date'] = date('Y-m-d', strtotime($value['date']));
+
         }
 
         return $data;
@@ -183,11 +207,13 @@ class HolidayController extends Controller
      */
     private static function loadModel($id)
     {
-        $loadModel = Holiday::find($id);
+        $model = Holiday::find($id);
 
-        if($loadModel===false){
+        if ($model===false) {
+
             throw new CHttpException(404,'資料不存在');
+
         }
-        return $loadModel;
+        return $model;
     }
 }

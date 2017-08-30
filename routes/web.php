@@ -14,24 +14,27 @@
 Route::get('/', function () {
     return view('index');
 })->name('root_path');
-Route::get('/index', function () {
-    return view('index');
-})->name('index');
+
+// Route::get('/index', function () {
+//     return view('index');
+// })->name('index');
 
 
 Route::get('holidies', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
 
-Route::get('holidies_form', ["uses"=>"HolidayController@getCreate","as"=>"holidiesInsertForm"]);
+Route::get('holidies/create', ["uses"=>"HolidayController@getCreate","as"=>"holidiesInsertForm"]);
 
-Route::get('holidies_form/{id}', ["uses"=>"HolidayController@getEdit","as"=>"holidiesUpdateForm"]);
+Route::get('holidies/edit/{id}', ["uses"=>"HolidayController@getEdit","as"=>"holidiesUpdateForm"]);
 
-Route::post('holidies/create', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
+Route::post('holidies/insert', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
 
 Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"holidayUpdate"]);
 
 Route::any('holidies/search', ["uses"=>'HolidayController@getIndex',"as"=>"holidaySearch"]);
 
 Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
+
+Route::get('index', ["uses"=>"LeaveController@getIndex"])->name('index');
 
 Route::get('/leave', function () {
     return view('leave');

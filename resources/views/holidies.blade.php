@@ -42,20 +42,20 @@
 											<label>
 												類型：
 												<select id="search_type" name="search[type]" class="form-control">
-													<option value="" @if(count($where)>0 && $where['type']=="")selected="selected"@endif>全部</option>
-													<option value="holiday" @if(count($where)>0 && $where['type']=="holiday")selected="selected"@endif>國定假日</option>
-													<option value="work" @if(count($where)>0 && $where['type']=="work")selected="selected"@endif>工作日</option>
+													<option value="" @if(count($search)>0 && $search['type']=="")selected="selected"@endif>全部</option>
+													<option value="holiday" @if(count($search)>0 && $search['type']=="holiday")selected="selected"@endif>國定假日</option>
+													<option value="work" @if(count($search)>0 && $search['type']=="work")selected="selected"@endif>工作日</option>
 												</select>
 											</label>
 											&nbsp;
 											<label>
 												區間：
-												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right" @if(count($where) > 0)value="{{$where['daterange']}}@endif">
+												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right" @if(count($search) > 0)value="{{$search['daterange']}}@endif">
 											</label>
 											&nbsp;
 											<label>
 												關鍵字：
-												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" @if(count($where) > 0)value="{{$where['name']}}@endif">
+												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" @if(count($search) > 0)value="{{$search['name']}}@endif">
 												<!-- 搜尋按鈕 -->
 												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
 												<!-- 新增按鈕 -->

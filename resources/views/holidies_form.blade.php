@@ -28,25 +28,14 @@
           </div>
           <input type="hidden" name="id" value="{{$model->id}}">
           <div class="col-md-11">
-          @if ($model->type_judge == 0)
             <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="work" checked="checked">
+              <input type="radio" name="holidies[type]" class="flat-red" value="work"@if( "{{$model->type}}" == "{{work}}")checked="checked"@endif>
               工作日
             </label>&emsp;
             <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="holiday">
+              <input type="radio" name="holidies[type]" class="flat-red" value="holiday"@if( "{{$model->type}}" == "{{holiday}}")checked="checked"@endif>
               國定假日
             </label>&emsp;
-          @else
-            <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="work">
-              工作日
-            </label>&emsp;
-            <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="holiday" checked="checked" ">
-              國定假日
-            </label>&emsp;
-          @endif
           </div>
         </div></div>
 
@@ -78,12 +67,5 @@
   <!-- laravel post需要不然會有in VerifyCsrfToken.php error -->
   <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
-@if ($errors->any())
-  <div class="alert alert-danger">
-      @foreach($errors->all() as $error)
-        <p>{{ $error }}</p>
-      @endforeach
-  </div>
-@endif
 <!-- /.content -->
 @stop
