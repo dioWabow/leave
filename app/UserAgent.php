@@ -22,7 +22,6 @@ class UserAgent extends Model
     public static function deleteUserAgentByUserId($user_id) 
     {
         $result = self::where('user_id',$user_id)->delete();
-
         return $result;
     }
 
@@ -34,12 +33,13 @@ class UserAgent extends Model
 
     public static function getAgentIdByUserId($user_id) 
     {
-        $result = self::where('user_id',$user_id)->get()->pluck('agent_id')->toArray();
+        $result = self::where('user_id',$user_id)->get()->pluck('agent_id');
         return $result;
     }
 
     public function user() 
     {
-        return self::hasOne('App\User','id','agent_id');
+        $result = self::hasOne('App\User','id','agent_id');
+        return $result;
     }
 }

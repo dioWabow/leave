@@ -2,8 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\UserTeam;
+
+use Schema;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
@@ -43,20 +45,26 @@ class User extends Model
     {
         $query = self::OrderedBy();
         foreach($where as $key => $value){
-            if (isset($value)) {
-                if ($key == 'teams') {      
-                    $query->whereIn('id', UserTeam::getUserIdByTeamId($value));
-                }
-                if ($key == 'status') {
-                    $query->where($key, $value);
-                }
+            if(Schema::hasColumn('users', $key) && isset($value)){
+
+                $query->where($key, $value);
+
+            } else {
+
                 if ($key == 'keywords') {
+
                     $query->Where(function ($query1) use ($value) {
-                        $query1->orWhere("employee_no", '=', $value)
-                               ->orWhere("name", 'like', '%'.$value.'%')
-                               ->orWhere("nickname", 'like', '%'.$value.'%');
+                        $query1->orWhere("employee_no", $value);
+                        $query1->orWhere("name", 'like', '%'.$value.'%');
+                        $query1->orWhere("nickname", 'like', '%'.$value.'%');
                     });
+
+                } elseif ($key == 'teams') {
+
+                    $query->whereIn('id', UserTeam::getUserIdByTeamId($value)->toArray());
+
                 }
+
             }
         }
 
@@ -64,23 +72,27 @@ class User extends Model
         return $result;
     }
 
-    public static function getAllUsersExcludeUserId($id){
-        $result = self::where('id', '!=' , $id)
-        ->get();
+    public static function getAllUsersExcludeUserId($id)
+    {
+        $result = self::where('id', '!=' , $id)->get();
         return $result;
     }
 
     public function scopeOrderedBy($query)
     {
-        return $query->orderBy($this->order_by, $this->order_way);
+        $result = $query->orderBy($this->order_by, $this->order_way);
+        return $result;
     }
 
-    public static function getAllUsers(){
+    public static function getAllUsers()
+    {
         $result = self::get();
         return $result;
     }
 
-    public function UserTeam(){
-        return $this::hasMany('App\UserTeam','user_id','id');
+    public function UserTeam()
+    {
+        $result = $this::hasMany('App\UserTeam','user_id','id');
+        return $result;
     }
 }

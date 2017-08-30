@@ -22,9 +22,7 @@ class UserTeam extends Model
 
     public static function getTeamUsersWithoutUserByUserId($id)
     {
-      $result = self::where('user_id', '!=' , $id)
-          ->groupBy("user_id")
-          ->get();
+      $result = self::where('user_id', '!=' , $id)->groupBy("user_id")->get();
       return $result;
     }
 
@@ -42,13 +40,13 @@ class UserTeam extends Model
 
     public static function getTeamIdByUserId($id) 
     {
-        $result = self::where('user_id', $id)->get()->pluck('team_id')->toArray();
+        $result = self::where('user_id', $id)->get()->pluck('team_id');
         return $result;
     }
 
     public static function getUserIdByTeamId($id) 
     {
-        $result = self::where('team_id', $id)->get()->pluck('user_id')->toArray();
+        $result = self::where('team_id', $id)->get()->pluck('user_id');
         return $result;
     }
 
@@ -60,10 +58,13 @@ class UserTeam extends Model
 
     public function team() 
     {
-        return $this::hasOne('App\Team','id','team_id');
+        $result = $this::hasOne('App\Team','id','team_id');
+        return $result;
     }
 
-    public function user(){
-        return $this::hasOne('App\User','id','user_id');
+    public function user()
+    {
+        $result = $this::hasOne('App\User','id','user_id');
+        return $result;
     }
 }
