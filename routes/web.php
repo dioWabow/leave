@@ -137,6 +137,10 @@ Route::post('/config/update',[
     'as'=>'config_update',
 ]);
 
+Route::match(['get', 'post'], '/demo/image',[
+    'uses'=> 'DemoControllor@getImage',
+    'as'=>'demo_image',
+]);
 
 
 
