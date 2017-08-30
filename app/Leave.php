@@ -13,10 +13,15 @@ class Leave extends Model
      */
     protected $table = 'leaves';
 
-    public function testDate()
+    public function testDate($first_day, $last_day)
     {
-    	$result = $this->get();
+        $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
+        // $result = $this->get();
     	return $result;
-    	// dd($result);
+    }
+
+    public function search($where=[])
+    {
+        //
     }
 }

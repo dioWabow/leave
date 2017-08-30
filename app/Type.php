@@ -12,4 +12,10 @@ class Type extends Model
      * @var string
      */
     protected $table = 'types';
+
+    public static function getTypeNameByKey($key = "")
+	{
+		$result = self::where("id", $key)->pluck('name')->first();
+		return $result;
+	}
 }

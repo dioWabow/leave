@@ -36,6 +36,8 @@ Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=
 
 Route::get('index', ["uses"=>"LeaveController@getIndex"])->name('index');
 
+Route::post('index', ["uses"=>"LeaveController@getIndex"])->name('indexChange');
+
 Route::get('/leave', function () {
     return view('leave');
 })->name('leave');
