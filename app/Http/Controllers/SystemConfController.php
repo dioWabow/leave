@@ -9,10 +9,23 @@ use Illuminate\Support\MessageBag;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Image; //使用圖片簡寫
 
 
 class SystemConfController extends Controller
 {
+    protected $image_root_path;
+    protected $image_path;
+
+    /**
+    * Instantiate a new UserController instance.
+    */
+    public function __construct()
+    {
+        $this->image_path = '';
+        $this->image_root_path = storage_path() . '/app/public/' . $this->image_path;
+    }
     /**
      * 更新
      *
@@ -24,6 +37,9 @@ class SystemConfController extends Controller
      {
         $input = $request->input('config');
 
+        $image_url = $this->getImage($request);
+        !empty($image_url) ? $input["company_logo"] = $image_url  : NULL;
+
         $model = new Config();
         $error = false;
         foreach ($input as $key => $value) {
@@ -31,48 +47,11 @@ class SystemConfController extends Controller
                 $error = true;
             }
         }
-        dd($results);
-
-        $model->save();
-
-
-        $record = array();
-        $config_key = array();
-        $input = $request->all();
-        //  取得上傳檔案
-        $file = $request->file('config')['company_logo'];
-        // 確認檔案是否有上傳
-        $checkfile = $request->hasFile('config');
         
-        if ( $checkfile ) {
-
-            $upload_logo = $_FILES['config'];
-            $logo_name = basename( $upload_logo['name']['company_logo'] );
-            
-            $destination_path = public_path(). '/dist/img';
-            $upload_success = $file->move( $destination_path, $logo_name );
-
-            if ( $upload_success ) {
-                $input['config']['company_logo'] = $logo_name;
-            }
-        }
-        
-        if (empty($input['config'])) {
-            return Redirect::to('system_conf');
+        if (!$error) {
+            return Redirect::to('/config/edit')->withErrors(['msg' => '更新成功']);
         } else {
-
-            $config_key = $input['config'];
-            foreach ($config_key as $key => $value) {
-                $record['config_value'] = $value;
-                $configs->fill($record);
-                $results = $configs->where('config_key', $key)->update($value);
-            }
-
-            if($results) {
-                return Redirect::to('/config/edit')->withErrors(['msg' => '更新成功']);
-            }else{
-                return Redirect::to('/config/edit')->withErrors(['msg' => '更新失敗']);
-            }
+            return Redirect::to('/config/edit')->withErrors(['msg' => '更新失敗']);
         }
     }
 
@@ -80,6 +59,28 @@ class SystemConfController extends Controller
     {
         $config = new Config();
         return view('system_conf', compact('config'));
+    }
+
+    /**
+    * 上傳圖片 demo
+    * 注意：須於 public 下建立連結 - php artisan storage:link 
+    */
+    public function getImage (Request $request)
+    {
+        $image_url = '';
+        if($request->hasFile('config') && $request->file('config')['company_logo']->isValid()) {
+            $input_file = Input::file('config');
+            $file_extension = $input_file['company_logo']->getClientOriginalExtension();
+            
+            $filename = 'company_logo.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
+            $image = $this->image_root_path . $filename;
+
+            Image::make($input_file['company_logo'])->save($image);
+
+            $image_url = Storage::url($this->image_path . $filename);
+        }
+
+        return $image_url;
     }
    
 }

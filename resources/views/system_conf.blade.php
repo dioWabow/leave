@@ -27,7 +27,7 @@
 						<div class="form-group">
 							<label for="config_company_name" class="col-sm-2 control-label">公司名稱</label>
 							<div class="col-sm-5">
-								<input type="text" class="form-control" id="config_company_name" name="config[company_name]" placeholder="Company Name" value="{{ $config->getConfigValueByKey('company_name') }}" disabled="disabled">
+								<input type="text" class="form-control" id="config_company_name" name="config[company_name]" placeholder="Company Name" value="{{ $config->getConfigValueByKey('company_name') }}">
 							</div>
 
 							<label for="config_company_short_name" class="col-sm-2 control-label">簡稱</label>
@@ -294,24 +294,43 @@
 	  $("#form_config_smtp :input").prop("disabled", true);
 	  $("#form_config_google :input").prop("disabled", true);
 	  $("#form_config_slack :input").prop("disabled", true);
+	  $("#form_config_other :input").prop("disabled", true);
 	});
 	$("#form_config_smtp").change(function() {
 	  $("#form_config_company :input").prop("disabled", true);
 	  $("#form_config_google :input").prop("disabled", true);
 	  $("#form_config_slack :input").prop("disabled", true);
+	  $("#form_config_other :input").prop("disabled", true);
 	});
 	$("#form_config_google").change(function() {
 	  $("#form_config_company :input").prop("disabled", true);
 	  $("#form_config_smtp :input").prop("disabled", true);
 	  $("#form_config_slack :input").prop("disabled", true);
+	  $("#form_config_other :input").prop("disabled", true);
 	});
 	$("#form_config_slack").change(function() {
 	  $("#form_config_company :input").prop("disabled", true);
 	  $("#form_config_smtp :input").prop("disabled", true);
 	  $("#form_config_google :input").prop("disabled", true);
+	  $("#form_config_other :input").prop("disabled", true);
+	});
+	$("#form_config_other").change(function() {
+	  $("#form_config_company :input").prop("disabled", true);
+	  $("#form_config_smtp :input").prop("disabled", true);
+	  $("#form_config_google :input").prop("disabled", true);
+	  $("#form_config_slack :input").prop("disabled", true);
 	});
 	$(".reset").click(function() {
 	  $(":input").prop("disabled", false);
 	});
+
+	var $option = {'showUpload': false};
+
+	@if($config->getConfigValueByKey('company_logo') != '')
+	$option.initialPreview = ['{{route('root_path')}}{{$config->getConfigValueByKey('company_logo')}}'];
+	$option.initialPreviewAsData = true;
+	@endif
+
+	$("#config_company_logo").fileinput($option);
 </script>
 @stop
