@@ -33,7 +33,7 @@ class LoginController extends Controller implements AuthenticatableContract
     public function logout()
     {
         Auth::logout();
-        return Redirect::to('root_path');
+        return Redirect::to('');
     }
 
     /**
