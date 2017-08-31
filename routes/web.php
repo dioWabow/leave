@@ -62,12 +62,7 @@ Route::get('/leave_manager.html', function () {
 Route::get('/leave_manager_view.html', function () {
     return view('leave_manager_view');
 })->name('leave_manager_view');
-Route::get('/leave_type.html', function () {
-    return view('leave_type');
-})->name('leave_type');
-Route::get('/leave_type_form.html', function () {
-    return view('leave_type_form');
-})->name('leave_type_form');
+
 Route::get('/leave_view.html', function () {
     return view('leave_view');
 })->name('leave_view');
@@ -84,9 +79,6 @@ Route::get('/report.html', function () {
 Route::get('/report-annual-leave.html', function () {
     return view('report-annual-leave');
 })->name('report-annual-leave');
-Route::get('/system_conf.html', function () {
-    return view('system_conf');
-})->name('system_conf');
 
 Route::get('/teams.html', function () {
     return view('teams');
@@ -98,6 +90,52 @@ Route::get('/users_form.html', function () {
     return view('users_form');
 })->name('users_form');
 
+
+Route::get('/leave_type/index',[
+    'uses'=> 'LeaveTypeControllor@getIndex',
+    'as'=>'leave_type',
+]);
+
+Route::any('/leave_type/index/search',[
+    'uses'=> 'LeaveTypeControllor@getIndex',
+    'as'=>'search',
+]);
+
+Route::get('/leave_type/create',[
+    'uses'=> 'LeaveTypeControllor@getCreate',
+    'as'=>'leave_type_create',
+]);
+
+Route::post('/leave_type/insert',[
+    'uses'=> 'LeaveTypeControllor@postInsert',
+    'as'=>'leave_type_insert',
+]);
+
+Route::post('/leave_type/update',[
+    'uses'=> 'LeaveTypeControllor@postUpdate',
+    'as'=>'leave_type_update',
+]);
+
+Route::get('/leave_type/view/{id}',[
+    'uses'=> 'LeaveTypeControllor@getView',
+    'as'=>'leave_type_view',
+]);
+
+Route::get('/leave_type/delete/{id}',[
+    'uses'=> 'LeaveTypeControllor@postDelete',
+    'as'=>'leave_type_delete',
+]);
+
+Route::get('/config/edit',[
+    'uses'=> 'SystemConfController@getIndex',
+    'as'=>'config_edit',
+]);
+
+
+Route::post('/config/update',[
+    'uses'=> 'SystemConfController@postUpdate',
+    'as'=>'config_update',
+]);
 
 Route::match(['get', 'post'], '/demo/image',[
     'uses'=> 'DemoControllor@getImage',

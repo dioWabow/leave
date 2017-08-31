@@ -6,10 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Config extends Model
 {
+    //可以傳入數值的欄位
+    protected $fillable = [
+        'config_key',
+        'config_value',
+        'comment',
+    ];
+
     /**
-     * 與Model關聯的table
+     * 搜尋table單個資料
      *
-     * @var string
+     * @param  array   $where     搜尋條件
+     * @return 資料object/false
      */
-    protected $table = 'configs';
+    public static function getConfigValueByKey($key = "")
+    {
+        $result = self::where("config_key", $key)->pluck('config_value')->first();
+        return $result;
+    }
+
+    public static function updateConfigValueByKey($key = "",$value = "")
+    {
+        $result = self::where('config_key', $key)->update(['config_value' => $value]);
+        return $result;
+    }
+
 }
