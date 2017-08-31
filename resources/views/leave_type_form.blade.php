@@ -154,7 +154,7 @@
 						<label>狀態</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[available]" class="leave_type_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($model->available == 0) checked="checked" @endif>
+						<input type="checkbox" name="leave_type[available]" class="leave_type_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($model->available == 1) checked="checked" @endif>
 					</div>
 
 				</div></div>

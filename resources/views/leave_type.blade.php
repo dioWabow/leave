@@ -129,6 +129,7 @@
 															@elseif ($value->reset_time == 'month') 每月重置
 															@elseif ($value->reset_time == 'season') 每季重置
 															@elseif ($value->reset_time == 'year') 每年重置
+															@elseif ($value->reset_time == 'other') 其他
 															@endif
 														</td>
 													<td>{{ $value->hours }}</td>
