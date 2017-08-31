@@ -38,20 +38,36 @@ class SystemConfController extends Controller
         $input = $request->input('config');
 
         $image_url = $this->getImage($request);
-        !empty($image_url) ? $input["company_logo"] = $image_url  : NULL;
+        if (!empty($image_url)) {
+
+            $input["company_logo"] = $image_url;
+
+        }
 
         $model = new Config();
         $error = false;
         foreach ($input as $key => $value) {
-            if (!$model->updateConfigValueByKey($key,$value)) {
-                $error = true;
+
+            if (!empty($value)) {
+
+                if (!$model->updateConfigValueByKey($key,$value)) {
+
+                    $error = true;
+
+                }
+
             }
+
         }
         
         if (!$error) {
+
             return Redirect::to('/config/edit')->withErrors(['msg' => '更新成功']);
+
         } else {
-            return Redirect::to('/config/edit')->withErrors(['msg' => '更新失敗']);
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);
+
         }
     }
 

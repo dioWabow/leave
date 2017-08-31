@@ -141,6 +141,3 @@ Route::match(['get', 'post'], '/demo/image',[
     'uses'=> 'DemoControllor@getImage',
     'as'=>'demo_image',
 ]);
-
-
-
