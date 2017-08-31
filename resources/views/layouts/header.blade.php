@@ -5,9 +5,9 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="{{route('root_path')}}{{$config->getConfigValueByKey('company_logo')}}"></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>哇寶</b>請假系統</span>
+      <span class="logo-lg"><b>{{$config_allpage->getConfigValueByKey('company_short_name')}}</b>請假系統</span>
     </a>
 
     <!-- Header Navbar -->
