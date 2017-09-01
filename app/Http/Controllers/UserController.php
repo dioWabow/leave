@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
+    protected $image_root_path;
+    protected $image_path;
+    
     public function __construct()
     {
         $this->image_path = 'avatar/';
