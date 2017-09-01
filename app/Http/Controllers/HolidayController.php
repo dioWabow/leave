@@ -109,8 +109,6 @@ class HolidayController extends Controller
 
         }
 
-        // dd($holidies);
-
         $model->date = date('Y-m-d', strtotime($model->date));
 
         return view('holidies_form', compact(
