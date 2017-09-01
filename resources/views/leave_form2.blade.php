@@ -1,7 +1,9 @@
 @extends('default')
 
 @section('content')
+
 <!-- Content Header (Page header) -->
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 <section class="content-header">
   <h1>
 	<i class="fa fa-plane"></i> 我要放假
@@ -87,7 +89,7 @@
 							<div class="input-group-addon">
 								<i class="fa fa-commenting-o"></i>
 							</div>
-							<input type="text" id="leave_timepicker" name="leave[timepicker]" class="form-control pull-right">
+							<input type="text" name="leave[reason]" class="form-control pull-right">
 						</div>
 					</div>
 				</div></div>
@@ -98,7 +100,7 @@
 					<div class="col-md-11">
 						@foreach($user_agents as $user_agent)
 							<label>
-							<input type="radio" name="leave[agent]" class="flat-red" value="{{$user_agent->user->id}}"> 
+							<input type="checkbox" name="leave[agent]" class="flat-red" value="{{$user_agent->user->id}}"> 
 								{{$user_agent->user->nickname}}
 							</label>&emsp;
 						@endforeach
@@ -148,4 +150,23 @@
 	</section>
 </form>
 <!-- /.content -->
+
+<script>
+$(document).ready(function(){
+	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+	$("#leave_timepicker").change(function() {
+	    $.ajax({
+	        url: '{{route("root_path")}}/leave/calculate_hours',
+	        type: 'POST',
+	        data: {_token: CSRF_TOKEN, date_range:$(this).val()},
+	        dataType: 'JSON',
+	        success: function (data) { 
+	        	$.each(data, function(index, element) {
+		            $('#leave_spent_hours').val(element);
+		        });
+	        }
+	    }); 
+	});
+});
+</script>
 @stop

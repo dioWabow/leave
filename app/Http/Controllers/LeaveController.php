@@ -34,7 +34,20 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request) 
     {
-        $id = '1';
+        $start_time = "2017-08-29";
+        $end_time = "2017-09-03";
+        $i = 1;
+        $date_list = [];
+        while ( $end_time > date( "Y-m-d", strtotime( "$start_time +$i day" ))){
+            $date_list[] = date( "Y-m-d", strtotime( "$start_time +$i day" ));
+            $i += 1;
+        }
+        
+        foreach($date_list as $date){
+            // $weekday = date('w', strtotime($datetime));
+        }
+
+        $id = 1;
 
         $types = Type::getAllType();
 
@@ -224,5 +237,15 @@ class LeaveController extends Controller
         }
             
         return $model;
+    }
+
+    public function calculate_hours(Request $request){
+        $hours = 0;
+        $data_range = $request->input('date_range');
+
+        $response = array(
+          'hours' => $hours,
+        );
+        return response()->json($response); 
     }
 }
