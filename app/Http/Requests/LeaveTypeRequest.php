@@ -28,8 +28,8 @@ class LeaveTypeRequest extends FormRequest
             'leave_type.hours' => 'required|numeric',
             'leave_type.exception' => 'required',
             'leave_type.reset_time' => 'required',
-            'leave_type.start_time' => 'required|Date',
-            'leave_type.end_time' => 'required|Date',
+            'leave_type.start_time' => 'date|nullable',
+            'leave_type.end_time' => 'date|nullable',
         ];
     }
 }

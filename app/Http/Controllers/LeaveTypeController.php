@@ -44,11 +44,10 @@ class LeaveTypeController extends Controller
         }
 
         $model = new Type;
-        $model->fill($order_by);
-        $dataProvider = $model->search($search);
+        $dataProvider = $model->fill($order_by)->search($search);
 
         return  view('leave_type', compact(
-            'dataProvider', 'search', 'model'
+            'search', 'model', 'dataProvider'
         ));
     }
 

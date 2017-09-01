@@ -4,13 +4,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    <i class="fa fa-anchor"></i> 假別資料@if ($model->id > 0)修改 @else 新增 @endif
+    <i class="fa fa-anchor"></i> {{$model->name}} 假別資料@if ($model->id > 0)修改 @else 新增 @endif
     <small>Vacation Category Management</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
     <li>假期設定</li>
-    <li><a href="./users.html">假別管理</a></li>
+    <li><a href="{{ route('leave_type') }}">假別管理</a></li>
     <li class="active">資料修改</li>
   </ol>
 </section>
@@ -21,7 +21,7 @@
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
-				<h3 class="box-title">公傷病假 資料@if ( $model->id > 0 )修改 @else 新增 @endif</h3>
+				<h3 class="box-title"></h3>
 			</div>
 			<div class="box-body">
 				<div class="form-group"><div class="row">
@@ -121,7 +121,12 @@
 						<label>開始時間</label>
 					</div>
 					<div class="col-md-3">
-						<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{ $model->start_time }}" >
+						<div class="input-group">
+							<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{ $model->start_time }}" >
+							<span class="input-group-btn">
+								<button id="clear_leave_type_start_time" type="button" class="btn btn-secondary btn-danger">x</button>
+							</span>
+						</div>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -129,7 +134,12 @@
 						<label>結束時間</label>
 					</div>
 					<div class="col-md-3">
-						<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{ $model->end_time }}" >
+						<div class="input-group">
+							<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{ $model->end_time }}" >
+							<span class="input-group-btn">
+								<button id="clear_leave_type_end_time" type="button" class="btn btn-secondary btn-danger">x</button>
+							</span>
+						</div>
 					</div>
 				</div></div>
 
@@ -170,4 +180,13 @@
         <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
 </form>
 <!-- /.content -->
+<script>
+$("#clear_leave_type_start_time").click(function() {
+    $("#leave_type_start_time").val("");
+});
+
+$("#clear_leave_type_end_time").click(function() {
+    $("#leave_type_end_time").val("");
+});
+</script>
 @stop

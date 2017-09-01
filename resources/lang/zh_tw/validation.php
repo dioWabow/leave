@@ -114,11 +114,9 @@ return [
             'required' => '請輸入重置時間',
         ],
         'leave_type.start_time' => [
-            'required' => '請輸入開始時間',
             'Date' => '開始時間請填入日期',
         ],
         'leave_type.end_time' => [
-            'required' => '請輸入結束時間',
             'Date' => '結束時間請填入日期',
         ],
     ],
