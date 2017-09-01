@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Team;
 use App\Leave;
+use App\Type;
 use App\UserAgent;
 use App\UserTeam;
 use App\Http\Requests\UserRequest;
@@ -35,14 +36,32 @@ class LeaveController extends Controller
     {
         $id = '1';
 
-        $model = new Leave;
-        $leaves = Leave::get();
+        $types = Type::getAllType();
 
         //使用者目前所有代理人
         $user_agents = UserAgent::getUserAgentByUserId($id);
 
+        //全部團隊列表
+        $teams = Team::getAllTeam();
+
+        //除了使用者本身，所有人的團隊(額外通知)
+        $user_no_team = $team_users = [];
+        foreach(User::getAllUsersExcludeUserId($id) as $users){
+
+            if ($users->UserTeam()->first()) {
+
+                $team_users[] = $users->UserTeam()->first();
+
+            } else {
+
+                //沒團隊的人
+                $user_no_team[] = $users;
+
+            }
+        }
+
         return view('leave_form2',compact(
-            'user_agents'
+            'types','user_agents','teams','team_users','user_no_team'
         ));
     }
 

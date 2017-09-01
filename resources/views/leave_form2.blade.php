@@ -26,70 +26,12 @@
 						<label>假別</label>
 					</div>
 					<div class="col-md-11">
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="kindness-leave" hour="4"> 
-							善待假
-						</label>&emsp; 
-						<label>
-							<input type="radio" id="aaa" name="leave[type_id]" class="flat-red" value="birthday-leave" hour="8">
-							生日假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="annual-leave" checked="checked"  hour="100">
-							特休
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="special-leave" hour="8">
-							久任假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="personal-leave" hour="112">
-							事假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="sick-leave" hour="100">
-							病假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value="marriage-leave" hour="100">
-							婚假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" maternity-leave" hour="100">
-							產假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" pre-maternity-leave" hour="100">
-							產檢假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" paternity-leave" hour="100">
-							陪產假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" funeral-leave" hour="100">
-							喪假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" occupational-sickness-leave" hour="100">
-							公傷病假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" family-care-leave" hour="100">
-							家庭照顧假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" menstruation-leave" hour="8">
-							生理假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" maternity-leave" hour="999">
-							公假
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="leave[type_id]" class="flat-red" value=" compensatory-leave" hour="0">
-							補休
-						</label>&emsp; 
+						@foreach( $types as $type)
+							<label>
+								<input type="radio" name="leave[type_id]" class="flat-red" @if($loop->first) checked="checked" @endif value="{{$type->id}}" hour="4"> 
+								{{$type->name}}
+							</label>&emsp; 
+						@endforeach
 					</div>
 				</div></div>
 				<div class="form-group" id="group_timepicker"><div class="row">
@@ -122,7 +64,7 @@
 					<div class="col-md-11" id="div_leave_dayrange">
 						<div class="input-group">
 							<label>
-								<input type="radio" id="leave_dayrange_allday" name="leave[dayrange]" class="flat-red" value="allday" checked> 
+								<input type="radio" id="leave_dayrange_allday" name="leave[dayrange]" class="flat-red" value="allday" checked>
 								全天
 							</label>&emsp; 
 							<label>
@@ -156,7 +98,7 @@
 					<div class="col-md-11">
 						@foreach($user_agents as $user_agent)
 							<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="{{$user_agent->user->id}}"> 
+							<input type="radio" name="leave[agent]" class="flat-red" value="{{$user_agent->user->id}}"> 
 								{{$user_agent->user->nickname}}
 							</label>&emsp;
 						@endforeach
@@ -176,24 +118,22 @@
 					</div>
 					<div class="col-md-11">
 						<select class="form-control select2" id="leave_notic_person" name="leave[notic_person]" multiple="multiple" data-placeholder="請選擇需另行通知的夥伴">
-							<optgroup label="Ｗaca-Team">
-								<option value="毛毛">毛毛</option>
-								<option value="rita">Rita</option>
-								<option value="lube">Lube</option>
-								<option value="wei">Wei</option>
-								<option value="rock">Rock</option>
-							</optgroup>
-							<optgroup label="Ｗaca-Engineer-Team">
-								<option value="suzy">Suzy</option>
-								<option value="rita">Rita</option>
-								<option value="sheng">Sheng</option>
-								<option value="henry">Henry</option>
-							</optgroup>
-							<optgroup label="Washop-Team">
-								<option value="dio">Dio</option>
-								<option value="eno">Eno</option>
-								<option value="carol">Carol</option>
-							</optgroup>
+							@foreach($teams as $team)
+	              <optgroup label="{{$team->name}}">
+	                @foreach($team_users as $team_user)
+	                    @if($team->id==$team_user->team_id)
+	                      <option value="{{$team_user->user_id}}">{{$team_user->user->nickname}}</option>
+	                    @endif
+	                @endforeach
+	              </optgroup>
+              @endforeach
+              @if(count($user_no_team)>0)
+                <optgroup label="NOGROUP">
+                  @foreach($user_no_team as $user)
+                    <option value="{{$user->id}}">{{$user->name}}</option>
+                  @endforeach
+                </optgroup>
+              @endif
 						</select>
 					</div>
 				</div></div>

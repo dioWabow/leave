@@ -12,4 +12,10 @@ class Type extends Model
      * @var string
      */
     protected $table = 'types';
+
+    public static function getAllType() 
+    {
+        $result = self::get();
+        return $result;
+    }
 }

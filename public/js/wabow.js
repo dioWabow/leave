@@ -30,8 +30,8 @@
     var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
     var $div_leave_notic_person   = $("#div_leave_notic_person");
 
-    var leave_type_arr = ['kindness-leave','birthday-leave','annual-leave','special-leave'];
-    var leave_type_single_arr = ['kindness-leave','birthday-leave','special-leave'];
+    var leave_type_arr = ['1','2','3','4'];
+    var leave_type_single_arr = ['1','2','3','4'];
     var daterangepicker_type = 'isDate';
     
     //Flat red color scheme for iCheck
