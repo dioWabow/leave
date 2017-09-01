@@ -58,7 +58,7 @@ class User extends Model
 
             } else {
 
-                if ($key == 'keywords') {
+                if ($key == 'keywords' && isset($value)) {
 
                     $query->Where(function ($query1) use ($value) {
                         $query1->orWhere("employee_no", $value);
@@ -66,7 +66,7 @@ class User extends Model
                         $query1->orWhere("nickname", 'like', '%'.$value.'%');
                     });
 
-                } elseif ($key == 'teams') {
+                } elseif ($key == 'teams' && isset($value)) {
 
                     $query->whereIn('id', UserTeam::getUserIdByTeamId($value)->toArray());
 
