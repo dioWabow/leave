@@ -41,9 +41,12 @@ Route::get('/leave_agent_view.html', function () {
 Route::get('/leave_form.html', function () {
     return view('leave_form');
 })->name('leave_form');
-Route::get('/leave_form2.html', function () {
-    return view('leave_form2');
-})->name('leave_form2');
+
+Route::get('leave/create', [
+        'uses' => 'LeaveController@getCreate',
+        'as' => 'leave/create',
+        ]);
+
 Route::get('/leave_form3.html', function () {
     return view('leave_form3');
 })->name('leave_form3');
