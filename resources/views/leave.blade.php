@@ -19,7 +19,7 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#prove" data-toggle="tab">等待核准 <span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="3 New Messages">4</span></a></li>
+					<li class="active"><a href="#prove" data-toggle="tab">等待核准<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="3 New Messages">4</span></a></li>
 					<li><a href="#upcoming" data-toggle="tab">即將放假 <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span></a></li>
 					<li><a href="#list" data-toggle="tab">歷史紀錄</a></li>
 				</ul>
@@ -29,72 +29,54 @@
 						<div class="dataTables_wrapper form-inline dt-bootstrap">
 							<div class="row">
 								<div class="col-sm-12">
+                                <form name="frmOrderby" id="frmOrderby" action="{{ route('search',  ['user_id'=>$model->user_id] )}}" method="POST">
+                                	@if(count($model->order_by)>0)
+											<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+											<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
+									@else
+											<input id="order_by" type="hidden" name="order_by[order_by]" value="">
+											<input id="order_way" type="hidden" name="order_by[order_way]" value="">
+									@endif
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th width="14%"><a href="#sort_name">狀態</a></th>
-												<th><a href="#sort_leave_type">假別</a></th>
-												<th><a href="#sort_datetime">時間</a></th>
-												<th><a href="#sort_reason">原因</a></th>
-												<th width="13%"><a href="#sort_agency">代理人</a></th>
-												<th width="8%"><a href="#sort_hours">時數(HR)</a></th>
+												<th width="14%"><a onclick="changeSort('tag_id');">狀態</a></th>
+												<th><a onclick="changeSort('type_id');">假別</a></th>
+												<th><a onclick="changeSort('start_time');">時間</a></th>
+												<th><a onclick="changeSort('reason');">原因</a></th>
+												<th width="13%">代理人</a></th>
+												<th width="8%"><a onclick="changeSort('hours');">時數(HR)</a></th>
 												<th width="8%"></th>
 											</tr>
 										</thead>
+                                        {!!csrf_field()!!}
+									</form>
 										<tbody>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
+                                        @foreach ($dataProvider as $value)
+											<tr class='clickable-row' data-href="leave_manager_view.html">
 												<td>
-													<button type="button" class="btn bg-green">小主管待核</button> <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                                    @foreach (App\Tag::getLeavesTagIdByTagId($value->tag_id) as $tag)
+													<button id="tag_button" type="button" class="btn bg-blue")>
+                                                        {{$tag->name}}
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                                    @endforeach
 												</td>
-												<td>公假</td>
-												<td>2017-08-10 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
+                                                
+                                                @foreach (App\Type::getLeavesTypeIdByTypeId($value->type_id) as $type_id)
+                                                <td>{{$type_id->name}}</td>
+                                                @endforeach
+												<td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+												<td>{{ $value->reason }}</td>
+                                                @foreach (App\UserAgent::getUserAgentByUserId($value->user_id) as $agent)
 												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-													<img src="dist/img/users/neo.png" class="img-circle" alt="Neo" width="50px">
+													<img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}" class="img-circle" alt="{{$agent->agent_id}}" width="50px">
 												</td>
-												<td>3</td>
+                                                @endforeach
+												<td>{{ $value->hours }}</td>
 												<td class="text-red">倒數1天</td>
 											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>
-													<button type="button" class="btn bg-yellow">代理人待核</button> <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>
-													<button type="button" class="btn bg-red">主管待核</button>
-												</td>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>
-													<button type="button" class="btn bg-blue">大BOSS待核</button>
-												</td>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
+                                            @endforeach
 										</tbody>
 									</table>
 								</div>
@@ -111,56 +93,31 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th><a href="#sort_leave_type">假別</a></th>
-												<th><a href="#sort_datetime">時間</a></th>
-												<th><a href="#sort_reason">原因</a></th>
-												<th width="13%"><a href="#sort_agency">代理人</a></th>
-												<th width="8%"><a href="#sort_hours">時數(HR)</a></th>
+												<th><a onclick="changeSort('type_id');">假別</a></th>
+												<th><a onclick="changeSort('start_time');">時間</a></th>
+												<th><a onclick="changeSort('reason');">原因</a></th>
+												<th width="13%">代理人</a></th>
+												<th width="8%"><a onclick="changeSort('hours');">時數(HR)</a></th>
 												<th width="8%"></th>
 											</tr>
 										</thead>
 										<tbody>
+                                        @foreach ($dataProvider as $value)
 											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>公假</td>
-												<td>2017-08-10 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
+                                                @foreach (App\Type::getLeavesTypeIdByTypeId($value->type_id) as $type_id)
+                                                <td>{{$type_id->name}}</td>
+                                                @endforeach
+												<td>{{$value->start_time}} ~ {{$value->end_time}}</td>
+												<td>{{$value->reason}}</td>
+												@foreach (App\UserAgent::getUserAgentByUserId($value->user_id) as $agent)
 												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-													<img src="dist/img/users/neo.png" class="img-circle" alt="Neo" width="50px">
+													<img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}" class="img-circle" alt="{{$agent->agent_id}}" width="50px">
 												</td>
-												<td>3</td>
+                                                @endforeach
+												<td>{{$value->hours}}</td>
 												<td class="text-red">倒數1天</td>
 											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_manager_view.html'>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-												<td>倒數94天</td>
-											</tr>
+                                        @endforeach
 										</tbody>
 									</table>
 								</div>
@@ -172,16 +129,16 @@
 					<!-- /.tab-pane -->
 					<div class="tab-pane" id="list">
 						<div class="dataTables_wrapper form-inline dt-bootstrap">
-							<form name="frmSetting" action="" method="POST">
+							<form name="frmSetting" action="{{ route('search', ['user_id' => $model->user_id ]) }}" method="POST">
 								<div class="row">
 									<div class="col-sm-3">
 										<div class="dataTables_length">
 											<label>
 												每頁 
-												<select name="search_page" class="form-control input-sm">
-													<option value="25">25</option>
-													<option value="50">50</option>
-													<option value="100">100</option>
+												<select name="order_by[pagesize]" class="form-control input-sm" onchange="changePageSize(this.value);">
+													<option value="25"@if(count($model->order_by) >0 && $model->pagesize == "25") selected="selected" @endif>25</option>
+														<option value="50"@if(count($model->order_by) >0 && $model->pagesize == "50") selected="selected" @endif>50</option>
+														<option value="100"@if(count($model->order_by) >0 && $model->pagesize == "100") selected="selected" @endif>100</option>
 												</select> 
 											筆</label>
 										</div>
@@ -192,11 +149,13 @@
 												假別：
 												<select id="search_leave_type" name="search[leave_type]" class="form-control">
 													<option value="" selected="selected">全部</option>
-													<option value="">特休</option>
-													<option value="">事假</option>
-													<option value="">病假</option>
-													<option value="">生日假</option>
-													<option value="">久任假</option>
+													<option value="1">一般</option>
+													<option value="2">謀職假</option>
+													<option value="3">無薪病假</option>
+													<option value="4">善待假</option>
+													<option value="5">特休</option>
+													<option value="6">久任假</option>
+													<option value="7">生日假</option>
 												</select>
 												&nbsp;
 												區間：
@@ -205,85 +164,59 @@
 												&nbsp;
 												<label>
 												狀態：
-												<select id="search_leave_type" name="search[leave_type]" class="form-control">
+												<select id="search_tag_id" name="search[tag_id]" class="form-control">
 													<option value="" selected="selected">全部</option>
-													<option value="">已取消</option>
-													<option value="">不准假</option>
-													<option value="">已准假</option>
+													<option value="0">已取消</option>
+													<option value="2">不准假</option>
+													<option value="1">已准假</option>
 												</select>
 											</label>
 											&nbsp;
 											<label>
-												<button type="button" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button>
+												<button type="submit" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button>
 											</label>
 											&nbsp;
 										</div>
 									</div>
 								</div>
+                                {!!csrf_field()!!}
 							</form>
 							<div class="row">
 								<div class="col-sm-12">
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th width="3%"><a href="#sort_status">狀態</a></th>
-												<th><a href="#sort_leave_type">假別</a></th>
-												<th><a href="#sort_datetime">時間</a></th>
-												<th><a href="#sort_reason">原因</a></th>
-												<th width="13%"><a href="#sort_agency">職代</a></th>
-												<th width="9%"><a href="#sort_hours">時數(HR)</a></th>
+												<th width="3%"><a onclick="changeSort('tag_id');">狀態</a></th>
+												<th><a onclick="changeSort('type_id');">假別</a></th>
+												<th><a onclick="changeSort('start_time');">時間</a></th>
+												<th><a onclick="changeSort('reason');">原因</a></th>
+												<th width="13%">職代</a></th>
+												<th width="9%"><a onclick="changeSort('hours');">時數(HR)</a></th>
 											</tr>
 										</thead>
 										<tbody>
+                                         @foreach ($dataProvider as $value)
 											<tr class='clickable-row' data-href='leave_view.html'>
+                                                 @foreach (App\Tag::getLeavesTagIdByTagId($value->tag_id) as $tag_id)
 												<td>
-													<button type="button" class="btn bg-navy">已准假</button>
+													<button type="button" class="btn bg-navy">
+                                                        {{$tag_id->name}}
+                                                    </button>
 												</td>
-												<td>善待假</td>
-												<td>2017-07-10 (上午)</td>
-												<td>驗車車</td>
+                                                @endforeach
+                                                @foreach (App\Type::getLeavesTypeIdByTypeId($value->type_id) as $type_id)
+                                                <td>{{$type_id->name}}</td>
+                                                @endforeach
 												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-													<img src="dist/img/users/neo.png" class="img-circle" alt="Neo" width="50px">
+												<td>{{$value->reason}}</td>
+												@foreach (App\UserAgent::getUserAgentByUserId($value->user_id) as $agent)
+												<td>
+													<img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}" class="img-circle" alt="{{$agent->agent_id}}" width="50px">
 												</td>
-												<td>4</td>
+                                                @endforeach
+												<td>{{$value->hours}}</td>
 											</tr>
-											<tr class='clickable-row' data-href='leave_view.html'>
-												<td>
-													<button type="button" class="btn bg-navy">已准假</button>
-												</td>
-												<td>特休</td>
-												<td>2017-11-10 ~ 2017-11-20</td>
-												<td>去美國黑皮</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>80</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_view.html' style="text-decoration:line-through">
-												<td>
-													<button type="button" class="btn">已取消</button>
-												</td>
-												<td>公假</td>
-												<td>2017-11-10 14:00 ~ 2017-11-10 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-											</tr>
-											<tr class='clickable-row' data-href='leave_view.html'>
-												<td>
-													<button type="button" class="btn bg-maroon">不准假</button>
-												</td>
-												<td>公假</td>
-												<td>2017-11-11 14:00 ~ 2017-11-11 17:00</td>
-												<td>找客戶 - 蔥媽媽</td>
-												<td>
-													<img src="dist/img/users/marty.png" class="img-circle" alt="Marty" width="50px">
-												</td>
-												<td>3</td>
-											</tr>
+                                        @endforeach
 										</tbody>
 										<tfotter>
 											<tr class="text-red">
@@ -292,7 +225,7 @@
 												<th></th>
 												<th></th>
 												<th class="pull-right">總計(Hr)</th>
-												<th>87</th>
+												<th class="vTotal">87</th>
 											</tr>
 										</tfotter>
 									</table>
@@ -302,17 +235,10 @@
 								<div class="col-sm-12">
 									<ul class="pagination">
 										<li class="paginate_button previous disabled">
-											<a href="#">上一頁</a>
-										</li>
-										<li class="paginate_button active"><a href="#">1</a></li>
-										<li class="paginate_button"><a href="#">2</a></li>
-										<li class="paginate_button"><a href="#">3</a></li>
-										<li class="paginate_button"><a href="#">4</a></li>
-										<li class="paginate_button"><a href="#">5</a></li>
-										<li class="paginate_button"><a href="#">6</a></li>
-										<li class="paginate_button next">
-											<a href="#">下一頁</a>
-										</li>
+                                            <li>
+                                                {{ $dataProvider->links() }}
+                                            </li>
+                                        </li>
 									</ul>
 								</div>
 							</div>
@@ -327,4 +253,27 @@
 		</div>
 	</div>
 </section>
+<script>
+function changePageSize(pagesize)
+{
+    $("#frmOrderby").submit();
+}
+
+function changeSort(sort)
+{
+	order_by = "{{ $model->order_by }}";
+	order_way = "{{ $model->order_way }}";
+
+	$("#order_by").val(sort);
+
+	if (order_by == sort && order_way == "DESC") {
+			$("#order_way").val("ASC");
+	} else {
+			$("#order_way").val("DESC");
+	}
+
+	$("#frmOrderby").submit();
+}
+
+</script>
 @stop

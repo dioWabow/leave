@@ -103,3 +103,13 @@ Route::match(['get', 'post'], '/demo/image',[
     'uses'=> 'DemoControllor@getImage',
     'as'=>'demo_image',
 ]);
+
+Route::get('/my_leaves/index/{user_id}',[
+    'uses'=> 'LeavesController@getIndex',
+    'as'=>'leave',
+]);
+
+Route::any('/my_leaves/search/{user_id}',[
+    'uses'=> 'LeavesController@getIndex',
+    'as'=>'search',
+]);

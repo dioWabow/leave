@@ -6,10 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    /**
-     * 與Model關聯的table
-     *
-     * @var string
-     */
-    protected $table = 'tags';
+    //可以傳入數值的欄位
+    protected $fillable = [
+        'name',
+        'shortname',
+        'sort',
+    ];
+
+
+    public static function getLeavesTagIdByTagId($tag_id) 
+    {
+        $result = self::where('id',$tag_id)->get();
+        return $result;
+    }
 }

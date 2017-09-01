@@ -6,10 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model
 {
-    /**
-     * 與Model關聯的table
-     *
-     * @var string
-     */
-    protected $table = 'types';
+    protected $fillable = [
+        'name',
+        'reset_time',
+        'hours',
+        'exception',
+        'start_time',
+        'end_time',
+        'reason',
+        'prove',
+        'available',
+        'order_by',
+        'order_way',
+        'pagesize',
+    ];
+    
+    public static function getLeavesTypeIdByTypeId($type_id) 
+    {
+        $result = self::where('id',$type_id)->get();
+        return $result;
+    }
 }
