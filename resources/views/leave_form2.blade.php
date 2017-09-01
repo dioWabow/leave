@@ -154,30 +154,12 @@
 						<label>代理人</label>
 					</div>
 					<div class="col-md-11">
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="毛毛"> 
-							毛毛
-						</label>&emsp; 
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="壽司"> 
-							壽司
-						</label>&emsp; 
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="Lube"> 
-							Lube
-						</label>&emsp; 
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="Dio"> 
-							Dio
-						</label>&emsp; 
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="Eno"> 
-							Eno
-						</label>&emsp; 
-						<label>
-							<input type="checkbox" name="leave[agent]" class="flat-red" value="Vic"> 
-							Vic
-						</label>&emsp; 
+						@foreach($user_agents as $user_agent)
+							<label>
+							<input type="checkbox" name="leave[agent]" class="flat-red" value="{{$user_agent->user->id}}"> 
+								{{$user_agent->user->nickname}}
+							</label>&emsp;
+						@endforeach
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">

@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Team;
+use App\Leave;
 use App\UserAgent;
 use App\UserTeam;
 use App\Http\Requests\UserRequest;
 
 use Session;
-use Image;
 use Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,8 +33,17 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request) 
     {
+        $id = '1';
 
-        return view('leave_form2');
+        $model = new Leave;
+        $leaves = Leave::get();
+
+        //使用者目前所有代理人
+        $user_agents = UserAgent::getUserAgentByUserId($id);
+
+        return view('leave_form2',compact(
+            'user_agents'
+        ));
     }
 
     /**
@@ -190,7 +199,7 @@ class LeaveController extends Controller
 
     private function loadModel($id) 
     {
-        $model = User::find($id);
+        $model = Leave::find($id);
         if ($model===false) {
             throw new CHttpException(404,'資料不存在');
         }
