@@ -12,10 +12,4 @@ class User extends Model
      * @var string
      */
     protected $table = 'users';
-
-    public static function getUserNameByKey($key = "")
-	{
-		$result = self::where("id", $key)->pluck('name')->first();
-		return $result;
-	}
 }

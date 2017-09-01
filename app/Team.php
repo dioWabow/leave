@@ -12,4 +12,10 @@ class Team extends Model
      * @var string
      */
     protected $table = 'teams';
+
+    public static function getColorByKey($key = "")
+	{
+		$result = self::where("id", $key)->pluck('color')->first();
+		return $result;
+	}
 }

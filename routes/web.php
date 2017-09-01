@@ -19,6 +19,9 @@ Route::get('/', function () {
 //     return view('index');
 // })->name('index');
 
+Route::get('index', ["uses"=>"LeaveController@getIndex"])->name('index');
+
+Route::post('index', ["uses"=>"LeaveController@ajaxReturnData", "as"=>"indexChange"]);
 
 Route::get('holidies', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
 
@@ -33,10 +36,6 @@ Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"ho
 Route::any('holidies/search', ["uses"=>'HolidayController@getIndex',"as"=>"holidaySearch"]);
 
 Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
-
-Route::get('index', ["uses"=>"LeaveController@getIndex"])->name('index');
-
-Route::post('index', ["uses"=>"LeaveController@getIndex"])->name('indexChange');
 
 Route::get('/leave', function () {
     return view('leave');

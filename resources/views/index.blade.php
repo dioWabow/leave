@@ -2,6 +2,7 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 <section class="content-header">
   <h1>
 	Dashboard
@@ -36,31 +37,49 @@
 <!-- /.content -->
 <!-- Index頁面 -->
 <script>
-  var json_change = '{!! json_encode($return_data) !!}';
-  var events = JSON.parse(json_change);
-
   $(function () {
 
     $('#calendar').fullCalendar({
       header: {
         left: 'prev, next, today',
-        center: '',
+        center: 'title',
         right: ''
       },
       //Random default events
-      events: events,
+      events: function(start, end, timezone, callback) {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+            url: '{{url("index")}}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                // our hypothetical feed requires UNIX timestamps
+                start: start.unix(),
+                end: end.unix()
+            },
+            success: function(data) {
+
+              var events = [];
+
+              $.each(data, function(index, value) {
+                events.push({
+                    title: value['title'],
+                    start: value['start'], // will be parsed
+                    end: value['end'],
+                    backgroundColor: value['backgroundColor'],
+                    borderColor: value['borderColor']
+                });
+              });
+
+              callback(events);
+            }
+        });
+      },
       editable: false,
-    });
-
-    // 會改變的日期
-    // 固定今天的日期
-
-    $('.fc-prev-button').click(function(){
-        // 傳減一
-    });
-
-    $('.fc-next-button').click(function(){
-
     });
 
   });

@@ -13,15 +13,27 @@ class Leave extends Model
      */
     protected $table = 'leaves';
 
-    public function testDate($first_day, $last_day)
+    public function leaveDataRange($first_day, $last_day)
     {
         $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
-        // $result = $this->get();
     	return $result;
     }
 
-    public function search($where=[])
+    public function User()
     {
-        //
+        $result = $this->hasOne('App\User', 'id' , 'user_id');
+        return $result;
+    }
+
+    public function Type()
+    {
+        $result = $this->hasOne('App\Type', 'id', 'type_id');
+        return $result;
+    }
+
+    public function UserTeam()
+    {
+        $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
+        return $result;
     }
 }
