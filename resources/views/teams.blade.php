@@ -57,12 +57,34 @@ $('#nestable').nestable({
 								<div class="form-group">
 									<input type="text" class="form-control" id="addInputName" placeholder="團隊名稱" required>
 								</div>
+								<br>
+								<div class="form-group">
+									<div class="input-group my-colorpicker2">
+										<input type="text" class="form-control" placeholder="團隊顏色" >
+					
+										<div class="input-group-addon">
+											<i></i>
+										</div>
+									</div>
+									<!-- /.input group -->
+								</div>
 								<button class="btn btn-info" id="addButton">新增</button>
 							</form>
 							<form class="form-inline" id="menu-editor" style="display: none;" action="" method="POST">
 								<h3>修改 "<span id="currentEditName"></span>" 名稱</h3>
 								<div class="form-group">
 									<input type="text" class="form-control" id="editInputName" placeholder="團隊名稱" required>
+								</div>
+								<br>
+								<div class="form-group">
+									<div class="input-group my-colorpicker2">
+										<input type="text" class="form-control" placeholder="團隊顏色" >
+					
+										<div class="input-group-addon">
+											<i></i>
+										</div>
+									</div>
+									<!-- /.input group -->
 								</div>
 								<button class="btn btn-info" id="editButton">修改</button>
 							</form>
