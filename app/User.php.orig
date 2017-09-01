@@ -11,6 +11,7 @@ class User extends Model
 {
     //可以傳入數值的欄位
     protected $fillable = [
+<<<<<<< HEAD
         'employee_no',
         'email',
         'password',
@@ -18,17 +19,29 @@ class User extends Model
         'remember_token',
         'name',
         'role',
+        'birthday',
+=======
+        'name', 
+        'role',
         'status',
         'job_seek',
         'employee_no',
         'nickname',
         'sex',
+>>>>>>> 68736847f9fbaa79459ffa35b502f627a7e79221
         'birthday',
         'avatar',
         'enter_date',
         'leave_date',
+<<<<<<< HEAD
         'status',
         'job_seek',
+        'arrive_time',
+    ];
+
+    /**
+     * 搜尋table單個資料
+=======
         'arrive_time',
         'order_by',
         'order_way',
@@ -44,10 +57,19 @@ class User extends Model
      * 搜尋table多個資料
      * 若有多個傳回第一個
      * 使用laravel的links方法產生分頁
+>>>>>>> 68736847f9fbaa79459ffa35b502f627a7e79221
      *
      * @param  array   $where     搜尋條件
      * @return 資料object/false
      */
+<<<<<<< HEAD
+    public static function getUserByEmail($email="") {
+
+        $query = self::where("email", $email);
+
+        $result = $query->first();
+
+=======
     public function search($where = array())
     {
         $query = self::OrderedBy();
@@ -100,21 +122,7 @@ class User extends Model
     public function UserTeam()
     {
         $result = $this::hasMany('App\UserTeam','user_id','id');
-        return $result;
-    }
-    
-    /**
-     * 搜尋table單個資料
-     *
-     * @param  array   $where     搜尋條件
-     * @return 資料object/false
-     */
-    public static function getUserByEmail($email="") {
-
-        $query = self::where("email", $email);
-
-        $result = $query->first();
-
+>>>>>>> 68736847f9fbaa79459ffa35b502f627a7e79221
         return $result;
     }
 }

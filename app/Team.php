@@ -11,5 +11,9 @@ class Team extends Model
      *
      * @var string
      */
-    protected $table = 'teams';
+    public static function getAllTeam() 
+    {
+        $result = self::get();
+        return $result;
+    }
 }

@@ -19,6 +19,7 @@ Route::get('login/google', 'Auth\LoginController@redirectToGoogle')->name('login
 Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
+<<<<<<< HEAD
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/index', function () {
         return view('index');
@@ -93,10 +94,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/system_conf.html', function () {
         return view('system_conf');
     })->name('system_conf');
-
-    Route::get('/teams.html', function () {
-        return view('teams');
-    })->name('teams');
+=======
+Route::get('/teams.html', function () {
+    return view('teams');
+})->name('teams');
 
 Route::any('user/index',[
         'uses' => 'UserController@getIndex',
@@ -111,4 +112,15 @@ Route::get('user/edit/{id}', [
         'uses' => 'UserController@getEdit',
         'as' => 'user/edit',
         ]);
+>>>>>>> 68736847f9fbaa79459ffa35b502f627a7e79221
+
+    Route::get('/teams.html', function () {
+        return view('teams');
+    })->name('teams');
+    Route::get('/users.html', function () {
+        return view('users');
+    })->name('users');
+    Route::get('/users_form.html', function () {
+        return view('users_form');
+    })->name('users_form');
 });

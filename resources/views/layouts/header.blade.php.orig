@@ -3,9 +3,9 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="{{ route('index') }}" class="logo">
+    <a href="index.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="dist/img/wabow_logo.png"></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>哇寶</b>請假系統</span>
     </a>
@@ -79,7 +79,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-right">
-                  <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -113,13 +113,13 @@
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
         <li class="active">
-          <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+          <a href="./index.html"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class=""><a href="{{ route('leave_form2') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class=""><a href="leave_form2.html"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li class="">
-          <a href="{{ route('leave') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
+          <a href="leave.html"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red" alt="待審核假單">3</small>
             </span>
@@ -127,7 +127,7 @@
         </li>
         <li class="header">Agent</li>
         <li class="">
-          <a href="{{ route('leave_agent_prove') }}">
+          <a href="leave_agent_prove.html">
             <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">3</small>
@@ -135,7 +135,7 @@
           </a>
         </li>
         <li class="">
-          <a href="{{ route('leave_agent') }}">
+          <a href="leave_agent.html">
             <i class="fa fa-github-alt"></i> <span>我是代理人</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">3</small>
@@ -144,31 +144,31 @@
         </li>
         <li class="header">MINI-MANAGER</li>
         <li class="">
-          <a href="{{ route('leave_manager') }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="leave_manager.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
                 <span class="pull-right-container">
             <small class="label pull-right bg-red">3</small>
           </span>
               </a>
         </li>
         <li class="">
-          <a href="{{ route('leave_form33') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
         <li class="header">MANAGER</li>
         <li class="">
-          <a href="{{ route('leave_manager') }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
                 <span class="pull-right-container">
             <small class="label pull-right bg-red">3</small>
           </span>
               </a>
         </li>
         <li class="">
-          <a href="{{ route('leave_form33') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
         <li class="header">BOSS</li>
         <li class="">
-          <a href="{{ route('leave_manager') }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="leave_manager.html"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
                 <span class="pull-right-container">
             <small class="label pull-right bg-red">1</small>
           </span>
@@ -176,18 +176,18 @@
         </li>
         <li class="header">HUMAN-RESOURCE</li>
         <li class="">
-          <a href="{{ route('leave_hr') }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="leave_hr.html"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">2</small>
             </span>
           </a>
         </li>
         <li class="">
-          <a href="{{ route('leave_form33') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          <a href="leave_form33.html"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
         <li class="">
-          <a href="{{ route('natural_disaster') }}"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
+          <a href="natural_disaster.html"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
@@ -199,9 +199,15 @@
             </span>
           </a>
           <ul class="treeview-menu">
+<<<<<<< HEAD
+            <li class=""><a href="system_conf.html"><i class="fa fa-circle-o"></i>系統設定</a></li>
+            <li class=""><a href="teams.html"><i class="fa fa-circle-o"></i>團隊設定</a></li>
+            <li class=""><a href="users.html"><i class="fa fa-circle-o"></i>員工管理</a></li>
+=======
             <li class=""><a href="{{ route('system_conf') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
             <li class=""><a href="{{ route('teams') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
             <li class=""><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
+>>>>>>> 68736847f9fbaa79459ffa35b502f627a7e79221
           </ul>
         </li>
         <li class="treeview ">
@@ -211,8 +217,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li class=""><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li class=""><a href="leave_type.html"><i class="fa fa-circle-o"></i>假別管理</a></li>
+            <li class=""><a href="holidies.html"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview ">
@@ -222,8 +228,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="{{ route('report') }}"><i class="fa fa-circle-o"></i>報表</a></li>
-            <li class=""><a href="{{ route('report-annual-leave') }}"><i class="fa fa-circle-o"></i>特休報表</a></li>
+            <li class=""><a href="report.html"><i class="fa fa-circle-o"></i>報表</a></li>
+            <li class=""><a href="report-annual-leave.html"><i class="fa fa-circle-o"></i>特休報表</a></li>
           </ul>
         </li>
       </ul>
