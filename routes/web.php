@@ -20,9 +20,9 @@ Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback')
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/index', function () {
-        return view('index');
-    })->name('index');
+    Route::get('index', ["uses"=>"SiteController@getIndex"])->name('index');
+    Route::post('index', ["uses"=>"SiteController@ajaxGetAllAvailableLeaveListByDateRange", "as"=>"indexChange"]);
+	
     Route::get('/holidies', function () {
         return view('holidies');
     })->name('holidies');
