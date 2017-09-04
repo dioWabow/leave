@@ -90,7 +90,7 @@
                     <tbody>
                       @foreach($dataProvider as $user)
                       <tr class='clickable-row' data-href="{{ route('user/edit', ['id'=>$user->id]) }}">
-                        <td align="center"><img src="{{route('root_path')}}/storage/avatar/{{$user->avatar}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
+                        <td align="center"><img src="{{route('root_path')}}/storage/avatar/{{$user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
                         <td align="center">
                           <div>{{$user->employee_no}}</div>
                           <div>
@@ -133,17 +133,19 @@
                         </td>
                         <td>
                           @foreach (App\UserAgent::getUserAgentByUserId($user->id) as $agent)
-                            <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}" class="img-circle" alt="{{$agent->user->avatar}}" width="50px">
+                            <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,9)}}" class="img-circle" alt="{{$agent->user->avatar}}" width="50px">
                           @endforeach
                         </td>
                         <td>
                           @foreach (App\UserTeam::getUserTeamByUserId($user->id) as $user_team)
-                            @if( $user_team->team->name == "Washop")
-                              <small class="label bg-purple">{{$user_team->team->name}}</small>
-                            @elseif( $user_team->team->name == "Waca" )
-                              <small class="label bg-gray">{{$user_team->team->name}}</small>
-                            @else
-                              <small class="label bg-red">{{$user_team->team->name}}</small>
+                            @if(!empty($user_team->team))@
+                              @if( $user_team->team->name == "Washop")
+                                <small class="label bg-purple">{{$user_team->team->name}}</small>
+                              @elseif( $user_team->team->name == "Waca" )
+                                <small class="label bg-gray">{{$user_team->team->name}}</small>
+                              @else
+                                <small class="label bg-red">{{$user_team->team->name}}</small>
+                              @endif
                             @endif
                           @endforeach
                         </td>

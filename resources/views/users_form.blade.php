@@ -209,12 +209,14 @@ $(function () {
     });
 
     $("#user_fileupload").fileinput({
+        @if(!empty($model->avatar))
         initialPreview: [
             '{{route("root_path")}}/storage/avatar/{{$model->avatar}}?v=' + Math.random()
         ],
+        @endif
         initialPreviewAsData: true,
     });
-
+    
     $("#clear_leave_date").click(function() {
       $("#user_leave_date").val("");
     });
