@@ -2,7 +2,6 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
-<meta name="csrf-token" content="{{ csrf_token() }}" />
 <section class="content-header">
   <h1>
 	Dashboard
@@ -47,17 +46,13 @@
       },
       //Random default events
       events: function(start, end, timezone, callback) {
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
         $.ajax({
             url: '{{url("index")}}',
             type: 'POST',
             dataType: 'json',
             data: {
                 // our hypothetical feed requires UNIX timestamps
+                "_token": "{{ csrf_token() }}",
                 start: start.unix(),
                 end: end.unix()
             },
