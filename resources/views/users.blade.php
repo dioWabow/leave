@@ -24,7 +24,7 @@
             <div class="row">
               <div class="col-sm-3">
                 <div class="dataTables_length">
-                    <form name="frmSearch" id="frmSearch" action="{{route('root_path')}}/user/index" method="POST">
+                    <form name="frmSearch" id="frmSearch" action="{{route('user/index')}}" method="POST">
                     <input id="order_by" type="hidden" name="order_by[order_by]" value="{{$model->order_by}}">
                     <input id="order_way" type="hidden" name="order_by[order_way]" value="{{$model->order_way}}">
                     
