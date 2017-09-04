@@ -7,7 +7,7 @@ use App\Leave;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class LeaveController extends Controller
+class SiteController extends Controller
 {
     /**
      * 搜尋
@@ -19,7 +19,7 @@ class LeaveController extends Controller
         return view('index');
     }
 
-    public function ajaxReturnData(Request $request)
+    public function ajaxGetAllAvailableLeaveListByDateRange(Request $request)
     {
         $start_time = date('Y-m-d', $request['start']);
         $end_time = date('Y-m-d', $request['end']);

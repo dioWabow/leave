@@ -19,9 +19,9 @@ Route::get('/', function () {
 //     return view('index');
 // })->name('index');
 
-Route::get('index', ["uses"=>"LeaveController@getIndex"])->name('index');
+Route::get('index', ["uses"=>"SiteController@getIndex"])->name('index');
 
-Route::post('index', ["uses"=>"LeaveController@ajaxReturnData", "as"=>"indexChange"]);
+Route::post('index', ["uses"=>"SiteController@ajaxGetAllAvailableLeaveListByDateRange", "as"=>"indexChange"]);
 
 Route::get('holidies', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
 
