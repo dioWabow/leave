@@ -30,9 +30,9 @@
 									<label>
 					                    每頁 
 					                    <select name="order_by[pagesize]" class="form-control input-sm" onchange="javascript:changePageSize(this.value);">
-					                      <option value="2"@if( "{{ $model->pagesize }}" == "{{2}}")selected="selected"@endif>2</option>
-					                      <option value="5"@if( "{{ $model->pagesize }}" == "{{5}}")selected="selected"@endif>5</option>
-					                      <option value="10"@if( "{{ $model->pagesize }}" == "{{10}}")selected="selected"@endif>10</option>
+					                      <option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
+					                      <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
+					                      <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
 					                    </select> 
 					                  筆</label>
 									</div>

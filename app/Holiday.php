@@ -21,9 +21,9 @@ class Holiday extends Model
     ];
 
     protected $attributes = [
-        'order_by' => "id",
+        'order_by' => "date",
         'order_way' => "DESC",
-        'pagesize' => '2',
+        'pagesize' => '25',
     ];
 
     /**

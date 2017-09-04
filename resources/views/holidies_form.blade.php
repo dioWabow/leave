@@ -3,14 +3,14 @@
 @section('content')
 <section class="content-header">
   <h1>
-  <i class="fa fa-anchor"></i> 國定假日/補班資料修改
+  <i class="fa fa-anchor"></i> 國定假日/補班資料{{ $model->id > 0 ? '修改' : '新增' }}
   <small>Vacation Category Management</small>
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
   <li>假期設定</li>
   <li><a href="{{ route('holidies') }}">國定假日/補班</a></li>
-  <li class="active">資料修改</li>
+  <li class="active">資料{{ $model->id > 0 ? '修改' : '新增' }}</li>
   </ol>
 </section>
 
@@ -29,12 +29,12 @@
           <input type="hidden" name="id" value="{{$model->id}}">
           <div class="col-md-11">
             <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="work"@if( "{{$model->type}}" == "{{work}}")checked="checked"@endif>
-              工作日
-            </label>&emsp;
-            <label>
               <input type="radio" name="holidies[type]" class="flat-red" value="holiday"@if( "{{$model->type}}" == "{{holiday}}")checked="checked"@endif>
               國定假日
+            </label>&emsp;
+            <label>
+              <input type="radio" name="holidies[type]" class="flat-red" value="work"@if( "{{$model->type}}" == "{{work}}")checked="checked"@endif>
+              工作日
             </label>&emsp;
           </div>
         </div></div>
