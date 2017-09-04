@@ -215,6 +215,7 @@ $(function () {
         ],
         @endif
         initialPreviewAsData: true,
+        showUpload: false,
     });
     
     $("#clear_leave_date").click(function() {

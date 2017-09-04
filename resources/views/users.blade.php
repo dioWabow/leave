@@ -82,13 +82,13 @@
                         <th width="8%"><a href="javascript:void(0)" onclick="changeSort('enter_date');">到職日</a></th>
                         <th width="8%"><a href="javascript:void(0)" onclick="changeSort('leave_date');">離職日</a></th>
                         <th width="8%"><a href="javascript:void(0)" onclick="changeSort('arrive_time');">上班時間</a></th>
-                        <th width="11%">職代</th>
+                        <th width="11%">代理人</th>
                         <th width="10%">團隊</th>
                         <th width="4%"><a href="javascript:void(0)" onclick="changeSort('status');">狀態</a></th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($dataProvider as $user)
+                      @forelse($dataProvider as $user)
                       <tr class='clickable-row' data-href="{{ route('user/edit', ['id'=>$user->id]) }}">
                         <td align="center"><img src="{{route('root_path')}}/storage/avatar/{{$user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
                         <td align="center">
@@ -157,7 +157,11 @@
                           @endif
                         </td>
                       </tr>
-                      @endforeach
+                      @empty
+                        <tr>
+                          <td colspan="11" align="center">無資料</td>
+                        </tr>
+                      @endforelse
 
                     </tbody>
                   </table>
