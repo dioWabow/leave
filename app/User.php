@@ -5,9 +5,8 @@ namespace App;
 use App\UserTeam;
 
 use Schema;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends BaseModel
 {
     //可以傳入數值的欄位
     protected $fillable = [
