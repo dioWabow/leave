@@ -60,28 +60,14 @@
 <script src="{{route('root_path')}}/js/wabow.js"></script>
 
 <!-- 國定假日/補班與修改頁面 -->
-@if(Request::is('holidies/*'))
   <script>
 $(function () {
-
-    $('input[name="search[daterange]"]').daterangepicker({
-        autoUpdateInput: false,
+    $('#search_daterange').daterangepicker({
+        showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-
-    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
-
-    if("{{$model->start_date}}" == "") {
-        $('#search_daterange').val('');
-    } else {
-        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->start_date)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->end_date)->format('Y-m-d') }}");
-    }
+    $('#search_daterange').val('');
 
     $('#holidies_available_date').daterangepicker({
         showDropdowns: true,
@@ -99,9 +85,8 @@ $(function () {
     $('#holidies_date').val($('#holidies_date').attr('date'));
 });
 </script>
-@endif
+
 <!-- 我的假單頁面用 -->
-@if(Request::is('leave_type/*'))
   <script>
 $(function () {
     $('#search_daterange').daterangepicker({
@@ -119,7 +104,7 @@ $(function () {
     });
 });
 </script>
-@endif
+
 <!--天災假調整用-->
 <script>
 $(function () {

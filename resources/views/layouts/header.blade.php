@@ -5,7 +5,7 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}/dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>哇寶</b>請假系統</span>
     </a>
@@ -204,7 +204,7 @@
               <li @if(Request::is('user/*'))class="active" @endif><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>
-        <li class="treeview @if(Request::is('holidies/*', 'leave_type/*'))active @endif">
+        <li class="treeview ">
           <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -212,7 +212,7 @@
           </a>
           <ul class="treeview-menu">
             <li class=""><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li class=""><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview ">

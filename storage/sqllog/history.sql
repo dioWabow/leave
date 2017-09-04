@@ -18,11 +18,6 @@ ALTER TABLE `users` ADD `created_at` TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMES
 --2017-08-18 tony 增加性別欄位
 ALTER TABLE `users` ADD `sex` TINYINT(1) NULL COMMENT '1:男 0:女' AFTER `nickname`;
 
--- 2017-08-17
-ALTER TABLE `holidays` ADD `name` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '假日名稱' AFTER `id`;
-ALTER TABLE `holidays` ADD `created_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間' AFTER `date`;
-ALTER TABLE `holidays` ADD `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改時間' AFTER `created_at`;
-
 --2017-08-17 tony user資料表增加 稱呼欄位、將enter_date與leave_date型態改為 date
 ALTER TABLE `users` ADD `nickname` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '稱呼' AFTER `name`;
 ALTER TABLE `users` CHANGE `enter_date` `enter_date` DATE NOT NULL COMMENT '到職日';

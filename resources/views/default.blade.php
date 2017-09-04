@@ -10,6 +10,7 @@
     <body class="hold-transition skin-blue-light sidebar-mini">
         <div class="wrapper">
             @include('layouts.header')
+            
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 @include('layouts.error')

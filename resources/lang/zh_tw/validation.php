@@ -118,18 +118,6 @@ return [
         'user.avatar' => [
             'image' => '大頭貼請選擇圖片',
         ],
-	'holidies.type' => [
-            'required' => '請選擇假日類型',
-        ],
-        'holidies.name' => [
-            'required' => '請輸入假日名稱',
-            'max' => '最長為10個字,請縮減長度',
-        ],
-        'holidies.date' => [
-            'required' => '請選擇日期',
-            'date' => '請填入正確的日期格式',
-            'unique' => '該日期已經有假日囉~',
-        ],
     ],
 
     /*

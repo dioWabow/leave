@@ -2,71 +2,14 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Model;
 
-class Holiday extends BaseModel
+class Holiday extends Model
 {
-    protected $fillable = [
-        'type',
-        'name',
-        'date',
-        'pagesize',
-        'order_by',
-        'order_way',
-        'start_time',
-        'end_time',
-        'start_date',
-        'end_date',
-    ];
-
-    protected $attributes = [
-        'order_by' => "date",
-        'order_way' => "DESC",
-        'pagesize' => '25',
-        'start_date' => "",
-        'end_date' => "",
-    ];
-
     /**
      * 與Model關聯的table
      *
      * @var string
      */
-
-    public function search($where=[])
-    {
-        $query = self::OrderedBy();
-
-        foreach ($where as $key => $value) {
-
-            if (Schema::hasColumn('holidays', $key) && !empty($value)) {
-
-                if ($key == 'name') {
-
-                    $query->where("name", 'LIKE', '%'.$value.'%');
-
-                } else {
-
-                    $query->where($key, $value);
-
-                }
-            }
-        }
-
-        if (!empty($where['start_time']) && !empty($where['end_time'])) {
-
-            $query->whereBetween('date', [$where['start_time'], $where['end_time']]);
-
-        }
-
-        $result = $query->paginate($this->pagesize);
-        return $result;
-    }
-
-    public function scopeOrderedBy($query)
-    {
-        $result = $query->orderBy($this->order_by, $this->order_way);
-        return $result;
-    }
+    protected $table = 'holidays';
 }

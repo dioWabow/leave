@@ -26,10 +26,12 @@ class BaseModel extends Model
                 if(in_array($key, array_keys($model->getOriginal()))) 
                     unset($model->$key);
             }
+            
             foreach ($dirty as $key => $value) {
                 $model->setAttribute($key, $value);
             }
         });
+        
         parent::boot();
     }
 }
