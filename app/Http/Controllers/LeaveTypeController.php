@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Type;
+use App\Leave;
 use App\Http\Requests\LeaveTypeRequest;
 
 use Session;
 use Redirect;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
@@ -58,19 +60,11 @@ class LeaveTypeController extends Controller
      */
     public function getCreate(Request $request)
     {
+       
         $model = new Type;
 
-        $input = $request->old('leave_type');
-
-        if (!empty($input)) {
-            
-            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
-            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
-            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
-
-            $model->fill($input);
-
-        }
+        $input = $this->checkDataValue($request->old('leave_type'));
+        $model->fill($input);
 
         return  view('leave_type_form', compact(
             'model'
@@ -84,19 +78,11 @@ class LeaveTypeController extends Controller
      */
     public function getEdit(Request $request, $id)
     {
+
         $model = $this->loadModel($id);
 
-        $input = $request->old('leave_type');
-
-        if (!empty($input)) {
-            
-            $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
-            $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
-            $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
-
-            $model->fill($input);
-
-        }
+        $input = $this->checkDataValue($request->old('leave_type'));
+        $model->fill($input);
         
         return  view('leave_type_form', compact(
             'model'
@@ -112,7 +98,7 @@ class LeaveTypeController extends Controller
     {
         $model = $this->loadModel($id)->delete();
         
-        return Redirect::to(route('leave_type'))->withErrors(['msg' => '刪除完畢。']);
+        return Redirect::route('leave_type')->withErrors(['msg' => '刪除完畢。']);
     }
     
     /**
@@ -123,19 +109,15 @@ class LeaveTypeController extends Controller
      */
     public function postInsert(LeaveTypeRequest $request)
     {
-        $input = $request->input('leave_type');
-
-        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
-        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
-        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+        $input = $this->checkDataValue($request->input('leave_type'));
 
         //儲存資料
         $model = new Type;
         $model->fill($input);
 
-        if ($model->saveOriginalOnly()) {
+        if ($model->save()) {
 
-            return Redirect::to(route('leave_type'))->withErrors(['msg' => '新增成功']);
+            return Redirect::route('leave_type')->withErrors(['msg' => '新增成功']);
 
         } else {
 
@@ -152,11 +134,7 @@ class LeaveTypeController extends Controller
      */
     public function postUpdate(LeaveTypeRequest $request)
     {
-        $input = $request->input('leave_type');
-        
-        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1;
-        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1;
-        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1;
+        $input = $this->checkDataValue($request->input('leave_type'));
 
         //更新資料
         $model = new Type;
@@ -165,7 +143,7 @@ class LeaveTypeController extends Controller
         
         if ($model->save()) {
 
-            return Redirect::to(route('leave_type_edit', [ 'id' => $input['id']]))->withErrors(['msg' => '更新成功']);
+            return Redirect::route('leave_type')->withErrors(['msg' => '更新成功']);
 
         } else {
 
@@ -186,4 +164,23 @@ class LeaveTypeController extends Controller
             
         return $model;
     }
+
+    private function checkDataValue($data)
+    {
+        $input = $data;
+        
+        // 日期區間用-分別存入
+        if (!empty($input['available_date'])) {
+            $available_date = explode(" - ", $input['available_date']);
+            $input['start_time'] = isset($available_date[0]) ? $available_date[0]:'';
+            $input['end_time'] = isset($available_date[1]) ? $available_date[1]:'';
+        }
+        // reason prove available 判斷 0 或 1 後存入 
+        $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
+        $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
+        $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
+    
+        return $input;
+    }
+
 }

@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
 
-class Type extends Model
+class Type extends BaseModel
 {
 
     protected $fillable = [
@@ -40,7 +40,7 @@ class Type extends Model
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function search( $where = [] )
+    public function search($where = [])
     {
         $query = $this->OrderedBy();
         foreach ($where as $key => $value) {
@@ -70,25 +70,4 @@ class Type extends Model
         $result = $query->orderBy($this->order_by, $this->order_way);
         return $result;
     }
-
-    public function saveOriginalOnly()
-    {
-        $dirty = $this->getDirty();
-
-        foreach ($this->getAttributes() as $key => $value) {
-
-            if(in_array($key, array_keys($this->getOriginal()))) unset($this->$key);
-
-        }
-
-        $isSaved = $this->save();
-        
-        foreach ($dirty as $key => $value) {
-
-            $this->setAttribute($key, $value);
-        
-        }
-
-        return $isSaved;
-    }   
 }

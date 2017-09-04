@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    <i class="fa fa-anchor"></i> {{$model->name}} 假別資料@if ($model->id > 0)修改 @else 新增 @endif
+    <i class="fa fa-anchor"></i>假別資料@if($model->id > 0)修改@else新增@endif
     <small>Vacation Category Management</small>
   </h1>
   <ol class="breadcrumb">
@@ -21,7 +21,7 @@
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
-				<h3 class="box-title"></h3>
+				<h3 class="box-title">{{$model->name}}{{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
 			</div>
 			<div class="box-body">
 				<div class="form-group"><div class="row">
@@ -116,30 +116,18 @@
 						<label class="text-red">(0 為無上限)</label>
 					</div>
 				</div></div>
+
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
-						<label>開始時間</label>
+						<label>使用區間</label>
 					</div>
-					<div class="col-md-3">
-						<div class="input-group">
-							<input type="text" id="leave_type_start_time" name="leave_type[start_time]" class="form-control pull-right types-single-date" date="{{ $model->start_time }}" >
-							<span class="input-group-btn">
-								<button id="clear_leave_type_start_time" type="button" class="btn btn-secondary btn-danger">x</button>
-							</span>
-						</div>
-					</div>
-				</div></div>
-				<div class="form-group"><div class="row">
-					<div class="col-md-1">
-						<label>結束時間</label>
-					</div>
-					<div class="col-md-3">
-						<div class="input-group">
-							<input type="text" id="leave_type_end_time" name="leave_type[end_time]" class="form-control pull-right types-single-date" date="{{ $model->end_time }}" >
-							<span class="input-group-btn">
-								<button id="clear_leave_type_end_time" type="button" class="btn btn-secondary btn-danger">x</button>
-							</span>
-						</div>
+					<div class="col-md-11">
+                        <div class="input-group">
+                            <input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
+                            <span class="input-group-btn">
+                                <button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
+                            </span>
+                        </div>
 					</div>
 				</div></div>
 
@@ -181,12 +169,9 @@
 </form>
 <!-- /.content -->
 <script>
-$("#clear_leave_type_start_time").click(function() {
-    $("#leave_type_start_time").val("");
-});
-
-$("#clear_leave_type_end_time").click(function() {
-    $("#leave_type_end_time").val("");
+//使用區間清空值
+$(".btn-danger").click(function() {
+    $("#leave_type_available_date").val("");
 });
 </script>
 @stop

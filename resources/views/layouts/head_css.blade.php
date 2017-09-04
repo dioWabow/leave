@@ -315,15 +315,19 @@ $(function () {
 </script>
 
 <!-- 假別管理與修改頁面用 -->
+@if(Request::is('leave_type/*'))
 <script>
 $(function () {
-$('.types-single-date').daterangepicker({
-    singleDatePicker: true,
+  $("#leave_type_available_date").daterangepicker({
     showDropdowns: true,
     locale: {format: 'YYYY-MM-DD'},
-});
+  });
 
-$('.types-single-date').each(function(){$(this).val($(this).attr('date'));});
-
+@if($model->start_time != '' || $model->end_time != '' ) 
+  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+@else
+  $('#leave_type_available_date').val("");
+@endif
 });
 </script>
+@endif

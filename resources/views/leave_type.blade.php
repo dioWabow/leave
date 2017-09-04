@@ -23,7 +23,7 @@
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
 						<div class="row">
 							<div class="col-sm-3">
-								<form name="frmSearch" id="frmSearch" action="{{ route('search') }}" method="POST">
+								<form name="frmSearch" id="frmSearch" action="{{ route('leave_type') }}" method="POST">
 									@if(count($model->order_by)>0)
 											<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
 											<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -84,7 +84,7 @@
 												關鍵字：
 												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" value="@if(count($search)>0){{$search['name']}}@endif" >
 												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-																								<button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
 											</label>
 										</div>
 											{!!csrf_field()!!}
@@ -96,15 +96,13 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th><a onclick="changeSort('name');">名稱</a></th>
-												<th width="15%"><a onclick="changeSort('exception');">類型</a></th>
-												<th width="15%"><a onclick="changeSort('reset_time');">重置形式</a></th>
-												<th width="15%"><a onclick="changeSort('hours');">上限(HR)</a></th>
-												<th width="15%"><a onclick="changeSort('start_time');">開始時間</a></th>
-												<th width="15%"><a onclick="changeSort('end_time');">結束時間</a></th>
-												<th width="10%"><a onclick="changeSort('reason');">理由</a></th>
-												<th width="10%"><a onclick="changeSort('prove');">證明</a></th>
-												<th width="10%"><a onclick="changeSort('available');">狀態</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('exception');">類型</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('reset_time');">重置形式</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('hours');">上限(HR)</a></th>
+												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('reason');">理由</a></th>
+												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('prove');">證明</a></th>
+												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('available');">狀態</a></th>
 												<th width="5%"></th>
 											</tr>
 										</thead>
@@ -133,8 +131,6 @@
 															@endif
 														</td>
 													<td>{{ $value->hours }}</td>
-													<td>{{ $value->start_time }}</td>
-													<td>{{ $value->end_time }}</td>
 													<td>
 														<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
 													</td>
@@ -145,24 +141,29 @@
 														<input type="checkbox" name="leave_type[available]" class="leave_type_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
 													</td>
 													<td>
-														<button type="submit"  class="btn btn-danger" @if($value->available == '1') disabled="disabled" @endif onclick="location.href='{{ route('leave_type_delete', [ 'id' => $value->id ]) }}'"><i class="fa fa-trash-o"></i></button>
+														<button type="submit"  class="btn btn-danger" @if(count(App\Leave::getTypeIdByLeaves($value->id))>0) disabled="disabled" @endif onclick="location.href='{{ route('leave_type_delete', [ 'id' => $value->id ]) }}'"><i class="fa fa-trash-o"></i></button>
 													</td>
-                                                </tr>
-                                            </tr>
-                                        @endforeach
-									</tbody>
+                        </tr>
+                      </tr>
+                      @endforeach
+									  </tbody>
 									</table>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
 									<ul class="pagination">
-                                        <li class="paginate_button previous disabled">
-                                            </li>
-                                                {{ $dataProvider->links() }}
-                                            </li>
-                                        </li>
-                                    </ul>
+                    <li class="paginate_button previous disabled">
+                        </li>
+                            {{ $dataProvider->links() }}
+                        </li>
+                    </li>
+                    <li class="">
+                        </li>
+                            @if (count($dataProvider) == 0 ) 目前無資料 @endif
+                        </li>
+                    </li>
+                  </ul>
 								</div>
 							</div>
 						</div>

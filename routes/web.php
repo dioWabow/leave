@@ -94,14 +94,9 @@ Route::get('/users_form.html', function () {
 })->name('users_form');
 
 
-Route::get('/leave_type/index',[
+Route::any('/leave_type/index',[
     'uses'=> 'LeaveTypeController@getIndex',
     'as'=>'leave_type',
-]);
-
-Route::any('/leave_type/search',[
-    'uses'=> 'LeaveTypeController@getIndex',
-    'as'=>'search',
 ]);
 
 Route::get('/leave_type/create',[
