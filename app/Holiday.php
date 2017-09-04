@@ -15,8 +15,8 @@ class Holiday extends Model
         'pagesize',
         'order_by',
         'order_way',
-        'startTime',
-        'endTime',
+        'start_time',
+        'end_time',
         'daterange',
     ];
 
@@ -24,8 +24,8 @@ class Holiday extends Model
         'order_by' => "date",
         'order_way' => "DESC",
         'pagesize' => '25',
-        'startTime' => "",
-        'endTime' => "",
+        'start_time' => "",
+        'end_time' => "",
     ];
 
     /**

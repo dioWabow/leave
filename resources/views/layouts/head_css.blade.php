@@ -66,10 +66,7 @@ $(function () {
 
     $('input[name="search[daterange]"]').daterangepicker({
         autoUpdateInput: false,
-        locale: {
-            format: 'YYYY-MM-DD',
-            cancelLabel: 'Clear'
-        }
+        locale: {format: 'YYYY-MM-DD'},
     });
 
     $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {

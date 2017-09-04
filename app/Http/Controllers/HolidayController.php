@@ -52,8 +52,8 @@ class HolidayController extends Controller
             $search['startTime'] = $daterange[0];
             $search['endTime'] = $daterange[1];
 
-            $order_by['startTime'] = $daterange[0];
-            $order_by['endTime'] = $daterange[1];
+            $order_by['start_time'] = $daterange[0];
+            $order_by['end_time'] = $daterange[1];
 
         }
 
