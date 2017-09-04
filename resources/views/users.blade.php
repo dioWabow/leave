@@ -24,7 +24,7 @@
             <div class="row">
               <div class="col-sm-3">
                 <div class="dataTables_length">
-                    <form name="frmSearch" id="frmSearch" action="{{route('root_path')}}/user/search" method="POST">
+                    <form name="frmSearch" id="frmSearch" action="{{route('user/index')}}" method="POST">
                     <input id="order_by" type="hidden" name="order_by[order_by]" value="{{$model->order_by}}">
                     <input id="order_way" type="hidden" name="order_by[order_way]" value="{{$model->order_way}}">
                     
@@ -32,9 +32,9 @@
                   <label>
                     每頁 
                     <select name="order_by[pagesize]" class="form-control input-sm" onchange="javascript:changePageSize(this.value);">
-                      <option value="1"@if($model->pagesize=="1")selected="selected"@endif>1</option>
-                      <option value="2"@if($model->pagesize=="2")selected="selected"@endif>2</option>
-                      <option value="3"@if($model->pagesize=="3")selected="selected"@endif>3</option>
+                      <option value="25"@if($model->pagesize=="25")selected="selected"@endif>25</option>
+                      <option value="50"@if($model->pagesize=="50")selected="selected"@endif>50</option>
+                      <option value="100"@if($model->pagesize=="100")selected="selected"@endif>100</option>
                     </select> 
                   筆</label>
                   </div>
@@ -75,16 +75,16 @@
                     <thead>
                       <tr>
                         <th width="3%"></th>
-                        <th width="5%"><a onclick="changeSort('employee_no');">編號</a></th>
-                        <th><a onclick="changeSort('nickname');">稱呼</a></th>
-                        <th><a onclick="changeSort('name');">姓名</a></th>
-                        <th width="8%"><a onclick="changeSort('birthday');">生日</a></th>
-                        <th width="8%"><a onclick="changeSort('enter_date');">到職日</a></th>
-                        <th width="8%"><a onclick="changeSort('leave_date');">離職日</a></th>
-                        <th width="8%"><a onclick="changeSort('arrive_time');">上班時間</a></th>
+                        <th width="5%"><a href="javascript:void(0)" onclick="changeSort('employee_no');">編號</a></th>
+                        <th><a href="javascript:void(0)" onclick="changeSort('nickname');">稱呼</a></th>
+                        <th><a href="javascript:void(0)" onclick="changeSort('name');">姓名</a></th>
+                        <th width="8%"><a href="javascript:void(0)" onclick="changeSort('birthday');">生日</a></th>
+                        <th width="8%"><a href="javascript:void(0)" onclick="changeSort('enter_date');">到職日</a></th>
+                        <th width="8%"><a href="javascript:void(0)" onclick="changeSort('leave_date');">離職日</a></th>
+                        <th width="8%"><a href="javascript:void(0)" onclick="changeSort('arrive_time');">上班時間</a></th>
                         <th width="11%">職代</th>
                         <th width="10%">團隊</th>
-                        <th width="4%"><a onclick="changeSort('status');">狀態</a></th>
+                        <th width="4%"><a href="javascript:void(0)" onclick="changeSort('status');">狀態</a></th>
                       </tr>
                     </thead>
                     <tbody>

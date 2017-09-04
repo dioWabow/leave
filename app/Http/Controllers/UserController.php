@@ -198,7 +198,7 @@ class UserController extends Controller
 
             } 
 
-            return Redirect::to('user/index')->withErrors(['msg' => '修改成功']);
+            return Redirect::route('user/index')->withErrors(['msg' => '修改成功']);
 
         } else {
 

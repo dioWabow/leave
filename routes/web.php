@@ -103,9 +103,10 @@ Route::any('user/index',[
         'as' => 'user/index',
         ]);
 
-Route::any('user/search',['uses' => 'UserController@getIndex',]);
-
-Route::post('user/update',['uses' => 'UserController@postUpdate',]);
+Route::post('user/update',[
+        'uses' => 'UserController@postUpdate',
+        'as' => 'user/update'
+        ]);
 
 Route::get('user/edit/{id}', [
         'uses' => 'UserController@getEdit',
