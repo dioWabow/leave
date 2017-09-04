@@ -204,7 +204,7 @@
             <li class=""><a href="{{ route('users') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>
-        <li class="treeview @if(Request::is('holidies/*'))active @endif">
+        <li class="treeview @if(Request::is('holidies/*', 'leave_type/*'))active @endif">
           <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>

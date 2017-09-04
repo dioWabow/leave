@@ -26,8 +26,8 @@ class HolidayPostRequest extends FormRequest
         return [
 
         'holidies.type' => 'required',
-        'holidies.name' => 'required',
-        'holidies.date' => 'required'
+        'holidies.name' => 'required|max:20',
+        'holidies.date' => 'required|date|unique:holidays,date,'.$this->id
 
         ];
     }

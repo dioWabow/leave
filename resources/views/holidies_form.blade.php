@@ -52,7 +52,7 @@
             <label>日期</label>
           </div>
           <div class="col-md-11">
-            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" date="{{$model->date}}">
+            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" date="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }}">
           </div>
         </div></div>
       </div>

@@ -49,9 +49,11 @@ class HolidayController extends Controller
         if (!empty($search['daterange'])) {
 
             $daterange = explode(" - ", $search['daterange']);
-
             $search['startTime'] = $daterange[0];
             $search['endTime'] = $daterange[1];
+
+            $order_by['startTime'] = $daterange[0];
+            $order_by['endTime'] = $daterange[1];
 
         }
 
@@ -64,7 +66,7 @@ class HolidayController extends Controller
         $dataProvider = self::changeTypeName($dataProvider);
 
         return view('holidies', compact(
-            'dataProvider', 'search', 'model'
+            'search', 'model', 'dataProvider'
         ));
     }
 
@@ -77,15 +79,13 @@ class HolidayController extends Controller
     {
         $model = new Holiday;
 
-        $holidies = $request->old('holidies');
+        $data = $request->old('holidies');
 
-        if (!empty($holidies)) {
+        if (!empty($data)) {
 
             $model->fill($request->old('holidies'));
 
         }
-
-        $type_judge = $model->type;
 
         return view('holidies_form', compact(
             'model'
@@ -101,11 +101,11 @@ class HolidayController extends Controller
     {
         $model = self::loadModel($id);
 
-        $holidies = $request->old('holidies');
+        $data = $request->old('holidies');
 
-        if (!empty($holidies)) {
+        if (!empty($data)) {
 
-            $model->fill($holidies);
+            $model->fill($data);
 
         }
 
@@ -126,13 +126,14 @@ class HolidayController extends Controller
     {
         $input = $request->input('holidies');
 
-        //儲存資料
+        // 儲存資料
         $model = new Holiday;
+
         $model->fill($input);
 
         if ($model->saveOriginalOnly()) {
 
-            return Redirect::to('holidies')->withErrors(['msg' => '新增成功']);
+            return Redirect::route('holidies')->withErrors(['msg' => '新增成功']);
 
         } else {
 
@@ -152,13 +153,13 @@ class HolidayController extends Controller
         $input = $request->all();
 
         //儲存資料
-        $holiday = self::loadModel($input['id']);
+        $model = self::loadModel($input['id']);
 
-        $holiday->fill($input['holidies']);
+        $model->fill($input['holidies']);
 
-        if ($holiday->save()) {
+        if ($model->save()) {
 
-            return Redirect::to('holidies')->withErrors(['msg' => '更新成功']);
+            return Redirect::route('holidies')->withErrors(['msg' => '更新成功']);
 
         } else {
 
@@ -176,7 +177,7 @@ class HolidayController extends Controller
     {
         $result = self::loadModel($id)->delete();
 
-        return Redirect::to('holidies')->withErrors(['msg' => '刪除成功']);
+        return Redirect::route('holidies')->withErrors(['msg' => '刪除成功']);
 
     }
 
@@ -190,8 +191,6 @@ class HolidayController extends Controller
         foreach ($data as $value) {
 
             $value['type'] = ($value['type'] == 'holiday') ? "國定假日" : "上班日";
-
-            $value['date'] = date('Y-m-d', strtotime($value['date']));
 
         }
 

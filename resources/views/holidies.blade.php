@@ -50,7 +50,7 @@
 											&nbsp;
 											<label>
 												區間：
-												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right" @if(count($search) > 0)value="{{$search['daterange']}}@endif">
+												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
 											</label>
 											&nbsp;
 											<label>
@@ -82,12 +82,17 @@
 											<tr class='clickable-row' data-href="{{ route('holidiesUpdateForm', ['id'=>$data['id']])}}">
 												<td>{{$data->type}}</td>
 												<td>{{$data->name}}</td>
-												<td>{{$data->date}}</td>
+												<td>{{ Carbon\Carbon::parse($data->date)->format('Y-m-d') }}</td>
 												<td>
 													<a href="{{ route('holidayDelete', ['id'=>$data['id']])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
 												</td>
 											</tr>
 											@endforeach
+											@if(count($dataProvider) == 0)
+											<tr class="">
+												<td colspan="4" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+											</tr>
+											@endif
 										</tbody>
 
 									</table>
