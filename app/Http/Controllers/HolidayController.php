@@ -49,11 +49,11 @@ class HolidayController extends Controller
         if (!empty($search['daterange'])) {
 
             $daterange = explode(" - ", $search['daterange']);
-            $search['startTime'] = $daterange[0];
-            $search['endTime'] = $daterange[1];
+            $search['start_time'] = $daterange[0];
+            $search['end_time'] = $daterange[1];
 
-            $order_by['start_time'] = $daterange[0];
-            $order_by['end_time'] = $daterange[1];
+            $order_by['start_date'] = $daterange[0];
+            $order_by['end_date'] = $daterange[1];
 
         }
 
@@ -131,7 +131,7 @@ class HolidayController extends Controller
 
         $model->fill($input);
 
-        if ($model->saveOriginalOnly()) {
+        if ($model->save()) {
 
             return Redirect::route('holidies')->withErrors(['msg' => '新增成功']);
 
@@ -150,12 +150,12 @@ class HolidayController extends Controller
      */
      public static function postUpdate(HolidayPostRequest $request)
      {
-        $input = $request->all();
+        $input = $request->input('holidies');
 
         //儲存資料
         $model = self::loadModel($input['id']);
 
-        $model->fill($input['holidies']);
+        $model->fill($input);
 
         if ($model->save()) {
 

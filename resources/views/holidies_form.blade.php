@@ -26,7 +26,7 @@
           <div class="col-md-1">
             <label>類型</label>
           </div>
-          <input type="hidden" name="id" value="{{$model->id}}">
+          <input type="hidden" name="holidies[id]" value="{{$model->id}}">
           <div class="col-md-11">
             <label>
               <input type="radio" name="holidies[type]" class="flat-red" value="holiday"@if( "{{$model->type}}" == "{{holiday}}")checked="checked"@endif>

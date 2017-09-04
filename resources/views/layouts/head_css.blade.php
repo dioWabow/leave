@@ -70,17 +70,17 @@ $(function () {
     });
 
     $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
     });
 
     $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
     });
 
-    if("{{$model->startTime}}" == "") {
+    if("{{$model->start_date}}" == "") {
         $('#search_daterange').val('');
     } else {
-        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->startTime)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->endTime)->format('Y-m-d') }}");
+        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->start_date)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->end_date)->format('Y-m-d') }}");
     }
 
     $('#holidies_available_date').daterangepicker({
