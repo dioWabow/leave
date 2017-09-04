@@ -24,7 +24,7 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="dataTables_length">
-								<form name="frmSearch" id="frmSearch" action="{{ route('holidaySearch') }}" method="POST">
+								<form name="frmSearch" id="frmSearch" action="{{ route('holidies') }}" method="POST">
 			                    <input id="sort" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
 			                    <input id="sort_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
 									<label>
@@ -71,9 +71,9 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th width="15%"><a onclick="changeSort('type');">類型</a></th>
-												<th><a onclick="changeSort('name');">名稱</a></th>
-												<th width="15%"><a onclick="changeSort('date');">日期</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('type');">類型</a></th>
+												<th><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('date');">日期</a></th>
 												<th width="5%"></th>
 											</tr>
 										</thead>

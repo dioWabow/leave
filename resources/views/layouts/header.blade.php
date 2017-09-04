@@ -204,7 +204,7 @@
             <li class=""><a href="{{ route('users') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>
-        <li class="treeview ">
+        <li class="treeview @if(Request::is('holidies/*'))active @endif">
           <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -212,7 +212,7 @@
           </a>
           <ul class="treeview-menu">
             <li class=""><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li class=""><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview ">

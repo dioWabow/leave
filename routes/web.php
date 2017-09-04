@@ -19,7 +19,7 @@ Route::get('/index', function () {
 })->name('index');
 
 
-Route::get('holidies', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
+Route::any('holidies/index', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
 
 Route::get('holidies/create', ["uses"=>"HolidayController@getCreate","as"=>"holidiesInsertForm"]);
 
@@ -28,8 +28,6 @@ Route::get('holidies/edit/{id}', ["uses"=>"HolidayController@getEdit","as"=>"hol
 Route::post('holidies/insert', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
 
 Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"holidayUpdate"]);
-
-Route::any('holidies/search', ["uses"=>'HolidayController@getIndex',"as"=>"holidaySearch"]);
 
 Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
 
