@@ -31,7 +31,7 @@ class User extends Model
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '1',
+        'pagesize' => '25',
     ];
     /**
      * 搜尋table多個資料
