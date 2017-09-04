@@ -13,15 +13,15 @@ class UserTeam extends Model
      */
     protected $table = 'users_teams';
 
-    public static function getTeamIdByKey($key = "")
-	{
-		$result = self::where("user_id", $key)->pluck('team_id')->first();
-		return $result;
-	}
-
-    public function Team()
+    public static function getTeamIdByUserId($id)
     {
-        $result = $this->hasOne('App\Team', 'id', 'team_id');
+        $result = self::where('user_id', $id)->get()->pluck('team_id');
+        return $result;
+    }
+
+    public function team()
+    {
+        $result = $this::hasOne('App\Team','id','team_id');
         return $result;
     }
 }
