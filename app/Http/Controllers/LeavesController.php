@@ -16,6 +16,7 @@ class LeavesController extends Controller
     */
     public function getIndex(Request $request, $user_id)
     {
+        $tag_id = (!empty($request->input('tag'))) ? explode(',',$request->input('tag')) : [];
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         if (!empty($search) || !empty($order_by)) {
@@ -45,11 +46,14 @@ class LeavesController extends Controller
             $search['end_time'] = $daterange[1];
             
         }
-
-        $model = new Leave;
-        $model->fill($order_by, $user_id);
-        $dataProvider = $model->search($search);
         
+        $model = new Leave;
+        
+        $model->user_id = $user_id;
+        $model->tag_id = $tag_id;
+        $model->fill($order_by);
+        $dataProvider = $model->search($search);
+
         return  view('leave', compact(
             'dataProvider', 'search', 'model'
         ));

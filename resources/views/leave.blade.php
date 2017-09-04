@@ -18,10 +18,10 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#prove" data-toggle="tab">等待核准<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="3 New Messages">4</span></a></li>
-					<li><a href="#upcoming" data-toggle="tab">即將放假 <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span></a></li>
-					<li><a href="#list" data-toggle="tab">歷史紀錄</a></li>
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#prove" data-toggle="tab"  onclick="location.href='{{ route('leave', ['user_id' => 1 , 'tag' => '1,2,3,4,5' ]) }}#prove'">等待核准<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="3 New Messages">4</span></a></li>
+					<li><a href="#upcoming" data-toggle="tab" onclick="location.href='{{ route('leave', ['user_id' => 1 , 'tag' => '6,7']) }}#upcoming'">即將放假 <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span></a></li>
+					<li><a href="#list" data-toggle="tab" onclick="location.href='{{ route('leave', ['user_id' => 1 , 'tag' => '0,1,2,3,4,5,6,7']) }}#list'">歷史紀錄</a></li>
 				</ul>
 				<div class="tab-content">
 					<!-- /.tab-pane -->
@@ -56,7 +56,7 @@
 											<tr class='clickable-row' data-href="leave_manager_view.html">
 												<td>
                                                     @foreach (App\Tag::getLeavesTagIdByTagId($value->tag_id) as $tag)
-													<button id="tag_button" type="button" class="btn bg-blue")>
+													<button id="tag_button" type="button" class="btn bg-blue">
                                                         {{$tag->name}}
                                                     </button>
                                                     <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
@@ -214,7 +214,7 @@
 													<img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}" class="img-circle" alt="{{$agent->agent_id}}" width="50px">
 												</td>
                                                 @endforeach
-												<td>{{$value->hours}}</td>
+												<td id="hours">{{$value->hours}}</td>
 											</tr>
                                         @endforeach
 										</tbody>
@@ -275,5 +275,25 @@ function changeSort(sort)
 	$("#frmOrderby").submit();
 }
 
+function ShowValue(id){                               
+    var v = document.getElementById("hours").value ;
+    alert(v);
+}
+
+
+$('#myTab a').click(function(e) {
+  e.preventDefault();
+  $(this).tab('show');
+});
+
+// store the currently selected tab in the hash value
+$("ul.nav-tabs > li > a").on("shown.bs.tab", function(e) {
+  var id = $(e.target).attr("href").substr(1);
+  window.location.hash = id;
+});
+
+// on load of the page: switch to the currently selected tab
+var hash = window.location.hash;
+$('#myTab a[href="' + hash + '"]').tab('show');
 </script>
 @stop

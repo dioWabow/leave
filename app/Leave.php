@@ -23,11 +23,9 @@ class Leave extends Model
     ];
 
     protected $attributes = [
-        'order_by' => "id",
-        'order_way' => "DESC",
+        'order_by' => 'id',
+        'order_way' => 'DESC',
         'pagesize' => '25',
-        'tag_id' => [1,3],
-        'user_id' => 1,
     ];
 
     /**
@@ -73,14 +71,12 @@ class Leave extends Model
     public function scopegetLeavesByUserId($query)
     {
         $result = $query->where('user_id', $this->user_id);
-        
         return $result;
     }
  
     public function scopegetStaticByTagId($query)
     {
         $result = $query->whereIn('tag_id',$this->tag_id);
-        
         return $result;
     }
 
