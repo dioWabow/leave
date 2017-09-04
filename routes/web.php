@@ -22,13 +22,17 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('index', ["uses"=>"SiteController@getIndex"])->name('index');
     Route::post('index', ["uses"=>"SiteController@ajaxGetAllAvailableLeaveListByDateRange", "as"=>"indexChange"]);
-	
-    Route::get('/holidies', function () {
-        return view('holidies');
-    })->name('holidies');
-    Route::get('/holidies_form', function () {
-        return view('holidies_form');
-    })->name('holidies_form');
+    
+    
+Route::get('holidies/edit/{id}', ["uses"=>"HolidayController@getEdit","as"=>"holidiesUpdateForm"]);
+
+Route::post('holidies/insert', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
+
+Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"holidayUpdate"]);
+
+Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
+
+
     Route::get('/leave.html', function () {
         return view('leave');
     })->name('leave');
