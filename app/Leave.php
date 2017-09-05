@@ -80,10 +80,4 @@ class Leave extends Model
         return $result;
     }
 
-   
-
-
-
-
-
 }
