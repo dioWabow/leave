@@ -47,7 +47,10 @@ Route::get('leave/create', [
         'as' => 'leave/create',
         ]);
 
-Route::post('leave/calculate_hours','LeaveController@calculate_hours');
+Route::post('leave/calculate_hours',[
+        'uses' => 'LeaveController@calculate_hours',
+        'as' => 'leave/calculate_hours',
+        ]);
 
 Route::get('/leave_form3.html', function () {
     return view('leave_form3');

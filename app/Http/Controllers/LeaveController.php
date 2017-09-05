@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use LeaveHelper;
 use App\User;
 use App\Team;
 use App\Leave;
@@ -34,20 +35,7 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request) 
     {
-        $start_time = "2017-08-29";
-        $end_time = "2017-09-03";
-        $i = 1;
-        $date_list = [];
-        while ( $end_time > date( "Y-m-d", strtotime( "$start_time +$i day" ))){
-            $date_list[] = date( "Y-m-d", strtotime( "$start_time +$i day" ));
-            $i += 1;
-        }
-        
-        foreach($date_list as $date){
-            // $weekday = date('w', strtotime($datetime));
-        }
-
-        $id = 1;
+        $id = 7;
 
         $types = Type::getAllType();
 
@@ -241,7 +229,21 @@ class LeaveController extends Controller
 
     public function calculate_hours(Request $request){
         $hours = 0;
-        $data_range = $request->input('date_range');
+        $date_range = $request->input('date_range');
+        $start_time = explode(" - ", $date_range)['0'];
+        $end_time = explode(" - ", $date_range)['1'];
+
+        //輸入日期不同天，需計算區間
+        if (date( "Y-m-d", strtotime( "$start_time" )) != date( "Y-m-d", strtotime( "$end_time" ))) {
+
+            $date_list = LeaveHelper::calculateWorkingDate($start_time,$end_time);
+            $hours = LeaveHelper::calculateRangeDateHours($date_list);
+
+        } else {
+
+            $hours = LeaveHelper::calculateOneDateHours($start_time,$end_time);
+
+        }
 
         $response = array(
           'hours' => $hours,

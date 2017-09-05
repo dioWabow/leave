@@ -30,8 +30,8 @@
     var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
     var $div_leave_notic_person   = $("#div_leave_notic_person");
 
-    var leave_type_arr = ['1','2','3','4'];
-    var leave_type_single_arr = ['1','2','3','4'];
+    var leave_type_arr = ['1','2','4'];
+    var leave_type_single_arr = ['1','2','4'];
     var daterangepicker_type = 'isDate';
     
     //Flat red color scheme for iCheck
@@ -74,6 +74,8 @@
     $input_leave_type_id.each(function(){
       if($(this).attr('hour') == 0) $(this).iCheck('disable');
       if($(this).iCheck('update')[0].checked === true){
+        var mydata = $(this).val();
+        if($.inArray(mydata, leave_type_single_arr) !== -1) daterangepicker_type = 'isSingleDate';
         fetchDaterangepicker();
         if($.inArray($(this).val(), leave_type_arr) !== -1){
           $div_leave_spent_hours.hide();
@@ -127,10 +129,16 @@
     //日期選擇器
     function fetchDaterangepicker(){
       var options = {};
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
       
       options.locale = {format: 'YYYY-MM-DD'};
       if(daterangepicker_type == 'isSingleDate') options.singleDatePicker = true;
       if(daterangepicker_type == 'isDatetime') {
+        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
         options.timePicker = true;
         options.timePickerIncrement = 30;
         options.timePicker24Hour = true;
@@ -144,10 +152,6 @@
       $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
         var myStartDate = new Date(picker.startDate);
         var myEndDate = new Date(picker.endDate);
-
-        //計算小時
-        var hour = Math.round((myEndDate - myStartDate) / (1000*60*60));
-        $leave_spent_hours.val(hour);
 
         //若天數 > 1則，不給選擇上午與下午
         if(daterangepicker_type == 'isDate') {
@@ -172,6 +176,12 @@
 
       $leave_timepicker.on('cancel.daterangepicker', function(ev, picker) {
           $(this).val('');
+          $("#ajax_switch").val(1);
+      });
+
+      $leave_timepicker.on('hide.daterangepicker', function(ev, picker) {
+          $leave_spent_hours.val('');
+          calculate_hours();
       });
     }
   });

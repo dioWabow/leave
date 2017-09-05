@@ -180,6 +180,10 @@ return [
          * 圖片套件
          */
         Intervention\Image\ImageServiceProvider::class,
+        /*
+         * 假別計算
+         */
+        App\Providers\LeaveHelperServiceProvider::class,
 
     ],
 
@@ -231,6 +235,11 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        /**
+         * HELPER
+         */
+        'LeaveHelper' => App\Facades\LeaveHelper::class,
+
     ],
 
 ];
