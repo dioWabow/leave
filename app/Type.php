@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Support\Facades\Schema;
-// use Illuminate\Database\Eloquent\Model;
-
 
 class Type extends BaseModel
 {

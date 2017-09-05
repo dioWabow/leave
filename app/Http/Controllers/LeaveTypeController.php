@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Type;
 use App\Leave;
+use App\Type;
 use App\Http\Requests\LeaveTypeRequest;
 
-use Session;
 use Redirect;
-use Carbon\Carbon;
+use Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;

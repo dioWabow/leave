@@ -146,6 +146,11 @@
                         </tr>
                       </tr>
                       @endforeach
+                      @if(count($dataProvider) == 0)
+											<tr class="">
+												<td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+											</tr>
+											@endif
 									  </tbody>
 									</table>
 								</div>
@@ -156,11 +161,6 @@
                     <li class="paginate_button previous disabled">
                         </li>
                             {{ $dataProvider->links() }}
-                        </li>
-                    </li>
-                    <li class="">
-                        </li>
-                            @if (count($dataProvider) == 0 ) 目前無資料 @endif
                         </li>
                     </li>
                   </ul>

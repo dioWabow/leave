@@ -21,7 +21,7 @@
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
-				<h3 class="box-title">{{$model->name}}{{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
+				<h3 class="box-title">{{$model->name}} {{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
 			</div>
 			<div class="box-body">
 				<div class="form-group"><div class="row">
@@ -122,12 +122,12 @@
 						<label>使用區間</label>
 					</div>
 					<div class="col-md-11">
-                        <div class="input-group">
-                            <input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
-                            <span class="input-group-btn">
-                                <button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
-                            </span>
-                        </div>
+            <div class="input-group">
+                <input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
+                <span class="input-group-btn">
+                    <button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
+                </span>
+            </div>
 					</div>
 				</div></div>
 

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Leave extends Model
+class Leave extends BaseModel
 {
     protected $fillable = [
         'user_id',
@@ -21,9 +19,9 @@ class Leave extends Model
         'pagesize',
     ];
 
-    public static function getTypeIdByLeaves($type_id) 
+    public static function getTypeIdByLeaves($id) 
     {
-        $result = self::where('type_id', $type_id)->get();
+        $result = self::where('type_id', $id)->get();
         return $result;
     }
 }
