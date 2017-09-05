@@ -99,7 +99,7 @@ $(function () {
 });
 </script>
 @endif
-@if(Request::is('leave_type/*'))
+
 <!-- 我的假單頁面用 -->
   <script>
 $(function () {
@@ -118,7 +118,6 @@ $(function () {
     });
 });
 </script>
-@endif
 
 <!--天災假調整用-->
 <script>
@@ -134,7 +133,7 @@ $(function () {
         singleDatePicker: true,
         showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
-    }).each(function(){
+    }).each(function(){
         $(this).val($(this).attr('date'));
     }).on('change', function(){ 
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
@@ -149,3 +148,21 @@ $('#nestable').nestable({
   maxDepth: 5
 });
 </script>
+
+<!-- 假別管理與修改頁面用 -->
+@if(Request::is('leave_type/*'))
+<script>
+$(function () {
+  $("#leave_type_available_date").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+  });
+
+@if($model->start_time != '' || $model->end_time != '' ) 
+  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+@else
+  $('#leave_type_available_date').val("");
+@endif
+});
+</script>
+@endif

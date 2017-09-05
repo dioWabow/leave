@@ -112,6 +112,25 @@ return [
             'date' => '請填入正確的日期格式',
             'unique' => '該日期已經有假日囉~',
         ],
+	'leave_type.name' => [
+            'required' => '請輸入假別名稱',
+        ],
+        'leave_type.hours' => [
+            'required' => '請輸入時間上限',
+            'numeric' => '時間上限僅限數字',
+        ],
+        'leave_type.exception' => [
+            'required' => '請輸入類型',
+        ],
+        'leave_type.reset_time' => [
+            'required' => '請輸入重置時間',
+        ],
+        'leave_type.start_time' => [
+            'Date' => '開始時間請填入日期',
+        ],
+        'leave_type.end_time' => [
+            'Date' => '結束時間請填入日期',
+        ],
         'user.employee_no' => [
             'required' => '請輸入員工編號',
             'numeric' => '員工編號僅限數字',
