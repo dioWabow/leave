@@ -10,13 +10,6 @@
 <script src="plugins/nestable/jquery.nestable2.js?v=2"></script>
     <link rel="stylesheet" href="plugins/nestable/style.css?v=3">
 
-<!-- Page script -->
-<script>
-$('#nestable').nestable({
-  maxDepth: 5
-});
-</script>
-  
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini">
 <div class="wrapper">

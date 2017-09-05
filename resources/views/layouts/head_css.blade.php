@@ -24,6 +24,7 @@
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css?v=3">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css?v=6">
@@ -58,6 +59,8 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- wabow -->
 <script src="{{route('root_path')}}/js/wabow.js"></script>
+<!-- colorpicker -->
+<script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <!-- 國定假日/補班與修改頁面 -->
   <script>
@@ -289,7 +292,9 @@ $(function () {
 
 <!-- 團隊設定用 -->
 <script>
-$('#nestable').nestable({
-  maxDepth: 5
+$(function () {
+  $('#nestable').nestable();
+
+  $(".my-colorpicker2").colorpicker();
 });
 </script>
