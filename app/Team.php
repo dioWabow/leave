@@ -2,10 +2,14 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Team extends Model
+class Team extends BaseModel
 {
+    protected $fillable = [
+        'parent_id',
+        'name',
+        'color',
+    ];
+
     /**
      * 與Model關聯的table
      *

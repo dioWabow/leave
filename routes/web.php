@@ -98,6 +98,11 @@ Route::group(['middleware' => 'auth'], function () {
         return view('teams');
     })->name('teams');
 
+Route::get('temas/index',[
+    'uses' => 'TeamController@getAllTeam',
+    'as' => 'teams/index',
+]);
+
 Route::any('user/index',[
         'uses' => 'UserController@getIndex',
         'as' => 'user/index',

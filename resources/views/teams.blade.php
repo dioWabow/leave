@@ -6,10 +6,6 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 @include('layouts.head_css')
 
-  <script src="plugins/nestable/jquery.nestable.js"></script>
-<script src="plugins/nestable/jquery.nestable2.js?v=2"></script>
-    <link rel="stylesheet" href="plugins/nestable/style.css?v=3">
-
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini">
 <div class="wrapper">
@@ -54,7 +50,6 @@
 								<div class="form-group">
 									<div class="input-group my-colorpicker2">
 										<input type="text" class="form-control" placeholder="團隊顏色" >
-					
 										<div class="input-group-addon">
 											<i></i>
 										</div>
@@ -72,7 +67,6 @@
 								<div class="form-group">
 									<div class="input-group my-colorpicker2">
 										<input type="text" class="form-control" placeholder="團隊顏色" >
-					
 										<div class="input-group-addon">
 											<i></i>
 										</div>
@@ -85,74 +79,17 @@
 						<div class="col-md-8">
 							<div class="dd nestable" id="nestable">
 								<ol class="dd-list">
-									<!--- Item1 --->
-									<li class="dd-item" data-id="1" data-name="WACA-Team" data-new="0" data-deleted="0">
-										<div class="dd-handle">WACA-Team</div>
-										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="1">
+								@foreach($result as $data)
+									<li class="dd-item" data-id="{{$data->id}}" data-name="{{$data->name}}" data-new="0" data-deleted="0">
+										<div class="dd-handle">{{$data->name}}</div>
+										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$data->id}}">
 											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="1">
-											<i class="fa fa-pencil" aria-hidden="true"></i>
-										</span>
-
-										<!--- Item1 children --->
-										<ol class="dd-list">
-											<!--- Item4 --->
-											<li class="dd-item" data-id="4" data-name="工程小組" data-new="0" data-deleted="0">
-												<div class="dd-handle">工程小組</div>
-												<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="4">
-													<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-												</span>
-												<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="4">
-													<i class="fa fa-pencil" aria-hidden="true"></i>
-												</span>
-											</li>
-
-											<!--- Item5 --->
-											<li class="dd-item" data-id="5" data-name="業務小組" data-new="0" data-deleted="0">
-												<div class="dd-handle">業務小組</div>
-												<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="5">
-													<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-												</span>
-												<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="5">
-													<i class="fa fa-pencil" aria-hidden="true"></i>
-												</span>
-											</li>
-										</ol>
-									</li>
-
-									<!--- Item2 --->
-									<li class="dd-item" data-id="2" data-name="WASHOP-Team" data-new="0" data-deleted="0">
-										<div class="dd-handle">WASHOP-Team</div>
-										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="2">
-											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="2">
+										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$data->id}}">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</span>
 									</li>
-
-									<!--- Item3 --->
-									<li class="dd-item" data-id="3" data-name="PM" data-new="0" data-deleted="0">
-										<div class="dd-handle">PM</div>
-										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="3">
-											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="3">
-											<i class="fa fa-pencil" aria-hidden="true"></i>
-										</span>
-									</li>
-
-									<!--- Item6 --->
-									<li class="dd-item" data-id="6" data-name="SYSTEM" data-new="0" data-deleted="0">
-										<div class="dd-handle">SYSTEM</div>
-										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="6">
-											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
-										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="6">
-											<i class="fa fa-pencil" aria-hidden="true"></i>
-										</span>
-									</li>
+								@endforeach
 								</ol>
 							</div>
 						</div>
@@ -174,211 +111,6 @@
 						<div class="form-group"><div class="row">
 							<div class="col-md-2">
 								<label>WACA-Team</label>
-							</div>
-							<div class="col-md-8">
-								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-							<div class="col-md-2">
-								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-						</div></div>
-
-						<div class="form-group"><div class="row">
-							<div class="col-md-2">
-								<label>WACA-Team / 工程小組</label>
-							</div>
-							<div class="col-md-8">
-								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-							<div class="col-md-2">
-								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-						</div></div>
-
-						<div class="form-group"><div class="row">
-							<div class="col-md-2">
-								<label>WACA-Team / 業務小組</label>
-							</div>
-							<div class="col-md-8">
-								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-							<div class="col-md-2">
-								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-						</div></div>
-
-						<div class="form-group"><div class="row">
-							<div class="col-md-2">
-								<label>WASHOP-Team</label>
-							</div>
-							<div class="col-md-8">
-								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-							<div class="col-md-2">
-								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-						</div></div>
-
-						<div class="form-group"><div class="row">
-							<div class="col-md-2">
-								<label>PM</label>
-							</div>
-							<div class="col-md-8">
-								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-							<div class="col-md-2">
-								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
-								</select>
-							</div>
-						</div></div>
-
-						<div class="form-group"><div class="row">
-							<div class="col-md-2">
-								<label>System</label>
 							</div>
 							<div class="col-md-8">
 								<label>人員</label>
