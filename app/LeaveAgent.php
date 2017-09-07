@@ -20,9 +20,15 @@ class LeaveAgent extends Model
     ];
 
 
-    public static function getLeaveIdByAgentId($leave_id) 
+    public static function getLeaveIdByAgentId($leave_id)
     {
         $result = self::where('leave_id',$leave_id)->get();
+        return $result;
+    }
+
+    public function user() 
+    {
+        $result = self::hasOne('App\User','id','agent_id');
         return $result;
     }
 }

@@ -14,7 +14,7 @@ class Tag extends Model
     ];
 
 
-    public static function getLeavesTagIdByTagId($tag_id) 
+    public static function getLeavesTagIdByTagId($tag_id)
     {
         $result = self::where('id',$tag_id)->get();
         return $result;

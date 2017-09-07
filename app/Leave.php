@@ -3,9 +3,8 @@
 namespace App;
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
 
-class Leave extends Model
+class Leave extends BaseModel
 {
     protected $fillable = [
         'user_id',
@@ -26,6 +25,8 @@ class Leave extends Model
         'order_by' => 'id',
         'order_way' => 'DESC',
         'pagesize' => '25',
+        'start_time' => '',
+        'end_time' => ''
     ];
 
     /**
@@ -39,25 +40,32 @@ class Leave extends Model
      */
     public function search($where = [])
     {
-        
-        $query = $this->OrderedBy()->getLeavesByUserId()->getStaticByTagId();
+        $query = self::OrderedBy();
         
         foreach ($where as $key => $value) {
-
+            
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
-                    $query->where($key, $value);
+                if ($key == 'tag_id' && is_array($value)) {
                     
-                }
+                    $query->whereIn('tag_id', $value);
 
+                } elseif ($key == 'start_time') {
+
+                    $query->where('start_time', '>' , $value);
+                    
+                } elseif ($key == 'end_time') {
+
+                    $query->where('end_time', '<' , $value);
+
+                 } else {
+
+                    $query->where($key, $value);
+
+                 } 
             }
-
-        if (!empty($where['start_time']) && !empty($where['end_time'])) {
-
-            $query->whereBetween('start_time', [$where['start_time'], $where['end_time']]);
-
         }
-        
+
         $result = $query->paginate($this->pagesize);
         return $result;
     }
@@ -68,16 +76,9 @@ class Leave extends Model
         return $result;
     }
 
-    public function scopegetLeavesByUserId($query)
+    public function getLeavesHoursTotal($data)
     {
-        $result = $query->where('user_id', $this->user_id);
+        $result = $data->whereNotIn('tag_id','7')->sum('hours');
         return $result;
     }
- 
-    public function scopegetStaticByTagId($query)
-    {
-        $result = $query->whereIn('tag_id',$this->tag_id);
-        return $result;
-    }
-
 }

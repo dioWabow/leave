@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserAgent extends Model
+class UserAgent extends BaseModel
 {
     /**
      * 與Model關聯的table
@@ -25,7 +23,6 @@ class UserAgent extends Model
         $result = self::where('user_id',$user_id)->get();
         return $result;
     }
-
 
     public function user() 
     {

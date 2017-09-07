@@ -103,20 +103,19 @@ Route::match(['get', 'post'], '/demo/image',[
     'uses'=> 'DemoControllor@getImage',
     'as'=>'demo_image',
 ]);
-
-Route::any('/my_leaves/index/{user_id}',[
-    'uses'=> 'LeavesController@getIndex',
-    'as'=>'leave',
+Route::any('/leaves/my/prove/{user_id}',[
+    'uses'=> 'LeavesController@getProve',
+    'as'=>'leaves_my_prove',
 ]);
-Route::any('/my_leaves/access/{user_id}',[
-    'uses'=> 'LeavesController@getAccessLeaves',
-    'as'=>'access',
+Route::any('/leaves/my/upcoming/{user_id}',[
+    'uses'=> 'LeavesController@getUpcoming',
+    'as'=>'leaves_my_upcoming',
 ]);
-Route::any('/my_leaves/all/{user_id}',[
-    'uses'=> 'LeavesController@getAllLeaves',
-    'as'=>'allleaves',
+Route::any('leaves/my/history/{user_id}',[
+    'uses'=> 'LeavesController@getHistory',
+    'as'=>'leaves_my_history',
 ]);
-Route::get('/my_leaves/delete/{id}',[
+Route::get('/leaves/my/delete/{id}',[
     'uses'=> 'LeavesController@postDelete',
-    'as'=>'leave_delete',
+    'as'=>'leaves_my_delete',
 ]);
