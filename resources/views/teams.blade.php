@@ -49,14 +49,14 @@
 								<br>
 								<div class="form-group">
 									<div class="input-group my-colorpicker2">
-										<input type="text" class="form-control" placeholder="團隊顏色" >
+										<input type="text" class="form-control" id="addInputColor" placeholder="團隊顏色" >
 										<div class="input-group-addon">
 											<i></i>
 										</div>
 									</div>
 									<!-- /.input group -->
 								</div>
-								<button class="btn btn-info" id="addButton">新增</button>
+								<button class="btn btn-info" type="button" id="addButton">新增</button>
 							</form>
 							<form class="form-inline" id="menu-editor" style="display: none;" action="" method="POST">
 								<h3>修改 "<span id="currentEditName"></span>" 名稱</h3>
@@ -66,14 +66,14 @@
 								<br>
 								<div class="form-group">
 									<div class="input-group my-colorpicker2">
-										<input type="text" class="form-control" placeholder="團隊顏色" >
+										<input type="text" class="form-control" id="editInputColor" placeholder="團隊顏色" >
 										<div class="input-group-addon">
 											<i></i>
 										</div>
 									</div>
 									<!-- /.input group -->
 								</div>
-								<button class="btn btn-info" id="editButton">修改</button>
+								<button class="btn btn-info" type="button" id="editButton">修改</button>
 							</form>
 						</div>
 						<div class="col-md-8">

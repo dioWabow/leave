@@ -291,10 +291,108 @@ $(function () {
 
 
 <!-- 團隊設定用 -->
+@if(Request::is('teams/*'))
 <script>
 $(function () {
+
   $('#nestable').nestable();
 
   $(".my-colorpicker2").colorpicker();
+
+  // 新增的ajax
+  $('#menu-add').find("button[id='addButton']").click(function() {
+
+    $this = $(this);
+    $team_name = $this.parents().find("input[id='addInputName']").val();
+    $team_color = $this.parents().find("input[id='addInputColor']").val();
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/create') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        team_name: $team_name,
+        team_color: $team_color,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('新增成功');
+          $('.dd-list').append(data.html);
+          $('.dd-empty').remove();
+          $this.parents().find("input[id='addInputName']").val('');
+          $this.parents().find("input[id='addInputColor']").val('');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
+
+  // 修改點下去 抓出id 丟給 editButton
+  $('.button-edit').click(function(){
+    $this = $(this);
+    $id = $this.attr("data-owner-id");
+    $('#editButton').val($id);
+  });
+
+  // 修改的ajax
+  $('#editButton').click(function(){
+    $this = $(this);
+
+    $id = $this.val();
+    $team_name = $this.parents().find("input[id='editInputName']").val();
+    $team_color = $this.parents().find("input[id='editInputColor']").val();
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/update') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+        team_name: $team_name,
+        team_color: $team_color
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  // 刪除的 ajax
+  $('.button-delete').click(function(){
+    $this = $(this);
+
+    $id = $this.attr("data-owner-id");
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/delete') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('刪除成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
 });
 </script>
+@endif

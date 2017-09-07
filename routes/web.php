@@ -98,9 +98,24 @@ Route::group(['middleware' => 'auth'], function () {
         return view('teams');
     })->name('teams');
 
-Route::get('temas/index',[
+Route::get('teams/index',[
     'uses' => 'TeamController@getAllTeam',
     'as' => 'teams/index',
+]);
+
+Route::post('teams/create',[
+    'uses' => 'TeamController@ajaxCreateData',
+    'as' => 'teams/create',
+]);
+
+Route::post('teams/delete',[
+    'uses' => 'TeamController@ajaxDeleteData',
+    'as' => 'teams/delete',
+]);
+
+Route::post('teams/update',[
+    'uses' => 'TeamController@ajaxUpdateData',
+    'as' => 'teams/update',
 ]);
 
 Route::any('user/index',[
