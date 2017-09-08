@@ -19,11 +19,6 @@ class ImageHelper
         $this->upload_path = storage_path() . '/app/public/';
     }
 
-    public static function test()
-    {
-        return '123';
-    }
-
     public function uploadImages($name, $folder = 'tmp')
     {
         $this->_save_folder = $folder . '/';

@@ -188,6 +188,7 @@ return [
          * Custom Service Providers...
          */
         App\Providers\ImageHelperServiceProvider::class,
+        App\Providers\WebHelperServiceProvider::class,
     ],
 
     /*
@@ -244,6 +245,7 @@ return [
          * HELPER
          */
         'ImageHelper' => App\Facades\ImageHelper::class,
+        'WebHelper' => App\Facades\WebHelper::class,
     ],
 
 ];
