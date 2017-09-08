@@ -18,9 +18,9 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{Request::is('leaves/my/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_my_prove', ['user_id' => 1 ]) }}">等待核准<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="3 New Messages">4</span></a></li>
-					<li class="{{Request::is('leaves/my/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_my_upcoming', ['user_id' => 1 ]) }}">即將放假 <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="3 New Messages">3</span></a></li>
-					<li class="{{Request::is('leaves/my/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_my_history', ['user_id' => 1 ]) }}">歷史紀錄</a></li>
+					<li class="{{Request::is('leaves/my/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_my_prove', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{LeaveHelper::getProveLeavesTotal(1)}} New Messages">{{LeaveHelper::getProveLeavesTotal(1)}}</span></a></li>
+					<li class="{{Request::is('leaves/my/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_my_upcoming', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{LeaveHelper::getUpComingLeavesTotal(1)}} New Messages">{{LeaveHelper::getUpComingLeavesTotal(1)}}</span></a></li>
+					<li class="{{Request::is('leaves/my/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_my_history', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
 				</ul>
 				<div class="tab-content">
 					@if(Request::is('leaves/my/prove/*'))

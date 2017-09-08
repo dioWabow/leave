@@ -59,7 +59,9 @@
                     @endforeach
                     </td>
                     <td>{{ $value->hours }}</td>
-                    <td class="text-red">@if($today->gt(Carbon\Carbon::parse($value->start_time))) 放假囉 @else 倒數{{$today->diffInDays(Carbon\Carbon::parse($value->start_time))}}天 @endif</td>
+                    <td class="text-red">
+                      {{ LeaveHelper::getDiffDays($value->start_time) }}
+                    </td>
                   </tr>
                   @endforeach
                   @if(count($dataProvider) == 0)

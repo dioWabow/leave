@@ -181,6 +181,12 @@ return [
          */
         Intervention\Image\ImageServiceProvider::class,
 
+        /*
+         * Custom Service Providers...
+         */
+         App\Providers\LeaveHelperServiceProvider::class,
+         App\Providers\WebHelperServiceProvider::class,
+
     ],
 
     /*
@@ -231,6 +237,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+
+        /**
+        * HELPER
+        */
+        'LeaveHelper' => App\Facades\LeaveHelper::class,
+        'WebHelper' => App\Facades\WebHelper::class,
+
     ],
 
 ];

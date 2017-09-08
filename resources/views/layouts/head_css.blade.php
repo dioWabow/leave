@@ -245,13 +245,21 @@ $(function () {
   });
 </script>
 
-@if(Request::is('leaves/my/history/*'))
 <!-- 我的假單頁面用 -->
+@if(Request::is('leaves/my/history/*'))
 <script>
 $(function () {
   $("#search_daterange").daterangepicker({
       showDropdowns: true,
       locale: {format: 'YYYY-MM-DD'},
+  });
+
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
+
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
   });
 
   @if($model->start_time != '' || $model->end_time != '' ) 

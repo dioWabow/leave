@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Leave;
 use App\User;
+use LeaveHelper;
+use WebHelper;
 
 use Carbon\Carbon;
 use Redirect;
@@ -42,15 +44,14 @@ class LeavesController extends Controller
         }
 
         $model = new Leave;
-        $today = Carbon::now();
         $search['tag_id'] = [2,3,4,5];
         $search['user_id'] = $user_id;
-
+        
         $model->fill($order_by);
         $dataProvider = $model->search($search);
 
         return  view('leave', compact(
-            'search', 'model', 'today', 'dataProvider'
+            'search', 'model', 'dataProvider'
         ));
     }
 
@@ -86,13 +87,12 @@ class LeavesController extends Controller
         $model = new Leave;
         $search['tag_id'] = [9];
         $search['user_id'] = $user_id;
-        $today = Carbon::now();
 
         $model->fill($order_by);
         $dataProvider = $model->search($search);
 
         return  view('leave', compact(
-            'search', 'model', 'today', 'dataProvider'
+            'search', 'model', 'dataProvider'
         ));
     }
     /**

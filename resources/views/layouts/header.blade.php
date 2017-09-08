@@ -121,7 +121,7 @@
         <li class="">
           <a href="{{ route('leaves_my_prove', ['user_id' => 1] ) }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+              <small class="label pull-right bg-red" alt="待審核假單">{{LeaveHelper::getProveLeavesTotal(1)}}</small>
             </span>
           </a>
         </li>
