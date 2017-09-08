@@ -192,7 +192,7 @@
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
-        <li class="treeview ">
+        <li class="treeview @if(Request::is('teams/*', 'leave_type/*'))active @endif">
           <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -200,7 +200,7 @@
           </a>
           <ul class="treeview-menu">
             <li class=""><a href="{{ route('system_conf') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
-            <li class=""><a href="{{ route('teams/index') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
+            <li @if(Request::is('teams/*'))class="active" @endif class=""><a href="{{ route('teams/index') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
             <li class=""><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>

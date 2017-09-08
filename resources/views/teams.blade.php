@@ -104,50 +104,28 @@
 					<div class="box-header with-border">
 						<h3 class="box-title">夥伴設定</h3>
 						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-primary" id="memberReload"><i class="glyphicon glyphicon-repeat"></i></button>
 							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						</div>
 					</div>
-					<div class="box-body">
+					<div class="box-body" id="member_set">
+					@foreach($result as $data)
 						<div class="form-group"><div class="row">
 							<div class="col-md-2">
-								<label>WACA-Team</label>
+								<label>{{$data->name}}</label>
 							</div>
 							<div class="col-md-8">
 								<label>人員</label>
 								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
 								</select>
 							</div>
 							<div class="col-md-2">
 								<label>主管</label>
 								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
-									<option value="">請選擇主管</option>
-									<option value="毛毛">毛毛</option>
-									<option value="rita">Rita</option>
-									<option value="lube">Lube</option>
-									<option value="wei">Wei</option>
-									<option value="rock">Rock</option>
-									<option value="suzy">Suzy</option>
-									<option value="rita">Rita</option>
-									<option value="sheng">Sheng</option>
-									<option value="henry">Henry</option>
-									<option value="dio">Dio</option>
-									<option value="eno">Eno</option>
-									<option value="carol">Carol</option>
 								</select>
 							</div>
 						</div></div>
+					@endforeach
 					</div>
 					<div class="box-footer">
 						<div class="pull-right">

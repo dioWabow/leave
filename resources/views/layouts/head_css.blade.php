@@ -293,7 +293,7 @@ $(function () {
 <!-- 團隊設定用 -->
 @if(Request::is('teams/*'))
 <script>
-$(function () {
+$(document).ready(function () {
 
   $('#nestable').nestable();
 
@@ -305,6 +305,16 @@ $(function () {
     $this = $(this);
     $team_name = $this.parents().find("input[id='addInputName']").val();
     $team_color = $this.parents().find("input[id='addInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
 
     $.ajax({
       type: "POST",
@@ -344,6 +354,16 @@ $(function () {
     $id = $this.val();
     $team_name = $this.parents().find("input[id='editInputName']").val();
     $team_color = $this.parents().find("input[id='editInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
 
     $.ajax({
       type: "POST",
@@ -393,6 +413,26 @@ $(function () {
 
   });
 
+  $('#memberReload').click(function(){
+    var div = $('#member_set').html();
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/reload')}}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+      },
+      success: function(data) {
+        if(data.result){
+          $('#member_set').html(div);
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  })
 });
 </script>
 @endif

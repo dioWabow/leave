@@ -118,6 +118,11 @@ Route::post('teams/update',[
     'as' => 'teams/update',
 ]);
 
+Route::post('teams/reload',[
+    'uses' => 'TeamController@ajaxReloadData',
+    'as' => 'teams/reload',
+]);
+
 Route::any('user/index',[
         'uses' => 'UserController@getIndex',
         'as' => 'user/index',

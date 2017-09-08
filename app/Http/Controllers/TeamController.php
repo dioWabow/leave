@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Team;
+use App\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,8 +27,6 @@ class TeamController extends Controller
         $name = $request['team_name'];
         $color = $request['team_color'];
         $team = array('name' => $name, 'color' => $color);
-
-        // rule 判斷資料型態
 
         // fill
         $model = new Team;
@@ -115,6 +114,16 @@ class TeamController extends Controller
 
         $result = $this->loadModel($id)->delete();
 
+        return json_encode(
+            array(
+                'result' => $result
+            )
+        );
+    }
+
+    public function ajaxReloadData(Request $request)
+    {
+        $result = true;
         return json_encode(
             array(
                 'result' => $result
