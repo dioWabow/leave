@@ -59,7 +59,7 @@
 												<!-- 搜尋按鈕 -->
 												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
 												<!-- 新增按鈕 -->
-												<a href="{{ route('holidiesInsertForm') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
+												<a href="{{ route('holidies/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
 											</label>
 										</div>
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -79,12 +79,12 @@
 										</thead>
 										<tbody>
 											@foreach($dataProvider as $data)
-											<tr class='clickable-row' data-href="{{ route('holidiesUpdateForm', ['id'=>$data['id']])}}">
+											<tr class='clickable-row' data-href="{{ route('holidies/edit', ['id'=>$data['id']])}}">
 												<td>{{$data->type}}</td>
 												<td>{{$data->name}}</td>
 												<td>{{ Carbon\Carbon::parse($data->date)->format('Y-m-d') }}</td>
 												<td>
-													<a href="{{ route('holidayDelete', ['id'=>$data['id']])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
+													<a href="{{ route('holidies/delete', ['id'=>$data['id']])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
 												</td>
 											</tr>
 											@endforeach
