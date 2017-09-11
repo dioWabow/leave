@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Schema;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
@@ -21,14 +22,9 @@ class BaseModel extends Model
         });
 
         static::saving(function ($model) {
-            $dirty = $model->getDirty();
             foreach ($model->getAttributes() as $key => $value) {
-                if(in_array($key, array_keys($model->getOriginal()))) 
+                if(!Schema::hasColumn($model->getTable(), $key)) 
                     unset($model->$key);
-            }
-            
-            foreach ($dirty as $key => $value) {
-                $model->setAttribute($key, $value);
             }
         });
         
