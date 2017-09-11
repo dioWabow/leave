@@ -111,6 +111,18 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'UserController@getEdit',
         ]);
     });
+
+    // 系統設定
+    Route::get('/config/edit',[
+        'uses'=> 'SystemConfController@getIndex',
+        'as'=>'config_edit',
+    ]);
+
+
+    Route::post('/config/update',[
+        'uses'=> 'SystemConfController@postUpdate',
+        'as'=>'config_update',
+    ]);
     
 });
 
