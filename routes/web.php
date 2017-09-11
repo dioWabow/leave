@@ -99,7 +99,7 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('teams');
 
 Route::get('teams/index',[
-    'uses' => 'TeamController@getAllTeam',
+    'uses' => 'TeamController@getAllTeamAndUser',
     'as' => 'teams/index',
 ]);
 
@@ -118,22 +118,27 @@ Route::post('teams/update',[
     'as' => 'teams/update',
 ]);
 
-Route::post('teams/reload',[
-    'uses' => 'TeamController@ajaxReloadData',
-    'as' => 'teams/reload',
+Route::post('teams/memberSet',[
+    'uses' => 'UserTeamController@postMemberSet',
+    'as' => 'teams/memberSet'
 ]);
 
 Route::any('user/index',[
-        'uses' => 'UserController@getIndex',
-        'as' => 'user/index',
-        ]);
+    'uses' => 'UserController@getIndex',
+    'as' => 'user/index',
+]);
 
-Route::any('user/search',['uses' => 'UserController@getIndex',]);
+Route::any('user/search',[
+    'uses' => 'UserController@getIndex',
+]);
 
-Route::post('user/update',['uses' => 'UserController@postUpdate',]);
+Route::post('user/update',[
+    'uses' => 'UserController@postUpdate',
+]);
 
 Route::get('user/edit/{id}', [
-        'uses' => 'UserController@getEdit',
-        'as' => 'user/edit',
-        ]);
+    'uses' => 'UserController@getEdit',
+    'as' => 'user/edit',
+]);
+
 });

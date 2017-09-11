@@ -414,25 +414,15 @@ $(document).ready(function () {
   });
 
   $('#memberReload').click(function(){
-    var div = $('#member_set').html();
 
-    $.ajax({
-      type: "POST",
-      url: "{{ route('teams/reload')}}",
-      dataType: "json",
-      data: {
-        "_token": "{{ csrf_token() }}",
-      },
-      success: function(data) {
-        if(data.result){
-          $('#member_set').html(div);
-        }
-      },
-      error: function(jqXHR) {
-        alert("發生錯誤: " + jqXHR.status);
-      }
+    $.get('index', function(data) {
+      var html = $(data).find('#member_set').html();
+      $('#member_set').html(html);
+      $(".select2").select2();
     });
-  })
+
+  });
+
 });
 </script>
 @endif

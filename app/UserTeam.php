@@ -26,7 +26,7 @@ class UserTeam extends Model
       return $result;
     }
 
-    public static function deleteUserTeamByUserId($id) 
+    public static function deleteUserTeamByUserId($id)
     {
         $result = self::where('user_id', $id)->delete();
         return $result;
@@ -38,25 +38,25 @@ class UserTeam extends Model
         return $result;
     }
 
-    public static function getTeamIdByUserId($id) 
+    public static function getTeamIdByUserId($id)
     {
         $result = self::where('user_id', $id)->get()->pluck('team_id');
         return $result;
     }
 
-    public static function getUserIdByTeamId($id) 
+    public static function getUserIdByTeamId($id)
     {
         $result = self::where('team_id', $id)->get()->pluck('user_id');
         return $result;
     }
 
-    public static function getUserTeamByUserId($id) 
+    public static function getUserTeamByUserId($id)
     {
         $result = self::where("user_id", $id)->get();
         return $result;
     }
 
-    public function team() 
+    public function team()
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;

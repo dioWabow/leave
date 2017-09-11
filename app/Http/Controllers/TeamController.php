@@ -21,6 +21,21 @@ class TeamController extends Controller
     	));
     }
 
+    public function getAllTeamAndUser()
+    {
+        $model = new Team;
+
+        $userModel = new User;
+
+        $team_result = $model->getAllTeam();
+
+        $user_result = $userModel->getAllUsers();
+
+        return view('teams', compact(
+            'team_result', 'user_result'
+        ));
+    }
+
     public function ajaxCreateData(Request $request)
     {
         // 抓request中所需要的值 name ccolor
@@ -114,16 +129,6 @@ class TeamController extends Controller
 
         $result = $this->loadModel($id)->delete();
 
-        return json_encode(
-            array(
-                'result' => $result
-            )
-        );
-    }
-
-    public function ajaxReloadData(Request $request)
-    {
-        $result = true;
         return json_encode(
             array(
                 'result' => $result

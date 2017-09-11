@@ -79,13 +79,13 @@
 						<div class="col-md-8">
 							<div class="dd nestable" id="nestable">
 								<ol class="dd-list">
-								@foreach($result as $data)
-									<li class="dd-item" data-id="{{$data->id}}" data-name="{{$data->name}}" data-new="0" data-deleted="0">
-										<div class="dd-handle">{{$data->name}}</div>
-										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$data->id}}">
+								@foreach($team_result as $team_data)
+									<li class="dd-item" data-id="{{$team_data->id}}" data-name="{{$team_data->name}}" data-new="0" data-deleted="0">
+										<div class="dd-handle">{{$team_data->name}}</div>
+										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
 											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$data->id}}">
+										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</span>
 									</li>
@@ -99,7 +99,7 @@
 		</div>
 
 		<div class="col-md-12">
-			<form action="" method="POST">
+			<form action="{{ route('teams/memberSet')}}" method="POST">
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<h3 class="box-title">夥伴設定</h3>
@@ -109,19 +109,26 @@
 						</div>
 					</div>
 					<div class="box-body" id="member_set">
-					@foreach($result as $data)
+					@foreach($team_result as $team_data)
 						<div class="form-group"><div class="row">
 							<div class="col-md-2">
-								<label>{{$data->name}}</label>
+								<label>{{$team_data->name}}</label>
 							</div>
 							<div class="col-md-8">
 								<label>人員</label>
-								<select class="form-control select2" name="teams[users][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
+								<select class="form-control select2" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
+								@foreach($user_result as $user_data)
+									<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+								@endforeach
 								</select>
 							</div>
 							<div class="col-md-2">
 								<label>主管</label>
-								<select class="form-control select2" name="teams[users_manager][]" data-placeholder="請選擇主管">
+								<select class="form-control select2" name="managers[{{$team_data->id}}][]" data-placeholder="請選擇主管">
+								@foreach($user_result as $user_data)
+									<option value="">請選擇主管</option>
+									<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+								@endforeach
 								</select>
 							</div>
 						</div></div>
@@ -134,6 +141,7 @@
 						</div>
 					</div>
 				</div>
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
 			</form>
 		</div>
 	</div>
