@@ -80,10 +80,6 @@ Route::group(['middleware' => 'auth'], function () {
         return view('system_conf');
     })->name('system_conf');
 
-    Route::get('/teams.html', function () {
-        return view('teams');
-    })->name('teams');
-
 Route::get('teams/index',[
     'uses' => 'TeamController@getAllTeamAndUser',
     'as' => 'teams/index',
