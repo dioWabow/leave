@@ -86,10 +86,11 @@ class UserController extends Controller
             $model->fill($input);
 
             //使用者目前所有代理人(前台in_array)
-            $user_agents = $input['agent'];
+            $user_agents = (!empty($input['agent'])) ? $input['agent'] : [];
 
             //使用者目前的團隊(前台in_array)
-            $user_teams =  $input['team'];
+            $user_teams =  (!empty($input['team'])) ? $input['team'] : [];
+
 
         } else {
 
@@ -198,7 +199,7 @@ class UserController extends Controller
 
             } 
 
-            return Redirect::to('user/index')->withErrors(['msg' => '修改成功']);
+            return Redirect::route('user/index')->withErrors(['msg' => '修改成功']);
 
         } else {
 

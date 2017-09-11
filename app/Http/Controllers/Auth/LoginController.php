@@ -54,34 +54,50 @@ class LoginController extends Controller implements AuthenticatableContract
     public function handleGoogleCallback()
     {
         $user = Socialite::driver('google')->stateless()->user();
-
         if ( !empty( $user->email ) ) {
+            
             //待系統設定更新完成改為取config
             if ( !empty($user->user["domain"]) && $user->user["domain"] == "wabow.com" ) {
-                $model = new User;
-                $model = $model->getUserByEmail($user->email);
-                if ( $model ) {
+
+                $model = User::getUserByEmail($user->email);
+                if ( $model === null) {
+
                     $data = [
-                        'email' => "$user->email" ,
+                        'email' => $user->email,
+                        'name' => $user->name,
+                        'nickname' => $user->name,
                         'enter_date' => date( "Y-m-d 00:00:00" ),
                         'status' => 1,
                         'job_seek' => 0,
                     ];
-                    $
+
+                    $model = new User;
                     $model = $model->fill($data);
                     $model->save();
-                }
-                if ( !empty($model->id) && Auth::loginUsingId($model->id) ) {
-                    return Redirect::to('index');
+
                 }else{
-                    return Redirect::to('root_path')->withErrors(['msg' => '登入失敗']);
+                    //已存在資料庫，不做任何事情。
+                }
+
+                if ( !empty($model->id) && Auth::loginUsingId($model->id) ) {
+
+                    return Redirect::route('index');
+
+                }else{
+
+                    return Redirect::route('root_path')->withErrors(['msg' => '登入失敗，請再試一次。']);
+                    
                 }
             }else{
+
                 //待系統設定更新完成改為公司名稱
-                return Redirect::to('root_path')->withErrors(['msg' => '非哇寶國際Email(@wabow.com)']);
+                return Redirect::route('root_path')->withErrors(['msg' => '非允許的 Email，請再次確認登入的 Email。']);
+
             }
         }else{
-            return Redirect::to('root_path')->withErrors(['msg' => '登入失敗']);
+
+            return Redirect::route('root_path')->withErrors(['msg' => 'Google 登入驗證失敗。']);
+
         }
 
     }

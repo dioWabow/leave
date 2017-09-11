@@ -164,9 +164,16 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * 圖片套件
+         */
+        Intervention\Image\ImageServiceProvider::class,
+         
+
+        /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -177,12 +184,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-
         /*
-         * Google登入用
+         * Custom Service Providers...
          */
-        Laravel\Socialite\SocialiteServiceProvider::class,
-
+        App\Providers\ImageHelperServiceProvider::class,
+        App\Providers\WebHelperServiceProvider::class,
     ],
 
     /*
@@ -231,8 +237,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,                
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
+        /**
+         * HELPER
+         */
+        'ImageHelper' => App\Facades\ImageHelper::class,
+        'WebHelper' => App\Facades\WebHelper::class,
     ],
 
 ];

@@ -5,9 +5,8 @@ namespace App;
 use App\UserTeam;
 
 use Schema;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends BaseModel
 {
     //可以傳入數值的欄位
     protected $fillable = [
@@ -38,7 +37,7 @@ class User extends Model
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '1',
+        'pagesize' => '25',
     ];
     /**
      * 搜尋table多個資料

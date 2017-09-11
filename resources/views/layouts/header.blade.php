@@ -112,7 +112,7 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li class="active">
+        <li @if(Request::is('user/*'))class="active" @endif>
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">PERSONAL</li>
@@ -192,7 +192,8 @@
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
-        <li class="treeview @if(Request::is('teams/*', 'leave_type/*'))active @endif">
+
+        <li class="treeview @if(Request::is('teams/*', 'leave_type/*', 'user/*'))active @endif">
           <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -201,18 +202,18 @@
           <ul class="treeview-menu">
             <li class=""><a href="{{ route('system_conf') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
             <li @if(Request::is('teams/*'))class="active" @endif class=""><a href="{{ route('teams/index') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
-            <li class=""><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
+            <li @if(Request::is('user/*'))class="active" @endif><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
         </li>
-        <li class="treeview ">
+        <li class="treeview @if(Request::is('holidies/*', 'leave_type/*'))active @endif">
           <a href="#"><i class="fa fa-anchor"></i> <span>假期設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li class=""><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li  @if(Request::is('leave_type/*')) class="active" @endif><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
+            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview ">

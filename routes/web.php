@@ -20,15 +20,16 @@ Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback')
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/index', function () {
-        return view('index');
-    })->name('index');
-    Route::get('/holidies', function () {
-        return view('holidies');
-    })->name('holidies');
-    Route::get('/holidies_form', function () {
-        return view('holidies_form');
-    })->name('holidies_form');
+    Route::get('index', ["uses"=>"SiteController@getIndex"])->name('index');
+    Route::post('index', ["uses"=>"SiteController@ajaxGetAllAvailableLeaveListByDateRange", "as"=>"indexChange"]);
+
+    Route::any('holidies/index', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
+    Route::get('holidies/create', ["uses"=>"HolidayController@getCreate","as"=>"holidiesInsertForm"]);
+    Route::get('holidies/edit/{id}', ["uses"=>"HolidayController@getEdit","as"=>"holidiesUpdateForm"]);
+    Route::post('holidies/insert', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
+    Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"holidayUpdate"]);
+    Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
+
     Route::get('/leave.html', function () {
         return view('leave');
     })->name('leave');
@@ -68,12 +69,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/leave_manager_view.html', function () {
         return view('leave_manager_view');
     })->name('leave_manager_view');
-    Route::get('/leave_type.html', function () {
-        return view('leave_type');
-    })->name('leave_type');
-    Route::get('/leave_type_form.html', function () {
-        return view('leave_type_form');
-    })->name('leave_type_form');
     Route::get('/leave_view.html', function () {
         return view('leave_view');
     })->name('leave_view');
@@ -142,3 +137,49 @@ Route::get('user/edit/{id}', [
 ]);
 
 });
+
+Route::post('user/update',[
+        'uses' => 'UserController@postUpdate',
+        'as' => 'user/update'
+        ]);
+
+Route::get('user/edit/{id}', [
+        'uses' => 'UserController@getEdit',
+        'as' => 'user/edit',
+        ]);
+
+
+Route::match(['get', 'post'], '/demo/image',[
+    'uses'=> 'DemoControllor@getImage',
+    'as'=>'demo_image',
+]);
+
+Route::any('/leave_type/index',[
+    'uses'=> 'LeaveTypeController@getIndex',
+    'as'=>'leave_type',
+]);
+
+Route::get('/leave_type/create',[
+    'uses'=> 'LeaveTypeController@getCreate',
+    'as'=>'leave_type_create',
+]);
+
+Route::post('/leave_type/insert',[
+    'uses'=> 'LeaveTypeController@postInsert',
+    'as'=>'leave_type_insert',
+]);
+
+Route::post('/leave_type/update',[
+    'uses'=> 'LeaveTypeController@postUpdate',
+    'as'=>'leave_type_update',
+]);
+
+Route::get('/leave_type/edit/{id}',[
+    'uses'=> 'LeaveTypeController@getEdit',
+    'as'=>'leave_type_edit',
+]);
+
+Route::get('/leave_type/delete/{id}',[
+    'uses'=> 'LeaveTypeController@postDelete',
+    'as'=>'leave_type_delete',
+]);
