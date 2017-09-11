@@ -168,7 +168,7 @@
         </li>
         <li class="header">BOSS</li>
         <li class="">
-          <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves_manager_prove', ['user_id' => 1] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
                 <span class="pull-right-container">
             <small class="label pull-right bg-red">1</small>
           </span>

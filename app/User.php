@@ -116,4 +116,10 @@ class User extends BaseModel
 
         return $result;
     }
+
+    public static function getLeavesUserIdByUserId($user_id) 
+    {
+        $result = self::where('id',$user_id)->get();
+        return $result;
+    }
 }

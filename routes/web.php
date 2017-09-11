@@ -111,6 +111,22 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'UserController@getEdit',
         ]);
     });
+
+    # 團隊假單-主管
+    Route::any('leaves/manager/prove/{user_id}',[
+        'uses'=> 'LeavesManagerController@getProve',
+        'as'=>'leaves_manager_prove',
+    ]);
+    
+    Route::any('leaves/manager/upcoming/{user_id}',[
+        'uses'=> 'LeavesManagerController@getUpcoming',
+        'as'=>'leaves_manager_upcoming',
+    ]);
+    
+    Route::any('leaves/manager/history/{user_id}',[
+        'uses'=> 'LeavesManagerController@getHistory',
+        'as'=>'leaves_manager_history',
+    ]);
     
 });
 
