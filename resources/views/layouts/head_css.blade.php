@@ -118,7 +118,38 @@ $(function () {
     });
 });
 </script>
+<!-- 團隊假單頁面用-HR -->
+@if(Request::is('leaves/hr/history/*'))
+<script>
+$(function () {
+    $('#search_daterange').daterangepicker({
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'},
+    });
+    
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
 
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    @if($model->start_time != '' || $model->end_time != '' ) 
+        $('#search_daterange').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+    @else
+        $('#search_daterange').val("");
+    @endif
+
+    $("#leave_view_fileupload").fileinput({
+        initialPreview: [
+            './dist/img/unsplash2.jpg'
+        ],
+        initialPreviewAsData: true,
+    });
+});
+</script>
+@endif
 <!--天災假調整用-->
 <script>
 $(function () {
