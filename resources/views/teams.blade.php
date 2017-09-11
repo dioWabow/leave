@@ -118,7 +118,15 @@
 								<label>人員</label>
 								<select class="form-control select2" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
 								@foreach($user_result as $user_data)
+								@foreach($userteam_result as $userteam_data)
+									@if("{{$team_data->id}}" == "{{$userteam_data->team_id}}")
+										@if("{{$user_data->id}}" == "{{$userteam_data->user_id}}")
+										<option value="{{$user_data->id}}" selected="">{{$user_data->nickname}}</option>
+										@endif
+									@else
 									<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+									@endif
+								@endforeach
 								@endforeach
 								</select>
 							</div>

@@ -56,6 +56,12 @@ class UserTeam extends Model
         return $result;
     }
 
+    public static function getAllUserTeamData()
+    {
+        $result = self::get();
+        return $result;
+    }
+
     public function team()
     {
         $result = $this::hasOne('App\Team','id','team_id');

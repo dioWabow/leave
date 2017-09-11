@@ -17,26 +17,39 @@ class UserTeamController extends Controller
         $teams = $request->teams;
         $managers = $request->managers;
 
-        $model = new UserTeam;
+        // dd($teams);
+        $type = false;
 
-        $user_list = [];
-        $manager_list = [];
 
         foreach ($teams as $key => $value) {
             foreach ($value as $member) {
-                $user_list[] = ['role' => 'user', 'user_id' => $member, 'team_id' => $key];
+                $user_list = ['role' => 'user', 'user_id' => $member, 'team_id' => $key];
+                $model = new UserTeam;
+                $model->fill($user_list);
+
+                if ($model->save()) {
+                    $type = true;
+                }
             }
         }
 
         foreach ($managers as $key => $value) {
             foreach ($value as $member) {
-                $manager_list[] = ['role' => 'manager', 'user_id' => $member, 'team_id' => $key];
+                if (!empty($member)) {
+
+                    $manager_list = ['role' => 'manager', 'user_id' => $member, 'team_id' => $key];
+                    $model = new UserTeam;
+                    $model->fill($manager_list);
+
+                    if ($model->save()) {
+                        $type = true;
+                    }
+
+                }
             }
         }
 
-        $model->fill($user_list);
-
-        if ($model->save()) {
+        if ($type) {
 
             return Redirect::route('teams/index')->withErrors(['msg' => '更新成功']);
 

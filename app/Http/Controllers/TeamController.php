@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Team;
 use App\User;
+use App\UserTeam;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,12 +28,16 @@ class TeamController extends Controller
 
         $userModel = new User;
 
+        $userTeamModel = new UserTeam;
+
         $team_result = $model->getAllTeam();
 
         $user_result = $userModel->getAllUsers();
 
+        $userteam_result = $userTeamModel->getAllUserTeamData();
+
         return view('teams', compact(
-            'team_result', 'user_result'
+            'team_result', 'user_result', 'userteam_result'
         ));
     }
 
