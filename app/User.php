@@ -5,13 +5,17 @@ namespace App;
 use App\UserTeam;
 
 use Schema;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends BaseModel
 {
     //可以傳入數值的欄位
     protected $fillable = [
-        'name', 
+        'employee_no',
+        'email',
+        'password',
+        'token',
+        'remember_token',
+        'name',
         'role',
         'status',
         'job_seek',
@@ -22,6 +26,8 @@ class User extends Model
         'avatar',
         'enter_date',
         'leave_date',
+        'status',
+        'job_seek',
         'arrive_time',
         'order_by',
         'order_way',
@@ -31,7 +37,7 @@ class User extends Model
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '1',
+        'pagesize' => '25',
     ];
     /**
      * 搜尋table多個資料
@@ -51,7 +57,7 @@ class User extends Model
 
             } else {
 
-                if ($key == 'keywords') {
+                if ($key == 'keywords' && isset($value)) {
 
                     $query->Where(function ($query1) use ($value) {
                         $query1->orWhere("employee_no", $value);
@@ -59,7 +65,7 @@ class User extends Model
                         $query1->orWhere("nickname", 'like', '%'.$value.'%');
                     });
 
-                } elseif ($key == 'teams') {
+                } elseif ($key == 'teams' && isset($value)) {
 
                     $query->whereIn('id', UserTeam::getUserIdByTeamId($value)->toArray());
 
@@ -95,4 +101,20 @@ class User extends Model
         $result = $this::hasMany('App\UserTeam','user_id','id');
         return $result;
     }
+    
+    /**
+     * 搜尋table單個資料
+     *
+     * @param  array   $where     搜尋條件
+     * @return 資料object/false
+     */
+    public static function getUserByEmail($email="") {
+
+        $query = self::where("email", $email);
+
+        $result = $query->first();
+
+        return $result;
+    }
+
 }

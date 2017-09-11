@@ -84,6 +84,13 @@
           $div_leave_dayrange.hide();
           $label_leave_dayrange.hide();
         }
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == '1') {
+          $leave_dayrange_allday.iCheck('disable');
+          $leave_dayrange_allday.iCheck('uncheck');
+          $leave_dayrange_morning.iCheck('check');
+        }
       }
     });
 
@@ -99,7 +106,7 @@
         $leave_dayrange_allday.iCheck('check');
 
         //遇到善待假則 allday 不可選擇
-        if($(this).val() == 'kindness-leave') {
+        if($(this).val() == '1') {
           $leave_dayrange_allday.iCheck('disable');
           $leave_dayrange_allday.iCheck('uncheck');
           $leave_dayrange_morning.iCheck('check');
@@ -181,7 +188,11 @@
 
       $leave_timepicker.on('hide.daterangepicker', function(ev, picker) {
           $leave_spent_hours.val('');
-          calculate_hours();
+          if(daterangepicker_type != 'isSingleDate') {
+
+            calculate_hours();
+
+          }
       });
     }
   });

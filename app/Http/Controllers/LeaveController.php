@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use LeaveHelper;
+use TimeHelper;
 use App\User;
 use App\Team;
 use App\Leave;
 use App\Type;
 use App\UserAgent;
 use App\UserTeam;
-use App\Http\Requests\UserRequest;
+use App\LeaveDay;
+use App\Http\Requests\LeaveRequest;
 
 use Session;
 use Redirect;
@@ -35,7 +37,7 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request) 
     {
-        $id = 7;
+        $id = 6;
 
         $types = Type::getAllType();
 
@@ -71,11 +73,186 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postInsert(UserRequest $request) 
+    public function postInsert(LeaveRequest $request) 
     {
-        return view('users_form',compact(
-            'model','user_agents','user_teams','teams','team_users','user_no_team'
-        ));
+        $User_id = 6;
+        $user = User::find($User_id);
+        $leave = $request->input('leave');
+
+        if (count(explode(" - ", $leave['timepicker']))>1) {
+
+            $leave['start_time'] = explode(" - ", $leave['timepicker'])['0'];
+            $leave['end_time'] = explode(" - ", $leave['timepicker'])['1'];
+            $leave['date_list'] = LeaveHelper::calculateWorkingDate($leave['start_time'],$leave['end_time']);
+            $leave['hours'] = LeaveHelper::calculateRangeDateHours($leave['date_list']);
+
+        } else {
+            
+            $leave['hours'] = ($leave['dayrange'] == "allday") ? 8 : 4;
+
+            if ($leave['dayrange'] == "morning") {
+
+                if ($user->arrive_time=="0900") {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 09:00:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 14:00:00";
+
+                } else {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 09:30:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 14:30:00";
+
+                }
+                
+            } elseif($leave['dayrange'] == "afternoon") {
+
+                if ($user->arrive_time=="0900") {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 14:00:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 18:00:00";
+
+                } else {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 14:30:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 18:30:00";
+
+                }
+
+            } else {
+
+                if ($user->arrive_time=="0900") {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 09:00:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 18:00:00";
+
+                } else {
+
+                    $leave['start_time'] = $leave['timepicker'] . " 09:30:00";
+                    $leave['end_time'] = $leave['timepicker'] . " 18:30:00";
+
+                }
+
+            }
+           
+        }
+
+        $model = new Leave;
+
+        $response = LeaveHelper::judgeLeave($leave);
+        if ($response == "") {
+
+            $leave['user_id'] = $User_id;
+            $leave['tag_id'] = 1;
+            $leave['create_user_id'] = $User_id;
+
+            $model->fill($leave);
+            if ($model->save()) {
+
+                $leave_day = [];
+
+                if (TimeHelper::changeDateFormat($model->start_time,'Y-m-d') != TimeHelper::changeDateFormat($model->end_time,'Y-m-d')) {
+
+                    //拆單
+                    foreach ($leave['date_list'] as $key => $date) {
+
+                        $leave_day_model = new LeaveDay;
+                        $leave_day['leave_id'] = $model->id;
+                        $leave_day['type_id'] = $model->type_id;
+                        $leave_day['create_user_id'] = $model->create_user_id;
+                        $leave_day['user_id'] = $model->user_id;
+
+                        // 第一天
+                        if ($key == 0) {
+
+                            $start_time = $date;
+                            $end_time = TimeHelper::changeDateFormat($date,'Y-m-d');
+                            $end_time .= ($user->arrive_time=="0900") ? " 18:00" : " 18:30";
+                            $hours = LeaveHelper::calculateOneDateHours($start_time,$end_time);
+
+                        // 最後一天
+                        } elseif($key == count($leave['date_list'])-1) {
+
+                            $start_time = TimeHelper::changeDateFormat($date,'Y-m-d');
+                            $start_time .=  ($user->arrive_time=="0900") ? " 09:00" : " 09:30" ;
+                            $end_time = $date;
+                            $hours = LeaveHelper::calculateOneDateHours($start_time,$end_time);
+
+                        // 中間天數
+                        } else {
+
+                            $start = ($user->arrive_time=="0900") ? " 09:00" : " 09:30";
+                            $end = ($user->arrive_time=="0900") ? " 18:00" : " 18:30";
+                            $start_time = $date . $start ;
+                            $end_time = $date . $end ;
+                            $hours = LeaveHelper::calculateOneDateHours($start_time,$end_time);
+
+                        }
+
+                        $leave_day['start_time'] = $start_time;
+                        $leave_day['end_time'] = $end_time;
+                        $leave_day['hours'] = $hours;
+
+                        $leave_day_model->fill($leave_day);
+                        if (!$leave_day_model->save()) {
+
+                            return Redirect::back()->withInput()->withErrors(['msg' => '新增子單失敗']);
+
+                        }
+                    }
+
+                } else {
+
+                    $leave_day_model = new LeaveDay;
+
+                    $leave_day['leave_id'] = $model->id;
+                    $leave_day['type_id'] = $model->type_id;
+                    $leave_day['create_user_id'] = $model->create_user_id;
+                    $leave_day['user_id'] = $model->user_id;
+                    $leave_day['start_time'] = $model->start_time;
+                    $leave_day['end_time'] = $model->end_time;
+                    $leave_day['hours'] = $model->hours;
+
+                    $leave_day_model->fill($leave_day);
+                    if (!$leave_day_model->save()) {
+
+                        return Redirect::back()->withInput()->withErrors(['msg' => '新增子單失敗']);
+
+                    }
+
+                }
+                
+
+                //新增假單代理人
+                // UserAgent::deleteUserAgentByUserId($model->id);
+                // if(!empty($leave['agent'])){
+
+                //     $user_agents = $leave['agent'];
+                //     foreach($user_agents as $agent_id){
+
+                //         $agent = new UserAgent;
+                //         $agent->fill([
+                //             'user_id' => $model->id,
+                //             'agent_id' => $agent_id,
+                //         ]);
+                //         $agent->save();
+
+                //     }
+
+                // }
+
+                return Redirect::route('index')->withErrors(['msg' => '新增成功']);
+
+            } else {
+
+                return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+
+            }
+
+        } else {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => $response]);
+
+        }
     }
 
 

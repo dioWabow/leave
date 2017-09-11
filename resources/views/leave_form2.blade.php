@@ -15,7 +15,8 @@
 </section>
 
 <!-- Main content -->
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="{{route('leave/insert')}}" method="POST" enctype="multipart/form-data">
+{!!csrf_field()!!}
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
@@ -115,7 +116,7 @@
 						<label>檔案上傳</label>
 					</div>
 					<div class="col-md-11">
-						<input id="leave_fileupload" name="leave[fileupload][]" class="file" type="file" multiple data-min-file-count="1">
+						<input id="leave_fileupload" name="leave[fileupload][]" class="file" type="file" multiple data-max-file-count="1">
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">

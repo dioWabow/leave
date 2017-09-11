@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh_tw',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'zh_tw',
 
     /*
     |--------------------------------------------------------------------------
@@ -184,6 +184,10 @@ return [
          * 假別計算
          */
         App\Providers\LeaveHelperServiceProvider::class,
+        /*
+         * 時間套件
+         */
+        App\Providers\TimeHelperServiceProvider::class,
 
     ],
 
@@ -239,6 +243,7 @@ return [
          * HELPER
          */
         'LeaveHelper' => App\Facades\LeaveHelper::class,
+        'TimeHelper' => App\Facades\TimeHelper::class,
 
     ],
 

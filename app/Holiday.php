@@ -13,7 +13,7 @@ class Holiday extends Model
      */
     protected $table = 'holidays';
 
-    public static function getHolidayByDateAndType($date,$type)
+    public static function checkHolidayByDateAndType($date,$type)
     {
         $query = self::where('date' , 'like' , $date.'%');
         $result = $query->where('type' , $type)->count();

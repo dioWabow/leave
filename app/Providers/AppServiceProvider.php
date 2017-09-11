@@ -16,9 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $annual_date = LeaveHelper::calculateAnnualDate();
+        $annual_hours = LeaveHelper::calculateAnnualDate();
 
-        View::share(compact('annual_date'));
+        View::share(compact('annual_hours'));
     }
 
     /**
