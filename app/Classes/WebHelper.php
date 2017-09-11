@@ -14,11 +14,8 @@ class WebHelper
     public static function getStatusValueByKey($data)
     {
         $arr = self::getStatusOptionsAsKeys();
-        if(!empty($arr[$data])) {
-            return $arr[$data];
-        }else{
-            return null;
-        }
+        
+        return (!empty($arr[$data])) ? $arr[$data] : null;
     }
 
     /**
@@ -41,9 +38,9 @@ class WebHelper
      */
     public static function getHolidiesTypeLabel($data)
     {
-    $arr = self::getHolidiesTypeOptions();
+        $arr = self::getHolidiesTypeOptions();
 
-    return (!empty($arr[$data])) ? $arr[$data] : null;
+        return (!empty($arr[$data])) ? $arr[$data] : null;
     }
     
     /**
@@ -66,9 +63,9 @@ class WebHelper
      */
     public static function getNoticesSendTypeLabel($data)
     {
-    $arr = self::getNoticesSendTypeOptions();
+        $arr = self::getNoticesSendTypeOptions();
 
-    return (!empty($arr[$data])) ? $arr[$data] : null;
+        return (!empty($arr[$data])) ? $arr[$data] : null;
     }
 
     /**

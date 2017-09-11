@@ -20,15 +20,6 @@ Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback')
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('index', ["uses"=>"SiteController@getIndex"])->name('index');
-    Route::post('index', ["uses"=>"SiteController@ajaxGetAllAvailableLeaveListByDateRange", "as"=>"indexChange"]);
-
-    Route::any('holidies/index', ["uses"=>"HolidayController@getIndex","as"=>"holidies"]);
-    Route::get('holidies/create', ["uses"=>"HolidayController@getCreate","as"=>"holidiesInsertForm"]);
-    Route::get('holidies/edit/{id}', ["uses"=>"HolidayController@getEdit","as"=>"holidiesUpdateForm"]);
-    Route::post('holidies/insert', ["uses"=>'HolidayController@postInsert',"as"=>"holidayCreate"]);
-    Route::post('holidies/update', ["uses"=>'HolidayController@postUpdate',"as"=>"holidayUpdate"]);
-    Route::get('holidies/delete/{id}', ["uses"=>"HolidayController@postDelete","as"=>"holidayDelete"]);
 
     Route::get('/leave.html', function () {
         return view('leave');
@@ -118,68 +109,101 @@ Route::post('teams/memberSet',[
     'as' => 'teams/memberSet'
 ]);
 
-Route::any('user/index',[
-    'uses' => 'UserController@getIndex',
-    'as' => 'user/index',
-]);
-
-Route::any('user/search',[
-    'uses' => 'UserController@getIndex',
-]);
-
-Route::post('user/update',[
-    'uses' => 'UserController@postUpdate',
-]);
-
-Route::get('user/edit/{id}', [
-    'uses' => 'UserController@getEdit',
-    'as' => 'user/edit',
-]);
-
 });
 
-Route::post('user/update',[
-        'uses' => 'UserController@postUpdate',
-        'as' => 'user/update'
+    # dashboard
+    Route::get('index', ['uses' => 'SiteController@getIndex'])->name('index');
+    Route::post('index', [
+        'as' => 'index/ajax',
+        'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
+    ]);
+    
+    # 國定假日/補班
+    Route::group(['prefix'=>'holidies'], function(){
+        Route::match(['get', 'post'], 'index', [
+            'as' => 'holidies',
+            'uses' => 'HolidayController@getIndex',
         ]);
 
-Route::get('user/edit/{id}', [
-        'uses' => 'UserController@getEdit',
-        'as' => 'user/edit',
+        Route::get('create', [
+            'as' => 'holidies/create',
+            'uses' => 'HolidayController@getCreate',
         ]);
 
+        Route::get('edit/{id}', [
+            'as' => 'holidies/edit',
+            'uses' => 'HolidayController@getEdit',
+        ]);
+
+        Route::get('delete/{id}', [
+            'as' => 'holidies/delete',
+            'uses' => 'HolidayController@postDelete',
+        ]);
+
+
+        Route::post('insert', [
+            'as' => 'holidies/insert',
+            'uses' => 'HolidayController@postInsert',
+        ]);
+
+        Route::post('update', [
+            'as' => "holidies/update",
+            'uses' => 'HolidayController@postUpdate',
+        ]);
+    });
+
+    # 假別管理
+    Route::group(['prefix'=>'leave_type'], function(){
+        Route::match(['get', 'post'], 'index',[
+            'as' => 'leave_type',
+            'uses' => 'LeaveTypeController@getIndex',
+        ]);
+        
+        Route::get('create',[
+            'as' =>'leave_type/create',
+            'uses' => 'LeaveTypeController@getCreate',
+        ]);
+        
+        Route::get('edit/{id}',[
+            'as' => 'leave_type/edit',
+            'uses' => 'LeaveTypeController@getEdit',
+        ]);
+        
+        Route::get('delete/{id}',[
+            'as' => 'leave_type/delete',
+            'uses' => 'LeaveTypeController@postDelete',
+        ]);
+        
+        Route::post('insert',[
+            'as' => 'leave_type/insert',
+            'uses' => 'LeaveTypeController@postInsert',
+        ]);
+        
+        Route::post('update',[
+            'as' => 'leave_type/update',
+            'uses' => 'LeaveTypeController@postUpdate',
+        ]);
+    });
+
+    # 員工管理
+    Route::group(['prefix'=>'user'], function(){
+        Route::any('index',[
+            'as' => 'user/index',
+            'uses' => 'UserController@getIndex',
+        ]);
+
+        Route::post('update',[
+            'as' => 'user/update',
+            'uses' => 'UserController@postUpdate',
+        ]);
+
+        Route::get('edit/{id}', [
+            'as' => 'user/edit',
+            'uses' => 'UserController@getEdit',
+        ]);
+    });
 
 Route::match(['get', 'post'], '/demo/image',[
-    'uses'=> 'DemoControllor@getImage',
     'as'=>'demo_image',
-]);
-
-Route::any('/leave_type/index',[
-    'uses'=> 'LeaveTypeController@getIndex',
-    'as'=>'leave_type',
-]);
-
-Route::get('/leave_type/create',[
-    'uses'=> 'LeaveTypeController@getCreate',
-    'as'=>'leave_type_create',
-]);
-
-Route::post('/leave_type/insert',[
-    'uses'=> 'LeaveTypeController@postInsert',
-    'as'=>'leave_type_insert',
-]);
-
-Route::post('/leave_type/update',[
-    'uses'=> 'LeaveTypeController@postUpdate',
-    'as'=>'leave_type_update',
-]);
-
-Route::get('/leave_type/edit/{id}',[
-    'uses'=> 'LeaveTypeController@getEdit',
-    'as'=>'leave_type_edit',
-]);
-
-Route::get('/leave_type/delete/{id}',[
-    'uses'=> 'LeaveTypeController@postDelete',
-    'as'=>'leave_type_delete',
+    'uses'=> 'DemoControllor@getImage',
 ]);

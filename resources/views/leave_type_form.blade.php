@@ -16,7 +16,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'leave_type_update' : 'leave_type_insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" method="POST" enctype="multipart/form-data">
 {!!csrf_field()!!}
 	<section class="content">
 		<div class="box box-info">

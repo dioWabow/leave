@@ -84,7 +84,7 @@
 												關鍵字：
 												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" value="@if(count($search)>0){{$search['name']}}@endif" >
 												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                        <button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type_create') }}'"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="location.href='{{ route('leave_type/create') }}'"><i class="fa fa-edit"></i></button>
 											</label>
 										</div>
 											{!!csrf_field()!!}
@@ -108,7 +108,7 @@
 										</thead>
 										<tbody>
 											@foreach ($dataProvider as $value)
-												<tr class="clickable-row" data-href="{{ route('leave_type_edit', [ 'id' => $value->id ]) }}">
+												<tr class="clickable-row" data-href="{{ route('leave_type/edit', [ 'id' => $value->id ]) }}">
 													<td>{{ $value->name }}</td>
 														<td>
 															@if ($value->exception == 'normal') 一般假別
@@ -141,7 +141,7 @@
 														<input type="checkbox" name="leave_type[available]" class="leave_type_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
 													</td>
 													<td>
-														<a href="{{ route('leave_type_delete', ['id'=>$value->id])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
+														<a href="{{ route('leave_type/delete', ['id'=>$value->id])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
 													</td>
                         </tr>
                       </tr>

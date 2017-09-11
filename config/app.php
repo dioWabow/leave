@@ -189,6 +189,7 @@ return [
          */
         App\Providers\ImageHelperServiceProvider::class,
         App\Providers\WebHelperServiceProvider::class,
+        App\Providers\UrlHelperServiceProvider::class,
     ],
 
     /*
@@ -246,6 +247,7 @@ return [
          */
         'ImageHelper' => App\Facades\ImageHelper::class,
         'WebHelper' => App\Facades\WebHelper::class,
+        'UrlHelper' => App\Facades\UrlHelper::class,
     ],
 
 ];
