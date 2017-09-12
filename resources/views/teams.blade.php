@@ -80,6 +80,7 @@
 							<div class="dd nestable" id="nestable">
 								<ol class="dd-list">
 								@foreach($team_result as $team_data)
+                                    @if (empty($team_data->parent_id))
 									<li class="dd-item" data-id="{{$team_data->id}}" data-name="{{$team_data->name}}" data-new="0" data-deleted="0">
 										<div class="dd-handle">{{$team_data->name}}</div>
 										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
@@ -88,7 +89,24 @@
 										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</span>
+                                            @if ($team_data->has_children)
+                                            <ol class="dd-list">
+                                                @foreach($team_result as $team_data_children)
+                                                @if ($team_data_children->parent_id == $team_data->id)
+                                                <li class="dd-item" data-id="{{$team_data_children->id}}" data-name="{{$team_data_children->name}}" data-new="0" data-deleted="0">
+                                                    <div class="dd-handle">{{$team_data_children->name}}</div>
+                                                    <span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$team_data_children->id}}">
+                                                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                                                    </span>
+                                                    <span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$team_data_children->id}}">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                    </li>
+                                                @endif
+                                                @endforeach
+                                            </ol>
+                                            @endif
 									</li>
+                                    @endif
 								@endforeach
 								</ol>
 							</div>

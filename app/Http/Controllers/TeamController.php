@@ -22,6 +22,9 @@ class TeamController extends Controller
 
         // 抓全部組別 抓全部人員 抓已被分配的user及manager名單
         $team_result = $model->getAllTeam();
+        foreach ($team_result as $key => $value) {
+            $team_result[$key]->has_children = Team::getHasChildrenTeam($value->id);
+        }
 
         $user_result = $userModel->getAllUsers();
 
@@ -132,6 +135,26 @@ class TeamController extends Controller
             );
 
         }
+    }
+
+    public function ajaxUpdateDrop(Request $request)
+    {
+        $team = json_decode($request["team_json"]);
+
+        foreach ($team as $key => $value) {
+
+            if ( !empty($value->children) ) {
+                foreach ( $value->children as $key_children => $value_children) {
+
+                    Team::UpdateTeamParentId($value_children->id,$value->id);
+
+                }
+            }
+
+            Team::UpdateTeamParentId($value->id,0);
+
+        }
+        //return $team;
     }
 
     public function ajaxDeleteData(Request $request)
