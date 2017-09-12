@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LeaveAgent extends Model
+class LeaveAgent extends BaseModel
 {
      /**
      * 與Model關聯的table
@@ -20,7 +18,7 @@ class LeaveAgent extends Model
     ];
 
 
-    public static function getLeaveIdByAgentId($leave_id)
+    public static function getAgentIdByLeaveId($leave_id)
     {
         $result = self::where('leave_id',$leave_id)->get();
         return $result;
@@ -31,4 +29,5 @@ class LeaveAgent extends Model
         $result = self::hasOne('App\User','id','agent_id');
         return $result;
     }
+
 }

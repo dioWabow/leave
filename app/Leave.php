@@ -46,8 +46,14 @@ class Leave extends BaseModel
             
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
-                if ($key == 'tag_id' && is_array($value)) {
+                if ($key == 'tag_id') {
                     
+                    if (!is_array($value)){
+                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                        $value = explode(',',$value);
+
+                    }
+
                     $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'start_time') {
@@ -76,9 +82,15 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public function getLeavesHoursTotal($data)
+    public function Type()
     {
-        $result = $data->whereNotIn('tag_id','7')->sum('hours');
+        $result = $this->hasOne('App\Type', 'id', 'type_id');
+        return $result;
+    }
+
+    public function Tag()
+    {
+        $result = $this->hasOne('App\Tag', 'id', 'tag_id');
         return $result;
     }
 }

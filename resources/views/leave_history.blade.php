@@ -1,5 +1,5 @@
 <!-- /.tab-pane -->
-<div class="{{Request::is('leaves/my/history/*') ? 'active' : ''}} tab-pane" id="list">
+<div class="{{Request::is('leaves/my/history/*') ? 'active' : ''}} tab-pane">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
     <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my_history', ['user_id' => 1 ]) }}" method="POST">
       @if(count($model->order_by)>0)
@@ -28,13 +28,13 @@
               假別：
               <select id="search_leave_type" name="search[type_id]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="1" @if (count($search)>0 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
-                <option value="2" @if (count($search)>0 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
-                <option value="3" @if (count($search)>0 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
-                <option value="4" @if (count($search)>0 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
-                <option value="5" @if (count($search)>0 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
-                <option value="6" @if (count($search)>0 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
-                <option value="7" @if (count($search)>0 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
+                <option value="1" @if (count($search)>2 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
+                <option value="2" @if (count($search)>2 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
+                <option value="3" @if (count($search)>2 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
+                <option value="4" @if (count($search)>2 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
+                <option value="5" @if (count($search)>2 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
+                <option value="6" @if (count($search)>2 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
+                <option value="7" @if (count($search)>2 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
               </select>
               &nbsp;
               區間：
@@ -44,7 +44,7 @@
               <label>
               狀態：
               <select id="search_tag_id" name="search[tag_id]" class="form-control">
-                <option value="" selected="selected">全部</option>
+                <option value="7,8,9" selected="selected">全部</option>
                 <option value="7" @if (count($search)>0 && $search['tag_id'] == '7') selected="selected" @endif>已取消</option>
                 <option value="8" @if (count($search)>0 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
                 <option value="9" @if (count($search)>0 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
@@ -76,28 +76,24 @@
           <tbody>
           @foreach ($dataProvider as $value)
             <tr class="clickable-row" data-href="leave_view.html" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
-            @foreach (App\Tag::getLeavesTagIdByTagId($value->tag_id) as $tag_id)
               <td>
                 <button type="button"
-                  @if($tag_id->id == 7) class="btn"
-                  @elseif($tag_id->id == 8) class="btn bg-maroon"
-                  @elseif($tag_id->id == 9) class="btn bg-navy"
+                  @if($value->tag_id == 7) class="btn"
+                  @elseif($value->tag_id == 8) class="btn bg-maroon"
+                  @elseif($value->tag_id == 9) class="btn bg-navy"
                   @endif>
-                  {{$tag_id->name}}
+                  {{ $value->tag->name }}
                 </button>
               </td>
-            @endforeach
-            @foreach (App\Type::getLeavesTypeIdByTypeId($value->type_id) as $type_id)
-              <td>{{$type_id->name}}</td>
-            @endforeach
-            <td>{{$value->start_time}}~{{$value->end_time}}</td>
-            <td>{{$value->reason}}</td>
+              <td>{{ $value->type->name }}</td>
+              <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+              <td>{{ $value->reason }}</td>
               <td>
-                @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+                @foreach (App\LeaveAgent::getAgentIdByLeaveId($value->id) as $agent)
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->user->nickname }}" width="50px">
                 @endforeach
               </td>
-              <td id="hours">{{$value->hours}}</td>
+              <td>{{ $value->hours }}</td>
             </tr>
             @endforeach
             @if(count($dataProvider) == 0)
@@ -113,7 +109,7 @@
               <th></th>
               <th></th>
               <th class="pull-right">總計(Hr)</th>
-              <th>{{$leaves_totle_hours}}</th>
+              <th>{{ $leaves_totle_hours }}</th>
             </tr>
           </tfotter>
         </table>

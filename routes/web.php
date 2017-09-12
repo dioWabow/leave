@@ -99,23 +99,32 @@ Route::get('/users_form.html', function () {
 })->name('users_form');
 
 
-Route::match(['get', 'post'], '/demo/image',[
-    'uses'=> 'DemoControllor@getImage',
-    'as'=>'demo_image',
-]);
-Route::any('/leaves/my/prove/{user_id}',[
-    'uses'=> 'LeavesController@getProve',
-    'as'=>'leaves_my_prove',
-]);
-Route::any('/leaves/my/upcoming/{user_id}',[
-    'uses'=> 'LeavesController@getUpcoming',
-    'as'=>'leaves_my_upcoming',
-]);
-Route::any('leaves/my/history/{user_id}',[
-    'uses'=> 'LeavesController@getHistory',
-    'as'=>'leaves_my_history',
-]);
-Route::get('/leaves/my/delete/{id}',[
-    'uses'=> 'LeavesController@postDelete',
-    'as'=>'leaves_my_delete',
-]);
+    Route::match(['get', 'post'], '/demo/image',[
+        'uses'=> 'DemoControllor@getImage',
+        'as'=>'demo_image',
+    ]);
+
+    # 我的假單
+    Route::group(['prefix'=>'leaves/my'], function(){
+
+        Route::any('prove/{user_id}',[
+            'uses'=> 'LeavesController@getProve',
+            'as'=>'leaves_my_prove',
+        ]);
+
+        Route::any('upcoming/{user_id}',[
+            'uses'=> 'LeavesController@getUpcoming',
+            'as'=>'leaves_my_upcoming',
+        ]);
+
+        Route::any('history/{user_id}',[
+            'uses'=> 'LeavesController@getHistory',
+            'as'=>'leaves_my_history',
+        ]);
+
+        Route::get('delete/{id}',[
+            'uses'=> 'LeavesController@postDelete',
+            'as'=>'leaves_my_delete',
+        ]);
+
+    });

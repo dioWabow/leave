@@ -186,6 +186,7 @@ return [
          */
          App\Providers\LeaveHelperServiceProvider::class,
          App\Providers\WebHelperServiceProvider::class,
+         App\Providers\UrlHelperServiceProvider::class,
 
     ],
 
@@ -243,6 +244,7 @@ return [
         */
         'LeaveHelper' => App\Facades\LeaveHelper::class,
         'WebHelper' => App\Facades\WebHelper::class,
+        'UrlHelper' => App\Facades\UrlHelper::class,
 
     ],
 

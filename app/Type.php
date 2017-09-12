@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Type extends Model
+class Type extends BaseModel
 {
     protected $fillable = [
         'name',
@@ -20,10 +18,4 @@ class Type extends Model
         'order_way',
         'pagesize',
     ];
-    
-    public static function getLeavesTypeIdByTypeId($type_id) 
-    {
-        $result = self::where('id',$type_id)->get();
-        return $result;
-    }
 }

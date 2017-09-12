@@ -1,8 +1,8 @@
 	<!-- /.tab-pane -->
-  <div class="{{Request::is('leaves/my/upcoming/*') ? 'active' : ''}} tab-pane" id="upcoming">
+<div class="{{Request::is('leaves/my/upcoming/*') ? 'active' : ''}} tab-pane" id="upcoming">
   <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my_upcoming', ['user_id' => 1 ]) }}" method="POST">
     <div class="dataTables_wrapper form-inline dt-bootstrap">
-     @if(count($model->order_by)>0)
+      @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
       @else
@@ -26,34 +26,32 @@
             <tbody>
             </form>
             @foreach ($dataProvider as $value)
-            <tr class='clickable-row' data-href='leave_manager_view.html'>
-                @foreach (App\Type::getLeavesTypeIdByTypeId($value->type_id) as $type_id)
-                  <td>{{$type_id->name}}</td>
-                @endforeach
-                <td>{{$value->start_time}} ~ {{$value->end_time}}</td>
-                <td>{{$value->reason}}</td>
+              <tr class="clickable-row" data-href="leave_manager_view.html">
+                <td>{{ $value->type->name }}</td>
+                <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+                <td>{{ $value->reason }}</td>
                 <td>
-                  @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                    <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+                  @foreach (App\LeaveAgent::getAgentIdByLeaveId($value->id) as $agent)
+                    <img src="{{ UrlHelper::getUserAvatarUrl($agent->user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
                   @endforeach
                 </td>
-                <td>{{$value->hours}}</td>
+                <td>{{ $value->hours }}</td>
                 <td class="text-red">
-                  {{ LeaveHelper::getDiffDays($value->start_time) }}
+                  {{ LeaveHelper::getDiffDaysLabel($value->start_time) }}
                 </td>
               </tr>
-                @endforeach
-                @if(count($dataProvider) == 0)
-                <tr class="">
-                  <td colspan="6" align="center"><span class="glyphicon glyphicon-search"> 沒有相關結果</span></td>
-                </tr>
-                @endif
-            </tbody>
-          </table>
-        </div>
+            @endforeach
+            @if(count($dataProvider) == 0)
+              <tr class="">
+                <td colspan="6" align="center"><span class="glyphicon glyphicon-search"> 沒有相關結果</span></td>
+              </tr>
+            @endif
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+</div>
 <!-- /.tab-pane -->
 <script>
 $('.sort').on('click', function(){
