@@ -5,7 +5,7 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="{{ route('root_path') }}/dist/img/wabow_logo.png"></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>哇寶</b>請假系統</span>
     </a>
@@ -215,14 +215,14 @@
             <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
-            <li class="treeview ">
+            <li class="treeview @if(Request::is('report/*'))active @endif">
           <a href="#"><i class="fa fa-bar-chart"></i> <span>月/年報表</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="#"><i class="fa fa-circle-o"></i>報表</a></li>
+            <li  @if(Request::is('report/*')) class="active" @endif><a href="{{ route('report/index') }}"><i class="fa fa-circle-o"></i>報表</a></li>
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
           </ul>
         </li>

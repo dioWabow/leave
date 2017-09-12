@@ -92,7 +92,7 @@
 									<tbody>
 										<tr class='clickable-row' data-href='leave_list.html'>
 											<td>
-												<img src="dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
+												<img src="{{route('root_path')}}/dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
 											</td>
 											<td>毛毛</td>
 											<td>4</td>
@@ -108,7 +108,7 @@
 										</tr>
 										<tr class='clickable-row' data-href='leave_list.html'>
 											<td>
-												<img src="dist/img/users/dio.png" class="img-circle" alt="Dio" width="50px">
+												<img src="{{route('root_path')}}/dist/img/users/dio.png" class="img-circle" alt="Dio" width="50px">
 											</td>
 											<td>Dio</td>
 											<td>4</td>
@@ -124,7 +124,7 @@
 										</tr>
 										<tr class='clickable-row' data-href='leave_list.html'>
 											<td>
-												<img src="dist/img/users/wei.png" class="img-circle" alt="Wei" width="50px">
+												<img src="{{route('root_path')}}/dist/img/users/wei.png" class="img-circle" alt="Wei" width="50px">
 											</td>
 											<td>Wei</td>
 											<td>4</td>
@@ -140,7 +140,7 @@
 										</tr>
 										<tr class='clickable-row' data-href='leave_list.html'>
 											<td>
-												<img src="dist/img/users/eno.png" class="img-circle" alt="Eno" width="50px">
+												<img src="{{route('root_path')}}/dist/img/users/eno.png" class="img-circle" alt="Eno" width="50px">
 											</td>
 											<td>Eno</td>
 											<td>4</td>
@@ -156,7 +156,7 @@
 										</tr>
 										<tr class='clickable-row' data-href='leave_list.html'>
 											<td>
-												<img src="dist/img/users/lube.png" class="img-circle" alt="Lube" width="50px">
+												<img src="{{route('root_path')}}/dist/img/users/lube.png" class="img-circle" alt="Lube" width="50px">
 											</td>
 											<td>Lube</td>
 											<td>4</td>
