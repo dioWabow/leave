@@ -1,3 +1,6 @@
+#2017-09-12 michael 團隊設定 patent_id 預設為0
+ALTER TABLE `teams` CHANGE `parent_id` `parent_id` INT(7) NOT NULL DEFAULT '0' COMMENT '上級團隊';
+
 #2017-09-11 michael 團隊設定 user_id 預設給null
 ALTER TABLE `users_teams` CHANGE `user_id` `user_id` INT(7) NULL DEFAULT NULL COMMENT '使用者', CHANGE `team_id` `team_id` INT(11) NULL DEFAULT NULL COMMENT '團隊';
 
