@@ -11,33 +11,39 @@ use App\Http\Controllers\Controller;
 
 class TeamController extends Controller
 {
-    public function getAllTeam()
-    {
-    	$model = new Team;
-
-    	$result = $model->getAllTeam();
-
-    	return view('teams', compact(
-    		'result'
-    	));
-    }
-
     public function getAllTeamAndUser()
     {
+        // Team User UserTeam
         $model = new Team;
 
         $userModel = new User;
 
         $userTeamModel = new UserTeam;
 
+        // 抓全部組別 抓全部人員 抓已被分配的user及manager名單
         $team_result = $model->getAllTeam();
 
         $user_result = $userModel->getAllUsers();
 
-        $userteam_result = $userTeamModel->getAllUserTeamData();
+        $team_user_result = $userTeamModel->getAllTeamUser()->toArray();
+
+        $team_manager_result = $userTeamModel->getAllTeamManager()->toArray();
+
+        // 將被分配的user及manager名單 轉成array
+        // 前台用inarray方式判斷
+        $team_user_list = [];
+        $team_manager_list = [];
+
+        foreach ($team_user_result as $value) {
+            $team_user_list[$value['team_id']][] = $value['user_id'];
+        }
+
+        foreach ($team_manager_result as $value) {
+            $team_manager_list[$value['team_id']][] = $value['user_id'];
+        }
 
         return view('teams', compact(
-            'team_result', 'user_result', 'userteam_result'
+            'team_result', 'user_result', 'team_user_list', 'team_manager_list'
         ));
     }
 

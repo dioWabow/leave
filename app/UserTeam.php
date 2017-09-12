@@ -56,9 +56,15 @@ class UserTeam extends Model
         return $result;
     }
 
-    public static function getAllUserTeamData()
+    public static function getAllTeamUser()
     {
-        $result = self::get();
+        $result = self::where("role", 'user')->get();
+        return $result;
+    }
+
+    public static function getAllTeamManager()
+    {
+        $result = self::where("role", 'manager')->get();
         return $result;
     }
 

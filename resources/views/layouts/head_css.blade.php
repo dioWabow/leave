@@ -123,6 +123,7 @@ $(function () {
 </script>
 
 <!--天災假調整用-->
+@if(Request::is('holidies/*'))
 <script>
 $(function () {
     var $naturalDisasterList = $('.naturalDisasterList');
@@ -143,6 +144,7 @@ $(function () {
     });
 });
 </script>
+@endif
 
 
 <!-- 團隊設定用 -->

@@ -118,15 +118,15 @@
 								<label>人員</label>
 								<select class="form-control select2" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
 								@foreach($user_result as $user_data)
-								@foreach($userteam_result as $userteam_data)
-									@if("{{$team_data->id}}" == "{{$userteam_data->team_id}}")
-										@if("{{$user_data->id}}" == "{{$userteam_data->user_id}}")
-										<option value="{{$user_data->id}}" selected="">{{$user_data->nickname}}</option>
+									@if(array_key_exists("$team_data->id", $team_user_list))
+										@if(in_array($user_data->id, $team_user_list[$team_data->id]))
+											<option value="{{$user_data->id}}" selected="">{{$user_data->nickname}}</option>
+										@else
+											<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
 										@endif
 									@else
-									<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+										<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
 									@endif
-								@endforeach
 								@endforeach
 								</select>
 							</div>
@@ -134,8 +134,16 @@
 								<label>主管</label>
 								<select class="form-control select2" name="managers[{{$team_data->id}}][]" data-placeholder="請選擇主管">
 								@foreach($user_result as $user_data)
-									<option value="">請選擇主管</option>
-									<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+									@if(array_key_exists("$team_data->id", $team_manager_list))
+										@if(in_array($user_data->id, $team_manager_list[$team_data->id]))
+											<option value="{{$user_data->id}}" selected="">{{$user_data->nickname}}</option>
+										@else
+											<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+										@endif
+									@else
+										<option value="">請選擇主管</option>
+										<option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+									@endif
 								@endforeach
 								</select>
 							</div>
@@ -145,7 +153,7 @@
 					<div class="box-footer">
 						<div class="pull-right">
 							<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
-							<button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i> Send</button>
+							<button type="submit" class="btn btn-primary" id="data_post"><i class="fa fa-send-o"></i> Send</button>
 						</div>
 					</div>
 				</div>

@@ -20,15 +20,20 @@ class UserTeamController extends Controller
         // dd($teams);
         $type = false;
 
+        // 每次送出post 都會清空userTeam 的db 用新的資料蓋過
+        $model = new UserTeam;
+        $model->truncate();
 
-        foreach ($teams as $key => $value) {
-            foreach ($value as $member) {
-                $user_list = ['role' => 'user', 'user_id' => $member, 'team_id' => $key];
-                $model = new UserTeam;
-                $model->fill($user_list);
+        if(!empty($teams)) {
+            foreach ($teams as $key => $value) {
+                foreach ($value as $member) {
+                    $user_list = ['role' => 'user', 'user_id' => $member, 'team_id' => $key];
+                    $model = new UserTeam;
+                    $model->fill($user_list);
 
-                if ($model->save()) {
-                    $type = true;
+                    if ($model->save()) {
+                        $type = true;
+                    }
                 }
             }
         }

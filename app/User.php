@@ -101,7 +101,7 @@ class User extends BaseModel
         $result = $this::hasMany('App\UserTeam','user_id','id');
         return $result;
     }
-    
+
     /**
      * 搜尋table單個資料
      *
