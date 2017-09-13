@@ -37,10 +37,10 @@ class SystemConfController extends Controller
      {
         $input = $request->input('config');
 
-        $image_url = ImageHelper::uploadImages("config",$this->image_path,"company_logo");
+        $image_url = ImageHelper::uploadImages("company_logo",$this->image_path,"company_logo");
         if (!empty($image_url)) {
 
-            $input["company_logo"] = $image_url[0];
+            $input["company_logo"] = $image_url;
 
         }
 
