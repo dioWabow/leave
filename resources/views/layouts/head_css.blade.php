@@ -280,7 +280,45 @@ $(document).ready(function () {
 
   });
 
+  $('form[name=member_form]').submit(function(event){
+
+    // 跑所有team
+    $('.member_list').each(function(){
+
+      $team = $(this).attr('team_id');
+
+      // 跑團隊人員 與 主管人員
+      $team_member = $('#member_'+$team).select2('val');
+      $team_manager = $('#manager_'+$team).select2('val');
+
+      // select2 抓出來型態不是string
+      if(!$team_member == "") {
+        $team_member = $team_member.toString();
+      }
+
+      // 當有選主管才要判斷
+      if($team_manager != ""){
+
+        $team_manager.toString();
+
+        if ($team_member == $team_manager){
+          event.preventDefault();
+          alert('人員不能同時為主管!!');
+
+        } else if($team_member.match($team_manager)) {
+          event.preventDefault();
+          alert('人員不能同時為主管!!');
+
+        }
+      }
+
+    });
+
 });
+
+
+});
+
 </script>
 @endif
 

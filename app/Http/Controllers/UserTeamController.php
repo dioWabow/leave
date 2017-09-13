@@ -15,6 +15,8 @@ class UserTeamController extends Controller
     public function postMemberSet(Request $request)
     {
         $teams = $request->teams;
+
+        // dd($teams);
         $managers = $request->managers;
 
         // dd($teams);

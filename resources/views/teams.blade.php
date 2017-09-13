@@ -99,7 +99,7 @@
 		</div>
 
 		<div class="col-md-12">
-			<form action="{{ route('teams/memberSet')}}" method="POST">
+			<form action="{{ route('teams/memberSet')}}" method="POST" name="member_form">
 				<div class="box box-info">
 					<div class="box-header with-border">
 						<h3 class="box-title">夥伴設定</h3>
@@ -110,13 +110,13 @@
 					</div>
 					<div class="box-body" id="member_set">
 					@foreach($team_result as $team_data)
-						<div class="form-group"><div class="row">
+						<div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}"><div class="row">
 							<div class="col-md-2">
 								<label>{{$team_data->name}}</label>
 							</div>
 							<div class="col-md-8">
 								<label>人員</label>
-								<select class="form-control select2" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員">
+								<select class="form-control select2  team_member" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員" id="member_{{$team_data->id}}" member_id="{{$team_data->id}}">
 								@foreach($user_result as $user_data)
 									@if(array_key_exists("$team_data->id", $team_user_list))
 										@if(in_array($user_data->id, $team_user_list[$team_data->id]))
@@ -132,7 +132,7 @@
 							</div>
 							<div class="col-md-2">
 								<label>主管</label>
-								<select class="form-control select2" name="managers[{{$team_data->id}}][]" data-placeholder="請選擇主管">
+								<select class="form-control select2 team_manager" name="managers[{{$team_data->id}}][]" data-placeholder="請選擇主管" id="manager_{{$team_data->id}}" manager_id="{{$team_data->id}}">
 								@foreach($user_result as $user_data)
 									@if(array_key_exists("$team_data->id", $team_manager_list))
 										@if(in_array($user_data->id, $team_manager_list[$team_data->id]))
