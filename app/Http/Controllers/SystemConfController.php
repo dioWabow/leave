@@ -10,12 +10,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use Image; //使用圖片簡寫
+use ImageHelper;
+use ConfigHelper;
+use UrlHelper;
 
 
 class SystemConfController extends Controller
 {
-    protected $image_root_path;
     protected $image_path;
 
     /**
@@ -24,7 +25,6 @@ class SystemConfController extends Controller
     public function __construct()
     {
         $this->image_path = '';
-        $this->image_root_path = storage_path() . '/app/public/' . $this->image_path;
     }
     /**
      * 更新
@@ -37,10 +37,10 @@ class SystemConfController extends Controller
      {
         $input = $request->input('config');
 
-        $image_url = $this->getImage($request);
+        $image_url = ImageHelper::uploadImages("config",$this->image_path,"company_logo");
         if (!empty($image_url)) {
 
-            $input["company_logo"] = $image_url;
+            $input["company_logo"] = $image_url[0];
 
         }
 
@@ -62,7 +62,7 @@ class SystemConfController extends Controller
         
         if (!$error) {
 
-            return Redirect::to('/config/edit')->withErrors(['msg' => '更新成功']);
+            return Redirect::route('config/edit');
 
         } else {
 
@@ -87,28 +87,6 @@ class SystemConfController extends Controller
 
         }
         return view('system_conf', compact('config'));
-    }
-
-    /**
-    * 上傳圖片 demo
-    * 注意：須於 public 下建立連結 - php artisan storage:link 
-    */
-    public function getImage (Request $request)
-    {
-        $image_url = '';
-        if($request->hasFile('config') && $request->file('config')['company_logo']->isValid()) {
-            $input_file = Input::file('config');
-            $file_extension = $input_file['company_logo']->getClientOriginalExtension();
-            
-            $filename = 'company_logo.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
-            $image = $this->image_root_path . $filename;
-
-            Image::make($input_file['company_logo'])->save($image);
-
-            $image_url = Storage::url($this->image_path . $filename);
-        }
-
-        return $image_url;
     }
    
 }

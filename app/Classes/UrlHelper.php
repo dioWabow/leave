@@ -22,4 +22,9 @@ class UrlHelper
     {
         return (!empty($filename))? url(Storage::url('avatar/' . $filename)) : '#';
     }
+
+    public function getCompanyLogoUrl($filename)
+    {
+        return (!empty($filename))? url(Storage::url($filename)) : '#';
+    }
 }

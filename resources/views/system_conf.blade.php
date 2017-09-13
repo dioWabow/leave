@@ -22,7 +22,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">公司資料</h3>
                 </div> 
-                <form id="form_config_company" action="{{ route('config_update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                <form id="form_config_company" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="config_company_name" class="col-sm-2 control-label">公司名稱</label>
@@ -49,11 +49,6 @@
                         </div>
                         <div class="form-group">
                             <label for="config_company_logo" class="col-sm-2 control-label"></label>
-                            @if( $config['company_logo'] != "") 
-                            <div class="col-sm-10">
-                                <img src = ".\dist\img\{{ $config['company_logo'] }}">
-                            </div>
-                            @endif
                         </div>
                         <div class="form-group">
                             <label for="config_company_rules" class="col-sm-2 control-label">人事規章Url</label>
@@ -88,7 +83,7 @@
                 <div class="box-header with-border">
                 <h3 class="box-title">SMTP 設定</h3>
                 </div>
-                <form id="form_config_smtp" action="{{ route('config_update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                <form id="form_config_smtp" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="form-group">
                     <label for="config_smtp_host" class="col-sm-2 control-label">HOST</label>
@@ -149,8 +144,8 @@
                     <button type="reset" class="btn btn-default reset">重置</button>
                     <button type="submit" class="btn btn-success pull-right">送出</button>
                 </div>
-                <!-- /.box-footer -->
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <!-- /.box-footer -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
         </div>
@@ -161,7 +156,7 @@
                 <div class="box-header with-border">
                 <h3 class="box-title">登入設定</h3>
                 </div>
-                <form id="form_config_google" action="{{ route('config_update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                <form id="form_config_google" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="form_config_google_login" class="col-sm-3 control-label">Google-自動登入</label>
@@ -203,8 +198,8 @@
                         <button type="reset" class="btn btn-default reset">重置</button>
                         <button type="submit" class="btn btn-warning pull-right">送出</button>
                     </div>
-                <!-- /.box-footer -->
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <!-- /.box-footer -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
 
@@ -212,7 +207,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Slack 設定</h3>
                 </div>
-                <form id="form_config_slack" action="{{ route('config_update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                <form id="form_config_slack" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="form_config_slack_status" class="col-sm-2 control-label">啟用</label>
@@ -253,37 +248,38 @@
                         <button type="submit" class="btn btn-danger pull-right">送出</button>
                     </div>
 
-                <!-- /.box-footer -->
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <!-- /.box-footer -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
             </div>
             <div class="box box-default">
-              <div class="box-header with-border">
-              <h3 class="box-title">其他設定</h3>
-              </div>
-              <form id="form_config_other" action="" class="form-horizontal" method="POST" enctype="multipart/form-data" _lpchecked="1">
-                  <div class="box-body">
-                      <div class="form-group">
-                          <label for="form_config_google_login" class="col-sm-3 control-label">大BOSS天數</label>
-                          <div class="col-sm-9">
+                <div class="box-header with-border">
+                    <h3 class="box-title">其他設定</h3>
+                </div>
+                <form id="form_config_other" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data" _lpchecked="1">
+                    <div class="box-body">
+                        <div class="form-group">
+                        <label for="form_config_google_login" class="col-sm-3 control-label">大BOSS天數</label>
+                            <div class="col-sm-9">
                             <input type="number" class="form-control" id="config_boss_days" name="config[boss_days]" placeholder="需要大BOSS審核的天數" value="{{ $config['boss_days'] }}">
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="config_google_json" class="col-sm-3 control-label">董事天數</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="config_google_json" class="col-sm-3 control-label">董事天數</label>
 
-                          <div class="col-sm-9">
-                          <input type="number" class="form-control" id="config_boss_days" name="config[director_days]" placeholder="需要董事審核的天數" value="{{ $config['director_days'] }}">
-                          </div>
-                      </div>
-                  </div>
-                  <!-- /.box-body -->
-                  <div class="box-footer">
-                      <button type="reset" class="btn btn-default">重置</button>
-                      <button type="submit" class="btn btn-default pull-right">送出</button>
-                  </div>
-              <!-- /.box-footer -->
-              </form>
+                            <div class="col-sm-9">
+                            <input type="number" class="form-control" id="config_boss_days" name="config[director_days]" placeholder="需要董事審核的天數" value="{{ $config['director_days'] }}">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="submit" class="btn btn-default pull-right">送出</button>
+                    </div>
+                    <!-- /.box-footer -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </form>
             </div>
         </div>
     </div>
@@ -327,7 +323,7 @@
     var $option = {'showUpload': false};
 
     @if( $config['company_logo'] != '')
-    $option.initialPreview = ['{{route('root_path')}}{{ $config['company_logo'] }}'];
+    $option.initialPreview = ['{{ UrlHelper::getCompanyLogoUrl($config['company_logo']) }}'];
     $option.initialPreviewAsData = true;
     @endif
 

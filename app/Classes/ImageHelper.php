@@ -13,18 +13,20 @@ class ImageHelper
     
     private $_save_folder;
     private $_file_path;
+    private $_file_name;
 
     function __construct ()
     {
         $this->upload_path = storage_path() . '/app/public/';
     }
 
-    public function uploadImages($name, $folder = 'tmp')
+    public function uploadImages($input_name, $folder = 'tmp',$file_name = "")
     {
         $this->_save_folder = $folder . '/';
         $this->_file_path = $this->upload_path . $this->_save_folder;
+        $this->_file_name = $file_name;
 
-        $input = $this->getAvailableFiles($name);
+        $input = $this->getAvailableFiles($input_name);
         if($input === null) return null;
 
         if(is_array($input)) {
@@ -54,11 +56,11 @@ class ImageHelper
         return $this->_file_path;
     }
 
-    private function getAvailableFiles($name) 
+    private function getAvailableFiles($input_name) 
     {
-        if(Input::hasFile($name)) {
+        if(Input::hasFile($input_name)) {
 
-            $input = Input::file($name);
+            $input = Input::file($input_name);
             if(is_array($input)) {
 
                 $result = array();
@@ -82,8 +84,12 @@ class ImageHelper
     {
         $file_extension = $file->getClientOriginalExtension();
         
-        $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
-
+        if (!empty($this->_file_name)) {
+            $filename = $this->_file_name . '.' . $file_extension; //若有指定命名時使用指定名字
+        }else{
+            $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
+        }
+        
         $path = $this->_file_path . $filename;
         $save = Image::make($file)->save($path);
 

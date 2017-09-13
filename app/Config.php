@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config extends Model
+class Config extends BaseModel
 {
 
     //可以傳入數值的欄位
