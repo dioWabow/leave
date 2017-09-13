@@ -23,8 +23,8 @@ class Team extends BaseModel
     
     public static function getColorByKey($key = "")
     {
-	$result = self::where("id", $key)->pluck('color')->first();
-	return $result;
+	   $result = self::where("id", $key)->pluck('color')->first();
+	   return $result;
     }
 
     public static function UpdateTeamParentId($id,$parent_id)
@@ -41,6 +41,20 @@ class Team extends BaseModel
         if (!empty($model)) {
 
             $result = true;
+
+        }
+
+        return $result;
+    }
+
+    public static function getTeamParentFullName($id)
+    {
+
+        $parent_id = self::where("id", $id)->pluck("parent_id");
+
+        if ($parent_id != "0") {
+
+            $result = self::where("id", $parent_id)->pluck("name")->first() . " / ";
 
         }
 

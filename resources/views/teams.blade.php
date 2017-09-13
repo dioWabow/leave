@@ -130,7 +130,11 @@
 					@foreach($team_result as $team_data)
 						<div class="form-group"><div class="row">
 							<div class="col-md-2">
-								<label>{{$team_data->name}}</label>
+								@if (empty($team_data->parent_id))
+									<label>{{$team_data->name}}</label>
+								@else
+									<label>{{$team_data->parent_name}}{{$team_data->name}}</label>
+								@endif
 							</div>
 							<div class="col-md-8">
 								<label>人員</label>

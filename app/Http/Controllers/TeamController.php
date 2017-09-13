@@ -24,6 +24,7 @@ class TeamController extends Controller
         $team_result = $model->getAllTeam();
         foreach ($team_result as $key => $value) {
             $team_result[$key]->has_children = Team::getHasChildrenTeam($value->id);
+            $team_result[$key]->parent_name = Team::getTeamParentFullName($value->id);
         }
 
         $user_result = $userModel->getAllUsers();
