@@ -99,7 +99,30 @@ Route::get('/users_form.html', function () {
 })->name('users_form');
 
 
-Route::match(['get', 'post'], '/demo/image',[
-    'uses'=> 'DemoControllor@getImage',
-    'as'=>'demo_image',
-]);
+    Route::match(['get', 'post'], '/demo/image',[
+        'uses'=> 'DemoControllor@getImage',
+        'as'=>'demo_image',
+    ]);
+
+    # 我的假單
+    Route::group(['prefix'=>'leaves/my'], function(){
+        Route::any('prove/{user_id}',[
+            'uses'=> 'LeavesMyController@getProve',
+            'as'=>'leaves_my_prove',
+        ]);
+
+        Route::any('upcoming/{user_id}',[
+            'uses'=> 'LeavesMyController@getUpcoming',
+            'as'=>'leaves_my_upcoming',
+        ]);
+
+        Route::any('history/{user_id}',[
+            'uses'=> 'LeavesMyController@getHistory',
+            'as'=>'leaves_my_history',
+        ]);
+
+        Route::get('delete/{id}',[
+            'uses'=> 'LeavesMyController@postDelete',
+            'as'=>'leaves_my_delete',
+        ]);
+    });

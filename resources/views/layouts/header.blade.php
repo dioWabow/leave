@@ -119,9 +119,9 @@
         <!-- Optionally, you can add icons to the links -->
         <li class=""><a href="{{ route('leave_form2') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li class="">
-          <a href="{{ route('leave') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
+          <a href="{{ route('leaves_my_prove', ['user_id' => 1] ) }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+              <small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveLeavesTotalByUserId(1) }}</small>
             </span>
           </a>
         </li>

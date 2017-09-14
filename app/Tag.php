@@ -2,14 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Tag extends Model
+class Tag extends BaseModel
 {
-    /**
+   /**
      * 與Model關聯的table
      *
      * @var string
      */
-    protected $table = 'tags';
+     protected $table = 'tags';
 }

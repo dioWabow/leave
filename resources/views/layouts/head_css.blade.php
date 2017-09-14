@@ -17,7 +17,7 @@
 <!-- daterange picker -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.css">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css"> 
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css">
 <!-- Bootstrap fileupload -->
 <link href="{{route('root_path')}}/plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 
@@ -246,23 +246,37 @@ $(function () {
 </script>
 
 <!-- 我的假單頁面用 -->
-  <script>
+@if(Request::is('leaves/my/history/*'))
+<script>
 $(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
+  $("#search_daterange").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+  });
 
-    $('#search_daterange').val('');
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
 
-    $("#leave_view_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/unsplash2.jpg'
-        ],
-        initialPreviewAsData: true,
-    });
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+  });
+
+  @if($model->start_time != '' || $model->end_time != '' ) 
+    $('#search_daterange').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+  @else
+    $('#search_daterange').val("");
+  @endif
+
+  $("#leave_view_fileupload").fileinput({
+      initialPreview: [
+          './dist/img/unsplash2.jpg'
+      ],
+      initialPreviewAsData: true,
+  });
 });
 </script>
+@endif
 
 <!--天災假調整用-->
 <script>
@@ -280,7 +294,7 @@ $(function () {
         locale: {format: 'YYYY-MM-DD'},
     }).each(function(){
         $(this).val($(this).attr('date'));
-    }).on('change', function(){ 
+    }).on('change', function(){
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
     });
 });
