@@ -108,12 +108,19 @@ class User extends BaseModel
      * @param  array   $where     搜尋條件
      * @return 資料object/false
      */
-    public static function getUserByEmail($email="") {
+    public static function getUserByEmail($email='')
+    {
 
-        $query = self::where("email", $email);
+        $query = self::where('email', $email);
 
         $result = $query->first();
 
+        return $result;
+    }
+
+    public static function getLeavesUserIdByUserId($user_id) 
+    {
+        $result = self::where('id', $user_id)->get();
         return $result;
     }
 }
