@@ -78,7 +78,7 @@
 						</div>
 						<div class="col-md-8">
 							<div class="dd nestable" id="nestable">
-								<ol class="dd-list">
+								<ol class="dd-list" id="team_set_list">
 								@foreach($team_result as $team_data)
                                     @if (empty($team_data->parent_id))
 									<li class="dd-item" data-id="{{$team_data->id}}" data-name="{{$team_data->name}}" data-new="0" data-deleted="0">

@@ -54,7 +54,7 @@
 <script src="{{route('root_path')}}/plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
 
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable.js"></script>
-<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=2"></script>
+<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=3"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- wabow -->
@@ -206,7 +206,7 @@ $(document).ready(function () {
       success: function(data) {
         if (data.result) {
           alert('新增成功');
-          $('.dd-list').append(data.html);
+          $('#team_set_list').append(data.html);
           $('.dd-empty').remove();
           $this.parents().find("input[id='addInputName']").val('');
           $this.parents().find("input[id='addInputColor']").val('');
@@ -256,6 +256,7 @@ $(document).ready(function () {
       success: function(data) {
         if (data.result) {
           alert('修改成功');
+          $("#menu-editor").fadeOut();
         }
       },
       error: function(jqXHR) {

@@ -77,10 +77,10 @@ class TeamController extends Controller
                 "<div class='dd-handle'>".$name."</div>".
                 "<span class='button-delete btn btn-default btn-xs pull-right' data-owner-id='".$id."'>".
                 "<i class='fa fa-times-circle-o' aria-hidden='true'></i>".
-                "</sapn>".
+                "</span>".
                 "<span class='button-edit btn btn-default btn-xs pull-right' data-owner-id='".$id."'>".
                 "<i class='fa fa-pencil' aria-hidden='true'></i>".
-                "</sapn>".
+                "</span>".
                 "</li>";
 
             return json_encode(

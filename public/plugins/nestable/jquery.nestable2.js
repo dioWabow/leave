@@ -124,7 +124,7 @@ var addToMenu = function() {
 $(function() {
 
     // set onclick events
-    $("#editButton").on("click", editMenuItem);
+    
 
     $("#nestable .button-delete").on("click", deleteFromMenu);
 
