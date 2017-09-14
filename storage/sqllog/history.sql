@@ -1,3 +1,6 @@
+#2017-09-14 michael 報表 leaves 新增扣薪欄位
+ALTER TABLE `leaves` ADD `deductions` INT(7) NULL DEFAULT NULL COMMENT '扣薪' AFTER `end_time`;
+
 #2017-08-29 carrie 假別管理 types 修改開始時間欄位名稱
 ALTER TABLE `types` CHANGE `strart_time` `start_time` TIMESTAMP NULL DEFAULT NULL COMMENT '可用區間(開始)';
 

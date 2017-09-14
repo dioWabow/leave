@@ -38,7 +38,6 @@
 							<div class="row">
 								<div class="col-sm-5">
 									<div class="label bg-blue" style="font-size:20px">2017-07</div>
-									<small class="badge">最後更新：2017-03-04 12:05:09</small>
 								</div>
 								<div class="col-sm-7">
 									<div class="pull-right">

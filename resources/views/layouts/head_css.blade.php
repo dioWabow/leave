@@ -118,7 +118,7 @@ $(function () {
     });
 });
 </script>
-
+@if(Request::is('disaster/*'))
 <!--天災假調整用-->
 <script>
 $(function () {
@@ -140,7 +140,7 @@ $(function () {
     });
 });
 </script>
-
+@endif
 
 <!-- 團隊設定用 -->
 <script>
