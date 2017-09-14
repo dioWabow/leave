@@ -133,7 +133,7 @@
 								@if (empty($team_data->parent_id))
 									<label>{{$team_data->name}}</label>
 								@else
-									<label>{{$team_data->parent_name}}{{$team_data->name}}</label>
+									<label>{{$team_data->parent_name}} / {{$team_data->name}}</label>
 								@endif
 							</div>
 							<div class="col-md-8">
