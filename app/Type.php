@@ -12,4 +12,17 @@ class Type extends Model
      * @var string
      */
     protected $table = 'types';
+
+    public static function getAllType() 
+    {
+        $result = self::get();
+        return $result;
+    }
+
+    public static function getTypeByException($exception)
+    {
+        $result = self::whereIn('exception', $exception)->get();
+        return $result;
+    }
+
 }

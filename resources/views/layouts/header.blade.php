@@ -65,7 +65,7 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">{{$annual_hours}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
@@ -101,7 +101,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/dio.png" class="img-circle" alt="Dio">
+          <img src="{{ route('root_path') }}/dist/img/dio.png" class="img-circle" alt="Dio">
         </div>
         <div class="pull-left info">
           <p>Dio</p>
@@ -117,7 +117,7 @@
         </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class=""><a href="{{ route('leave_form2') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class=""><a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li class="">
           <a href="{{ route('leave') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
