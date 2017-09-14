@@ -134,9 +134,4 @@ $(function() {
         e.preventDefault();
     });
 
-    $("#menu-add").submit(function(e) {
-        e.preventDefault();
-        addToMenu();
-    });
-
 });
