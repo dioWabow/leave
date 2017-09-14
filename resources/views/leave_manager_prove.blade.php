@@ -1,5 +1,5 @@
 <div class="{{(Request::is('leaves/manager/prove/*')) ? 'active' : ''}} tab-pane" id="prove">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_prove', ['user_id' => 1 ]) }}" method="POST">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_prove', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}" method="POST">
     <div class="dataTables_wrapper form-inline dt-bootstrap">
         @if(count($model->order_by)>0)
           <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -29,20 +29,22 @@
             </form>
             <tbody>
               @foreach ($dataProvider as $value)
-              <tr class='clickable-row' data-href='leave_manager_view.html'>
+              <tr class="clickable-row" data-href='leave_manager_view.html'>
                 <td>
                   <input type="checkbox" name="check" class="flat-red check" value="">
                 </td>
                   @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
-                  <td><img src="{{route('root_path')}}/storage/avatar/{{$user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
-                @endforeach
-                <td>{{$value->type->name}}</td>
+                    <td>
+                      <img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px">
+                    </td>
+                  @endforeach
+                <td>{{$value->fetchType->name}}</td>
                 <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
                 <td>{{ $value->reason }}</td>
                 <td>
-                @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
-                @endforeach
+                  @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
+                    <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+                  @endforeach
                 </td>
                 <td>{{ $value->hours }}</td>
                 <td class="text-red">
@@ -53,7 +55,7 @@
               @endforeach
               @if(count($dataProvider) == 0)
                 <tr class="">
-                  <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+                  <td colspan="9" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
                 </tr>
               @endif
           </tbody>
@@ -76,6 +78,7 @@
 </div>
 <script>
 $('.sort').on('click', function(){
+
 	var $sortname = $(this).attr('sortname');
 	var $order_by = "{{ $model->order_by }}";
 	var $order_way = "{{ $model->order_way }}";
@@ -87,6 +90,8 @@ $('.sort').on('click', function(){
 	} else {
     $("#order_way").val("DESC");
 	}
+  
 	$("#frmOrderby").submit();
+
 });
 </script>

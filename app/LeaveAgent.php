@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LeaveAgent extends Model
+class LeaveAgent extends BaseModel
 {
      /**
      * 與Model關聯的table
@@ -26,7 +24,7 @@ class LeaveAgent extends Model
         return $result;
     }
 
-    public function user() 
+    public function fetchUser() 
     {
         $result = self::hasOne('App\User','id','agent_id');
         return $result;

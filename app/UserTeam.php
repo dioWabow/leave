@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserTeam extends Model
+class UserTeam extends BaseModel
 {
     /**
      * 與Model關聯的table
@@ -56,15 +54,33 @@ class UserTeam extends Model
         return $result;
     }
 
-    public function team() 
+    public static function getManagerTeamByUserId($id) 
+    {
+        $result = self::where('user_id', $id)
+            ->where('role', 'manager')
+            ->pluck('team_id');
+        return $result;
+    }
+
+    public static function getUsersIdByTeamsId($id, $user_id) 
+    {
+        $result = self::whereIn('team_id', $id)
+            ->where('user_id', '!=', $user_id)
+            ->get()
+            ->pluck('user_id');
+        return $result;
+    }
+
+    public function fetchTeam() 
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;
     }
 
-    public function user()
+    public function fetchUser()
     {
         $result = $this::hasOne('App\User','id','user_id');
         return $result;
     }
+
 }

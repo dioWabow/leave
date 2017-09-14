@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Schema;
+use Schema;
 
 class Leave extends BaseModel
 {
@@ -41,19 +41,28 @@ class Leave extends BaseModel
     public function search($where = [])
     {
         $query = self::OrderedBy();
-        
         foreach ($where as $key => $value) {
             
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
-                if ($key == 'tag_id' && is_array($value)) {
+                if ($key == 'tag_id') {
                     
+                    if (!is_array($value)){
+                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                        $value = explode(',',$value);
+
+                    }
+
                     $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'id' && is_array($value)) {
 
                     $query->whereIn('id', $value);
 
+                } elseif ($key == 'user_id') {
+
+                    $query->whereIn('user_id', $value);
+                    
                 } elseif ($key == 'start_time') {
 
                     $query->where('start_time', '>' , $value);
@@ -92,25 +101,19 @@ class Leave extends BaseModel
     	return $result;
     }
 
-    public function User()
+    public function fetchUser()
     {
         $result = $this->hasOne('App\User', 'id' , 'user_id');
         return $result;
     }
 
-    public function Type()
+    public function fetchType()
     {
         $result = $this->hasOne('App\Type', 'id', 'type_id');
         return $result;
     }
 
-    public function Tag()
-    {
-        $result = $this->hasOne('App\Tag', 'id', 'tag_id');
-        return $result;
-    }
-
-    public function UserTeam()
+    public function fetchUserTeam()
     {
         $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
         return $result;

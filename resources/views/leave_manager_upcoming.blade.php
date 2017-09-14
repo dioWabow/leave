@@ -1,5 +1,5 @@
 <div class="{{(Request::is('leaves/manager/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_upcoming', ['user_id' => 1 ]) }}" method="POST">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_upcoming', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}" method="POST">
       <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
           <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -27,14 +27,14 @@
       @foreach ($dataProvider as $value)
         <tr class='clickable-row' data-href='leave_manager_view.html'>
           @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
-            <td><img src="{{ UrlHelper::getUserAvatarUrl($user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
+            <td><img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px"></td>
           @endforeach
-          <td>{{$value->type->name}}</td>
+          <td>{{$value->fetchType->name}}</td>
           <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
           <td>{{ $value->reason }}</td>
           <td>
           @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-            <img src="{{UrlHelper::getUserAvatarUrl($agent->user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+            <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
           @endforeach
           </td>
           <td>{{ $value->hours }}</td>
@@ -44,11 +44,17 @@
           <td><span class="footable-toggle fooicon fooicon-plus"></span></td>
         </tr>
       @endforeach
+      @if(count($dataProvider) == 0)
+        <tr class="">
+          <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+        </tr>
+      @endif
     </tbody>
   </table>
 </div>
 <script>
-$('.sort').on('click', function(){
+$('.sort').on('click', function() {
+
 	var $sortname = $(this).attr('sortname');
 	var $order_by = "{{ $model->order_by }}";
 	var $order_way = "{{ $model->order_way }}";
@@ -60,6 +66,8 @@ $('.sort').on('click', function(){
 	} else {
 			$("#order_way").val("DESC");
 	}
+  
 	$("#frmOrderby").submit();
+
 });
 </script>

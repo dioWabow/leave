@@ -8,7 +8,7 @@
 	<small>Teams Leave List</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('root_path') }}/index.html"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">團隊假單</li>
   </ol>
 </section>
@@ -19,10 +19,15 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{Request::is('leaves/manager/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_manager_prove', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="1 New Messages">1</span></a></li>
-					<li class="{{Request::is('leaves/manager/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_manager_upcoming', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="1 New Messages">1</span></a></li>
-					<li class="{{Request::is('leaves/manager/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_manager_history', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
-					<li><a href="#calendar" data-toggle="tab">行事曆（只有小主管＆主管有）</a></li>
+					<li class="{{ Request::is('leaves/manager/prove/*')? 'active' : '' }}"><a href="{{ route('leaves_manager_prove', [ 'user_id' => Auth::user()->id, 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }} New Messages">{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }}</span></a></li>
+					<li class="{{ Request::is('leaves/manager/upcoming/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager_upcoming', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }} New Messages">{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }}</span></a></li>
+					<li class="{{ Request::is('leaves/manager/history/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager_history', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
+					@if ( in_array($getRole,['manager','mini_manager']) )
+						<li class="{{ Request::is('leaves/manager/calendar/*') ? 'active' : '' }}">
+							<a href="{{ route('leaves_manager_calendar', [ 'user_id' => Auth::user()->id, 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('calc') }}
+							</a>
+						</li>
+					@endif
 				</ul>
 				<div class="tab-content">
 					<!-- /.tab-pane-prove -->
@@ -44,9 +49,9 @@
 					<!-- /.tab-pane -->
 					
 					<!-- /.tab-pane -->
-					<div class="tab-pane" id="calendar">
-						<div id="calendar"></div>
-					</div>
+					@if(Request::is('leaves/manager/calendar/*'))
+						@include('leave_manager_calendar')
+					@endif
 					<!-- /.tab-pane -->
 
 				</div>

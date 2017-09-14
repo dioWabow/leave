@@ -113,21 +113,28 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 團隊假單-主管
-    Route::any('leaves/manager/prove/{user_id}',[
-        'uses'=> 'LeavesManagerController@getProve',
-        'as'=>'leaves_manager_prove',
-    ]);
-    
-    Route::any('leaves/manager/upcoming/{user_id}',[
-        'uses'=> 'LeavesManagerController@getUpcoming',
-        'as'=>'leaves_manager_upcoming',
-    ]);
-    
-    Route::any('leaves/manager/history/{user_id}',[
-        'uses'=> 'LeavesManagerController@getHistory',
-        'as'=>'leaves_manager_history',
-    ]);
-    
+    Route::group(['prefix'=>'leaves/manager'], function(){
+        Route::any('prove/{user_id}/{role}',[
+            'uses'=> 'LeavesManagerController@getProve',
+            'as'=>'leaves_manager_prove',
+        ]);
+        
+        Route::any('upcoming/{user_id}/{role}',[
+            'uses'=> 'LeavesManagerController@getUpcoming',
+            'as'=>'leaves_manager_upcoming',
+        ]);
+        
+        Route::any('history/{user_id}/{role}',[
+            'uses'=> 'LeavesManagerController@getHistory',
+            'as'=>'leaves_manager_history',
+        ]);
+
+        Route::any('calendar/{user_id}/{role}',[
+            'uses'=> 'LeavesManagerController@getCalendar',
+            'as'=>'leaves_manager_calendar',
+        ]);
+    });
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[

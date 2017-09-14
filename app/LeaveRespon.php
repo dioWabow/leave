@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LeaveRespon extends Model
+class LeaveRespon extends BaseModel
 {
     /**
      * 與Model關聯的table
@@ -22,9 +20,9 @@ class LeaveRespon extends Model
     ];
 
      
-    public static function getUserIdByLeaveId($id)
+    public static function getLeaveIdByUserId($id)
     {
-        $result = self::where('user_id',$id)->pluck('leave_id')->all();
+        $result = self::where('user_id', $id)->pluck('leave_id')->all();
         return $result;
     }
 
