@@ -82,15 +82,15 @@
                   @elseif($value->tag_id == 8) class="btn bg-maroon"
                   @elseif($value->tag_id == 9) class="btn bg-navy"
                   @endif>
-                  {{ $value->tag->name }}
+                  {{ WebHelper::getLeaveTagsLabelForHistory($value->tag_id) }}
                 </button>
               </td>
-              <td>{{ $value->type->name }}</td>
+              <td>{{ $value->fetchType->name }}</td>
               <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
               <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getAgentIdByLeaveId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->user->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                 @endforeach
               </td>
               <td>{{ $value->hours }}</td>
@@ -132,6 +132,7 @@
 </div>
 <script>
 $('.sort').on('click', function(){
+
   var $sortname = $(this).attr('sortname');
   var $order_by = "{{ $model->order_by }}";
   var $order_way = "{{ $model->order_way }}";
@@ -143,7 +144,9 @@ $('.sort').on('click', function(){
   } else {
     $("#order_way").val("DESC");
   }
+
   $("#frmOrderby").submit();
+
 });
 
 function changePageSize(pagesize)

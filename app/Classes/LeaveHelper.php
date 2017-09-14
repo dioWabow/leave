@@ -4,19 +4,18 @@ namespace App\Classes;
 
 use App\Leave;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 
 class LeaveHelper
 {
     /**
      * 傳入user_id 取得 user的等待核准假單
-     * tag 狀態 2,3,4,5
+     * tag 狀態 1,2,3,4
      * 
      */
     public static function getProveLeavesTotalByUserId($id)
     {
-        $tag_id = [2,3,4,5];
-        return Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
+        $tag_id = [1,2,3,4];
+        return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
     }
     /**
      * 傳入user_id 取得 user的即將放假假單
@@ -26,7 +25,7 @@ class LeaveHelper
     public static function getUpComingLeavesTotalByUserId($id)
     {
         $tag_id = [9];
-        return Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
+        return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
     }
     /**
      * 傳入start_time 取得 倒數天數

@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Leave;
 use WebHelper;
 use LeaveHelper;
+use App\Leave;
 
 use Redirect;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class LeavesController extends Controller
+class LeavesMyController extends Controller
 {
    /**
-     * 列表-等待核准 Prvoe tag 2,3,4,5
+     * 列表-等待核准 Prvoe tag 1,2,3,4
      *
      * @return \Illuminate\Http\Response
     */
@@ -27,7 +27,7 @@ class LeavesController extends Controller
             $request->session()->forget('leaves_my');
             $request->session()->push('leaves_my.search', $search);
             $request->session()->push('leaves_my.order_by', $order_by);
-            $search['tag_id'] = [2,3,4,5];
+            $search['tag_id'] = [1,2,3,4];
 
         } else {
 
@@ -38,7 +38,7 @@ class LeavesController extends Controller
 
             } else {
 
-                $search['tag_id'] = [2,3,4,5];
+                $search['tag_id'] = [1,2,3,4];
                 $request->session()->forget('leaves_my');
 
             }
@@ -49,7 +49,7 @@ class LeavesController extends Controller
         $search['user_id'] = $user_id;
         $dataProvider = $model->fill($order_by)->search($search);
 
-        return  view('leave', compact(
+        return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
         ));
     }
@@ -90,7 +90,7 @@ class LeavesController extends Controller
         $search['user_id'] = $user_id;
         $dataProvider = $model->fill($order_by)->search($search);
 
-        return  view('leave', compact(
+        return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
         ));
     }
@@ -140,11 +140,10 @@ class LeavesController extends Controller
         $model = new Leave;
         // TODO 取登入者
         $search['user_id'] = $user_id;
-
         $dataProvider = $model->fill($order_by)->search($search);
         $leaves_totle_hours = LeaveHelper::getLeavesHoursTotal($dataProvider);
 
-        return  view('leave', compact(
+        return  view('leave_my', compact(
             'dataProvider', 'search', 'model', 'leaves_totle_hours'
         ));
     }

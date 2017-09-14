@@ -20,13 +20,13 @@ class LeaveAgent extends BaseModel
 
     public static function getAgentIdByLeaveId($leave_id)
     {
-        $result = self::where('leave_id',$leave_id)->get();
+        $result = self::where('leave_id', $leave_id)->get();
         return $result;
     }
 
-    public function user() 
+    public function fetchUser() 
     {
-        $result = self::hasOne('App\User','id','agent_id');
+        $result = self::hasOne('App\User', 'id', 'agent_id');
         return $result;
     }
 

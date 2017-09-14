@@ -82,13 +82,19 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public function Type()
+    public function fetchUser()
+    {
+        $result = $this->hasOne('App\User', 'id' , 'user_id');
+        return $result;
+    }
+
+    public function fetchType()
     {
         $result = $this->hasOne('App\Type', 'id', 'type_id');
         return $result;
     }
 
-    public function Tag()
+    public function fetchTag()
     {
         $result = $this->hasOne('App\Tag', 'id', 'tag_id');
         return $result;

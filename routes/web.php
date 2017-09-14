@@ -106,25 +106,23 @@ Route::get('/users_form.html', function () {
 
     # 我的假單
     Route::group(['prefix'=>'leaves/my'], function(){
-
         Route::any('prove/{user_id}',[
-            'uses'=> 'LeavesController@getProve',
+            'uses'=> 'LeavesMyController@getProve',
             'as'=>'leaves_my_prove',
         ]);
 
         Route::any('upcoming/{user_id}',[
-            'uses'=> 'LeavesController@getUpcoming',
+            'uses'=> 'LeavesMyController@getUpcoming',
             'as'=>'leaves_my_upcoming',
         ]);
 
         Route::any('history/{user_id}',[
-            'uses'=> 'LeavesController@getHistory',
+            'uses'=> 'LeavesMyController@getHistory',
             'as'=>'leaves_my_history',
         ]);
 
         Route::get('delete/{id}',[
-            'uses'=> 'LeavesController@postDelete',
+            'uses'=> 'LeavesMyController@postDelete',
             'as'=>'leaves_my_delete',
         ]);
-
     });

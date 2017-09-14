@@ -33,7 +33,7 @@ class User extends BaseModel
 
     public static function getAgentIdByUsers($agent_id)
     {
-        $result = self::where('id',$agent_id)->get();
+        $result = self::where('id', $agent_id)->get();
         return $result;
     }
 }
