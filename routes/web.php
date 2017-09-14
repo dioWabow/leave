@@ -105,6 +105,11 @@ Route::post('teams/memberSet',[
     'as' => 'teams/memberSet'
 ]);
 
+Route::post('teams/update_drop',[
+    'uses' => 'TeamController@ajaxUpdateDrop',
+    'as' => 'teams/update_drop'
+]);
+
 });
 
     # dashboard

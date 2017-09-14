@@ -137,7 +137,7 @@ $(function () {
         singleDatePicker: true,
         showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
-    }).each(function(){
+    }).each(function(){
         $(this).val($(this).attr('date'));
     }).on('change', function(){ 
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
@@ -152,7 +152,28 @@ $(function () {
 <script>
 $(document).ready(function () {
 
-  $('#nestable').nestable();
+  var nestableChange = function (e) {
+    var list = e.length ? e : $(e.target), output = list.data('output');
+
+    $.ajax({
+        method: "POST",
+        url: "{{route('teams/update_drop')}}",
+        data: {
+          "_token": "{{ csrf_token() }}", 
+          "team_json": window.JSON.stringify(list.nestable('serialize'))
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+        alert("更新失敗!");
+    });
+  };
+
+  $('#nestable').nestable({
+    maxDepth: 2,
+    dropCallback : 'sourceId'
+    }).on('change', nestableChange);
+  nestableChange($('#nestable').data('output', $('#nestable-output')));
+
+
 
   $(".my-colorpicker2").colorpicker();
 
