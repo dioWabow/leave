@@ -28,11 +28,6 @@ var deleteFromMenu = function() {
     var targetId = $(this).data('owner-id');
     var target = $('[data-id="' + targetId + '"]');
 
-    var result = confirm("Delete " + target.data('name') + " and all its subitems ?");
-    if (!result) {
-        return;
-    }
-
     // Remove children (if any)
     target.find("li").each(function() {
         deleteFromMenuHelper($(this));
@@ -58,6 +53,7 @@ var prepareEdit = function() {
     var target = $('[data-id="' + targetId + '"]');
 
     $("#editInputName").val(target.data("name"));
+    $("#editInputColor").val(target.data("color"));
     $("#currentEditName").html(target.data("name"));
     $("#editButton").data("owner-id", target.data("id"));
 
@@ -121,17 +117,3 @@ var addToMenu = function() {
 
 
 
-$(function() {
-
-    // set onclick events
-    
-
-    $("#nestable .button-delete").on("click", deleteFromMenu);
-
-    $("#nestable .button-edit").on("click", prepareEdit);
-
-    $("#menu-editor").submit(function(e) {
-        e.preventDefault();
-    });
-
-});

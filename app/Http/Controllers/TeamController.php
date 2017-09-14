@@ -73,7 +73,7 @@ class TeamController extends Controller
             $id = $model->id;
 
             $html = 
-                "<li class='dd-item' data-id='".$id."' data-name='".$name."' data-new='0' data-deleted='0'>".
+                "<li class='dd-item' data-id='".$id."' data-name='".$name."' data-color='".$color."'data-new='0' data-deleted='0'>".
                 "<div class='dd-handle'>".$name."</div>".
                 "<span class='button-delete btn btn-default btn-xs pull-right' data-owner-id='".$id."'>".
                 "<i class='fa fa-times-circle-o' aria-hidden='true'></i>".
@@ -121,8 +121,8 @@ class TeamController extends Controller
 
             return json_encode(
                 array(
+                    'id' => $id,
                     'result' => $result,
-                    'id' => $id
                 )
             );
 

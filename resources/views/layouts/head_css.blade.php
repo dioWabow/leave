@@ -17,17 +17,17 @@
 <!-- daterange picker -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.css">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css"> 
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css">
 <!-- Bootstrap fileupload -->
 <link href="{{route('root_path')}}/plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css?v=3">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css">
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
-<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css?v=6">
+<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
@@ -54,7 +54,7 @@
 <script src="{{route('root_path')}}/plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
 
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable.js"></script>
-<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=3"></script>
+<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- wabow -->
@@ -218,11 +218,14 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on('click', '.button-edit', prepareEdit);
+
   // 修改點下去 抓出id 丟給 editButton
-  $('.button-edit').click(function(){
+  $(document).on('click', '.button-edit', function(event){
     $this = $(this);
     $id = $this.attr("data-owner-id");
     $('#editButton').val($id);
+
   });
 
   // 修改的ajax
@@ -266,8 +269,10 @@ $(document).ready(function () {
 
   });
 
+  $(document).on('click', '.button-delete', deleteFromMenu);
+
   // 刪除的 ajax
-  $('.button-delete').click(function(){
+  $(document).on('click', '.button-delete', function(event){
     $this = $(this);
 
     $id = $this.attr("data-owner-id");
