@@ -25,22 +25,22 @@ class LeaveHelper
         $annual_date = 0;
         $annual_hours = 0;
 
-        // 計算年資
-        $start_date_year = ($start_date=='') ? Carbon::now()->format('Y') : TimeHelper::changeDateFormat($start_date,'Y');
+        //計算年資
+        $start_date_year = (empty($start_date)) ? Carbon::now()->format('Y') : TimeHelper::changeDateFormat($start_date,'Y');
         $enter_date_year = TimeHelper::changeDateFormat($enter_date,'Y');
         $service_year = intval($start_date_year - $enter_date_year );
 
-        // 計算使否足年
-        $start_date_month = ($start_date=='') ? Carbon::now()->format('m') : TimeHelper::changeDateFormat($start_date,'m');
+        //計算使否足年
+        $start_date_month = (empty($start_date)) ? Carbon::now()->format('m') : TimeHelper::changeDateFormat($start_date,'m');
         $enter_date_month = TimeHelper::changeDateFormat($enter_date,'m');
         $service_month = intval($start_date_month - $enter_date_month);
 
-        // 計算是否足月
-        $start_date_day = ($start_date=='') ? Carbon::now()->format('d') : TimeHelper::changeDateFormat($start_date,'d');
+        //計算是否足月
+        $start_date_day = (empty($start_date)) ? Carbon::now()->format('d') : TimeHelper::changeDateFormat($start_date,'d');
         $enter_date_day = TimeHelper::changeDateFormat($enter_date,'d');
         $service_day = intval($start_date_day - $enter_date_day);
 
-        // 當不足1年時，年資-1
+        //當不足1年時，年資-1
         if (($start_date_month - $enter_date_month) <0 ) { //月份不足年資減1
 
             $service_year --;
@@ -55,25 +55,24 @@ class LeaveHelper
 
         }
 
-        // 按照年資發放特休
+        //按照年資發放特休
         switch ($service_year) {
             case 0:
                 if ($start_date_year != $enter_date_year) {
 
                     $service_month += 12;
 
-                    if ($service_month > 6) { // 大於六個月發3天
+                    if ($service_month > 6) { //大於六個月發3天
 
                         $annual_date = 3;
 
-                    } elseif($service_month == 6 && $service_day >= 0) { // 等於六個月先判斷是否足月，才發三天
+                    } elseif($service_month == 6 && $service_day >= 0) { //等於六個月先判斷是否足月，才發三天
 
                         $annual_date = 3;
 
                     }
 
                 }
-
                 break;
             case 1:
                 $annual_date = 7;
@@ -102,8 +101,7 @@ class LeaveHelper
     public static function calculateWorkingDate($start_time,$end_time)
     {
         $date_list = [];
-
-        // 除了頭尾的日期將中間的日期取出，並判斷是否為補班或假日
+        //除了頭尾的日期將中間的日期取出，並判斷是否為補班或假日
         for ( $i = 1; TimeHelper::changeDateFormat($end_time,'Y-m-d') > TimeHelper::changeDateValue($start_time,['+,' . $i . ',day'],'Y-m-d'); $i++ ) {
 
             $date_list[] = TimeHelper::changeDateValue($start_time,['+,' . $i . ',day'],'Y-m-d');
@@ -114,7 +112,7 @@ class LeaveHelper
 
             if (in_array(TimeHelper::getWeekNumberByDate($date),['0','6']) ) {
 
-                if (!Holiday::checkHolidayByDateAndType($date,'work')>0) {
+                if (!Holiday::checkHolidayByDateAndType($date,'work') > 0) {
 
                     unset($date_list[$key]);
 
@@ -122,7 +120,7 @@ class LeaveHelper
 
             } else {
 
-                if (Holiday::checkHolidayByDateAndType($date,'holiday')>0) {
+                if (Holiday::checkHolidayByDateAndType($date,'holiday') > 0) {
 
                     unset($date_list[$key]);
 
@@ -131,7 +129,6 @@ class LeaveHelper
             }
 
         }
-
         //將頭尾日期補上
         array_unshift($date_list,$start_time);
         $date_list[] = $end_time;
@@ -326,7 +323,6 @@ class LeaveHelper
         $reset_time = Type::find($type_id)->reset_time;
 
         $dt = Carbon::parse($date);
-
         switch ($reset_time) {
             case 'week':
                 $start_date = $dt->startOfWeek()->format('Y-m-d H:i:s');
@@ -345,7 +341,33 @@ class LeaveHelper
 
             case 'none':
             case 'other':
-                $start_date = $end_date = "";
+                $start_date = $end_date = '';
+                break;
+
+            case 'season':
+                if (in_array(TimeHelper::changeDateFormat($date,'m'),['1','2','3'])) {
+
+                    $start_date = TimeHelper::changeDateFormat($date,'Y') . "-01-01 00:00:00";
+                    $end_date = TimeHelper::changeDateFormat($date,'Y') . "-03-31 23:59:59";
+
+                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['4','5','6'])) {
+
+                    $start_date = TimeHelper::changeDateFormat($date,'Y') . "-04-01 00:00:00";
+                    $end_date = TimeHelper::changeDateFormat($date,'Y') . "-06-30 23:59:59";
+
+                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['7','8','9'])) {
+
+                    $start_date = TimeHelper::changeDateFormat($date,'Y') . "-07-01 00:00:00";
+                    $end_date = TimeHelper::changeDateFormat($date,'Y') . "-09-30 23:59:59";
+
+                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['10','11','12'])) {
+
+                    $start_date = TimeHelper::changeDateFormat($date,'Y') . "-10-01 00:00:00";
+                    $end_date = TimeHelper::changeDateFormat($date,'Y') . "-12-31 23:59:59";
+
+                }
+                break;
+
         }
 
         return ['start_date' => $start_date , 'end_date' => $end_date];
@@ -357,12 +379,12 @@ class LeaveHelper
 
         if (TimeHelper::changeDateFormat($date,'m-d') >= TimeHelper::changeDateFormat($enter_date,'m-d')) {
 
-            $start_date = $leave_year . "-" . TimeHelper::changeDateFormat($enter_date,'m-d');
+            $start_date = $leave_year . '-' . TimeHelper::changeDateFormat($enter_date,'m-d');
             $end_date = TimeHelper::changeDateValue($start_date,['+,1,year','-,1,day'],'Y-m-d');
 
         } else {
 
-            $end_date = $leave_year . "-" . TimeHelper::changeDateValue($enter_date,['-,1,day'],'m-d');
+            $end_date = $leave_year . '-' . TimeHelper::changeDateValue($enter_date,['-,1,day'],'m-d');
             $start_date = TimeHelper::changeDateValue($end_date,['-,1,year','+,1,day'],'Y-m-d');
 
         }
@@ -386,13 +408,13 @@ class LeaveHelper
     public static function checkLeaveTypeUsed($user_id,$start_time,$end_time,$leave_type,$hours)
     {
         //如果結尾沒有時分秒 補上23:59:59
-        if (TimeHelper::changeDateFormat($end_time,"H") == "00") {
+        if (!empty($end_time) &&TimeHelper::changeDateFormat($end_time,'H') == '00') {
 
-            $end_time .= " 23:59:59";
+            $end_time .= ' 23:59:59';
 
         }
 
-        if (LeaveDay::checkLeaveByUserIdDateTypeHours($user_id,$start_time,$end_time,$leave_type,$hours)>0) {
+        if (LeaveDay::getLeaveByUserIdDateType($user_id,$start_time,$end_time,$leave_type)>$hours) {
 
             return true;
 
@@ -404,13 +426,29 @@ class LeaveHelper
     //判斷請假會不會與其他假別相連
     public static function checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)
     {
-        if (LeaveDay::checkLeaveByUserIdEndTimeType($user_id,$front_date,$leave_type_arr)>0||LeaveDay::checkLeaveByUserIdStartTimeType($user_id,$back_date,$leave_type_arr)>0) {
+        if (LeaveDay::getLeaveByUserIdEndTimeType($user_id,$front_date,$leave_type_arr)>0||LeaveDay::getLeaveByUserIdStartTimeType($user_id,$back_date,$leave_type_arr)>0) {
 
             return true;
 
         }
 
         return false;
+    }
+
+    //刪除請假時段沒空的代理人
+    public static function removeAgentByDate($agent_arr,$start_time,$end_time)
+    {
+        foreach ($agent_arr as $key => $agent_id) {
+
+            if (LeaveDay::getLeaveByUserIdDateRangeType($agent_id,$start_time,$end_time,'') > 0) {
+
+                unset($agent_arr[$key]);
+
+            } 
+
+        }
+
+        return $agent_arr;
     }
 
     public static function judgeLeave($leave)
@@ -420,25 +458,45 @@ class LeaveHelper
         $enter_date = '2016-11-07';
         $job_seek = 1;
         $response = '';
+        $agent_arr = (!empty($leave['agent'])) ? $leave['agent'] : [];
         $arrive_time = "0900";
         $leave_date = $leave['timepicker'];
         $start_time = $leave['start_time'];
         $end_time = $leave['end_time'];
         $date_list = (!empty($leave['date_list'])) ? $leave['date_list'] : [];
-        $leave_name = Type::find($leave['type_id'])->name;
+        $leave_type = Type::find($leave['type_id']);
+        $leave_name = $leave_type->name;
 
         //當天是否請過假
-        if (LeaveDay::checkLeaveByUserIdDateRangeType($user_id,$start_time,$end_time,"")>0) {
+        if (LeaveDay::getLeaveByUserIdDateRangeType($user_id,$start_time,$end_time,'') > 0) {
 
             $response = '當天已經請假';
             return $response;
 
-        } 
+        }
 
-        switch (Type::find($leave['type_id'])->exception) {
+        //假是否有設定使用區間
+        if (!empty($leave_type->start_time) && !empty($leave_type->end_time)) {
+
+            if ($leave_type->start_time > $start_time) {
+
+                $response = '請確認該假別請假區間';
+                return $response;
+
+            }
+
+            if ($leave_type->end_time < $end_time) {
+
+                $response = '請確認該假別請假區間';
+                return $response;
+
+            }
+
+        }
+
+        switch ($leave_type->exception) {
             //善待假
             case "entertain":
-
                 //善待假剩餘時數是否足夠
                 $start_date = self::getStartDateAndEndDate($leave['type_id'],$leave_date)['start_date'];
                 $end_date = self::getStartDateAndEndDate($leave['type_id'],$leave_date)['end_date'];
@@ -449,6 +507,7 @@ class LeaveHelper
                 if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = intval(TimeHelper::changeDateFormat($leave_date,'m')) . '月已經請過' . $leave_name;
+                    return $response;
                     break;
 
                 }
@@ -467,6 +526,7 @@ class LeaveHelper
                 if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與特定假別連著請";
+                    return $response;
                     break;
 
                 }
@@ -474,18 +534,20 @@ class LeaveHelper
                 if (Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($front_date,'Y-m-d'),'holiday')>0 || Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($back_date,'Y-m-d'),'holiday')>0) {
 
                     $response = $leave_name . "不可與國定假日連著請";
+                    return $response;
                     break;
 
                 }
                 
                 break;
+
             //生日假
             case 'birthday':
-
                 //當月是否為生日月
                 if (TimeHelper::changeDateFormat($birthday,'m') != TimeHelper::changeDateFormat($leave_date,'m')) {
                     
                     $response = intval(TimeHelper::changeDateFormat($leave_date,'m')) . "月不是你的生日";
+                    return $response;
                     break;
 
                 }
@@ -501,6 +563,7 @@ class LeaveHelper
                 if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = $leave_year . "已經請過" . $leave_name . "或是剩餘時數不足";
+                    return $response;
                     break;
 
                 }
@@ -519,14 +582,15 @@ class LeaveHelper
                 if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
+                    return $response;
                     break;
 
                 }
 
                 break;
+
             //特休
             case 'annual_leave':
-
                 //特休剩餘時數是否足夠
                 $start_date = self::getStartDateAndEndDateByEnterDate($enter_date,$start_time)['start_date'];
                 $end_date = self::getStartDateAndEndDateByEnterDate($enter_date,$start_time)['end_date'];
@@ -563,6 +627,7 @@ class LeaveHelper
                 if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response =  $leave_name . "剩餘時數不足";
+                    return $response;
                     break;
 
                 }
@@ -591,6 +656,7 @@ class LeaveHelper
                     if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
+                        return $response;
                         break;
 
                     }
@@ -611,6 +677,7 @@ class LeaveHelper
                 if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
+                    return $response;
                     break;
 
                 }
@@ -618,11 +685,11 @@ class LeaveHelper
                 break;
             //久任
             case 'lone_stay':    
-
                 //請假當月年資是否滿兩年
                 if (self::calculateAnnualDate($leave_date) < 80) {
 
                     $response = "年資未滿兩年，無法使用" . $leave_name;
+                    return $response;
                     break;
 
                 }
@@ -637,6 +704,7 @@ class LeaveHelper
                 if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = $start_date . "~" . $end_date . "間已經請過" . $leave_name . "或是剩餘時數不足";
+                    return $response;
                     break;
 
                 }
@@ -655,6 +723,7 @@ class LeaveHelper
                 if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
+                    return $response;
                     break;
 
                 }
@@ -662,7 +731,6 @@ class LeaveHelper
                 break;
             //謀職假
             case 'job_seek':
-
                 //謀職假開關是否打開
                 if ($job_seek == 0) {
 
@@ -675,7 +743,7 @@ class LeaveHelper
                 $start_date = self::getStartDateAndEndDate($leave['type_id'],$start_time)['start_date'];
                 $end_date = self::getStartDateAndEndDate($leave['type_id'],$start_time)['end_date'];
                 
-                if ($start_date == '' && $end_date == '') {
+                if (empty($start_date) && empty($end_date)) {
 
                     $date_list = self::calculateWorkingDate($start_time,$end_time);
                     $hours = self::calculateRangeDateHours($date_list);
@@ -684,6 +752,7 @@ class LeaveHelper
                     if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
+                        return $response;
                         break;
 
                     }
@@ -722,6 +791,7 @@ class LeaveHelper
                     if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
+                        return $response;
                         break;
 
                     }
@@ -750,6 +820,7 @@ class LeaveHelper
                         if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
+                            return $response;
                             break;
 
                         }
@@ -759,23 +830,30 @@ class LeaveHelper
                 }
 
                 break;
+            //有薪病假、病假無需判斷
+            case 'paid_sick':
+            case 'sick':
+                $response = '';
+                break;
+
             default:
-                // 時數是否足夠
+                //時數是否足夠
                 $start_date = self::getStartDateAndEndDate($leave['type_id'],$start_time)['start_date'];
                 $end_date = self::getStartDateAndEndDate($leave['type_id'],$start_time)['end_date'];
                 
-                if ($start_date == '' && $end_date == '') {
+                if (empty($start_date) && empty($end_date)) {
 
                     $date_list = self::calculateWorkingDate($start_time,$end_time);
                     $hours = self::calculateRangeDateHours($date_list);
                     $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                    //當重至時間為none，時數上限為0代表不限制請假時數，不需判斷
+                    //當重製時間為none，時數上限為0代表不限制請假時數，不需判斷
                     if (($hours + $remain_hours) != 0) {
 
                         if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
+                            return $response;
                             break;
 
                         }
@@ -786,7 +864,6 @@ class LeaveHelper
                         break;
 
                     }
-                    
 
                 } else {
 
@@ -822,16 +899,17 @@ class LeaveHelper
                     if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
+                        return $response;
                         break;
 
                     }
 
-                    if (count($new_date_list)>0) {
+                    if (count($new_date_list) > 0) {
 
                         $start_date = self::getStartDateAndEndDate($leave['type_id'],$new_date_list['0'])['start_date'];
                         $end_date = self::getStartDateAndEndDate($leave['type_id'],$new_date_list['0'])['end_date'];
 
-                        if(count($new_date_list) == 1) {
+                        if (count($new_date_list) == 1) {
 
                             $start = ($arrive_time == "0900") ? " 09:00" : " 09:30";
                             $start_date_new = TimeHelper::changeDateFormat($new_date_list['0'] ,'Y-m-d') . $start;
@@ -850,6 +928,7 @@ class LeaveHelper
                         if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
+                            return $response;
                             break;
 
                         }
@@ -861,20 +940,25 @@ class LeaveHelper
                 break;
         }
 
-        // 檢查理由是否必填
-        if (Type::find($leave['type_id'])->reason) {
+        //檢查理由是否必填
+        if ($leave_type->reason) {
 
             if (empty($leave['reason'])) {
 
                 $response = "請填請假理由";
+                return $response;
 
             }
 
         }
 
-        // 檢查證明是否必填
+        //檢查代理人時間是否有衝突
+        if (count($agent_arr) != 0 && count(self::removeAgentByDate($agent_arr,$start_time,$end_time)) == 0 ){
 
-        // 檢查代理人時間是否有衝突
+            $response = "代理人都已請假";
+            return $response;
+
+        }
 
         return $response;
     }

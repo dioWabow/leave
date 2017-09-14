@@ -15,13 +15,17 @@ class Leave extends BaseModel
         'reason',
         'prove',
         'create_user_id',
+        'agent',
+        'notice_person',
+        'timepicker',
+        'dayrange',
     ];
-
+    
     /**
      * 與Model關聯的table
      *
      * @var string
      */
     protected $table = 'leaves';
-    
+
 }

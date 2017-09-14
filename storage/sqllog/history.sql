@@ -1,3 +1,20 @@
+--2017-09-12 tony 請假證明欄位大小加長
+ALTER TABLE `leaves` CHANGE `prove` `prove` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '證明文件檔名';
+--2017-09-11 tony
+ALTER TABLE `leaves_notices` ADD `created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) AFTER `send_time`;
+ALTER TABLE `leaves_notices` ADD `updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) AFTER `created_at`;
+ALTER TABLE `leaves_notices` CHANGE `send_time` `send_time` TIMESTAMP NULL COMMENT '送出時間';
+--2017-09-11 tony 新增假單代理人資料表
+CREATE TABLE `leaves_agents` (
+ `id` int(7) NOT NULL,
+ `leave_id` int(7) NOT NULL COMMENT '請假單',
+ `agent_id` int(7) NOT NULL COMMENT '職務代理人',
+ `created_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ `updated_at` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `leaves_agents` ADD INDEX( `id`);
+ALTER TABLE `leaves_agents` ADD PRIMARY KEY(`id`);
+ALTER TABLE `leaves_agents` CHANGE `id` `id` INT(7) NOT NULL AUTO_INCREMENT;
 --2017-09-08 tony
 ALTER TABLE `leaves_days` CHANGE `start_time` `start_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '開始時間';
 ALTER TABLE `users` CHANGE `annual_date` `annual_hours` INT(5) NULL DEFAULT NULL COMMENT '特休時數';

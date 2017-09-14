@@ -188,6 +188,10 @@ return [
          * 時間套件
          */
         App\Providers\TimeHelperServiceProvider::class,
+        /*
+         * 上傳檔案
+         */
+        App\Providers\AttachHelperServiceProvider::class,
 
     ],
 
@@ -244,6 +248,7 @@ return [
          */
         'LeaveHelper' => App\Facades\LeaveHelper::class,
         'TimeHelper' => App\Facades\TimeHelper::class,
+        'AttachHelper' => App\Facades\AttachHelper::class,
 
     ],
 

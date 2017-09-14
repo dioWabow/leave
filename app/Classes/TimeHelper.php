@@ -20,7 +20,6 @@ class TimeHelper
     public static function changeDateValue($date,$value,$format)
     {
         $dt = Carbon::parse($date);
-
         foreach($value as $val) {
 
             $val1 = explode(",", $val);
@@ -72,11 +71,27 @@ class TimeHelper
 
                     if ($val1['0'] == '+') {
 
-                        $dt->addHours($val1['1']);
+                        if ($dt->hour < 13 && ($dt->hour+$val1['1']) >= 13) {
+
+                            $dt->addHours($val1['1']+1);
+
+                        } else {
+
+                            $dt->addHours($val1['1']);
+
+                        }
 
                     } else {
 
-                        $dt->subHours($val1['1']);
+                        if ($dt->hour > 12 && ($dt->hour-$val1['1']) <= 12) {
+
+                            $dt->subHours($val1['1']+1);
+
+                        } else {
+
+                            $dt->subHours($val1['1']);
+
+                        }
 
                     }
                     

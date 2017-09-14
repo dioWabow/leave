@@ -31,7 +31,7 @@ class LeaveDay extends BaseModel
      */
     protected $leave_tag_arr = [7,8];
 
-    public static function checkLeaveByUserIdDateTypeHours($user_id,$start_date,$end_date,$type,$hours)
+    public static function getLeaveByUserIdDateType($user_id,$start_date,$end_date,$type)
     {
         $leave_hours = 0;
 
@@ -65,11 +65,11 @@ class LeaveDay extends BaseModel
             }
         }
 
-        $result = ($leave_hours > $hours);
+        $result = $leave_hours;
         return $result;
     }
 
-    public static function checkLeaveByUserIdDateRangeType($user_id,$start_time,$end_time,$type)
+    public static function getLeaveByUserIdDateRangeType($user_id,$start_time,$end_time,$type)
     {
         $leave_hours = 0;
 
@@ -120,7 +120,7 @@ class LeaveDay extends BaseModel
     }
 
 
-    public static function checkLeaveByUserIdEndTimeType($user_id,$date,$type)
+    public static function getLeaveByUserIdEndTimeType($user_id,$date,$type)
     {
         $leave_hours = 0;
 
@@ -153,7 +153,7 @@ class LeaveDay extends BaseModel
         return $result;
     }
 
-    public static function checkLeaveByUserIdStartTimeType($user_id,$date,$type)
+    public static function getLeaveByUserIdStartTimeType($user_id,$date,$type)
     {
         $leave_hours = 0;
 

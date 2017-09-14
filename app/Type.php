@@ -24,4 +24,5 @@ class Type extends Model
         $result = self::whereIn('exception', $exception)->get();
         return $result;
     }
+
 }
