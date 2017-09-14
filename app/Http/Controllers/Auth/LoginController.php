@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Config;
 
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Controller;
@@ -55,9 +56,8 @@ class LoginController extends Controller implements AuthenticatableContract
     {
         $user = Socialite::driver('google')->stateless()->user();
         if ( !empty( $user->email ) ) {
-            
-            //待系統設定更新完成改為取config
-            if ( !empty($user->user["domain"]) && $user->user["domain"] == "wabow.com" ) {
+
+            if ( !empty($user->user["domain"]) && $user->user["domain"] == Config::getConfigValueByKey('company_domain') ) {
 
                 $model = User::getUserByEmail($user->email);
                 if ( $model === null) {
@@ -90,8 +90,7 @@ class LoginController extends Controller implements AuthenticatableContract
                 }
             }else{
 
-                //待系統設定更新完成改為公司名稱
-                return Redirect::route('root_path')->withErrors(['msg' => '非允許的 Email，請再次確認登入的 Email。']);
+                return Redirect::route('root_path')->withErrors(['msg' => '非允許的 Email，請再次確認登入的 Email(@'.Config::getConfigValueByKey('company_domain').')。']);
 
             }
         }else{

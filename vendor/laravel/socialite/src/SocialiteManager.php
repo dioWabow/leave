@@ -32,9 +32,9 @@ class SocialiteManager extends Manager implements Contracts\Factory
         //將google認證修改為使用db資料
         $config = [];
 
-        $config["client_id"] = Config::getConfigByKey("google_client_id")->config_value;
-        $config["client_secret"] = Config::getConfigByKey("google_client_secret")->config_value;
-        $config["redirect"] = Config::getConfigByKey("google_redirect")->config_value;
+        $config["client_id"] = Config::getConfigValueByKey("google_client_id");
+        $config["client_secret"] = Config::getConfigValueByKey("google_client_secret");
+        $config["redirect"] = Config::getConfigValueByKey("google_redirect");
 
         return $this->buildProvider(
             GoogleProvider::class, $config
