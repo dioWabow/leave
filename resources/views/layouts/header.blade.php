@@ -65,7 +65,7 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">{{$annual_hours}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
@@ -117,7 +117,7 @@
         </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class=""><a href="#"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class=""><a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li class="">
           <a href="#"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">

@@ -116,4 +116,5 @@ class User extends BaseModel
 
         return $result;
     }
+
 }

@@ -126,6 +126,21 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
+    Route::get('leave/create', [
+        'uses' => 'LeaveController@getCreate',
+        'as' => 'leave/create',
+    ]);
+
+    Route::post('leave/insert', [
+        'uses' => 'LeaveController@postInsert',
+        'as' => 'leave/insert',
+    ]);
+
+    Route::post('leave/calculate_hours',[
+        'uses' => 'LeaveController@calculate_hours',
+        'as' => 'leave/calculate_hours',
+    ]);
+    
 });
 
 Route::match(['get', 'post'], '/demo/image',[

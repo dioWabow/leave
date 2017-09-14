@@ -68,4 +68,19 @@ class Type extends BaseModel
         $result = $query->orderBy($this->order_by, $this->order_way);
         return $result;
     }
+    
+    public static function getAllType() 
+    {
+        $result = self::get();
+        return $result;
+    }
+
+    public static function getTypeByException($exception)
+    {
+        $result = self::whereIn('exception', $exception)->get();
+        return $result;
+    }
+
+    
 }
+
