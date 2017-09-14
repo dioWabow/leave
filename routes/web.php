@@ -112,21 +112,23 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-    # 團隊假單-主管
-    Route::any('leaves/hr/prove/{user_id}',[
-        'uses'=> 'LeavesHrController@getProve',
-        'as'=>'leaves_hr_prove',
-    ]);
-    
-    Route::any('leaves/hr/upcoming/{user_id}',[
-        'uses'=> 'LeavesHrController@getUpcoming',
-        'as'=>'leaves_hr_upcoming',
-    ]);
-    
-    Route::any('leaves/hr/history/{user_id}',[
-        'uses'=> 'LeavesHrController@getHistory',
-        'as'=>'leaves_hr_history',
-    ]);
+    # 團隊假單-HR
+    Route::group(['prefix'=>'leaves/hr'], function(){
+        Route::any('prove/{user_id}',[
+            'uses'=> 'LeavesHrController@getProve',
+            'as'=>'leaves_hr_prove',
+        ]);
+        
+        Route::any('upcoming/{user_id}',[
+            'uses'=> 'LeavesHrController@getUpcoming',
+            'as'=>'leaves_hr_upcoming',
+        ]);
+        
+        Route::any('history/{user_id}',[
+            'uses'=> 'LeavesHrController@getHistory',
+            'as'=>'leaves_hr_history',
+        ]);
+    });
     
 });
 

@@ -4,47 +4,33 @@ namespace App\Classes;
 
 use App\Leave;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 
 class LeaveHelper
 {
     /**
-     * 傳入user_id 取得 user的等待核准假單
-     * tag 狀態 2,3,4,5
+     * 計算HR可查看等待審核的假單
+     * tag 狀態 1,2,3,4
      * 
      */
-    public static function getProveLeavesTotal($id)
-    {
-        $tag_id = [2,3,4,5];
-        $result = Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
-        return $result;
-    }
-    /**
-     * 傳入user_id 取得 user的即將放假假單
-     * tag 狀態 7
-     * 
-     */
-    public static function getUpComingLeavesTotal($id)
-    {
-        $tag_id = [9];
-        $result = Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
-        return $result;
-    }
-
     public static function getHrProveLeavesTotal()
     {
-        $tag_id = [2,3,4,5];
-        $result = Leave::whereIn('tag_id',$tag_id)->count();
+        $tag_id = [1,2,3,4];
+        $result = Leave::whereIn('tag_id', $tag_id)->count();
         return $result;
     }
 
+    /**
+     * 計算HR可查看即將放假的假單
+     * tag 狀態 9
+     * 
+     */
     public static function getHrUpComingLeavesTotal()
     {
         $tag_id = [9];
-        $result = Leave::whereIn('tag_id',$tag_id)->count();
+        $result = Leave::whereIn('tag_id', $tag_id)->count();
         return $result;
     }
+
     /**
      * 傳入start_time 取得 倒數天數
      * 

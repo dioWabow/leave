@@ -1,6 +1,6 @@
 <div class="{{(Request::is('leaves/hr/history/*')) ? 'active' : ''}} tab-pane" id="list">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_history', ['user_id' => 1 ]) }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_history', [ 'user_id' => Auth::user()->id ]) }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -27,13 +27,13 @@
               假別：
               <select id="search_leave_type" name="search[type_id]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="1" @if (count($search)>0 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
-                <option value="2" @if (count($search)>0 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
-                <option value="3" @if (count($search)>0 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
-                <option value="4" @if (count($search)>0 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
-                <option value="5" @if (count($search)>0 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
-                <option value="6" @if (count($search)>0 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
-                <option value="7" @if (count($search)>0 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
+                <option value="1" @if (count($search)>1 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
+                <option value="2" @if (count($search)>1 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
+                <option value="3" @if (count($search)>1 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
+                <option value="4" @if (count($search)>1 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
+                <option value="5" @if (count($search)>1 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
+                <option value="6" @if (count($search)>1 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
+                <option value="7" @if (count($search)>1 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
               </select>
               &nbsp;
               區間：
@@ -43,7 +43,7 @@
               <label>
               狀態：
               <select id="search_tag_id" name="search[tag_id]" class="form-control">
-                <option value="" selected="selected">全部</option>
+                <option value="8,9" selected="selected">全部</option>
                 <option value="8" @if (count($search)>0 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
                 <option value="9" @if (count($search)>0 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
               </select>
@@ -77,25 +77,24 @@
             <tr class="clickable-row" data-href="leave_view.html" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
-                  @if($value->tag_id == 7) class="btn"
-                  @elseif($value->tag_id == 8) class="btn bg-maroon"
+                  @if($value->tag_id == 8) class="btn bg-maroon"
                   @elseif($value->tag_id == 9) class="btn bg-navy"
                   @endif>
-                  {{$value->tag->name}}
+                  {{ WebHelper::getLeaveTagsLabelForHistory($value->tag_id) }}
                 </button>
               </td>
             <td>
-              <img src="{{ UrlHelper::getUserAvatarUrl($value->user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$value->user->nickname}}" width="50px">
+              <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{$value->fetchUser->nickname}}" width="50px">
             </td>
-            <td>{{$value->type->name}}</td>
-            <td>{{$value->start_time}}~{{$value->end_time}}</td>
-            <td>{{$value->reason}}</td>
+            <td>{{ $value->fetchType->name }}</td>
+            <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+            <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{$agent->fetchUser->nickname}}" width="50px">
                 @endforeach
               </td>
-              <td id="hours">{{$value->hours}}</td>
+              <td id="hours">{{ $value->hours }}</td>
             </tr>
             @endforeach
             @if(count($dataProvider) == 0)

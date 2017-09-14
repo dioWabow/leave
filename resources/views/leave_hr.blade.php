@@ -19,9 +19,9 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{Request::is('leaves/hr/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_hr_prove', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{LeaveHelper::getHrProveLeavesTotal()}} New Messages">{{LeaveHelper::getHrProveLeavesTotal()}}</span></a></li>
-					<li class="{{Request::is('leaves/hr/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_upcoming', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{LeaveHelper::getHrUpComingLeavesTotal(1)}} New Messages">{{LeaveHelper::getHrUpComingLeavesTotal(1)}}</span></a></li>
-					<li class="{{Request::is('leaves/hr/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_history', ['user_id' => 1 ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
+					<li class="{{Request::is('leaves/hr/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_hr_prove', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getHrProveLeavesTotal() }} New Messages">{{ LeaveHelper::getHrProveLeavesTotal() }}</span></a></li>
+					<li class="{{Request::is('leaves/hr/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_upcoming', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getHrUpComingLeavesTotal() }} New Messages">{{ LeaveHelper::getHrUpComingLeavesTotal() }}</span></a></li>
+					<li class="{{Request::is('leaves/hr/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_history', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
 				</ul>
 				<div class="tab-content">
 					<!-- /.tab-pane -->

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Team extends Model
+class Team extends BaseModel
 {
     /**
      * 與Model關聯的table
@@ -17,9 +15,9 @@ class Team extends Model
         return $result;
     }
     
-    public static function getColorByKey($key = "")
+    public static function getColorByKey($key = '')
     {
-	$result = self::where("id", $key)->pluck('color')->first();
+	$result = self::where('id', $key)->pluck('color')->first();
 	return $result;
     }
 }

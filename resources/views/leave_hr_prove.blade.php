@@ -1,5 +1,5 @@
 <div class="{{(Request::is('leaves/hr/prove/*')) ? 'active' : ''}} tab-pane" id="prove">
-<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_prove', ['user_id' => 1 ]) }}" method="POST">
+<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_prove', [ 'user_id' => Auth::user()->id ] ) }}" method="POST">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
   @if(count($model->order_by)>0)
     <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -14,11 +14,11 @@
           <thead>
             <tr>
               <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
-              <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+              <th width="6%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="3%">代理人</a></th>
+              <th width="5%">代理人</a></th>
               <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
               <th width="8%"></th>
             </tr>
@@ -27,26 +27,24 @@
           <tbody>
           </form>
             @foreach ($dataProvider as $value)
-            <tr class='clickable-row' data-href="leave_manager_view.html">
+            <tr class="clickable-row" data-href="leave_manager_view.html">
               <td>
                 <button type="button"
-                  @if($value->id == 1) class="btn"
-                  @elseif($value->tag_id == 2) class="btn bg-blue"
-                  @elseif($value->tag_id == 3) class="btn bg-yellow"
-                  @elseif($value->tag_id == 4) class="btn bg-red"
-                  @elseif($value->tag_id == 5) class="btn bg-blue"
-                  @elseif($value->tag_id == 6) class="btn bg-navy"
+                  @if($value->tag_id == 1) class="btn bg-yellow"
+                  @elseif($value->tag_id == 2) class="btn bg-green"
+                  @elseif($value->tag_id == 3) class="btn bg-red"
+                  @elseif($value->tag_id == 4) class="btn bg-blue"
                   @endif>
-                  {{$value->tag->name}}
+                  {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
                 </button>
               </td>
-              <td>{{ $value->type->name }}</td>
-              <td><img src="{{UrlHelper::getUserAvatarUrl($value->user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$value->user->nickname}}" width="50px"></td>
+              <td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
+              <td>{{ $value->fetchType->name }}</td>
               <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
               <td>{{ $value->reason }}</td>
               <td>
               @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+                <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
               @endforeach
               </td>
               <td>{{ $value->hours }}</td>
@@ -68,6 +66,7 @@
 </div>
 <script>
 $('.sort').on('click', function(){
+
 	var $sortname = $(this).attr('sortname');
 	var $order_by = "{{ $model->order_by }}";
 	var $order_way = "{{ $model->order_way }}";
@@ -79,6 +78,8 @@ $('.sort').on('click', function(){
 	} else {
     $("#order_way").val("DESC");
 	}
+
 	$("#frmOrderby").submit();
+
 });
 </script>

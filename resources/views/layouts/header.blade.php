@@ -175,10 +175,10 @@
               </a>
         </li>
         <li class="header">HUMAN-RESOURCE</li>
-        <li class="">
-          <a href="{{ route('leaves_hr_prove', ['user_id' => 1] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+        <li @if(Request::is('leaves/hr/*')) class="active" @endif>
+          <a href="{{ route('leaves_hr_prove', [ 'user_id' => Auth::user()->id ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">2</small>
+              <small class="label pull-right bg-red">{{ LeaveHelper::getHrProveLeavesTotal() }}</small>
             </span>
           </a>
         </li>

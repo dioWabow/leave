@@ -1,5 +1,5 @@
 <div class="{{(Request::is('leaves/hr/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
-<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_upcoming', ['user_id' => 1 ]) }}" method="POST">
+<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_upcoming', [ 'user_id' => Auth::user()->id ]) }}" method="POST">
   <table class="table table-bordered table-striped table-hover">
     @if(count($model->order_by)>0)
       <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -14,7 +14,7 @@
         <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-        <th width="3%">代理人</a></th>
+        <th width="5%">代理人</a></th>
         <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
         <th width="8%"></th>
       </tr>
@@ -23,16 +23,16 @@
     </form>
     <tbody>
        @foreach ($dataProvider as $value)
-        <tr class='clickable-row' data-href='leave_manager_view.html'>
+        <tr class="clickable-row" data-href="leave_manager_view.html">
           <td>
-            <img src="{{ UrlHelper::getUserAvatarUrl($value->user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$value->user->nickname}}" width="50px">
+            <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
           </td>
-          <td>{{$value->type->name}}</td>
+          <td>{{$value->fetchType->name}}</td>
           <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
           <td>{{ $value->reason }}</td>
           <td>
           @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-            <img src="{{UrlHelper::getUserAvatarUrl($agent->user->avatar)}}?v={{rand(1,99)}}" class="img-circle" alt="{{$agent->user->nickname}}" width="50px">
+            <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
           @endforeach
           </td>
           <td>{{ $value->hours }}</td>
@@ -46,6 +46,7 @@
 </div>
 <script>
 $('.sort').on('click', function(){
+
   var $sortname = $(this).attr('sortname');
   var $order_by = "{{ $model->order_by }}";
   var $order_way = "{{ $model->order_way }}";
@@ -57,7 +58,9 @@ $('.sort').on('click', function(){
   } else {
     $("#order_way").val("DESC");
   }
+
   $("#frmOrderby").submit();
+
 });
 
 function changePageSize(pagesize)
