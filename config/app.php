@@ -191,6 +191,8 @@ return [
         App\Providers\WebHelperServiceProvider::class,
         App\Providers\UrlHelperServiceProvider::class,
         App\Providers\ConfigHelperServiceProvider::class,
+        App\Providers\SlackHelperServiceProvider::class,
+        App\Providers\EmailHelperServiceProvider::class,
     ],
 
     /*
@@ -250,6 +252,8 @@ return [
         'WebHelper' => App\Facades\WebHelper::class,
         'UrlHelper' => App\Facades\UrlHelper::class,
         'ConfigHelper' => App\Facades\ConfigHelper::class,
+        'SlackHelper' => App\Facades\SlackHelper::class,
+        'EmailHelper' => App\Facades\EmailHelper::class,
     ],
 
 ];

@@ -132,3 +132,8 @@ Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
     'uses'=> 'DemoControllor@getImage',
 ]);
+
+Route::get('email',[
+    'as'=>'email',
+    'uses'=> 'SystemConfController@testEmail',
+]);

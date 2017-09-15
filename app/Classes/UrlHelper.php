@@ -25,6 +25,11 @@ class UrlHelper
 
     public function getCompanyLogoUrl($filename)
     {
-        return (!empty($filename))? url(Storage::url($filename)) : '#';
+        return (!empty($filename))? url(Storage::url($filename)) . self::getRandom() : '#';
+    }
+
+    public static function getRandom()
+    {
+        return '?v=' .  rand();
     }
 }

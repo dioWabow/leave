@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Config;
+use App\User;
+use App\Notifications\EmailTest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use ImageHelper;
 use ConfigHelper;
 use UrlHelper;
+use EmailHelper;
 
 
 class SystemConfController extends Controller
@@ -87,6 +90,11 @@ class SystemConfController extends Controller
 
         }
         return view('system_conf', compact('config'));
+    }
+   
+    public function testEmail(Request $request)
+    {
+        EmailHelper::notify(new EmailTest());
     }
    
 }
