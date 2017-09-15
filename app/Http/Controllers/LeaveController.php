@@ -20,6 +20,7 @@ use Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
 {
@@ -37,9 +38,9 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getCreate(Request $request) 
+    public function getCreate(Request $request,$user_id= '') 
     {
-        $id = 6;
+        $user_id = (!empty($user_id)) ? $user_id : Auth::user()->id;
 
         $data = $request->old('leave');
 
@@ -54,14 +55,14 @@ class LeaveController extends Controller
         $types = Type::getAllType();
 
         //使用者目前所有代理人
-        $user_agents = UserAgent::getUserAgentByUserId($id);
+        $user_agents = UserAgent::getUserAgentByUserId($user_id);
 
         //全部團隊列表
         $teams = Team::getAllTeam();
 
         //除了使用者本身，所有人的團隊(額外通知)
         $user_no_team = $team_users = [];
-        foreach(User::getAllUsersExcludeUserId($id) as $users){
+        foreach(User::getAllUsersExcludeUserId($user_id) as $users){
 
             if ($users->UserTeam()->first()) {
 
@@ -76,7 +77,7 @@ class LeaveController extends Controller
         }
 
         return view('leave_form2',compact(
-            'model','types','user_agents','teams','team_users','user_no_team'
+            'user_id','model','types','user_agents','teams','team_users','user_no_team'
         ));
     }
 
@@ -87,9 +88,8 @@ class LeaveController extends Controller
      */
     public function postInsert(LeaveRequest $request) 
     {
-        $User_id = 6;
-        $user = User::find($User_id);
         $leave = $request->input('leave');
+        $user = User::find($leave['user_id']);
         $start = ($user->arrive_time == '0900') ? ' 09:00' : ' 09:30';
         $end = ($user->arrive_time == '0900') ? ' 18:00' : ' 18:30';
 
@@ -125,12 +125,8 @@ class LeaveController extends Controller
 
         $model = new Leave;
 
-        $response = LeaveHelper::judgeLeave($leave);
+        $response = LeaveHelper::judgeLeave($leave,$leave['user_id']);
         if (empty($response)) {
-
-            $leave['user_id'] = $User_id;
-            $leave['tag_id'] = 1;
-            $leave['create_user_id'] = $User_id;
 
             if(Input::hasFile('fileupload')) {
                 $file_name = AttachHelper::uploadFiles('fileupload','prove');
@@ -257,7 +253,7 @@ class LeaveController extends Controller
                             $end_paid_sick_time = TimeHelper::changeDateValue($start_paid_sick_time,['+,'.$remain_paid_sick_hours.',hour'],'Y-m-d H:i:s');
 
                             // 當時間沒有h時，補上 18:00or18:30
-                            if (TimeHelper::changeDateFormat(end($date_list) ,'h') != '0') {
+                            if (TimeHelper::changeDateFormat(end($date_list) ,'H') != '00') {
 
                                 //如果有薪假結尾時間大於當天時間，結尾改為當天時間
                                 if ($end_paid_sick_time > end($date_list) && count($date_list) > 1) {
@@ -294,7 +290,7 @@ class LeaveController extends Controller
                             }
 
                             //將有薪時數扣掉當天總時數，如果>=0代表當天已請完，將當天抽掉，在判斷前一天
-                            if (TimeHelper::changeDateFormat(end($date_list) ,'h') == '0') {
+                            if (TimeHelper::changeDateFormat(end($date_list) ,'H') == '00') {
 
                                 $the_day_start = end($date_list) . $start;
                                 $the_day_end = end($date_list) . $end;
@@ -321,7 +317,7 @@ class LeaveController extends Controller
                             if ($remain_paid_sick_hours >= 0) {
 
                                 //如果成立代表date_list裡面昰同一天直接整個unset
-                                if (TimeHelper::changeDateFormat($date_list[0],'Y-m-d') == TimeHelper::changeDateFormat($date_list[1],'Y-m-d')) {
+                                if (count($date_list) > 1 && TimeHelper::changeDateFormat($date_list[0],'Y-m-d') == TimeHelper::changeDateFormat($date_list[1],'Y-m-d')) {
 
                                     unset($date_list);
 
@@ -359,7 +355,7 @@ class LeaveController extends Controller
                             }
 
                             //如果成立代表date_list裡面昰同一天直接整個unset
-                            if (TimeHelper::changeDateFormat($date_list[0],'Y-m-d') == TimeHelper::changeDateFormat($date_list[1],'Y-m-d')) {
+                            if (count($date_list) > 1 && TimeHelper::changeDateFormat($date_list[0],'Y-m-d') == TimeHelper::changeDateFormat($date_list[1],'Y-m-d')) {
 
                                 unset($date_list);
 

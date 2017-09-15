@@ -9,35 +9,55 @@ use App\User;
 use App\Type;
 use TimeHelper;
 
+use Auth;
 use Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Input;
 
 class LeaveHelper
 {
-    public static function homePageURL()
+    public function homePageURL()
     {
       return url('/');
     }
 
-    public static function calculateAnnualDate($start_date = "2017-08-31 00:00:00") 
+    private  $user_id;
+    private  $birthday;
+    private  $enter_date;
+    private  $job_seek;
+    private  $arrive_time;
+
+    public function __construct($id = '')
     {
-        $enter_date = '2014-11-07 00:00:00';
+
+        $this->user_id = Auth::user()->id;
+        $this->birthday = Auth::user()->birthday;
+        $this->enter_date = Auth::user()->enter_date;
+        $this->job_seek = Auth::user()->job_seek;
+        $this->arrive_time = Auth::user()->arrive_time;
+
+    }
+
+    public function calculateAnnualDate($start_date = '',$user_id = '') 
+    {
+        self::updateUser($user_id);
+
         $annual_date = 0;
         $annual_hours = 0;
 
         //計算年資
         $start_date_year = (empty($start_date)) ? Carbon::now()->format('Y') : TimeHelper::changeDateFormat($start_date,'Y');
-        $enter_date_year = TimeHelper::changeDateFormat($enter_date,'Y');
+        $enter_date_year = TimeHelper::changeDateFormat($this->enter_date,'Y');
         $service_year = intval($start_date_year - $enter_date_year );
 
         //計算使否足年
         $start_date_month = (empty($start_date)) ? Carbon::now()->format('m') : TimeHelper::changeDateFormat($start_date,'m');
-        $enter_date_month = TimeHelper::changeDateFormat($enter_date,'m');
+        $enter_date_month = TimeHelper::changeDateFormat($this->enter_date,'m');
         $service_month = intval($start_date_month - $enter_date_month);
 
         //計算是否足月
         $start_date_day = (empty($start_date)) ? Carbon::now()->format('d') : TimeHelper::changeDateFormat($start_date,'d');
-        $enter_date_day = TimeHelper::changeDateFormat($enter_date,'d');
+        $enter_date_day = TimeHelper::changeDateFormat($this->enter_date,'d');
         $service_day = intval($start_date_day - $enter_date_day);
 
         //當不足1年時，年資-1
@@ -98,7 +118,7 @@ class LeaveHelper
     }
 
     //將一個區間的時間排除國定假日及放入補班之後輸出成陣列
-    public static function calculateWorkingDate($start_time,$end_time)
+    public function calculateWorkingDate($start_time,$end_time)
     {
         $date_list = [];
         //除了頭尾的日期將中間的日期取出，並判斷是否為補班或假日
@@ -137,14 +157,13 @@ class LeaveHelper
     }
 
     //計算一個range的時間
-    public static function calculateRangeDateHours($date_list) 
+    public function calculateRangeDateHours($date_list , $user_id = '') 
     {
-        $user_id = 6;
+        self::updateUser($user_id);
+
         $hours = 0;
         $start_time = $date_list['0'];
         $end_time = end($date_list);
-
-        $user = User::find($user_id);
 
         if (TimeHelper::changeDateFormat($start_time,'Y-m-d') == TimeHelper::changeDateFormat($end_time,'Y-m-d')) {
 
@@ -152,7 +171,7 @@ class LeaveHelper
 
         } else {
 
-            if ($user->arrive_time=='0900') {
+            if ($this->arrive_time=='0900') {
 
                 $arrive_time = '09:00:00';
                 $leave_time = '18:00:00';
@@ -198,7 +217,7 @@ class LeaveHelper
     }
 
     //計算一天的時間
-    public static function calculateOneDateHours($start_time,$end_time)
+    public function calculateOneDateHours($start_time,$end_time)
     {
         $hours = 0;
 
@@ -222,7 +241,7 @@ class LeaveHelper
         return $hours;
     }
 
-    public static function getFrontDateAndBackDate ($start_time,$end_time,$dayrange,$leave_date)
+    public function getFrontDateAndBackDate ($start_time,$end_time,$dayrange,$leave_date)
     {
         if ($dayrange == 'morning') {
 
@@ -278,7 +297,7 @@ class LeaveHelper
 
     }
 
-    public static function getFrontDateOrBackDate($date_time,$type)
+    public function getFrontDateOrBackDate($date_time,$type)
     {
         if ($type == 'front') {
 
@@ -318,7 +337,7 @@ class LeaveHelper
 
     }
 
-    public static function getStartDateAndEndDate($type_id,$date)
+    public function getStartDateAndEndDate($type_id,$date)
     {
         $reset_time = Type::find($type_id)->reset_time;
 
@@ -373,7 +392,7 @@ class LeaveHelper
         return ['start_date' => $start_date , 'end_date' => $end_date];
     }
 
-    public static function getStartDateAndEndDateByEnterDate($enter_date,$date)
+    public function getStartDateAndEndDateByEnterDate($enter_date,$date)
     {
         $leave_year = TimeHelper::changeDateFormat($date,'Y');
 
@@ -392,20 +411,20 @@ class LeaveHelper
         return ['start_date' => $start_date , 'end_date' => $end_date];
     }
 
-    public static function getRemainHours($type_id,$hours)
+    public function getRemainHours($type_id,$hours)
     {
         $remain_hours = Type::find($type_id)->hours;
         return $remain_hours - $hours;
     }
 
-    public static function getAnnulLeaveRemainHours($date,$hours)
+    public function getAnnulLeaveRemainHours($date,$hours)
     {
         $remain_hours = self::calculateAnnualDate($date);
         return $remain_hours - $hours;
     }
 
     //判斷有沒有請過某種假，時數也會判斷
-    public static function checkLeaveTypeUsed($user_id,$start_time,$end_time,$leave_type,$hours)
+    public function checkLeaveTypeUsed($user_id,$start_time,$end_time,$leave_type,$hours)
     {
         //如果結尾沒有時分秒 補上23:59:59
         if (!empty($end_time) &&TimeHelper::changeDateFormat($end_time,'H') == '00') {
@@ -424,7 +443,7 @@ class LeaveHelper
     }
 
     //判斷請假會不會與其他假別相連
-    public static function checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)
+    public function checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)
     {
         if (LeaveDay::getLeaveByUserIdEndTimeType($user_id,$front_date,$leave_type_arr)>0||LeaveDay::getLeaveByUserIdStartTimeType($user_id,$back_date,$leave_type_arr)>0) {
 
@@ -436,7 +455,7 @@ class LeaveHelper
     }
 
     //刪除請假時段沒空的代理人
-    public static function removeAgentByDate($agent_arr,$start_time,$end_time)
+    public function removeAgentByDate($agent_arr,$start_time,$end_time)
     {
         foreach ($agent_arr as $key => $agent_id) {
 
@@ -451,15 +470,29 @@ class LeaveHelper
         return $agent_arr;
     }
 
-    public static function judgeLeave($leave)
+    //更新判斷人資料
+    public function updateUser($user_id)
     {
-        $user_id = 6;
-        $birthday = '1992-11-14';
-        $enter_date = '2016-11-07';
-        $job_seek = 1;
-        $response = '';
+        if (!empty($user_id)) {
+
+            $user = User::find($user_id);
+            $this->user_id = $user->id;
+            $this->birthday = $user->birthday;
+            $this->enter_date = $user->enter_date;
+            $this->job_seek = $user->job_seek;
+            $this->arrive_time = $user->arrive_time;
+
+        }
+    }
+
+    public function judgeLeave($leave,$user_id = '')
+    {
+        self::updateUser($user_id);
+
+        $start = ($this->arrive_time == "0900") ? " 09:00" : " 09:30";
+        $end = ($this->arrive_time == "0900") ? " 18:00" : " 18:30";
+
         $agent_arr = (!empty($leave['agent'])) ? $leave['agent'] : [];
-        $arrive_time = "0900";
         $leave_date = $leave['timepicker'];
         $start_time = $leave['start_time'];
         $end_time = $leave['end_time'];
@@ -467,10 +500,12 @@ class LeaveHelper
         $leave_type = Type::find($leave['type_id']);
         $leave_name = $leave_type->name;
 
-        //當天是否請過假
-        if (LeaveDay::getLeaveByUserIdDateRangeType($user_id,$start_time,$end_time,'') > 0) {
+        $response = '';
 
-            $response = '當天已經請假';
+        //當天是否請過假
+        if (LeaveDay::getLeaveByUserIdDateRangeType($this->user_id,$start_time,$end_time,'') > 0) {
+
+            $response = '該時段已經請假';
             return $response;
 
         }
@@ -504,7 +539,7 @@ class LeaveHelper
                 $hours = ($leave['dayrange']=="allday") ? 8 : 4 ;
                 $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = intval(TimeHelper::changeDateFormat($leave_date,'m')) . '月已經請過' . $leave_name;
                     return $response;
@@ -523,7 +558,7 @@ class LeaveHelper
                 $front_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['front_date'];
                 $back_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['back_date'];
 
-                if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
+                if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與特定假別連著請";
                     return $response;
@@ -544,7 +579,7 @@ class LeaveHelper
             //生日假
             case 'birthday':
                 //當月是否為生日月
-                if (TimeHelper::changeDateFormat($birthday,'m') != TimeHelper::changeDateFormat($leave_date,'m')) {
+                if (TimeHelper::changeDateFormat($this->birthday,'m') != TimeHelper::changeDateFormat($leave_date,'m')) {
                     
                     $response = intval(TimeHelper::changeDateFormat($leave_date,'m')) . "月不是你的生日";
                     return $response;
@@ -560,7 +595,7 @@ class LeaveHelper
                 $hours = ($leave['dayrange']=="allday") ? 8 : 4 ;
                 $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = $leave_year . "已經請過" . $leave_name . "或是剩餘時數不足";
                     return $response;
@@ -579,7 +614,7 @@ class LeaveHelper
                 $front_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['front_date'];
                 $back_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['back_date'];
 
-                if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
+                if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
                     return $response;
@@ -592,8 +627,8 @@ class LeaveHelper
             //特休
             case 'annual_leave':
                 //特休剩餘時數是否足夠
-                $start_date = self::getStartDateAndEndDateByEnterDate($enter_date,$start_time)['start_date'];
-                $end_date = self::getStartDateAndEndDateByEnterDate($enter_date,$start_time)['end_date'];
+                $start_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$start_time)['start_date'];
+                $end_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$start_time)['end_date'];
 
                 $new_date_list = [];
 
@@ -611,7 +646,7 @@ class LeaveHelper
                 if (count($date_list) == 1) {
 
                     $start_date_origin = $date_list['0'];
-                    $end = ($arrive_time == "0900") ? " 18:00" : " 18:30";
+                    
                     $end_date_origin =  TimeHelper::changeDateFormat($date_list['0'] ,'Y-m-d') . $end;
 
                     $hours = self::calculateOneDateHours($start_date_origin,$end_date_origin);
@@ -624,7 +659,7 @@ class LeaveHelper
 
                 $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours);
 
-                if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response =  $leave_name . "剩餘時數不足";
                     return $response;
@@ -634,12 +669,12 @@ class LeaveHelper
 
                 if (count($new_date_list)>0) {
 
-                    $start_date = self::getStartDateAndEndDateByEnterDate($enter_date,$new_date_list['0'])['start_date'];
-                    $end_date = self::getStartDateAndEndDateByEnterDate($enter_date,$new_date_list['0'])['end_date'];
+                    $start_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$new_date_list['0'])['start_date'];
+                    $end_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$new_date_list['0'])['end_date'];
 
                     if (count($new_date_list) == 1) {
 
-                        $start = ($arrive_time == "0900") ? " 09:00" : " 09:30";
+                        
                         $start_date_new = TimeHelper::changeDateFormat($new_date_list['0'] ,'Y-m-d') . $start;
                         $end_date_new = $new_date_list['0'];
 
@@ -653,7 +688,7 @@ class LeaveHelper
                     
                     $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours);
 
-                    if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                    if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
                         return $response;
@@ -674,7 +709,7 @@ class LeaveHelper
                 $front_date = self::getFrontDateOrBackDate($start_time,'front');
                 $back_date = self::getFrontDateOrBackDate($end_time,'back');
 
-                if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
+                if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
                     return $response;
@@ -695,13 +730,13 @@ class LeaveHelper
                 }
 
                 //久任假剩餘時數是否足夠
-                $start_date = self::getStartDateAndEndDateByEnterDate($enter_date,$leave_date)['start_date'];
-                $end_date = self::getStartDateAndEndDateByEnterDate($enter_date,$leave_date)['end_date'];
+                $start_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$leave_date)['start_date'];
+                $end_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$leave_date)['end_date'];
 
                 $hours = ($leave['dayrange']=="allday") ? 8 : 4 ;
                 $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                     $response = $start_date . "~" . $end_date . "間已經請過" . $leave_name . "或是剩餘時數不足";
                     return $response;
@@ -720,7 +755,7 @@ class LeaveHelper
                 $front_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['front_date'];
                 $back_date = self::getFrontDateAndBackDate($start_time,$end_time,$leave['dayrange'],$leave_date)['back_date'];
 
-                if (self::checkLeaveByType($user_id,$front_date,$back_date,$leave_type_arr)) {
+                if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
 
                     $response = $leave_name . "不可與善待假連著請";
                     return $response;
@@ -732,7 +767,7 @@ class LeaveHelper
             //謀職假
             case 'job_seek':
                 //謀職假開關是否打開
-                if ($job_seek == 0) {
+                if ($this->job_seek == 0) {
 
                     $response = $leave_name . "尚未開啟";
                     break;
@@ -745,11 +780,10 @@ class LeaveHelper
                 
                 if (empty($start_date) && empty($end_date)) {
 
-                    $date_list = self::calculateWorkingDate($start_time,$end_time);
                     $hours = self::calculateRangeDateHours($date_list);
                     $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                    if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                    if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
                         return $response;
@@ -775,7 +809,6 @@ class LeaveHelper
                     if (count($date_list) == 1) {
 
                         $start_date_origin = $date_list['0'];
-                        $end = ($arrive_time == "0900") ? " 18:00" : " 18:30";
                         $end_date_origin =  TimeHelper::changeDateFormat($date_list['0'] ,'Y-m-d') . $end;
 
                         $hours = self::calculateOneDateHours($start_date_origin,$end_date_origin);
@@ -788,7 +821,7 @@ class LeaveHelper
                     
                     $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                    if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                    if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
                         return $response;
@@ -803,7 +836,6 @@ class LeaveHelper
 
                         if(count($new_date_list) == 1) {
 
-                            $start = ($arrive_time == "0900") ? " 09:00" : " 09:30";
                             $start_date_new = TimeHelper::changeDateFormat($new_date_list['0'] ,'Y-m-d') . $start;
                             $end_date_new = $new_date_list['0'];
 
@@ -817,7 +849,7 @@ class LeaveHelper
                         
                         $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                        if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                        if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
                             return $response;
@@ -850,7 +882,7 @@ class LeaveHelper
                     //當重製時間為none，時數上限為0代表不限制請假時數，不需判斷
                     if (($hours + $remain_hours) != 0) {
 
-                        if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                        if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
                             return $response;
@@ -883,7 +915,6 @@ class LeaveHelper
                     if (count($date_list) == 1) {
 
                         $start_date_origin = $date_list['0'];
-                        $end = ($arrive_time == "0900") ? " 18:00" : " 18:30";
                         $end_date_origin =  TimeHelper::changeDateFormat($date_list['0'] ,'Y-m-d') . $end;
 
                         $hours = self::calculateOneDateHours($start_date_origin,$end_date_origin);
@@ -896,7 +927,7 @@ class LeaveHelper
                     
                     $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                    if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                    if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                         $response =  $leave_name . "剩餘時數不足";
                         return $response;
@@ -911,7 +942,6 @@ class LeaveHelper
 
                         if (count($new_date_list) == 1) {
 
-                            $start = ($arrive_time == "0900") ? " 09:00" : " 09:30";
                             $start_date_new = TimeHelper::changeDateFormat($new_date_list['0'] ,'Y-m-d') . $start;
                             $end_date_new = $new_date_list['0'];
 
@@ -925,7 +955,7 @@ class LeaveHelper
                         
                         $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
-                        if (self::checkLeaveTypeUsed($user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
+                        if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
                             $response =  $leave_name . "剩餘時數不足";
                             return $response;
@@ -946,6 +976,18 @@ class LeaveHelper
             if (empty($leave['reason'])) {
 
                 $response = "請填請假理由";
+                return $response;
+
+            }
+
+        }
+
+        //檢查證明是否需要
+        if ($leave_type->prove) {
+
+            if (!Input::hasFile('fileupload')) {
+
+                $response = "請上傳請假證明";
                 return $response;
 
             }

@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use LeaveHelper;
-
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -16,9 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $annual_hours = LeaveHelper::calculateAnnualDate();
 
-        View::share(compact('annual_hours'));
+
     }
 
     /**

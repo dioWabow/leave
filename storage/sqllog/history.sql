@@ -1,3 +1,15 @@
+--2017-09-15 tony
+ALTER TABLE `leaves` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';
+ALTER TABLE `leaves` CHANGE `start_time` `start_time` TIMESTAMP NULL COMMENT '開始時間';
+ALTER TABLE `leaves` CHANGE `end_time` `end_time` TIMESTAMP NULL COMMENT '結束時間';
+ALTER TABLE `leaves` CHANGE `updated_at` `updated_at` TIMESTAMP NULL COMMENT '最後編輯';
+ALTER TABLE `leaves_days` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';
+ALTER TABLE `leaves_days` CHANGE `start_time` `start_time` TIMESTAMP NULL COMMENT '開始時間';
+ALTER TABLE `leaves_days` CHANGE `end_time` `end_time` TIMESTAMP NULL COMMENT '結束時間';
+ALTER TABLE `leaves_days` CHANGE `updated_at` `updated_at` TIMESTAMP NULL COMMENT '最後編輯';
+ALTER TABLE `holidays` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';
+ALTER TABLE `holidays` CHANGE `updated_at` `updated_at` TIMESTAMP NULL COMMENT '最後編輯';
+ALTER TABLE `holidays` CHANGE `date` `date` DATE NULL COMMENT '日期';
 --2017-09-12 tony 請假證明欄位大小加長
 ALTER TABLE `leaves` CHANGE `prove` `prove` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '證明文件檔名';
 
