@@ -10,7 +10,7 @@ use Image;
 class ImageHelper
 {
     public $upload_path;
-    
+
     private $_save_folder;
     private $_file_path;
 
@@ -54,7 +54,7 @@ class ImageHelper
         return $this->_file_path;
     }
 
-    private function getAvailableFiles($name) 
+    private function getAvailableFiles($name)
     {
         if(Input::hasFile($name)) {
 
@@ -81,7 +81,7 @@ class ImageHelper
     private function saveImage($file)
     {
         $file_extension = $file->getClientOriginalExtension();
-        
+
         $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
 
         $path = $this->_file_path . $filename;

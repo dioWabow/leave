@@ -19,7 +19,7 @@ class Leave extends BaseModel
         'pagesize',
     ];
 
-    public static function getTypeIdByLeaves($id) 
+    public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
         return $result;

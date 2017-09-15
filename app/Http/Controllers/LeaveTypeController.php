@@ -23,7 +23,7 @@ class LeaveTypeController extends Controller
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
-        
+
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leave_type');
@@ -59,7 +59,7 @@ class LeaveTypeController extends Controller
      */
     public function getCreate(Request $request)
     {
-       
+
         $model = new Type;
 
         $input = $this->checkDataValue($request->old('leave_type'));
@@ -82,7 +82,7 @@ class LeaveTypeController extends Controller
 
         $input = $this->checkDataValue($request->old('leave_type'));
         $model->fill($input);
-        
+
         return  view('leave_type_form', compact(
             'model'
         ));
@@ -96,10 +96,10 @@ class LeaveTypeController extends Controller
     public function postDelete(Request $request, $id)
     {
         $model = $this->loadModel($id)->delete();
-        
+
         return Redirect::route('leave_type')->withErrors(['msg' => '刪除完畢。']);
     }
-    
+
     /**
      * 新增
      *
@@ -139,7 +139,7 @@ class LeaveTypeController extends Controller
         $model = new Type;
         $model = $this->loadModel($input['id']);
         $model->fill($input);
-        
+
         if ($model->save()) {
 
             return Redirect::route('leave_type')->withErrors(['msg' => '更新成功']);
@@ -160,14 +160,14 @@ class LeaveTypeController extends Controller
             throw new CHttpException(404,'資料不存在');
 
         }
-            
+
         return $model;
     }
 
     private function checkDataValue($data)
     {
         $input = $data;
-        
+
         // 日期區間用-分別存入
         if (!empty($input['available_date'])) {
             $available_date = explode(" - ", $input['available_date']);
@@ -178,7 +178,7 @@ class LeaveTypeController extends Controller
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
         $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
-    
+
         return $input;
     }
 

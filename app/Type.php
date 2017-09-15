@@ -21,7 +21,7 @@ class Type extends BaseModel
         'order_way',
         'pagesize',
     ];
-    
+
     protected $attributes = [
         'order_by' => "id",
         'order_way' => "DESC",
@@ -52,13 +52,13 @@ class Type extends BaseModel
                 }  else {
 
                     $query->where($key, $value);
-                    
+
                 }
 
             }
 
         }
-       
+
         $result = $query->paginate($this->pagesize);
         return $result;
     }
@@ -66,6 +66,12 @@ class Type extends BaseModel
     public function scopeOrderedBy($query)
     {
         $result = $query->orderBy($this->order_by, $this->order_way);
+        return $result;
+    }
+
+    public static function getAllTypes()
+    {
+        $result = self::get();
         return $result;
     }
 }

@@ -72,120 +72,58 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<table class="table table-bordered table-striped table-hover">
+									<table class="table table-bordered table-striped table-hover">
 									<thead>
 										<tr>
 											<th width="3%"></th>
 											<th><a href="#sort_name">名稱</a></th>
-											<th><a href="#sort_x">善待假</a></th>
-											<th><a href="#sort_x">生日假</a></th>
-											<th><a href="#sort_x">久任假</a></th>
-											<th><a href="#sort_x">年假</a></th>
-											<th><a href="#sort_x">病假</a></th>
-											<th><a href="#sort_x">有薪病假</a></th>
-											<th><a href="#sort_x">生理假</a></th>
-											<th><a href="#sort_x">公假</a></th>
-											<th><a href="#sort_x">總計(Hr)</a></th>
-											<th><a href="#sort_x">扣薪</a></th>
+											@foreach($all_type as $type_data)
+											<th><a href="#">{{$type_data->name}}</a></th>
+											@endforeach
+											<th><a href="#sort_name">總計(Hr)</a></th>
+											<th><a href="#sort_name">扣薪</a></th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr class='clickable-row' data-href='leave_list.html'>
-											<td>
-												<img src="{{route('root_path')}}/dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
-											</td>
-											<td>毛毛</td>
-											<td>4</td>
-											<td>0</td>
-											<td>0</td>
-											<td>40</td>
-											<td>2</td>
-											<td>8</td>
-											<td>8</td>
-											<td>20</td>
-											<td class="text-red">82</td>
-											<td><span class="label bg-red">2</span></td>
-										</tr>
-										<tr class='clickable-row' data-href='leave_list.html'>
-											<td>
-												<img src="{{route('root_path')}}/dist/img/users/dio.png" class="img-circle" alt="Dio" width="50px">
-											</td>
-											<td>Dio</td>
-											<td>4</td>
-											<td>0</td>
-											<td>0</td>
-											<td>40</td>
-											<td>2</td>
-											<td>8</td>
-											<td>8</td>
-											<td>20</td>
-											<td class="text-red">82</td>
-											<td><span class="label bg-red">2</span></td>
-										</tr>
-										<tr class='clickable-row' data-href='leave_list.html'>
-											<td>
-												<img src="{{route('root_path')}}/dist/img/users/wei.png" class="img-circle" alt="Wei" width="50px">
-											</td>
-											<td>Wei</td>
-											<td>4</td>
-											<td>0</td>
-											<td>0</td>
-											<td>40</td>
-											<td>2</td>
-											<td>8</td>
-											<td>8</td>
-											<td>20</td>
-											<td class="text-red">82</td>
-											<td><span class="label bg-red">2</span></td>
-										</tr>
-										<tr class='clickable-row' data-href='leave_list.html'>
-											<td>
-												<img src="{{route('root_path')}}/dist/img/users/eno.png" class="img-circle" alt="Eno" width="50px">
-											</td>
-											<td>Eno</td>
-											<td>4</td>
-											<td>0</td>
-											<td>0</td>
-											<td>40</td>
-											<td>2</td>
-											<td>8</td>
-											<td>8</td>
-											<td>20</td>
-											<td class="text-red">82</td>
-											<td><span class="label bg-red">2</span></td>
-										</tr>
-										<tr class='clickable-row' data-href='leave_list.html'>
-											<td>
-												<img src="{{route('root_path')}}/dist/img/users/lube.png" class="img-circle" alt="Lube" width="50px">
-											</td>
-											<td>Lube</td>
-											<td>4</td>
-											<td>0</td>
-											<td>0</td>
-											<td>40</td>
-											<td>2</td>
-											<td>8</td>
-											<td>8</td>
-											<td>20</td>
-											<td class="text-red">82</td>
-											<td><span class="label bg-red">2</span></td>
-										</tr>
+										@foreach($all_user as $user_data)
+											<tr class="clickable-row" data-href="">
+												<td>
+													<img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" class="img-circle" alt="{{$user_data->nickname}}" width="60px">
+												</td>
+												<td>{{$user_data->nickname}}</td>
+												@foreach($report_list as $key => $report_data)
+												@foreach($all_type as $type_data)
+												@if("{{$key}}" == "{{$user_data->id}}")
+												<td>{{$report_data[$type_data->id]}}</td>
+												@endif
+												@endforeach
+												@endforeach
+												@if(!empty($report_list[$user_data->id]))
+												<td class="text-red">{{($report_list[$user_data->id]['sum'])}}</td>
+												<td><span class="label bg-red">{{($report_list[$user_data->id]['deductions'])}}</span></td>
+												@else
+												<td></td>
+												<td></td>
+												@endif
+											</tr>
+										@endforeach
 									</tbody>
 									<tfotter>
 										<tr class="text-red">
 											<th></th>
 											<th class="pull-right">總計(Hr)</th>
-											<th>40</th>
-											<th>0</th>
-											<th>0</th>
-											<th>200</th>
-											<th>10</th>
-											<th>40</th>
-											<th>40</th>
-											<th>100</th>
-											<th>410</th>
-											<td><span class="label bg-red">10</span></td>
+											@foreach($report_type_total as $key => $total_data)
+											@if($key == "sum")
+											<td class="text-red">{{$total_data}}</td>
+											@elseif($key == "deductions")
+											<td><span class="label bg-red">{{$total_data}}</span></td>
+											@else
+											<th>{{$total_data}}</th>
+											@endif
+											@endforeach
 										</tr>
 									</tfotter>
+									</table>
 								</table>
 							</div>
 						</div>

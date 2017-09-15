@@ -49,7 +49,7 @@ class DemoControllor extends Controller
 
     /**
     * 上傳圖片 demo
-    * 注意：須於 public 下建立連結 - php artisan storage:link 
+    * 注意：須於 public 下建立連結 - php artisan storage:link
     */
     public function getImageOld (Request $request)
     {
@@ -57,7 +57,7 @@ class DemoControllor extends Controller
         if($request->hasFile('demo') && $request->file('demo')['image']->isValid()) {
             $input_file = Input::file('demo');
             $file_extension = $input_file['image']->getClientOriginalExtension();
-            
+
             $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
             $image = $this->image_root_path . $filename;
 
