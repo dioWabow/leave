@@ -126,11 +126,11 @@
           </a>
         </li>
         <li class="header">Agent</li>
-        <li class="">
-          <a href="#">
+        <li @if(Request::is('approve/*')) class="active" @endif>
+          <a href="{{ route('agent_approve') }}">
             <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
+              <small class="label pull-right bg-red">{{ LeaveHelper::getAgentApproveLeavesTotal(Auth::user()->id) }}</small>
             </span>
           </a>
         </li>

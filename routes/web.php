@@ -125,6 +125,14 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'SystemConfController@postUpdate',
         ]);
     });
+
+    # 同意代理嗎?
+    Route::group(['prefix'=>'approve'], function(){
+        Route::any('index',[
+            'as'=>'agent_approve',
+            'uses'=> 'AgentApproveController@getIndex',
+        ]);
+    });
     
 });
 
