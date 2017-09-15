@@ -71,27 +71,11 @@ class TimeHelper
 
                     if ($val1['0'] == '+') {
 
-                        if ($dt->hour < 13 && ($dt->hour+$val1['1']) >= 13) {
-
-                            $dt->addHours($val1['1']+1);
-
-                        } else {
-
-                            $dt->addHours($val1['1']);
-
-                        }
+                        $dt->addHours($val1['1']);
 
                     } else {
 
-                        if ($dt->hour > 12 && ($dt->hour-$val1['1']) <= 12) {
-
-                            $dt->subHours($val1['1']+1);
-
-                        } else {
-
-                            $dt->subHours($val1['1']);
-
-                        }
+                        $dt->subHours($val1['1']);
 
                     }
                     
@@ -116,6 +100,47 @@ class TimeHelper
 
         return $dt->format($format);
     }
+
+    //跳過中午休息時間
+    public static function changeHourValue($date,$value,$format)
+    {
+        $dt = Carbon::parse($date);
+        
+        foreach($value as $val) {
+
+            $val1 = explode(",", $val);
+
+            if ($val1['0'] == '+') {
+
+                if ($dt->hour < 13 && ($dt->hour+$val1['1']) >= 13) {
+
+                    $dt->addHours($val1['1']+1);
+
+                } else {
+
+                    $dt->addHours($val1['1']);
+
+                }
+
+            } else {
+
+                if ($dt->hour > 12 && ($dt->hour-$val1['1']) <= 12) {
+
+                    $dt->subHours($val1['1']+1);
+
+                } else {
+
+                    $dt->subHours($val1['1']);
+
+                }
+
+            }
+
+        }
+
+        return $dt->format($format);
+    }
+
 
     public static function getWeekNumberByDate($date)
     {
