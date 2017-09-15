@@ -96,7 +96,7 @@ class User extends BaseModel
         return $result;
     }
 
-    public function UserTeam()
+    public function fetchUserTeam()
     {
         $result = $this::hasMany('App\UserTeam','user_id','id');
         return $result;

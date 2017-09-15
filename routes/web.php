@@ -125,6 +125,14 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'SystemConfController@postUpdate',
         ]);
     });
+
+    # 我是代理人
+    Route::group(['prefix'=>'agent'], function(){
+        Route::any('index',[
+            'as'=>'leave_agent',
+            'uses'=> 'LeaveAgentController@getIndex',
+        ]);
+    });
     
 });
 
