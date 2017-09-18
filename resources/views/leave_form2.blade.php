@@ -84,7 +84,7 @@
 								下午
 							</label>&emsp;
 							</label>&emsp;
-							
+							<input type="hidden" id="keep_dayrange" name="keep_dayrange" value="{{$model->dayrange}}">
 						</div>
 					</div>
 				</div>
