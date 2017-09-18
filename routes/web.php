@@ -126,20 +126,23 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
-    Route::get('leave/create', [
+    // 我要放假
+    Route::group(['prefix'=>'leave'], function(){
+        Route::get('create', [
         'uses' => 'LeaveController@getCreate',
         'as' => 'leave/create',
-    ]);
+        ]);
 
-    Route::post('leave/insert', [
-        'uses' => 'LeaveController@postInsert',
-        'as' => 'leave/insert',
-    ]);
+        Route::post('insert', [
+            'uses' => 'LeaveController@postInsert',
+            'as' => 'leave/insert',
+        ]);
 
-    Route::post('leave/calculate_hours',[
-        'uses' => 'LeaveController@calculate_hours',
-        'as' => 'leave/calculate_hours',
-    ]);
+        Route::post('calculate_hours',[
+            'uses' => 'LeaveController@calculate_hours',
+            'as' => 'leave/calculate_hours',
+        ]);
+    });
     
 });
 
