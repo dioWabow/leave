@@ -44,8 +44,6 @@ class ReportController extends Controller
 
     public function postSearch(Request $request)
     {
-
-        dd($request);
         $input = $request->input('setting');
         $order_by = $request->input('order_by');
 
@@ -53,12 +51,10 @@ class ReportController extends Controller
 
         $month = $input['month'];
 
+        $order_type = $order_by['order_by'];
+
         $order_way = $order_by['order_way'];
 
-        // 跑setp 5 
-        // 排序看 order_way
-
-        // 年月 type desc asc
         $model = new LeaveDay;
 
         $userModel = new User;
@@ -67,16 +63,47 @@ class ReportController extends Controller
 
         $data_list = $model->search($year, $month);
 
-        $all_user = $userModel->getAllUsers();
+        $all_user_tmp = $userModel->getAllUsers();
+
+        $all_user = [];
+        foreach ($all_user_tmp as $key => $value) {
+            $all_user[$value->id] = $value;
+        }
 
         $all_type = $typeModel->getAllTypes();
 
+        $compute_report_list = [];
+
         $report_list = self::getReport($all_type, $data_list);
+
+        foreach ($report_list as $key => $value) {
+            $compute_report_list[$key] = $value[$order_type];
+        }
+
+        if($order_way == "DESC"){
+            arsort($compute_report_list);
+        } else {
+            asort($compute_report_list);
+        }
+
+        $new_user_sort = [];
+        foreach ($compute_report_list as $user_id => $hours) {
+            $new_user_sort[] = $user_id;
+        }
+
+        $all_user_tmp = $all_user;
+
+        unset($all_user);
+
+        $all_user_sort = [];
+        foreach ($new_user_sort as $value) {
+            $all_user[] = $all_user_tmp[$value];
+        }
 
         $report_type_total = self::getTypeTotal($all_type, $data_list);
 
         return view('report', compact(
-            'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'
+            'order_by', 'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'
         ));
     }
 

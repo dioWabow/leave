@@ -66,8 +66,8 @@
 										</label>
 										<label><button type="submit" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
 										&nbsp;
-										<input id="sort" type="hidden" name="order_by[order_by]" value="">
-			                    		<input id="sort_way" type="hidden" name="order_by[order_way]" value="">
+										<input id="sort" type="hidden" name="order_by[order_by]" @if(isset($order_by) && count($order_by) > 0)value="{{$order_by['order_by']}}"@endif>
+			                    		<input id="sort_way" type="hidden" name="order_by[order_way]" @if(isset($order_by) && count($order_by) > 0)value="{{$order_by['order_way']}}"@endif>
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									</div>
 								</div>
@@ -82,13 +82,14 @@
 											<th width="3%"></th>
 											<th><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
 											@foreach($all_type as $type_data)
-											<th><a href="javascript:void(0)" onclick="changeSort('{{$type_data->name}}');">{{$type_data->name}}</a></th>
+											<th><a href="javascript:void(0)" onclick="changeSort('{{$type_data->id}}');">{{$type_data->name}}</a></th>
 											@endforeach
 											<th><a href="javascript:void(0)" onclick="changeSort('sum');">總計(Hr)</a></th>
 											<th><a href="javascript:void(0)" onclick="changeSort('deductions');">扣薪</a></th>
 										</tr>
 									</thead>
 									<tbody>
+										@if(isset($all_user) && count($all_user) > 0)
 										@foreach($all_user as $user_data)
 											<tr class="clickable-row" data-href="">
 												<td>
@@ -111,6 +112,7 @@
 												@endif
 											</tr>
 										@endforeach
+										@endif
 									</tbody>
 									<tfotter>
 										<tr class="text-red">
