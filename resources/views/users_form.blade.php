@@ -179,7 +179,7 @@
 						<label>頭像</label>
 					</div>
 					<div class="col-md-11">
-						<input id="user_fileupload" name="user[avatar]" class="file-loading" type="file" multiple data-min-file-count="0">
+						<input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
 					</div>
 				</div></div>
 			</div>

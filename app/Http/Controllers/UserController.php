@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use ImageHelper;
 use App\User;
 use App\Team;
 use App\UserAgent;
@@ -17,13 +18,11 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
-    protected $image_root_path;
     protected $image_path;
     
     public function __construct()
     {
         $this->image_path = 'avatar/';
-        $this->image_root_path = storage_path() . '/app/public/' . $this->image_path;
     }
 
     /**
@@ -146,17 +145,12 @@ class UserController extends Controller
         $model = $this->loadModel($input['id']);
 
         //上傳圖片 注意：須於 public 下建立連結 - php artisan storage:link 
-        $image_url = '';
-        if ($request->hasFile('user') && $request->file('user')['avatar']->isValid()) {
-            $input_file = Input::file('user');
-            $file_extension = $input_file['avatar']->getClientOriginalExtension();
-            
-            $filename = $input['nickname'] . '.' . $file_extension; //命名方式依照各專案需求
-            $image = $this->image_root_path . $filename;
+        $filename = ImageHelper::uploadImages("avatar",$this->image_path,$input['nickname']);
 
-            if (Image::make($input_file['avatar'])->save($image)) {
-                $input['avatar'] = $filename;
-            }
+        if (!empty($filename)) {
+
+            $input["avatar"] = $filename;
+
         }
 
         $model->fill($input);
@@ -164,7 +158,7 @@ class UserController extends Controller
 
             //修改代理人
             UserAgent::deleteUserAgentByUserId($model->id);
-            if(!empty($input['agent'])){
+            if (!empty($input['agent'])) {
 
                 $user_agents = $input['agent'];
                 foreach($user_agents as $agent_id){
