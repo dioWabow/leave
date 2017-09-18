@@ -176,34 +176,34 @@ Route::group(['middleware' => 'auth'], function () {
 
     #團隊設定
     Route::group(['prefix'=>'teams'], function(){
-        Route::get('teams/index',[
-            'uses' => 'TeamController@getAllTeamAndUser',
+        Route::get('index',[
             'as' => 'teams/index',
+            'uses' => 'TeamController@getAllTeamAndUser',
         ]);
 
-        Route::post('teams/create',[
-            'uses' => 'TeamController@ajaxCreateData',
+        Route::post('create',[
             'as' => 'teams/create',
+            'uses' => 'TeamController@ajaxCreateData',
         ]);
 
-        Route::post('teams/delete',[
-            'uses' => 'TeamController@ajaxDeleteData',
+        Route::post('delete',[
             'as' => 'teams/delete',
+            'uses' => 'TeamController@ajaxDeleteData',
         ]);
 
-        Route::post('teams/update',[
-            'uses' => 'TeamController@ajaxUpdateData',
+        Route::post('update',[
             'as' => 'teams/update',
+            'uses' => 'TeamController@ajaxUpdateData',
         ]);
 
-        Route::post('teams/memberSet',[
+        Route::post('memberSet',[
+            'as' => 'teams/memberSet',
             'uses' => 'UserTeamController@postMemberSet',
-            'as' => 'teams/memberSet'
         ]);
 
-        Route::post('teams/update_drop',[
+        Route::post('update_drop',[
+            'as' => 'teams/update_drop',
             'uses' => 'TeamController@ajaxUpdateDrop',
-            'as' => 'teams/update_drop'
         ]);
     });
 

@@ -330,17 +330,22 @@ $(document).ready(function () {
 
         $team_manager.toString();
 
-        if ($team_member == $team_manager){
+        if($team_member === null){
           event.preventDefault();
-          alert('人員不能同時為主管!!');
+          alert('有主管的情況至少要有一名組員!!');
+        } else {
 
-        } else if($team_member.match($team_manager)) {
-          event.preventDefault();
-          alert('人員不能同時為主管!!');
+          if($team_member == $team_manager){
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
 
+          } else if($team_member.match($team_manager)) {
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          }
         }
       }
-
     });
 
 });
