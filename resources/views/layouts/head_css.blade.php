@@ -228,6 +228,8 @@ $(document).ready(function () {
 
   });
 
+  $(document).on('click', '#editButton', editMenuItem);
+
   // 修改的ajax
   $('#editButton').click(function(){
     $this = $(this);

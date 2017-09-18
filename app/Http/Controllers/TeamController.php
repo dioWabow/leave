@@ -27,7 +27,7 @@ class TeamController extends Controller
             $team_result[$key]->parent_name = Team::getTeamParentFullName($value->id);
         }
 
-        $user_result = $userModel->getAllUsers();
+        $user_result = $userModel->getAllAllowUsers();
 
         $team_user_result = $userTeamModel->getAllTeamUser()->toArray();
 
@@ -86,7 +86,7 @@ class TeamController extends Controller
             return json_encode(
                 array(
                     'result' => $result,
-                    'html' => $html
+                    'html' => $html,
                 )
             );
 
@@ -95,7 +95,7 @@ class TeamController extends Controller
             $result = false;
             return json_encode(
                 array(
-                    'result' => $result
+                    'result' => $result,
                 )
             );
 
@@ -131,7 +131,7 @@ class TeamController extends Controller
             $result = false;
             return json_encode(
                 array(
-                    'result' => $result
+                    'result' => $result,
                 )
             );
 
@@ -166,7 +166,7 @@ class TeamController extends Controller
 
         return json_encode(
             array(
-                'result' => $result
+                'result' => $result,
             )
         );
     }

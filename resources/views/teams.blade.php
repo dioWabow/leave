@@ -174,7 +174,7 @@
 					</div>
 					<div class="box-footer">
 						<div class="pull-right">
-							<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
+							<button type="reset" class="btn btn-default" onclick="history.go();"><i class="fa fa-undo"></i> 取消</button>
 							<button type="submit" class="btn btn-primary" id="data_post"><i class="fa fa-send-o"></i> Send</button>
 						</div>
 					</div>
