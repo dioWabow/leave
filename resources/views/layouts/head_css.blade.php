@@ -152,17 +152,17 @@ $('#nestable').nestable({
 <!-- 假別管理與修改頁面用 -->
 @if(Request::is('leave_type/*'))
 <script>
-$(function () {
-  $("#leave_type_available_date").daterangepicker({
-    showDropdowns: true,
-    locale: {format: 'YYYY-MM-DD'},
-  });
+  $(function () {
+    $("#leave_type_available_date").daterangepicker({
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'},
+    });
 
-@if($model->start_time != '' || $model->end_time != '' ) 
-  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
-@else
-  $('#leave_type_available_date').val("");
-@endif
-});
+    @if($model->start_time != '' || $model->end_time != '' ) 
+    $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+    @else
+    $('#leave_type_available_date').val("");
+    @endif
+  });
 </script>
 @endif
