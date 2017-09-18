@@ -17,23 +17,63 @@ class ReportController extends Controller
 {
     public function getIndex()
     {
+        $year = date('Y');
+
+        $month = date('m');
+
     	$model = new LeaveDay;
 
     	$userModel = new User;
 
     	$typeModel = new Type;
 
-    	$data_list = $model->search();
+    	$data_list = $model->search($year, $month);
 
     	$all_user = $userModel->getAllUsers();
 
     	$all_type = $typeModel->getAllTypes();
 
-    	$sum = 0;
-
     	$report_list = self::getReport($all_type, $data_list);
 
     	$report_type_total = self::getTypeTotal($all_type, $data_list);
+
+        return view('report', compact(
+            'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'
+        ));
+    }
+
+    public function postSearch(Request $request)
+    {
+
+        dd($request);
+        $input = $request->input('setting');
+        $order_by = $request->input('order_by');
+
+        $year = $input['year'];
+
+        $month = $input['month'];
+
+        $order_way = $order_by['order_way'];
+
+        // 跑setp 5 
+        // 排序看 order_way
+
+        // 年月 type desc asc
+        $model = new LeaveDay;
+
+        $userModel = new User;
+
+        $typeModel = new Type;
+
+        $data_list = $model->search($year, $month);
+
+        $all_user = $userModel->getAllUsers();
+
+        $all_type = $typeModel->getAllTypes();
+
+        $report_list = self::getReport($all_type, $data_list);
+
+        $report_type_total = self::getTypeTotal($all_type, $data_list);
 
         return view('report', compact(
             'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'

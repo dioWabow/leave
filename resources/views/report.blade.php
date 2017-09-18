@@ -34,7 +34,7 @@
 			<div class="box box-info">
 				<div class="box-body">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
-						<form name="frmSetting" action="" method="POST">
+						<form name="frmSetting" id="frmSearch" action="{{ route('report/search')}}" method="POST">
 							<div class="row">
 								<div class="col-sm-5">
 									<div class="label bg-blue" style="font-size:20px">2017-07</div>
@@ -45,7 +45,7 @@
 											時間：
 											<select id="setting_year" name="setting[year]" class="form-control">
 												@for($i=2015; $i <= date('Y'); $i++)
-												<option value="$i">{{$i}} 年</option>
+												<option value="{{$i}}">{{$i}} 年</option>
 												@endfor
 											</select>
 											<select id="setting_month" name="setting[month]" class="form-control">
@@ -64,8 +64,11 @@
 												<option value="12">十二月</option>
 											</select>
 										</label>
-										<label><button type="button" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
+										<label><button type="submit" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
 										&nbsp;
+										<input id="sort" type="hidden" name="order_by[order_by]" value="">
+			                    		<input id="sort_way" type="hidden" name="order_by[order_way]" value="">
+										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									</div>
 								</div>
 							</div>
@@ -77,12 +80,12 @@
 									<thead>
 										<tr>
 											<th width="3%"></th>
-											<th><a href="#sort_name">名稱</a></th>
+											<th><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
 											@foreach($all_type as $type_data)
-											<th><a href="#">{{$type_data->name}}</a></th>
+											<th><a href="javascript:void(0)" onclick="changeSort('{{$type_data->name}}');">{{$type_data->name}}</a></th>
 											@endforeach
-											<th><a href="#sort_name">總計(Hr)</a></th>
-											<th><a href="#sort_name">扣薪</a></th>
+											<th><a href="javascript:void(0)" onclick="changeSort('sum');">總計(Hr)</a></th>
+											<th><a href="javascript:void(0)" onclick="changeSort('deductions');">扣薪</a></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -134,6 +137,19 @@
 		</div>
 	</div>
 </section>
+<script>
+function changeSort(sort){
+  order_by = $('#sort').val();
+  order_way = $('#sort_way').val();
+  $('#sort').val(sort);
+  if (order_by == sort && order_way == "DESC") {
+      $('#sort_way').val("ASC");
+  } else {
+    $('#sort_way').val("DESC");
+  }
+  $("#frmSearch").submit();
+}
+</script>
   </div>
   <!-- /.content-wrapper -->
 
