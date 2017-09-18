@@ -14,6 +14,7 @@ use App\UserTeam;
 use App\LeaveDay;
 use App\LeaveAgent;
 use App\LeaveNotice;
+use App\LeaveResponse;
 use App\Http\Requests\LeaveRequest;
 
 use Redirect;
@@ -271,6 +272,16 @@ class LeaveController extends Controller
                     }
 
                 }
+
+                //新增審核紀錄
+                $leave_response = new LeaveResponse;
+                $leave_response->fill([
+                    'leave_id' => $model->id,
+                    'user_id' => $model->create_user_id,
+                    'tag_id' => '1',
+                    'memo' => '提出請假申請',
+                ]);
+                $leave_response->save();
 
                 return Redirect::route('index')->withErrors(['msg' => '新增成功']);
 

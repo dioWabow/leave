@@ -1,3 +1,7 @@
+--2017-09-18 tony 修改資料表名稱
+RENAME TABLE `leave`.`leaves_respons` TO `leave`.`leaves_responses`;
+ALTER TABLE `leaves_responses` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';
+ALTER TABLE `leaves_responses` ADD `updated_at` TIMESTAMP NULL COMMENT '最後編輯' AFTER `created_at`;
 --2017-09-15 tony
 ALTER TABLE `leaves` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';
 ALTER TABLE `leaves` CHANGE `start_time` `start_time` TIMESTAMP NULL COMMENT '開始時間';

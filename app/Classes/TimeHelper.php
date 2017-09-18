@@ -6,11 +6,6 @@ use Carbon\Carbon;
 
 class TimeHelper
 {
-    public static function homePageURL()
-    {
-      return url('/');
-    }
-
     public static function changeDateFormat($date,$format)
     {
         $dt = Carbon::parse($date);

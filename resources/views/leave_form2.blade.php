@@ -34,7 +34,7 @@
 						@foreach( $types as $type)
 							@if($type->exception!='paid_sick')
 								<label>
-									<input type="radio" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" hour="4">
+									<input type="radio" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
 									{{$type->name}}
 								</label>&emsp;
 							@endif
@@ -83,10 +83,16 @@
 								<input type="radio" id="leave_dayrange_afternoon"  name="leave[dayrange]" class="flat-red" value="afternoon" @if($model->dayrange=="afternoon") checked @endif> 
 								下午
 							</label>&emsp;
-							<input type="hidden" id="keep_dayrange" name="keep_dayrange" value="{{$model->dayrange}}">
+							</label>&emsp;
+							
 						</div>
 					</div>
-				</div></div>
+				</div>
+				<div>
+				<div class="col-md-1"></div>
+				<span id="leave_notice" style="color:red;"></span>
+				</div>
+				</div>
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>理由</label>
@@ -114,7 +120,7 @@
 							@endif
 						@empty
 							<label>
-								<input type="hidden" name="leave[agent][]" class="flat-red" value=""> 
+								<input type="hidden" name="leave[agent]" class="flat-red" value=""> 
 									<font style="color: red">無代理人</font>
 							</label>&emsp;
 						@endforelse

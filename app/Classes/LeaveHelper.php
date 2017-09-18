@@ -16,11 +16,6 @@ use Illuminate\Support\Facades\Input;
 
 class LeaveHelper
 {
-    public function homePageURL()
-    {
-      return url('/');
-    }
-
     private  $user_id;
     private  $birthday;
     private  $enter_date;
@@ -578,12 +573,12 @@ class LeaveHelper
                 $end_date = self::getStartDateAndEndDate($leave['type_id'],$leave_date)['end_date'];
                 $leave_year = TimeHelper::changeDateFormat($leave_date,'Y');
 
-                $hours = ($leave['dayrange']=='allday') ? 8 : 4 ;
+                $hours = 8; //生日假半天全天都用八小帶入
                 $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
                 if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
-                    $response = $leave_year . '已經請過' . $leave_name . '或是剩餘時數不足';
+                    $response = $leave_year . '已經請過' . $leave_name;
                     return $response;
                     break;
 
@@ -694,12 +689,12 @@ class LeaveHelper
                 $start_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$leave_date)['start_date'];
                 $end_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$leave_date)['end_date'];
 
-                $hours = ($leave['dayrange']=='allday') ? 8 : 4 ;
+                $hours = 8; //久任假半天或全天都用8小時帶入
                 $remain_hours = self::getRemainHours($leave['type_id'],$hours);
 
                 if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
-                    $response = $start_date . '~' . $end_date . '間已經請過' . $leave_name . '或是剩餘時數不足';
+                    $response = $start_date . '~' . $end_date . '間已經請過' . $leave_name;
                     return $response;
                     break;
 
