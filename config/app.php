@@ -191,6 +191,14 @@ return [
         App\Providers\WebHelperServiceProvider::class,
         App\Providers\UrlHelperServiceProvider::class,
         App\Providers\ConfigHelperServiceProvider::class,
+        /*
+         * 假別計算
+         */
+        App\Providers\LeaveHelperServiceProvider::class,
+        /*
+         * 時間套件
+         */
+         App\Providers\TimeHelperServiceProvider::class,
     ],
 
     /*
@@ -246,6 +254,8 @@ return [
         /**
          * HELPER
          */
+        'LeaveHelper' => App\Facades\LeaveHelper::class,
+        'TimeHelper' => App\Facades\TimeHelper::class,
         'ImageHelper' => App\Facades\ImageHelper::class,
         'WebHelper' => App\Facades\WebHelper::class,
         'UrlHelper' => App\Facades\UrlHelper::class,

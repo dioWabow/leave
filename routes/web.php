@@ -125,6 +125,14 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'SystemConfController@postUpdate',
         ]);
     });
+
+    # 特休報表
+    Route::group(['prefix'=>'annual'], function(){
+        Route::any('index',[
+            'as'=>'annual/index',
+            'uses'=> 'LeaveAnnualReportController@getIndex',
+        ]);
+    });
     
 });
 
