@@ -101,23 +101,37 @@ $(function () {
 @endif
 
 <!-- 我的假單頁面用 -->
-  <script>
+@if(Request::is('leaves/my/history/*'))
+<script>
 $(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
+  $("#search_daterange").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+  });
 
-    $('#search_daterange').val('');
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
 
-    $("#leave_view_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/unsplash2.jpg'
-        ],
-        initialPreviewAsData: true,
-    });
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+  });
+
+  @if($model->start_time != '' || $model->end_time != '' ) 
+    $('#search_daterange').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+  @else
+    $('#search_daterange').val("");
+  @endif
+
+  $("#leave_view_fileupload").fileinput({
+      initialPreview: [
+          './dist/img/unsplash2.jpg'
+      ],
+      initialPreviewAsData: true,
+  });
 });
 </script>
+@endif
 
 <!--天災假調整用-->
 <script>

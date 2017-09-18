@@ -316,8 +316,35 @@ class WebHelper
     public static function getLeaveTagsOptionsForHistory()
     {
         return [
+            '7' => '已取消',
             '9' => '已准假',
             '8' => '不准假',
+        ];
+    }
+    /**
+     * 取得 leave 中 tag 的名稱 (等待審核頁面)
+     *
+     * @return []
+     */
+     public static function getLeaveTagsLabelForProve($data)
+     {
+         $arr = self::getLeaveTagsOptionsForProve();
+         
+         return (!empty($arr[$data])) ? $arr[$data] : null;
+     }
+
+    /**
+     * 取得 leave 中 tag 的所有項目種類 (等待審核頁面)
+     *
+     * @return []
+     */
+    public static function getLeaveTagsOptionsForProve()
+    {
+        return [
+            '1' => '代理人待核',
+            '2' => '小主管待核',
+            '3' => '主管待核',
+            '4' => '大BOSS待核',
         ];
     }
 }

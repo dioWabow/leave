@@ -118,10 +118,10 @@
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
         <li class=""><a href="#"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
-        <li class="">
-          <a href="#"><i class="fa fa-calendar"></i> <span>我的假單</span>
+        <li @if(Request::is('leaves/my/*')) class="active" @endif>
+          <a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+              <small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }}</small>
             </span>
           </a>
         </li>
