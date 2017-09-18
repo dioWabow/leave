@@ -44,8 +44,9 @@
 										<label>
 											時間：
 											<select id="setting_year" name="setting[year]" class="form-control">
-												<option value="2017" selected="selected">2017 年</option>
-												<option value="2016">2016 年</option>
+												@for($i=2015; $i <= date('Y'); $i++)
+												<option value="$i">{{$i}} 年</option>
+												@endfor
 											</select>
 											<select id="setting_month" name="setting[month]" class="form-control">
 												<option value="year">整年</option>
