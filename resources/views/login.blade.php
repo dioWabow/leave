@@ -18,7 +18,7 @@
   <script>
   $(function() {
       $('#login').click(function(){
-        location.href = 'index.html';
+        location.href = '{{ route('login_google') }}';
       });
       
       $('body').vegas({
@@ -46,6 +46,14 @@
     <a href="index.html"><img src="dist/img/wabow_logo.png" width="50"> <b>哇寶</b>請假系統</a>
   </div>
   <button type="button" name="login" id="login" class="btn btn-block btn-warning btn-lg"><i class="fa fa-sign-in"></i> 我要登入</button>
+  <br>
+  @if ($errors->has('msg'))
+    <div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><i class="icon fa fa-ban"></i> 錯誤</h4>
+      {{ $errors->first('msg') }}
+    </div>
+  @endif
 </div>
 </body>
 </html>

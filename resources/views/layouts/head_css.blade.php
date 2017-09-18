@@ -17,16 +17,17 @@
 <!-- daterange picker -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.css">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css"> 
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css">
 <!-- Bootstrap fileupload -->
 <link href="{{route('root_path')}}/plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css?v=3">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
-<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css?v=6">
+<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
@@ -53,21 +54,36 @@
 <script src="{{route('root_path')}}/plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
 
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable.js"></script>
-<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=2"></script>
+<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <!-- wabow -->
 <script src="{{route('root_path')}}/js/wabow.js"></script>
+<!-- colorpicker -->
+<script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <!-- 國定假日/補班與修改頁面 -->
+@if(Request::is('holidies/*'))
   <script>
 $(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
+    $('input[name="search[daterange]"]').daterangepicker({
+        autoUpdateInput: false,
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('#search_daterange').val('');
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    if("{{$model->start_date}}" == "") {
+        $('#search_daterange').val('');
+    } else {
+        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->start_date)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->end_date)->format('Y-m-d') }}");
+    }
 
     $('#holidies_available_date').daterangepicker({
         showDropdowns: true,
@@ -85,165 +101,7 @@ $(function () {
     $('#holidies_date').val($('#holidies_date').attr('date'));
 });
 </script>
-
-<!-- Index頁面 -->
-<script>
-  $(function () {
-
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-    function ini_events(ele) {
-      ele.each(function () {
-
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
-        };
-
-        // store the Event Object in the DOM element so we can get to it later
-        $(this).data('eventObject', eventObject);
-
-        // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex: 1070,
-          revert: true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
-
-      });
-    }
-
-    ini_events($('#external-events div.external-event'));
-
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
-    var date = new Date();
-    var d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
-      },
-      //Random default events
-      events: [
-        {
-          title: 'All Day Event',
-          start: new Date(y, m, 1),
-          backgroundColor: "#f56954", //red
-          borderColor: "#f56954" //red
-        },
-        {
-          title: 'Long Event',
-          start: new Date(y, m, d - 5),
-          end: new Date(y, m, d - 2),
-          backgroundColor: "#f39c12", //yellow
-          borderColor: "#f39c12" //yellow
-        },
-        {
-          title: 'Meeting',
-          start: new Date(y, m, d, 10, 30),
-          allDay: false,
-          backgroundColor: "#0073b7", //Blue
-          borderColor: "#0073b7" //Blue
-        },
-        {
-          title: 'Lunch',
-          start: new Date(y, m, d, 12, 0),
-          end: new Date(y, m, d, 14, 0),
-          allDay: false,
-          backgroundColor: "#00c0ef", //Info (aqua)
-          borderColor: "#00c0ef" //Info (aqua)
-        },
-        {
-          title: 'Birthday Party',
-          start: new Date(y, m, d + 1, 19, 0),
-          end: new Date(y, m, d + 1, 22, 30),
-          allDay: false,
-          backgroundColor: "#00a65a", //Success (green)
-          borderColor: "#00a65a" //Success (green)
-        },
-        {
-          title: 'Click for Google',
-          start: new Date(y, m, 28),
-          end: new Date(y, m, 29),
-          url: 'http://google.com/',
-          backgroundColor: "#3c8dbc", //Primary (light-blue)
-          borderColor: "#3c8dbc" //Primary (light-blue)
-        }
-      ],
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar !!!
-      drop: function (date, allDay) { // this function is called when something is dropped
-
-        // retrieve the dropped element's stored Event Object
-        var originalEventObject = $(this).data('eventObject');
-
-        // we need to copy it, so that multiple events don't have a reference to the same object
-        var copiedEventObject = $.extend({}, originalEventObject);
-
-        // assign it the date that was reported
-        copiedEventObject.start = date;
-        copiedEventObject.allDay = allDay;
-        copiedEventObject.backgroundColor = $(this).css("background-color");
-        copiedEventObject.borderColor = $(this).css("border-color");
-
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-        // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
-          $(this).remove();
-        }
-
-      }
-    });
-
-    /* ADDING EVENTS */
-    var currColor = "#3c8dbc"; //Red by default
-    //Color chooser button
-    var colorChooser = $("#color-chooser-btn");
-    $("#color-chooser > li > a").click(function (e) {
-      e.preventDefault();
-      //Save color
-      currColor = $(this).css("color");
-      //Add color effect to button
-      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-    });
-    $("#add-new-event").click(function (e) {
-      e.preventDefault();
-      //Get value and make sure it is not null
-      var val = $("#new-event").val();
-      if (val.length == 0) {
-        return;
-      }
-
-      //Create events
-      var event = $("<div />");
-      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-      event.html(val);
-      $('#external-events').prepend(event);
-
-      //Add draggable funtionality
-      ini_events(event);
-
-      //Remove event from text input
-      $("#new-event").val("");
-    });
-  });
-</script>
+@endif
 
 <!-- 我的假單頁面用 -->
   <script>
@@ -265,6 +123,7 @@ $(function () {
 </script>
 
 <!--天災假調整用-->
+@if(Request::is('holidies/*'))
 <script>
 $(function () {
     var $naturalDisasterList = $('.naturalDisasterList');
@@ -285,31 +144,232 @@ $(function () {
     });
 });
 </script>
+@endif
 
 
 <!-- 團隊設定用 -->
+@if(Request::is('teams/*'))
 <script>
-$('#nestable').nestable({
-  maxDepth: 5
-});
-</script>
+$(document).ready(function () {
 
-<!-- 員工管理與修改頁面用 -->
+  var nestableChange = function (e) {
+    var list = e.length ? e : $(e.target), output = list.data('output');
+
+    $.ajax({
+        method: "POST",
+        url: "{{route('teams/update_drop')}}",
+        data: {
+          "_token": "{{ csrf_token() }}", 
+          "team_json": window.JSON.stringify(list.nestable('serialize'))
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+        alert("更新失敗!");
+    });
+  };
+
+  $('#nestable').nestable({
+    maxDepth: 2,
+    dropCallback : 'sourceId'
+    }).on('change', nestableChange);
+  nestableChange($('#nestable').data('output', $('#nestable-output')));
+
+
+
+  $(".my-colorpicker2").colorpicker();
+
+  // 新增的ajax
+  $('#menu-add').find("button[id='addButton']").click(function() {
+
+    $this = $(this);
+    $team_name = $this.parents().find("input[id='addInputName']").val();
+    $team_color = $this.parents().find("input[id='addInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/create') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        team_name: $team_name,
+        team_color: $team_color,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('新增成功');
+          $('#team_set_list').append(data.html);
+          $('.dd-empty').remove();
+          $this.parents().find("input[id='addInputName']").val('');
+          $this.parents().find("input[id='addInputColor']").val('');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
+
+  $(document).on('click', '.button-edit', prepareEdit);
+
+  // 修改點下去 抓出id 丟給 editButton
+  $(document).on('click', '.button-edit', function(event){
+    $this = $(this);
+    $id = $this.attr("data-owner-id");
+    $('#editButton').val($id);
+
+  });
+
+  $(document).on('click', '#editButton', editMenuItem);
+
+  // 修改的ajax
+  $('#editButton').click(function(){
+    $this = $(this);
+
+    $id = $this.val();
+    $team_name = $this.parents().find("input[id='editInputName']").val();
+    $team_color = $this.parents().find("input[id='editInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/update') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+        team_name: $team_name,
+        team_color: $team_color
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+          $("#menu-editor").fadeOut();
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $(document).on('click', '.button-delete', deleteFromMenu);
+
+  // 刪除的 ajax
+  $(document).on('click', '.button-delete', function(event){
+    $this = $(this);
+
+    $id = $this.attr("data-owner-id");
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/delete') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('刪除成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $('#memberReload').click(function(){
+
+    $.get('index', function(data) {
+      var html = $(data).find('#member_set').html();
+      $('#member_set').html(html);
+      $(".select2").select2();
+    });
+
+  });
+
+  $('form[name=member_form]').submit(function(event){
+
+    // 跑所有team
+    $('.member_list').each(function(){
+
+      $team = $(this).attr('team_id');
+
+      // 跑團隊人員 與 主管人員
+      $team_member = $('#member_'+$team).select2('val');
+      $team_manager = $('#manager_'+$team).select2('val');
+
+      // select2 抓出來型態不是string
+      if(!$team_member == "") {
+        $team_member = $team_member.toString();
+      }
+
+      // 當有選主管才要判斷
+      if($team_manager != ""){
+
+        $team_manager.toString();
+
+        if($team_member === null){
+          event.preventDefault();
+          alert('有主管的情況至少要有一名組員!!');
+        } else {
+
+          if($team_member == $team_manager){
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          } else if($team_member.match($team_manager)) {
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          }
+        }
+      }
+    });
+
+});
+
+
+});
+
+</script>
+@endif
+
+<!-- 假別管理與修改頁面用 -->
+@if(Request::is('leave_type/*'))
 <script>
 $(function () {
-  $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
+  $("#leave_type_available_date").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+  });
 
-    $('.single-date').each(function(){$(this).val($(this).attr('date'));});
-
-    $("#user_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/users/vic.png'
-        ],
-        initialPreviewAsData: true,
-    });
+@if($model->start_time != '' || $model->end_time != '' )
+  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+@else
+  $('#leave_type_available_date').val("");
+@endif
 });
 </script>
+@endif
