@@ -24,13 +24,11 @@ class LeaveHelper
 
     public function __construct($id = '')
     {
-
         $this->user_id = Auth::user()->id;
         $this->birthday = Auth::user()->birthday;
         $this->enter_date = Auth::user()->enter_date;
         $this->job_seek = Auth::user()->job_seek;
         $this->arrive_time = Auth::user()->arrive_time;
-
     }
 
     public function calculateAnnualDate($start_date = '',$user_id = '') 
@@ -81,7 +79,7 @@ class LeaveHelper
 
                         $annual_date = 3;
 
-                    } elseif($service_month == 6 && $service_day >= 0) { //等於六個月先判斷是否足月，才發三天
+                    } elseif ($service_month == 6 && $service_day >= 0) { //等於六個月先判斷是否足月，才發三天
 
                         $annual_date = 3;
 
@@ -133,7 +131,7 @@ class LeaveHelper
 
             }
 
-            foreach($date_list as $key => $date) {
+            foreach ($date_list as $key => $date) {
 
                 if (in_array(TimeHelper::getWeekNumberByDate($date['start_time']),['0','6']) ) {
 
@@ -226,7 +224,7 @@ class LeaveHelper
 
             $back_date = $end_time;
 
-        } elseif($dayrange == 'afternoon') {
+        } elseif ($dayrange == 'afternoon') {
 
             if (TimeHelper::getWeekNumberByDate($leave_date) == 5) {
                
@@ -246,7 +244,7 @@ class LeaveHelper
                 $back_date = TimeHelper::changeDateValue($end_time,['+,2,day'],'Y-m-d H:i:s');
                 $back_date = TimeHelper::changeHourValue($back_date,['+,15,hour'],'Y-m-d H:i:s');
 
-            } elseif(TimeHelper::getWeekNumberByDate($leave_date) == 1) {
+            } elseif (TimeHelper::getWeekNumberByDate($leave_date) == 1) {
                
                 $front_date = TimeHelper::changeDateValue($start_time,['-,2,day'],'Y-m-d H:i:s');
                 $front_date = TimeHelper::changeHourValue($front_date,['-,15,hour'],'Y-m-d H:i:s');
@@ -274,7 +272,7 @@ class LeaveHelper
                 $date = TimeHelper::changeDateValue($date_time,['-,2,day'],'Y-m-d H:i:s');
                 $date = TimeHelper::changeHourValue($date,['-,15,hour'],'Y-m-d H:i:s');
 
-            } elseif(TimeHelper::changeDateFormat($date_time,'H') == '09') {
+            } elseif (TimeHelper::changeDateFormat($date_time,'H') == '09') {
 
                 $date = TimeHelper::changeHourValue($date_time,['-,15,hour'],'Y-m-d H:i:s');
 
@@ -291,7 +289,7 @@ class LeaveHelper
                 $date = TimeHelper::changeDateValue($date_time,['+,2,day'],'Y-m-d H:i:s');
                 $date = TimeHelper::changeHourValue($date,['+,15,hour'],'Y-m-d H:i:s');
 
-            } elseif(TimeHelper::changeDateFormat($date_time,'H') == '18') {
+            } elseif (TimeHelper::changeDateFormat($date_time,'H') == '18') {
 
                 $date = TimeHelper::changeHourValue($date_time,['+,15,hour'],'Y-m-d H:i:s');
 
@@ -340,17 +338,17 @@ class LeaveHelper
                     $start_date = TimeHelper::changeDateFormat($date,'Y') . '-01-01 00:00:00';
                     $end_date = TimeHelper::changeDateFormat($date,'Y') . '-03-31 23:59:59';
 
-                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['4','5','6'])) {
+                } elseif (in_array(TimeHelper::changeDateFormat($date,'m'),['4','5','6'])) {
 
                     $start_date = TimeHelper::changeDateFormat($date,'Y') . '-04-01 00:00:00';
                     $end_date = TimeHelper::changeDateFormat($date,'Y') . '-06-30 23:59:59';
 
-                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['7','8','9'])) {
+                } elseif (in_array(TimeHelper::changeDateFormat($date,'m'),['7','8','9'])) {
 
                     $start_date = TimeHelper::changeDateFormat($date,'Y') . '-07-01 00:00:00';
                     $end_date = TimeHelper::changeDateFormat($date,'Y') . '-09-30 23:59:59';
 
-                } elseif(in_array(TimeHelper::changeDateFormat($date,'m'),['10','11','12'])) {
+                } elseif (in_array(TimeHelper::changeDateFormat($date,'m'),['10','11','12'])) {
 
                     $start_date = TimeHelper::changeDateFormat($date,'Y') . '-10-01 00:00:00';
                     $end_date = TimeHelper::changeDateFormat($date,'Y') . '-12-31 23:59:59';
@@ -530,7 +528,7 @@ class LeaveHelper
 
                 //善待假是否與特休、生日、久任、國定假日相連
                 $leave_type_arr = [];
-                foreach(Type::getTypeByException(['birthday','annual_leave','lone_stay']) as $type) {
+                foreach (Type::getTypeByException(['birthday','annual_leave','lone_stay']) as $type) {
 
                     $leave_type_arr[] = $type->id;
 
@@ -586,7 +584,7 @@ class LeaveHelper
 
                 //生日假不可與善待假連著請
                 $leave_type_arr = [];
-                foreach(Type::getTypeByException(['entertain']) as $type) {
+                foreach (Type::getTypeByException(['entertain']) as $type) {
 
                     $leave_type_arr[] = $type->id;
 
@@ -655,7 +653,7 @@ class LeaveHelper
 
                 //特休不可與善待假連著請
                 $leave_type_arr = [];
-                foreach(Type::getTypeByException(['entertain']) as $type) {
+                foreach (Type::getTypeByException(['entertain']) as $type) {
 
                     $leave_type_arr[] = $type->id;
 
@@ -702,7 +700,7 @@ class LeaveHelper
 
                 //久任不可與善待假連著請
                 $leave_type_arr = [];
-                foreach(Type::getTypeByException(['entertain']) as $type) {
+                foreach (Type::getTypeByException(['entertain']) as $type) {
 
                     $leave_type_arr[] = $type->id;
 

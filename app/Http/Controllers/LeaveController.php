@@ -53,7 +53,27 @@ class LeaveController extends Controller
 
         }
 
+        //抓出所有假別，並判斷謀職假是否開啟
         $types = Type::getAllType();
+
+        if (!User::getJobSeekByUserId($user_id)[0]) {
+
+            $type_id_arr = Type::getTypeByException(['job_seek'])->toArray();
+            foreach ($type_id_arr as $type_id) {
+
+                foreach ($types as $key => $type) {
+
+                    if ($type['id'] == $type_id['id']) {
+
+                        unset($types[$key]);
+
+                    }
+
+                }
+
+            }
+
+        }
 
         //使用者目前所有代理人
         $user_agents = UserAgent::getUserAgentByUserId($user_id);
@@ -63,7 +83,7 @@ class LeaveController extends Controller
 
         //除了使用者本身，所有人的團隊(額外通知)
         $user_no_team = $team_users = [];
-        foreach(User::getAllUsersExcludeUserId($user_id) as $users){
+        foreach (User::getAllUsersExcludeUserId($user_id) as $users) {
 
             if ($users->UserTeam()->first()) {
 
@@ -75,6 +95,7 @@ class LeaveController extends Controller
                 $user_no_team[] = $users;
 
             }
+
         }
 
         return view('leave_form2',compact(
@@ -95,7 +116,7 @@ class LeaveController extends Controller
         $start = ' 09:00';
         $end = ' 18:00';
 
-        if (count(explode(' - ', $leave['timepicker']))>1) {
+        if (count(explode(' - ', $leave['timepicker'])) > 1) {
 
             $leave['start_time'] = LeaveHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['0'],$user->id);
             $leave['end_time'] = LeaveHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['1'],$user->id);
@@ -111,7 +132,7 @@ class LeaveController extends Controller
                 $leave['start_time'] = $leave['timepicker'] . $start;
                 $leave['end_time'] = TimeHelper::changeHourValue($leave['start_time'],['+,4,hour'],'Y-m-d H:i:s');
                 
-            } elseif($leave['dayrange'] == 'afternoon') {
+            } elseif ($leave['dayrange'] == 'afternoon') {
 
                 $leave['end_time'] = $leave['timepicker'] . $end;
                 $leave['start_time'] = TimeHelper::changeHourValue($leave['end_time'],['-,4,hour'],'Y-m-d H:i:s');
@@ -177,7 +198,7 @@ class LeaveController extends Controller
                     }
 
                 //病假拆單
-                } elseif(in_array($exception,['paid_sick','sick'])) {
+                } elseif (in_array($exception,['paid_sick','sick'])) {
 
                     $sick_type = Type::getTypeByException(['sick'])->first()['id'];
                     $paid_sick_type = Type::getTypeByException(['paid_sick'])->first()['id'];

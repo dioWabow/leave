@@ -60,9 +60,9 @@ class User extends BaseModel
                 if ($key == 'keywords' && isset($value)) {
 
                     $query->Where(function ($query1) use ($value) {
-                        $query1->orWhere("employee_no", $value);
-                        $query1->orWhere("name", 'like', '%'.$value.'%');
-                        $query1->orWhere("nickname", 'like', '%'.$value.'%');
+                        $query1->orWhere('employee_no', $value);
+                        $query1->orWhere('name', 'like', '%'.$value.'%');
+                        $query1->orWhere('nickname', 'like', '%'.$value.'%');
                     });
 
                 } elseif ($key == 'teams' && isset($value)) {
@@ -108,12 +108,17 @@ class User extends BaseModel
      * @param  array   $where     搜尋條件
      * @return 資料object/false
      */
-    public static function getUserByEmail($email="") {
-
-        $query = self::where("email", $email);
+    public static function getUserByEmail($email='')
+    {
+        $query = self::where('email', $email);
 
         $result = $query->first();
+        return $result;
+    }
 
+    public static function getJobSeekByUserId($user_id)
+    {
+        $result = self::where('id',$user_id)->pluck('job_seek');
         return $result;
     }
 
