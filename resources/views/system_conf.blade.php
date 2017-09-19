@@ -89,7 +89,7 @@
                     <label for="config_smtp_host" class="col-sm-2 control-label">HOST</label>
 
                     <div class="col-sm-7">
-                        <input type="email" class="form-control" id="config_smtp_host" name="config[config_smtp_host]" placeholder="ex: smtp.gmail.com" value="{{ $config['config_smtp_host'] }}">
+                        <input type="email" class="form-control" id="config_smtp_host" name="config[smtp_host]" placeholder="ex: smtp.gmail.com" value="{{ $config['smtp_host'] }}">
                     </div>
 
                     <label for="config_smtp_port" class="col-sm-1 control-label">Port</label>
