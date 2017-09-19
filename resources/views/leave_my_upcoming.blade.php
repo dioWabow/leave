@@ -26,7 +26,7 @@
             <tbody>
             </form>
             @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="leave_manager_view.html">
+              <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}">
                 <td>{{ $value->fetchType->name }}</td>
                 <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
                 <td>{{ $value->reason }}</td>
@@ -36,8 +36,8 @@
                   @endforeach
                 </td>
                 <td>{{ $value->hours }}</td>
-                <td class="text-red">
-                  {{ LeaveHelper::getDiffDaysLabel($value->start_time) }}
+                <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+                  @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
                 </td>
               </tr>
             @endforeach

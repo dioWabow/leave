@@ -28,13 +28,14 @@
               假別：
               <select id="search_leave_type" name="search[type_id]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="1" @if (count($search)>2 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
-                <option value="2" @if (count($search)>2 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
-                <option value="3" @if (count($search)>2 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
-                <option value="4" @if (count($search)>2 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
-                <option value="5" @if (count($search)>2 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
-                <option value="6" @if (count($search)>2 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
-                <option value="7" @if (count($search)>2 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
+                <option value="normal" @if (count($model->order_by) >0 && $model->exception == "normal") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
+                <option value="job_seek" @if (count($model->order_by) >0 && $model->exception == "job_seek") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
+                <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == "paid_sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
+                <option value="sick" @if (count($model->order_by) >0 && $model->exception == "sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
+                <option value="entertain" @if (count($model->order_by) >0 && $model->exception == "entertain") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
+                <option value="annaul_leave" @if (count($model->order_by) >0 && $model->exception == "annaul_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == "lone_stay") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
+                <option value="birthday" @if (count($model->order_by) >0 && $model->exception == "birthday") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
               &nbsp;
               區間：
@@ -69,13 +70,13 @@
               <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="13%">職代</a></th>
+              <th width="13%">代理人</a></th>
               <th width="9%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
             </tr>
           </thead>
           <tbody>
           @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="leave_view.html" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
+            <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
                   @if($value->tag_id == 7) class="btn"

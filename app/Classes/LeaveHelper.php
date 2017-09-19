@@ -17,16 +17,19 @@ class LeaveHelper
         $tag_id = [1,2,3,4];
         return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
     }
+
     /**
      * 傳入user_id 取得 user的即將放假假單
-     * tag 狀態 7
+     * tag 狀態 9
      * 
      */
     public static function getUpComingLeavesTotalByUserId($id)
     {
         $tag_id = [9];
-        return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
+        $leave_id = Leave::getUpComingLeavesIdByToday(Carbon::now());
+        return Leave::where('user_id', $id)->whereIn('id', $leave_id)->whereIn('tag_id', $tag_id)->count();
     }
+
     /**
      * 傳入start_time 取得 倒數天數
      * 
@@ -38,15 +41,16 @@ class LeaveHelper
         $start_time = Carbon::parse($data);
         $result = '';
 
-        if ($start_time->gt($today))  {
+        if ($start_time->gte($today))  {
 
-            $result = '倒數'. $today->diffInDays(Carbon::parse($start_time)) . '天'; 
+            $result = $today->diffInDays(Carbon::parse($start_time));
 
         } 
        
         return $result;
 
     }
+    
     /**
      * 傳入 dataProvider 取得 假單排除狀態 tag 7(取消) 的時數總和
      * 

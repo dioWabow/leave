@@ -24,22 +24,22 @@
             <!-- Menu toggle button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              <span class="label label-warning">{{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }}</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have {{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }} notifications</li>
               <li>
                 <!-- Inner Menu: contains the notifications -->
                 <ul class="menu">
                   <li><!-- start notification -->
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 張假單尚未審核
+                    <a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}">
+                      <i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }} 張假單尚未審核
                     </a>
                   </li>
                   <!-- end notification -->
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              <li class="footer"><a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}">View all</a></li>
             </ul>
           </li>
           <!-- User Account Menu -->

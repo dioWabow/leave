@@ -173,7 +173,7 @@ $(function () {
   });
 
 @if($model->start_time != '' || $model->end_time != '' ) 
-  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
 @else
   $('#leave_type_available_date').val("");
 @endif

@@ -27,7 +27,7 @@
             <tbody>
             </form>
               @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="leave_manager_view.html">
+              <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}">
                 <td>
                   <button type="button"
                     @if($value->tag_id == 1) class="btn bg-yellow"
@@ -37,7 +37,7 @@
                     @endif>
                     {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
                   </button>
-                  @if ($value->tag_id == 2 || $value->tag_id == 3)
+                  @if ($value->tag_id == 1 || $value->tag_id == 2)
                     <a href="{{ route('leaves/my/delete', [ 'id' => $value->id ]) }}">
                       <button type="button" class="btn btn-danger">
                         <i class="fa fa-trash-o"></i>
@@ -54,8 +54,8 @@
                 @endforeach
                 </td>
                 <td>{{ $value->hours }}</td>
-                <td class="text-red">
-                  {{ LeaveHelper::getDiffDaysLabel($value->start_time) }}
+                <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+                  @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
                 </td>
               </tr>
               @endforeach

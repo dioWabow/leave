@@ -19,14 +19,16 @@ class Leave extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
+        'exception'
     ];
 
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '25',
+        'pagesize' => '5',
         'start_time' => '',
-        'end_time' => ''
+        'end_time' => '',
+        'exception' => '',
     ];
 
     /**
@@ -41,7 +43,7 @@ class Leave extends BaseModel
     public function search($where = [])
     {
         $query = self::OrderedBy();
-        
+
         foreach ($where as $key => $value) {
             
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
@@ -55,6 +57,14 @@ class Leave extends BaseModel
                     }
 
                     $query->whereIn('tag_id', $value);
+
+                 } elseif ($key == 'id') {
+                
+                    $query->whereIn('id', $value);
+
+                 } elseif ($key == 'type_id') {
+                
+                    $query->whereIn('type_id', $value);
 
                 } elseif ($key == 'start_time') {
 
@@ -108,6 +118,32 @@ class Leave extends BaseModel
     public function fetchTag()
     {
         $result = $this->hasOne('App\Tag', 'id', 'tag_id');
+        return $result;
+    }
+
+    public static function getfinishedLeavesIdByToday($today)
+    {
+        $result = self::where('start_time', '<=', $today)
+                        ->where('tag_id', '9')
+                        ->orWhereIn('tag_id', ['7','8'])
+                        ->get()
+                        ->pluck('id');
+        return $result;
+    }
+
+    public static function getUpComingLeavesIdByToday($today)
+    {
+        $result = self::where('start_time', '>=' ,$today)
+                        ->get()
+                        ->pluck('id');
+        return $result;
+    }
+
+    public static function getTypeIdByException($exception)
+    {
+        $result = Type::where('exception', $exception)
+                        ->get()
+                        ->pluck('id');
         return $result;
     }
 }
