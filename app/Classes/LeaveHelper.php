@@ -480,6 +480,14 @@ class LeaveHelper
 
         $response = '';
 
+        //請假不得往前請
+        if (TimeHelper::changeDateFormat($start_time,'Y-m-d') < Carbon::now()->format('Y-m-d')) {
+
+            $response = '不得請以前的假';
+            return $response;
+
+        }
+
         //當天是否請過假
         if (LeaveDay::getLeaveByUserIdDateRangeType($this->user_id,$start_time,$end_time,'') > 0) {
 
@@ -557,6 +565,15 @@ class LeaveHelper
 
             //生日假
             case 'birthday':
+                //是否有設定生日
+                if (empty($this->birthday) || $this->birthday == '0000-00-00') {
+
+                    $response = '尚未設定生日，請洽公司HR';
+                    return $response;
+                    break;
+
+                }
+
                 //當月是否為生日月
                 if (TimeHelper::changeDateFormat($this->birthday,'m') != TimeHelper::changeDateFormat($leave_date,'m')) {
                     

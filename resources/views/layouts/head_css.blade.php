@@ -232,6 +232,7 @@ $(function () {
 
   var leave_type_arr = ['entertain','birthday','lone_stay'];
   var leave_type_single_arr = ['entertain','birthday','lone_stay'];
+  var leave_type_notice_arr = ['birthday','lone_stay'];
   var daterangepicker_type = 'isDate';
 
   //Flat red color scheme for iCheck
@@ -285,15 +286,15 @@ $(function () {
       if($.inArray(mydata, leave_type_arr) !== -1){
         $div_leave_spent_hours.hide();
         $label_leave_spent_hours.hide();
-        $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+        
       }else{
         $div_leave_dayrange.hide();
         $label_leave_dayrange.hide();
-        if (mydata == "annual_leave") {
-          $leave_notice.text("特休請已半天為單位");
-        }else{
-          $leave_notice.hide();
-        }
+        $leave_notice.hide();
+      }
+
+      if($.inArray(mydata, leave_type_notice_arr) !== -1){
+        $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
       }
       
       //遇到善待假則 allday 不可選擇
@@ -362,14 +363,8 @@ $(function () {
       $label_leave_dayrange.show();
 
       $leave_notice.show();
-      $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
     }else{
-      if (mydata == "annual_leave") {
-        $leave_notice.show();
-        $leave_notice.text("特休假請以半天為單位");
-      }else{
-        $leave_notice.hide();
-      }
+      $leave_notice.hide();
 
       $div_leave_spent_hours.show();
       $label_leave_spent_hours.show();
@@ -378,6 +373,10 @@ $(function () {
       $label_leave_dayrange.hide();
 
       daterangepicker_type = 'isDatetime';
+    }
+
+    if($.inArray(mydata, leave_type_notice_arr) !== -1){
+      $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
     }
 
     fetchDaterangepicker();
@@ -396,19 +395,28 @@ $(function () {
     var time = $leave_timepicker.val();
 
     options.locale = {format: 'YYYY-MM-DD'};
-    if(daterangepicker_type == 'isSingleDate') options.singleDatePicker = true;
+    if(daterangepicker_type == 'isSingleDate') {
+      options.singleDatePicker = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+    }
     if(daterangepicker_type == 'isDatetime') {
-      options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
-      options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      if (time) {
+        options.startDate = time.split(" - ")['0'];
+        options.endDate = time.split(" - ")['1'];
+      } else {
+        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      }
+
       options.timePicker = true;
       options.timePickerIncrement = 30;
       options.timePicker24Hour = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
       options.locale = {format: 'YYYY-MM-DD HH:mm'};
     }
 
     $leave_timepicker.daterangepicker(options);
     $leave_timepicker.val(time);
-    $leave_timepicker.attr("date", time);
 
     $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
       var myStartDate = new Date(picker.startDate);
