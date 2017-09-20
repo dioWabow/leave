@@ -27,22 +27,32 @@ class ImageHelper
         $this->_file_name = $file_name;
 
         $input = $this->getAvailableFiles($input_name);
-        if($input === null) return null;
+        if ($input === null) return null;
 
-        if(is_array($input)) {
+        if (is_array($input)) {
+
             $result = array();
             foreach($input as $key=>$file) {
+
                 $filename = $this->saveImage($file);
-                if($filename !== null) $result[] = $filename;
+                if ($filename !== null) $result[] = $filename;
+
             }
 
-            if(count($result) > 0) {
+            if (count($result) > 0) {
+
                 return $result;
-            }else{
+
+            } else {
+
                 return null;
+
             }
-        }else{
+
+        } else {
+
             return $this->saveImage($input);
+
         }
     }
 
@@ -58,21 +68,24 @@ class ImageHelper
 
     private function getAvailableFiles($input_name) 
     {
-        if(Input::hasFile($input_name)) {
+        if (Input::hasFile($input_name)) {
 
             $input = Input::file($input_name);
-            if(is_array($input)) {
+            if (is_array($input)) {
 
                 $result = array();
                 foreach ($input as $key=>$file) {
-                    if($file->isValid()) $result[] = $file;
+
+                    if ($file->isValid()) $result[] = $file;
+
                 }
 
-                if(count($result) > 0) return $result;
+                if (count($result) > 0) return $result;
 
             }else{
 
-                if($input->isValid()) return $input;
+                if ($input->isValid()) return $input;
+
             }
 
         }
@@ -85,18 +98,26 @@ class ImageHelper
         $file_extension = $file->getClientOriginalExtension();
         
         if (!empty($this->_file_name)) {
+
             $filename = $this->_file_name . '.' . $file_extension; //若有指定命名時使用指定名字
-        }else{
+
+        } else {
+
             $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
+
         }
         
         $path = $this->_file_path . $filename;
         $save = Image::make($file)->save($path);
 
-        if($save) {
+        if ($save) {
+
             return $filename;
-        }else{
+
+        } else {
+
             return null;
+
         }
     }
 }
