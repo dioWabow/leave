@@ -367,19 +367,28 @@ $(function () {
     var time = $leave_timepicker.val();
 
     options.locale = {format: 'YYYY-MM-DD'};
-    if(daterangepicker_type == 'isSingleDate') options.singleDatePicker = true;
+    if(daterangepicker_type == 'isSingleDate') {
+      options.singleDatePicker = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+    }
     if(daterangepicker_type == 'isDatetime') {
-      options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
-      options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      if (time) {
+        options.startDate = time.split(" - ")['0'];
+        options.endDate = time.split(" - ")['1'];
+      } else {
+        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      }
+
       options.timePicker = true;
       options.timePickerIncrement = 30;
       options.timePicker24Hour = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
       options.locale = {format: 'YYYY-MM-DD HH:mm'};
     }
 
     $leave_timepicker.daterangepicker(options);
     $leave_timepicker.val(time);
-    $leave_timepicker.attr("date", time);
 
     $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
       var myStartDate = new Date(picker.startDate);
