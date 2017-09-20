@@ -196,10 +196,6 @@ class ReportController extends Controller
                                 $result[$user_key]['deductions'] += $data_value['hours'];
 
                             }
-                        } else {
-
-                            $result[$user_key]['deductions'] = "0";
-
                         }
 
                         // 補上 total sum

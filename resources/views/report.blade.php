@@ -75,8 +75,8 @@
 											@foreach($all_type as $type_data)
 											<th><a>{{$type_data->name}}</a></th>
 											@endforeach
-											<th>總計(Hr)</th>
-											<th>扣薪</th>
+											<th><a>總計(Hr)</a></th>
+											<th><a>扣薪</a></th>
 										</tr>
 									</thead>
 									<tbody>
