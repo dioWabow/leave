@@ -32,7 +32,7 @@ class SiteController extends Controller
 
         foreach ($leave_list as $key => $value) {
             // 判斷如果有user 被移除的情況
-            if ($value->user != null) {
+            if ($value->fetchUser != null) {
                 // 用關聯方式取值
                 $user_name = $value->fetchUser->nickname;
                 $vacation_name = $value->fetchType->name;
