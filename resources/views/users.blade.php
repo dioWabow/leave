@@ -133,13 +133,13 @@
                         </td>
                         <td>
                           @foreach (App\UserAgent::getUserAgentByUserId($user->id) as $agent)
-                            <img src="{{UrlHelper::getUserAvatarUrl($agent->user->avatar)}}" class="img-circle" alt="{{$agent->user->avatar}}" width="50px">
+                            <img src="{{UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}" class="img-circle" alt="{{$agent->fetchUser->avatar}}" width="50px">
                           @endforeach
                         </td>
                         <td>
                           @foreach (App\UserTeam::getUserTeamByUserId($user->id) as $user_team)
                             @if(!empty($user_team->team))
-                              <small class="label" style="background-color:{{$user_team->team->color}};">{{$user_team->team->name}}</small>
+                              <small class="label" style="background-color:{{$user_team->fetchTeam->color}};">{{$user_team->fetchTeam->name}}</small>
                             @endif
                           @endforeach
                         </td>

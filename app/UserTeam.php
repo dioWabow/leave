@@ -56,13 +56,13 @@ class UserTeam extends Model
         return $result;
     }
 
-    public function team() 
+    public function fetchTeam()
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;
     }
 
-    public function user()
+    public function fetchUser()
     {
         $result = $this::hasOne('App\User','id','user_id');
         return $result;

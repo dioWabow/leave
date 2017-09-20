@@ -149,7 +149,7 @@
               <optgroup label="{{$team->name}}">
                 @foreach($team_users as $team_user)
                     @if($team->id==$team_user->team_id)
-                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->user->nickname}}</option>
+                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->fetchUser->nickname}}</option>
                     @endif
                 @endforeach
               </optgroup>
