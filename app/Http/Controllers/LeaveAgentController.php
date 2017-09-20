@@ -61,4 +61,21 @@ class LeaveAgentController extends Controller
     {
         return  view('leave_agent_finish_view');
     }
+
+    /**
+     * 找id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private static function loadModel($id)
+    {
+        $model = Leave::find($id);
+
+        if ($model===false) {
+
+            throw new CHttpException(404,'資料不存在');
+
+        }
+        return $model;
+    }
 }

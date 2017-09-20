@@ -133,7 +133,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeaveAgentController@getIndex',
         ]);
 
-        Route::any('edit/{id}',[
+        Route::get('edit/{id}',[
             'as'=>'agent/edit',
             'uses'=> 'LeaveAgentController@getEdit',
         ]);
