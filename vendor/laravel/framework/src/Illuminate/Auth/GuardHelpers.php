@@ -93,7 +93,7 @@ trait GuardHelpers
      */
     public function hasMiniManagement()
     {
-        $Teams = [];
+        $Teams = false;
         if (!empty($this->user()->getAuthIdentifier())) {
             
             $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
@@ -110,7 +110,7 @@ trait GuardHelpers
      */
     public function hasManagement()
     {
-        $Teams = [];
+        $Teams = false;
         if (!empty($this->user()->getAuthIdentifier())) {
 
             $Teams = UserTeam::getTeamIdByUserIdInManagement($this->user()->getAuthIdentifier());

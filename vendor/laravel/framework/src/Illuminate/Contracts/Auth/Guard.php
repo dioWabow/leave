@@ -51,14 +51,14 @@ interface Guard
     /**
      * 取得是否有小主管權限
      *
-     * @return array(TeamId)/false
+     * @return array(TeamObj)/false
      */
     public function hasMiniManagement();
 
     /**
      * 取得是否有主管權限
      *
-     * @return array(TeamId)/false
+     * @return array(TeamObj)/false
      */
     public function hasManagement();
 
