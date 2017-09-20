@@ -6,8 +6,6 @@ use App\Leave;
 use App\LeaveDay;
 use App\Type;
 use App\User;
-use Redirect;
-use Session;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
