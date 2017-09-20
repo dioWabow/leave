@@ -20,7 +20,7 @@ class UrlHelper
      */
     public static function getUserAvatarUrl($filename)
     {
-        return (!empty($filename)) ? url(Storage::url('avatar/' . $filename)) . self::getRandom() : url(Storage::url('avatar/' . 'wabow.png'));
+        return (!empty($filename)) ? url(Storage::url('avatar/' . $filename)) . self::getRandom() : '#';
     }
 
     public function getCompanyLogoUrl($filename)

@@ -80,6 +80,11 @@ $(function () {
   //代理人、通知對象
   $(".select2").select2({width: '100%'});
 
+  //預設圖片
+  $("img").error(function () {
+   $(this).unbind("error").attr("src", "{{route('root_path')}}/dist/img/users/default.png");
+  });
+
 });
 
 </script>
