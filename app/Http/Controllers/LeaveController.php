@@ -42,19 +42,43 @@ class LeaveController extends Controller
      */
     public function getIndex(Request $request)
     {
+        $user_arr = [];
+
         $user_id = Auth::user()->id;
 
-        if (Auth::user()->role == 'manage') {
+        if (Auth::hasHr()) {
 
-            $teams = UserHelper::getUserTeamById($user_id);
+            $user_arr = User::getAllUsersWithoutLeaved();
 
-        } elseif (Auth::user()->role == 'hr') {
-
-            $teams = Team::getAllTeam();
+        } else {
             
+            if (Auth::hasManageMent()) {
+
+                //抓自己昰主管的team的所有人
+                $users = UserTeam::getUserByTeams(Auth::hasManageMent());
+
+                //抓自己底下的子team的所有人
+                $miniusers = UserTeam::getMiniTeamUsers($user_id);
+
+                $users = array_unique(array_merge($users,$miniusers), SORT_REGULAR);
+
+                foreach ($users as $user) {
+
+                    if (!empty(User::find($user))) {
+
+                        $user_arr[] = User::find($user);
+
+                    }
+
+                }
+
+            }
+
         }
 
-        dd($teams);
+        return view('leave_form33',compact(
+            'user_arr'
+        ));
     }
 
     /**
@@ -64,6 +88,33 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request,$user_id= '') 
     {
+        //判斷是否可以幫此人請假
+        if (!empty($user_id) && !Auth::hasHr()) {
+
+            if (Auth::hasManageMent() || Auth::hasMiniManageMent()) {
+
+                //抓自己昰主管的team的所有人
+                $users = UserTeam::getUserByTeams(Auth::hasManageMent());
+
+                //抓自己底下的子team的所有人
+                $miniusers = UserTeam::getMiniTeamUsers(Auth::user()->id);
+
+                $users = array_unique(array_merge($users,$miniusers), SORT_REGULAR);
+
+                if (!in_array($user_id, $users)) {
+
+                    return Redirect::route('index')->withErrors(['msg' => '無法幫此人請假']);
+
+                }
+
+            } else {
+
+                return Redirect::route('index')->withErrors(['msg' => '無法幫此人請假']);
+
+            }
+
+        }
+
         $user_id = (!empty($user_id)) ? $user_id : Auth::user()->id;
 
         $data = $request->old('leave');

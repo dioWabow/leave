@@ -145,24 +145,24 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // 主管協助申請請假
-    Route::group(['prefix'=>'minimanager_assist_leave'], function(){
+    Route::group(['prefix'=>'leave_assist'], function(){
         Route::get('getIndex', [
-            'as' => 'minimanager_assist_leave/getIndex',
+            'as' => 'leave_assist/getIndex',
             'uses' => 'LeaveController@getIndex',
         ]);
 
         Route::get('create/{id}', [
-            'as' => 'minimanager_assist_leave/create',
+            'as' => 'leave_assist/create',
             'uses' => 'LeaveController@getCreate',
         ]);
 
         Route::post('insert', [
-            'as' => 'minimanager_assist_leave/insert',
+            'as' => 'leave_assist/insert',
             'uses' => 'LeaveController@postInsert',
         ]);
 
         Route::post('calculate_hours',[
-            'as' => 'minimanager_assist_leave/calculate_hours',
+            'as' => 'leave_assist/calculate_hours',
             'uses' => 'LeaveController@calculate_hours',
         ]);
     });

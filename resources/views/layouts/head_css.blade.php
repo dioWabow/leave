@@ -165,7 +165,7 @@ $(function () {
 </script>
 @endif
 
-@if(Request::is('leave/*'))
+@if(Request::is('leave/*') || Request::is('leave_assist/*'))
 <script>
 $(function () {
   $(".clickable-row").click(function(e) {

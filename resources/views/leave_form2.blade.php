@@ -112,10 +112,10 @@
 					</div>
 					<div class="col-md-11">
 						@forelse($user_agents as $user_agent)
-							@if($user_agent->user->status != 0)
+							@if($user_agent->fetchUser->status != 0)
 								<label>
-								<input type="checkbox" @if((count($model->agent)>0)&&in_array($user_agent->user->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->user->id}}"> 
-									{{$user_agent->user->nickname}}
+								<input type="checkbox" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->fetchUser->id}}"> 
+									{{$user_agent->fetchUser->nickname}}
 								</label>&emsp;
 							@endif
 						@empty
@@ -143,8 +143,8 @@
 							@foreach($teams as $team)
 	              <optgroup label="{{$team->name}}">
 	                @foreach($team_users as $team_user)
-	                  @if($team->id==$team_user->team_id&&$team_user->user->status!=0)
-	                    <option value="{{$team_user->user_id}}" @if((count($model->notice_person)>0)&&in_array($team_user->user->id,$model->notice_person)) selected="selected" @endif>{{$team_user->user->nickname}}</option>
+	                  @if($team->id==$team_user->team_id&&$team_user->fetchUser->status!=0)
+	                    <option value="{{$team_user->user_id}}" @if((count($model->notice_person)>0)&&in_array($team_user->fetchUser->id,$model->notice_person)) selected="selected" @endif>{{$team_user->fetchUser->nickname}}</option>
 	                  @endif
 	                @endforeach
 	              </optgroup>

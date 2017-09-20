@@ -106,29 +106,30 @@ class UserTeam extends Model
         }
     }
 
+
     public static function getUserByTeams($teams)
     {
         $result = [];
 
-       foreach ($teams as $team) {
+        foreach ($teams as $team) {
 
-           $team_user_role = self::where('role', 'user')
-                ->where('team_id', $team->team_id)
+            $team_user_role = self::where('role', 'user')
+                ->where('team_id', $team->id)
                 ->get();
 
-           foreach ($team_user_role as $user) {
-                
-               if (!in_array($user->user_id, $result)) {
+            foreach ($team_user_role as $user) {
+               
+                if (!in_array($user->user_id, $result)) {
 
-                   $result[] = $user->user_id;
+                    $result[] = $user->user_id;
 
-               }
+                }
 
-           }
+            }
 
-       }
+        }
 
-       return $result;
+        return $result;
     }
 
     public static function getUserIdByTeamId($id) 
@@ -143,46 +144,9 @@ class UserTeam extends Model
         return $result;
     }
 
-    public function fetchTeam() 
+    public static function getMiniTeamUsers($id)
     {
-        $result = $this::hasOne('App\Team','id','team_id');
-        return $result;
-    }
 
-    public function fetchUser()
-    {
-        $result = $this::hasOne('App\User','id','user_id');
-        return $result;
-    }
-
-    public static function getUserByTeams($teams)
-    {
-        $result = [];
-
-        foreach ($teams as $team) {
-
-            $team_user_role = self::where('role', 'user')
-                ->where('team_id', $team->team_id)
-                ->get();
-
-            foreach ($team_user_role as $user) {
-                
-                if (!in_array($user->user_id, $result)) {
-
-                    $result[] = $user->user_id;
-
-                }
-
-            }
-
-        }
-
-        return $result;
-    }
-
-
-    public static function getMiniTeam($id)
-    {
         $result = [];
         
         $teams = self::where('user_id', $id)
@@ -190,9 +154,10 @@ class UserTeam extends Model
             ->get();
 
         $miniteams = Team::whereIn('parent_id' , $teams->pluck('team_id')->toArray())->get();
+
         foreach ($miniteams as $miniteam) {
 
-            $team_user_role = self::where('role' , 'user')
+            $team_user_role = self::where('user_id' , '!=' , $id)
                 ->where('team_id' , $miniteam->id)
                 ->get();
 
@@ -217,9 +182,10 @@ class UserTeam extends Model
         return $result;
     }
 
-    public function user()
+    public function fetchUser()
     {
         $result = $this::hasOne('App\User','id','user_id');
         return $result;
     }
+
 }

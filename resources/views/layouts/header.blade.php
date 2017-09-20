@@ -125,6 +125,10 @@
             </span>
           </a>
         </li>
+        <li class="">
+          <a href="{{ route('leave_assist/getIndex') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          </a>
+        </li>
         <li class="header">Agent</li>
         <li class="">
           <a href="#">
@@ -150,10 +154,7 @@
           </span>
               </a>
         </li>
-        <li class="">
-          <a href="{{ route('minimanager_assist_leave/getIndex') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
-          </a>
-        </li>
+        
         <li class="header">MANAGER</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -161,10 +162,6 @@
             <small class="label pull-right bg-red">3</small>
           </span>
               </a>
-        </li>
-        <li class="">
-          <a href="#"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
-          </a>
         </li>
         <li class="header">BOSS</li>
         <li class="">
@@ -180,10 +177,6 @@
             <span class="pull-right-container">
               <small class="label pull-right bg-red">2</small>
             </span>
-          </a>
-        </li>
-        <li class="">
-          <a href="#"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
         <li class="">

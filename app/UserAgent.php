@@ -37,7 +37,7 @@ class UserAgent extends Model
         return $result;
     }
 
-    public function user() 
+    public function fetchUser() 
     {
         $result = self::hasOne('App\User','id','agent_id');
         return $result;
