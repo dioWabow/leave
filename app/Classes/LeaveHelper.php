@@ -557,6 +557,15 @@ class LeaveHelper
 
             //生日假
             case 'birthday':
+                //是否有設定生日
+                if (empty($this->birthday) || $this->birthday == '0000-00-00') {
+
+                    $response = '尚未設定生日，請洽公司HR';
+                    return $response;
+                    break;
+
+                }
+
                 //當月是否為生日月
                 if (TimeHelper::changeDateFormat($this->birthday,'m') != TimeHelper::changeDateFormat($leave_date,'m')) {
                     
