@@ -151,7 +151,7 @@
               </a>
         </li>
         <li class="">
-          <a href="#"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
+          <a href="{{ route('minimanager_assist_leave/getIndex') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
         <li class="header">MANAGER</li>

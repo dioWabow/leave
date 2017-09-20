@@ -52,11 +52,67 @@ class UserTeam extends Model
 
     public static function getUserTeamByUserId($id) 
     {
-        $result = self::where("user_id", $id)->get();
+        $result = self::where('user_id', $id)->get();
         return $result;
     }
 
-    public function team() 
+    public static function getUserByTeams($teams)
+    {
+        $result = [];
+
+        foreach ($teams as $team) {
+
+            $team_user_role = self::where('role', 'user')
+                ->where('team_id', $team->team_id)
+                ->get();
+
+            foreach ($team_user_role as $user) {
+                
+                if (!in_array($user->user_id, $result)) {
+
+                    $result[] = $user->user_id;
+
+                }
+
+            }
+
+        }
+
+        return $result;
+    }
+
+
+    public static function getMiniTeam($id)
+    {
+        $result = [];
+        
+        $teams = self::where('user_id', $id)
+            ->where('role', 'manager')
+            ->get();
+
+        $miniteams = Team::whereIn('parent_id' , $teams->pluck('team_id')->toArray())->get();
+        foreach ($miniteams as $miniteam) {
+
+            $team_user_role = self::where('role' , 'user')
+                ->where('team_id' , $miniteam->id)
+                ->get();
+
+            foreach ($team_user_role as $user) {
+                    
+                if (!in_array($user->user_id, $result)) {
+
+                    $result[] = $user->user_id;
+
+                }
+
+            }
+            
+        }
+
+        return $result;
+    }
+
+    public function fetchteam() 
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;

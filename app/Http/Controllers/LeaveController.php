@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use LeaveHelper;
 use TimeHelper;
 use AttachHelper;
+use UserHelper;
 use App\User;
 use App\Team;
 use App\Leave;
@@ -32,6 +33,28 @@ class LeaveController extends Controller
     {
         $this->file_path = 'avatar/';
         $this->file_root_path = storage_path() . '/app/public/' . $this->file_path;
+    }
+
+    /**
+     *
+     * 列表
+     *
+     */
+    public function getIndex(Request $request)
+    {
+        $user_id = Auth::user()->id;
+
+        if (Auth::user()->role == 'manage') {
+
+            $teams = UserHelper::getUserTeamById($user_id);
+
+        } elseif (Auth::user()->role == 'hr') {
+
+            $teams = Team::getAllTeam();
+            
+        }
+
+        dd($teams);
     }
 
     /**

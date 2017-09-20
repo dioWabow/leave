@@ -129,18 +129,41 @@ Route::group(['middleware' => 'auth'], function () {
     // 我要放假
     Route::group(['prefix'=>'leave'], function(){
         Route::get('create', [
-        'uses' => 'LeaveController@getCreate',
-        'as' => 'leave/create',
+            'as' => 'leave/create',
+            'uses' => 'LeaveController@getCreate',
         ]);
 
         Route::post('insert', [
-            'uses' => 'LeaveController@postInsert',
             'as' => 'leave/insert',
+            'uses' => 'LeaveController@postInsert',
         ]);
 
         Route::post('calculate_hours',[
-            'uses' => 'LeaveController@calculate_hours',
             'as' => 'leave/calculate_hours',
+            'uses' => 'LeaveController@calculate_hours',
+        ]);
+    });
+
+    // 主管協助申請請假
+    Route::group(['prefix'=>'minimanager_assist_leave'], function(){
+        Route::get('getIndex', [
+            'as' => 'minimanager_assist_leave/getIndex',
+            'uses' => 'LeaveController@getIndex',
+        ]);
+
+        Route::get('create/{id}', [
+            'as' => 'minimanager_assist_leave/create',
+            'uses' => 'LeaveController@getCreate',
+        ]);
+
+        Route::post('insert', [
+            'as' => 'minimanager_assist_leave/insert',
+            'uses' => 'LeaveController@postInsert',
+        ]);
+
+        Route::post('calculate_hours',[
+            'as' => 'minimanager_assist_leave/calculate_hours',
+            'uses' => 'LeaveController@calculate_hours',
         ]);
     });
     
