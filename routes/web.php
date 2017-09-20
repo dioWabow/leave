@@ -114,14 +114,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     # 報表
     Route::group(['prefix'=>'report'], function(){
-        Route::get('index',[
+        Route::any('index',[
             'as' => 'report/index',
-            'uses' => 'ReportController@getIndex',
-        ]);
-
-        Route::post('index',[
-            'as' => 'report/search',
-            'uses' => 'ReportController@postSearch'
+            'uses' => 'ReportController@postIndex',
         ]);
     });
 

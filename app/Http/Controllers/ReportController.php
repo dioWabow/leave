@@ -15,186 +15,270 @@ use Illuminate\Support\Facades\Input;
 
 class ReportController extends Controller
 {
-    public function getIndex()
-    {
-        $year = date('Y');
-
-        $month = date('m');
-
-    	$model = new LeaveDay;
-
-    	$userModel = new User;
-
-    	$typeModel = new Type;
-
-    	$data_list = $model->search($year, $month);
-
-    	$all_user = $userModel->getAllUsers();
-
-    	$all_type = $typeModel->getAllTypes();
-
-    	$report_list = self::getReport($all_type, $data_list);
-
-    	$report_type_total = self::getTypeTotal($all_type, $data_list);
-
-        return view('report', compact(
-            'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'
-        ));
-    }
-
-    public function postSearch(Request $request)
+    public function postIndex(Request $request)
     {
         $input = $request->input('setting');
+        if (empty($input)) {
+
+            $year = date('Y');
+            $month = date('m');
+
+        } else {
+
+            $year = $input['year'];
+            $month = $input['month'];
+
+        }
+
+        // dd($month);
+
         $order_by = $request->input('order_by');
+        if (empty($order_by)) {
 
-        $year = $input['year'];
+            $order_type = "";
+            $order_way = "";
 
-        $month = $input['month'];
+        } else {
 
-        $order_type = $order_by['order_by'];
+            $order_type = $order_by['order_by'];
+            $order_way = $order_by['order_way'];
 
-        $order_way = $order_by['order_way'];
+        }
 
         $model = new LeaveDay;
-
-        $userModel = new User;
-
-        $typeModel = new Type;
-
         $data_list = $model->search($year, $month);
 
+        $userModel = new User;
         $all_user_tmp = $userModel->getAllUsers();
 
-        $all_user = [];
+        // 離職人員判斷
         foreach ($all_user_tmp as $key => $value) {
+
+            if (!empty($value['leave_date'])) {
+                if (date('m', strtotime($value['leave_date'])) < $month) {
+                    unset($all_user_tmp[$key]);
+                }
+            }
+        }
+
+        // 讓key == user_id
+        $all_user = [];
+        foreach ($all_user_tmp as $value) {
             $all_user[$value->id] = $value;
         }
 
-        $all_type = $typeModel->getAllTypes();
+        $typeModel = new Type;
+        $all_type_temp = $typeModel->getAllTypes();
+
+        // 讓key 等同sql的id
+        $all_type = [];
+        foreach ($all_type_temp as $type_value) {
+            $all_type[$type_value->id] = $type_value;
+        }
 
         $compute_report_list = [];
 
-        $report_list = self::getReport($all_type, $data_list);
+        $report_list = self::getReport($all_user, $all_type, $data_list);
+        $report_data = $report_list['result'];
+        $report_total = $report_list['resultTotal'];
 
-        foreach ($report_list as $key => $value) {
-            $compute_report_list[$key] = $value[$order_type];
+        // 如果是排序才要進入
+        if(isset($order_by) && !empty($order_type)) {
+
+            // report 是誰 order_type 該 type 的小時
+            foreach ($report_data as $report_key => $report_value) {
+                $compute_report_list[$report_key] = $report_value[$order_type];
+            }
+
+            if ($order_way == "DESC") {
+                arsort($compute_report_list);
+            } else {
+                asort($compute_report_list);
+            }
+
+            $new_user_sort = [];
+            foreach ($compute_report_list as $user_id => $hours) {
+                $new_user_sort[] = $user_id;
+            }
+
+            $all_user_moment = $all_user;
+
+            $all_user_sort = [];
+            foreach ($new_user_sort as $value) {
+                unset($all_user[$value]);
+                $all_user[] = $all_user_moment[$value];
+            }
         }
-
-        if($order_way == "DESC"){
-            arsort($compute_report_list);
-        } else {
-            asort($compute_report_list);
-        }
-
-        $new_user_sort = [];
-        foreach ($compute_report_list as $user_id => $hours) {
-            $new_user_sort[] = $user_id;
-        }
-
-        $all_user_tmp = $all_user;
-
-        unset($all_user);
-
-        $all_user_sort = [];
-        foreach ($new_user_sort as $value) {
-            $all_user[] = $all_user_tmp[$value];
-        }
-
-        $report_type_total = self::getTypeTotal($all_type, $data_list);
 
         return view('report', compact(
-            'order_by', 'data_list',  'all_user', 'all_type', 'report_list', 'report_type_total'
+            'year', 'month','order_by', 'data_list',  'all_user', 'all_type', 'report_data', 'report_total'
         ));
     }
 
-    private function getReport($all_type, $data_list)
+    private function getReport($all_user, $all_type, $data_list=[])
     {
-    	$sum = 0;
+        $sum = 0;
+        $deductSum = 0;
 
-    	$result = [];
+        $result = [];
+        $resultTotal = [];
 
-    	foreach ($data_list as $key => $value) {
+        if (count($data_list) < 1) {
+            foreach ($all_user as $user_key => $user_value) {
 
-    		if (empty($result[$value['user_id']][$value['type_id']])){
+                foreach ($all_type as $type_key => $type_value) {
 
-    			$result[$value['user_id']][$value['type_id']] = $value['hours'];
+                    if (empty($result[$user_key][$type_key])) {
 
-    		} else {
+                        // user 的時數
+                        $result[$user_key][$type_key] = 0;
 
-    			$result[$value['user_id']][$value['type_id']] += $value['hours'];
+                        // type 的時數
+                        $resultTotal[$type_key] = 0;
 
-    		}
+                    }
+                }
 
-    		foreach ($all_type as $type_key => $type_value) {
-    			if(empty($result[$value['user_id']][$type_value->id])) {
-    				$result[$value['user_id']][$type_value->id] = "0";
-    			}
-    		}
+                        $result[$user_key]['sum'] = 0;
+                        $result[$user_key]['deductions'] = 0;
 
-    		if (empty($result[$value['user_id']]['sum'])){
+                        $resultTotal['sum'] = 0;
+                        $resultTotal['deductions'] = 0;
+            }
+        } else {
+            foreach ($all_user as $user_key => $user_value) {
+                foreach ($data_list as $data_key => $data_value) {
+                    if ($user_key == $data_value['user_id']) {
 
-    			$result[$value['user_id']]['sum'] = $value['hours'];
+                        // resultTotal 計算 有值的欄位加總
+                        $sum += $data_value['hours'];
 
-    		} else {
+                        if (empty($resultTotal[$data_value['type_id']])) {
 
-    			$result[$value['user_id']]['sum'] += $value['hours'];
+                            $resultTotal[$data_value['type_id']] = $data_value['hours'];
 
-    		}
+                        } else {
 
-    		if (!empty($value['deductions'])) {
-    			if (empty($result[$value['user_id']][$value['deductions']])){
-    				$result[$value['user_id']]['deductions'] = $value['hours'];
-    			} else {
-    				$result[$value['user_id']]['deductions'] += $value['hours'];
-    			}
-    		} else {
-    			$result[$value['user_id']]['deductions'] = "0";
-    		}
-    	}
+                            $resultTotal[$data_value['type_id']] += $data_value['hours'];
 
-    	return $result;
+                        }
 
+                        //把 user_key 的價別資料抓出&加總
+
+                        if (empty($result[$user_key][$data_value['type_id']])) {
+
+                            $result[$user_key][$data_value['type_id']] = $data_value['hours'];
+
+                        } else {
+
+                            $result[$user_key][$data_value['type_id']] += $data_value['hours'];
+
+                        }
+
+                        // 如果 是空的 價別 補 0
+
+                        foreach ($all_type as $type_key => $type_value) {
+
+                            // user 的補 0
+                            if (empty($result[$user_key][$type_key])) {
+
+                                $result[$user_key][$type_key] = 0;
+
+                            }
+
+                            // total 的補 0
+                            if (empty($resultTotal[$type_key])) {
+
+                                $resultTotal[$type_key] = 0;
+
+                            }
+                        }
+
+                        // 補上 total
+
+                        if (empty($result[$user_key]['sum'])) {
+
+                            $result[$user_key]['sum'] = $data_value['hours'];
+
+                        } else {
+
+                            $result[$user_key]['sum'] += $data_value['hours'];
+
+                        }
+
+                        // 補上 扣薪
+
+                        if (!empty($data_value['deductions'])) {
+
+                            if (empty($result[$user_key]['deductions'])) {
+
+                                $result[$user_key]['deductions'] = $data_value['hours'];
+
+                            } else {
+
+                                $result[$user_key]['deductions'] += $data_value['hours'];
+
+                            }
+                        } else {
+
+                            $result[$user_key]['deductions'] = "0";
+
+                        }
+
+                        // 補上 total sum
+                        $resultTotal['sum'] = $sum;
+
+                        // 補上 total 扣薪
+                        if (!empty($data_value['deductions'])) {
+
+                            if (empty($resultTotal['deductions'])) {
+
+                                $deductSum += $data_value['hours'];
+
+                            }
+
+                        }
+
+                        $resultTotal['deductions'] = $deductSum;
+
+                    } else {
+
+                        // 沒有架別資料的人 都補0
+
+                        foreach ($all_type as $type_key => $type_value) {
+
+                            // user 的
+                            if (empty($result[$user_key][$type_key])) {
+
+                                $result[$user_key][$type_key] = 0;
+
+                            }
+
+                            // total 的
+                            if (empty($resultTotal[$data_value['type_id']])) {
+
+                                $resultTotal[$data_value['type_id']] = 0;
+
+                            }
+                        }
+
+                            // user
+                            if (empty($result[$user_key]['sum'])) {
+                                $result[$user_key]['sum'] = 0;
+                            }
+                            if (empty($result[$user_key]['deductions'])) {
+                                $result[$user_key]['deductions'] = 0;
+                            }
+                    }
+                }
+            }
+        }
+
+        // dd($result);
+
+        return [
+            'result' => $result, 'resultTotal' => $resultTotal
+        ];
     }
 
-    private function getTypeTotal($all_type, $data_list)
-    {
-    	$sum = 0;
-
-    	$result = [];
-
-    	foreach ($data_list as $value) {
-
-    		$sum += $value['hours'];
-
-    		if (empty($result[$value['type_id']])){
-
-    			$result[$value['type_id']] = $value['hours'];
-
-    		} else {
-
-    			$result[$value['type_id']] += $value['hours'];
-
-    		}
-
-    		foreach ($all_type as $type_key => $type_value) {
-    			if(empty($result[$type_value->id])) {
-    				$result[$type_value->id] = "0";
-    			}
-    		}
-
-    		$result['sum'] = "$sum";
-
-    		if(!empty($value['deductions'])) {
-    			if (empty($result[$value['deductions']])){
-    				$result['deductions'] = $value['hours'];
-    			} else {
-    				$result['deductions'] += $value['hours'];
-    			}
-    		} else {
-    			$result['deductions'] = "0";
-    		}
-    	}
-
-    	return $result;
-    }
 }
