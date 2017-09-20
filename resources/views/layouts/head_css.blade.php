@@ -455,6 +455,52 @@ $(function () {
 @endif
 
 <!-- 員工管理用 -->
-@if(Request::is('leave/*'))
+@if(Request::is('user/*'))
+@if(Request::is('user/index'))
+<script>
+function changePageSize(pagesize){
+  $("#frmSearch").submit();
+}
+function changeSort(sort){
+  order_by = '{{$model->order_by}}';
+  order_way = '{{$model->order_way}}';
+  $('#order_by').val(sort);
+  if (order_by == sort && order_way == "DESC") {
+    $('#order_way').val("ASC");
+  } else {
+    $('#order_way').val("DESC");
+  }
+  $("#frmSearch").submit();
+}
+</script>
+@endif
+@if(Request::is('user/edit/*'))
+<script>
+$(function () {
+  $('.single-date').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'},
+    });
 
+    $('.single-date').each(function(){
+      $(this).val($(this).attr('date'));
+    });
+
+    $("#user_fileupload").fileinput({
+        @if(!empty($model->avatar))
+        initialPreview: [
+            '{{UrlHelper::getUserAvatarUrl($model->avatar)}}'
+        ],
+        @endif
+        initialPreviewAsData: true,
+        showUpload: false,
+    });
+    
+    $("#clear_leave_date").click(function() {
+      $("#user_leave_date").val("");
+    });
+});
+</script>
+@endif
 @endif

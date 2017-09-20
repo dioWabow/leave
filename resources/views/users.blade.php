@@ -139,13 +139,7 @@
                         <td>
                           @foreach (App\UserTeam::getUserTeamByUserId($user->id) as $user_team)
                             @if(!empty($user_team->team))
-                              @if( $user_team->team->name == "Washop")
-                                <small class="label bg-purple">{{$user_team->team->name}}</small>
-                              @elseif( $user_team->team->name == "Waca" )
-                                <small class="label bg-gray">{{$user_team->team->name}}</small>
-                              @else
-                                <small class="label bg-red">{{$user_team->team->name}}</small>
-                              @endif
+                              <small class="label" style="background-color:{{$user_team->team->color}};">{{$user_team->team->name}}</small>
                             @endif
                           @endforeach
                         </td>
@@ -179,22 +173,6 @@
   <!-- /.content-wrapper -->
 
   <!-- Page script -->
-<script>
-function changePageSize(pagesize){
-  $("#frmSearch").submit();
-}
-function changeSort(sort){
-  order_by = '{{$model->order_by}}';
-  order_way = '{{$model->order_way}}';
-  $('#order_by').val(sort);
-  if (order_by == sort && order_way == "DESC") {
-    $('#order_way').val("ASC");
-  } else {
-    $('#order_way').val("DESC");
-  }
-  $("#frmSearch").submit();
-}
-</script>
 
 
 @stop
