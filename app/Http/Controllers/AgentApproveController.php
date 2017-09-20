@@ -11,11 +11,11 @@ use App\Http\Controllers\Controller;
 
 class AgentApproveController extends Controller
 {
-     /**
+    /**
      * 列表
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function getIndex(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
@@ -43,7 +43,7 @@ class AgentApproveController extends Controller
         // 先取得該登入者所代理的假單
         $search['id'] = LeaveAgent::getLeaveIdByUserId(Auth::user()->id);
         //取得假單在送出的狀態(代理人待核)
-        $search['tag_id'] = [1];
+        $search['tag_id'] = ['1'];
 
         $model = new Leave;
         $dataProvider = $model->fill($order_by)->search($search);
@@ -51,5 +51,37 @@ class AgentApproveController extends Controller
         return  view('leave_agent_prove', compact(
             'search', 'model', 'dataProvider'
         ));
+    }
+
+    /**
+     * 檢視
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEdit(Request $request, $id)
+    {
+        $model = $this->loadModel($id);
+
+        return  view('leave_agent_view', compact(
+            'model'
+        ));
+    }
+
+    /**
+     * 找id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private static function loadModel($id)
+    {
+        $model = Leave::find($id);
+
+        if ($model===false) {
+
+            throw new CHttpException(404,'資料不存在');
+
+        }
+
+        return $model;
     }
 }

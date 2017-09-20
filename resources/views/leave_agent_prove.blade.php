@@ -18,15 +18,15 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-body">
-				<form name="frmOrderby" id="frmOrderby" action="{{ route('agent_approve') }}" method="POST">
+				<form name="frmOrderby" id="frmOrderby" action="{{ route('approve/index') }}" method="POST">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
 						@if(count($model->order_by)>0)
-								<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
-								<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
-							@else
-								<input id="order_by" type="hidden" name="order_by[order_by]" value="">
-								<input id="order_way" type="hidden" name="order_by[order_way]" value="">
-							@endif
+							<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+							<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
+						@else
+							<input id="order_by" type="hidden" name="order_by[order_by]" value="">
+							<input id="order_way" type="hidden" name="order_by[order_way]" value="">
+						@endif
 							<div class="row">
 								<div class="col-sm-12">
 									<table class="table table-bordered table-striped table-hover">
@@ -43,7 +43,7 @@
 									</form>
 									<tbody>
 										@foreach ($dataProvider as $value)
-											<tr class="clickable-row" data-href="leave_agent_view.html">
+											<tr class="clickable-row" data-href="{{ route('approve/edit', [ 'id' => $value->id ]) }}">
 												<td>
 													<input type="checkbox" name="check" class="flat-red check" value="">
 												</td>
@@ -81,7 +81,8 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <h1>確定 <span class="text-red">不能代理</span> 嗎？</h1>
+			 <!--文字寫變換在head_css內-->
+        <h1></h1>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -90,24 +91,4 @@
     </div>
   </div>
 </div>
-<script>
-$('.sort').on('click', function(){
-
-	var $sortname = $(this).attr('sortname');
-	var $order_by = "{{ $model->order_by }}";
-	var $order_way = "{{ $model->order_way }}";
-
-	$("#order_by").val($sortname);
-
-	if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-	} else {
-    $("#order_way").val("DESC");
-	}
-  
-	$("#frmOrderby").submit();
-
-});
-
-</script>
 @stop

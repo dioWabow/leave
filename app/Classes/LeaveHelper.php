@@ -14,11 +14,12 @@ class LeaveHelper
      * 確認假單在 tag 1 (代理人待核)
      * 取得代理假單的總數
      */
-     public static function getAgentApproveLeavesTotal($user_id)
-     {
-        $tag_id = 1;
-        $leave_id = LeaveAgent::getLeaveIdByUserId($user_id);
+    public static function getAgentApproveLeavesTotal($id)
+    {
+        $tag_id = '1';
+        
+        $leave_id = LeaveAgent::getLeaveIdByUserId($id);
         $result = Leave::whereIn('id', $leave_id)->where('tag_id', $tag_id)->count();
         return $result;
-     }
+    }
 }

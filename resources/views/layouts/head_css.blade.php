@@ -166,3 +166,39 @@ $(function () {
 });
 </script>
 @endif
+<!-- 同意代理嗎? 頁面用 -->
+@if(Request::is('approve/index'))
+<script>
+$(function () {
+  $('.sort').on('click', function(){
+
+    var $sortname = $(this).attr('sortname');
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+      $("#order_way").val("ASC");
+    } else {
+      $("#order_way").val("DESC");
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+  /* 同不同意代理文字替換*/
+  $('.btn-danger').on('click', function(){
+    
+    $(".modal-body h1").html("確定 <span class='text-red'>不能代理</span> 嗎？");
+    
+  });
+
+  $('.btn-info').on('click', function(){
+    
+    $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");
+
+  });
+});
+</script>
+@endif

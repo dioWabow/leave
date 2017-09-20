@@ -129,8 +129,13 @@ Route::group(['middleware' => 'auth'], function () {
     # 同意代理嗎?
     Route::group(['prefix'=>'approve'], function(){
         Route::any('index',[
-            'as'=>'agent_approve',
+            'as'=>'approve/index',
             'uses'=> 'AgentApproveController@getIndex',
+        ]);
+
+        Route::any('edit/{id}',[
+            'as'=>'approve/edit',
+            'uses'=> 'AgentApproveController@getEdit',
         ]);
     });
     
