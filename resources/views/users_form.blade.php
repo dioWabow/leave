@@ -32,17 +32,13 @@
 					</div>
 					<div class="col-md-5">
 						<label>
-							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="director" @if ($model->role == "director") checked="checked" @endif>
+							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="admin" @if ($model->role == "admin") checked="checked" @endif>
 							最高管理者
 						</label>&emsp; 
 						<label>
 							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="hr" @if ($model->role == "hr") checked="checked" @endif> 
 							HR
 						</label>&emsp; 
-            <label>
-              <input type="radio" id="user_role" name="user[role]" class="flat-red" value="admin" @if ($model->role == "admin") checked="checked" @endif> 
-              主管
-            </label>&emsp; 
 						<label>
 							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="user" @if ($model->role == "user") checked="checked" @endif> 
 							員工
@@ -149,7 +145,7 @@
               <optgroup label="{{$team->name}}">
                 @foreach($team_users as $team_user)
                     @if($team->id==$team_user->team_id)
-                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->user->nickname}}</option>
+                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->fetchUser->nickname}}</option>
                     @endif
                 @endforeach
               </optgroup>
@@ -196,32 +192,6 @@
 
 <!-- /.content -->
 
-<script>
-$(function () {
-  $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
 
-    $('.single-date').each(function(){
-      $(this).val($(this).attr('date'));
-    });
-
-    $("#user_fileupload").fileinput({
-        @if(!empty($model->avatar))
-        initialPreview: [
-            '{{UrlHelper::getUserAvatarUrl($model->avatar)}}'
-        ],
-        @endif
-        initialPreviewAsData: true,
-        showUpload: false,
-    });
-    
-    $("#clear_leave_date").click(function() {
-      $("#user_leave_date").val("");
-    });
-});
-</script>
 @stop
 

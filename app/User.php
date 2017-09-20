@@ -80,7 +80,9 @@ class User extends BaseModel
 
     public static function getAllUsersExcludeUserId($id)
     {
-        $result = self::where('id', '!=' , $id)->get();
+        $result = self::where('id', '!=' , $id)
+            ->where('status' , '1')
+            ->get();
         return $result;
     }
 
@@ -96,7 +98,7 @@ class User extends BaseModel
         return $result;
     }
 
-    public function UserTeam()
+    public function fetchUserTeam()
     {
         $result = $this::hasMany('App\UserTeam','user_id','id');
         return $result;
@@ -119,6 +121,12 @@ class User extends BaseModel
     public static function getJobSeekByUserId($user_id)
     {
         $result = self::where('id',$user_id)->pluck('job_seek');
+        return $result;
+    }
+
+    public static function getRoleByUserId($user_id)
+    {
+        $result = self::where('id',$user_id)->pluck('role')->first();
         return $result;
     }
 

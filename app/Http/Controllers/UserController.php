@@ -108,9 +108,9 @@ class UserController extends Controller
         $user_no_team = $team_users = [];
         foreach(User::getAllUsersExcludeUserId($id) as $users){
 
-            if ($users->UserTeam()->first()) {
+            if ($users->fetchUserTeam()->first()) {
 
-                $team_users[] = $users->UserTeam()->first();
+                $team_users[] = $users->fetchUserTeam()->first();
 
             } else {
 

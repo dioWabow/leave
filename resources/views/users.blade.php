@@ -90,27 +90,13 @@
                     <tbody>
                       @forelse($dataProvider as $user)
                       <tr class='clickable-row' data-href="{{ route('user/edit', ['id'=>$user->id]) }}">
-                        <td align="center"><img src="{{route('root_path')}}/storage/avatar/{{$user->avatar}}?v={{rand(1,99)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
+                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
                         <td align="center">
                           <div>{{$user->employee_no}}</div>
                           <div>
-                              @if ($user->role == "director")
-                                <small class="label bg-red">
-                                最高管理者
-                                </small>
-                              @elseif ($user->role == "admin")
-                                <small class="label bg-red">
-                                主管
-                                </small>
-                              @elseif ($user->role == "hr")
-                                <small class="label bg-red">
-                                人資
-                                </small>
-                              @else
-                                <small class="label bg-blue">
-                                員工
-                                </small>
-                              @endif
+                            <small class="label bg-red">
+                              {{UserHelper::getRoleByUserId($user->id)}}
+                            </small>
                           </div>
                         </td>
                         <td>{{$user->nickname}}</td>
@@ -133,19 +119,15 @@
                         </td>
                         <td>
                           @foreach (App\UserAgent::getUserAgentByUserId($user->id) as $agent)
-                            <img src="{{route('root_path')}}/storage/avatar/{{$agent->user->avatar}}?v={{rand(1,9)}}" class="img-circle" alt="{{$agent->user->avatar}}" width="50px">
+                            @if($agent->fetchUser->status == 1)
+                            <img src="{{UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}" class="img-circle" alt="{{$agent->fetchUser->avatar}}" width="50px">
+                            @endif
                           @endforeach
                         </td>
                         <td>
                           @foreach (App\UserTeam::getUserTeamByUserId($user->id) as $user_team)
-                            @if(!empty($user_team->team))@
-                              @if( $user_team->team->name == "Washop")
-                                <small class="label bg-purple">{{$user_team->team->name}}</small>
-                              @elseif( $user_team->team->name == "Waca" )
-                                <small class="label bg-gray">{{$user_team->team->name}}</small>
-                              @else
-                                <small class="label bg-red">{{$user_team->team->name}}</small>
-                              @endif
+                            @if(!empty($user_team->fetchTeam))
+                              <small class="label" style="background-color:{{$user_team->fetchTeam->color}};">{{$user_team->fetchTeam->name}}</small>
                             @endif
                           @endforeach
                         </td>
@@ -179,40 +161,6 @@
   <!-- /.content-wrapper -->
 
   <!-- Page script -->
-<script>
-$(function () {
-  $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-        autoUpdateInput: false,
-    });
-
-
-    $('.single-date').each(function(){$(this).val($(this).attr('date'));});
-
-    $("#user_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/users/vic.png'
-        ],
-        initialPreviewAsData: true,
-    });
-});
-function changePageSize(pagesize){
-  $("#frmSearch").submit();
-}
-function changeSort(sort){
-  order_by = '{{$model->order_by}}';
-  order_way = '{{$model->order_way}}';
-  $('#order_by').val(sort);
-  if (order_by == sort && order_way == "DESC") {
-    $('#order_way').val("ASC");
-  } else {
-    $('#order_way').val("DESC");
-  }
-  $("#frmSearch").submit();
-}
-</script>
 
 
 @stop
