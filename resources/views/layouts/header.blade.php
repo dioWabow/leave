@@ -135,7 +135,7 @@
           </a>
         </li>
         <li @if(Request::is('agent/*')) class="active" @endif>
-          <a href="{{ route('leave_agent') }}">
+          <a href="{{ route('agent/index') }}">
             <i class="fa fa-github-alt"></i> <span>我是代理人</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-red">{{ LeaveHelper::getAgentLeavesTotal(Auth::user()->id) }}</small>

@@ -18,7 +18,7 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-body">
-					<form name="frmOrderby" id="frmOrderby" action="{{ route('leave_agent') }}" method="POST">
+					<form name="frmOrderby" id="frmOrderby" action="{{ route('agent/index') }}" method="POST">
 						<div class="dataTables_wrapper form-inline dt-bootstrap">
 							@if(count($model->order_by)>0)
 								<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -33,7 +33,7 @@
 										<thead>
 											<tr>
 												<th width="3%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
-												<th><a href="javascript:void(0)" class="sort" sortname="hours">時間</a></th>
+												<th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
 												<th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
 												<th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
 												<th width="8%"><a href="#sort_days"></a></th>
@@ -43,14 +43,16 @@
 										</form>
 									<tbody>
 									@foreach ($dataProvider as $value)
-										<tr class="clickable-row" data-href="leave_agent_finish_view.html">
+										<tr class="clickable-row" data-href="{{ route('agent/edit', [ 'id' => $value->id ]) }}">
 											<td>
                       	<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
                     	</td>
 											<td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
 											<td>{{ $value->reason }}</td>
 											<td>{{ $value->hours }}</td>
-											<td>{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}</td>
+											<td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+                          @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
+                      </td>
 										</tr>
 									@endforeach
 									</tbody>
@@ -82,6 +84,5 @@ $('.sort').on('click', function(){
 	$("#frmOrderby").submit();
 
 });
-
 </script>
 @stop

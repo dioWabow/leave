@@ -52,5 +52,13 @@ class LeaveAgentController extends Controller
         ));
     }
 
-
+    /**
+     * 檢視
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEdit(Request $request, $id)
+    {
+        return  view('leave_agent_finish_view');
+    }
 }

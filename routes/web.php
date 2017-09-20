@@ -129,8 +129,13 @@ Route::group(['middleware' => 'auth'], function () {
     # 我是代理人
     Route::group(['prefix'=>'agent'], function(){
         Route::any('index',[
-            'as'=>'leave_agent',
+            'as'=>'agent/index',
             'uses'=> 'LeaveAgentController@getIndex',
+        ]);
+
+        Route::any('edit/{id}',[
+            'as'=>'agent/edit',
+            'uses'=> 'LeaveAgentController@getEdit',
         ]);
     });
     
