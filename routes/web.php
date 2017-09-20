@@ -143,6 +143,14 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'leave/calculate_hours',
         ]);
     });
+
+    // 特休結算
+    Route::group(['prefix'=>'annual_leave_calculate'], function(){
+        Route::get('view', [
+        'uses' => 'AnnualHoursController@getView',
+        'as' => 'annual_leave_calculate/view',
+        ]);
+    });
     
 });
 
