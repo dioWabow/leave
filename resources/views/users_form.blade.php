@@ -32,17 +32,13 @@
 					</div>
 					<div class="col-md-5">
 						<label>
-							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="director" @if ($model->role == "director") checked="checked" @endif>
+							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="admin" @if ($model->role == "admin") checked="checked" @endif>
 							最高管理者
 						</label>&emsp; 
 						<label>
 							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="hr" @if ($model->role == "hr") checked="checked" @endif> 
 							HR
 						</label>&emsp; 
-            <label>
-              <input type="radio" id="user_role" name="user[role]" class="flat-red" value="admin" @if ($model->role == "admin") checked="checked" @endif> 
-              主管
-            </label>&emsp; 
 						<label>
 							<input type="radio" id="user_role" name="user[role]" class="flat-red" value="user" @if ($model->role == "user") checked="checked" @endif> 
 							員工

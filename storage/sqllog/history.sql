@@ -1,3 +1,5 @@
+--2017-09-20 tony 修改user role將manage刪除
+ALTER TABLE `users` CHANGE `role` `role` ENUM('user','hr','admin','director') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'user' COMMENT '權限';
 --2017-09-18 tony 修改資料表名稱
 RENAME TABLE `leave`.`leaves_respons` TO `leave`.`leaves_responses`;
 ALTER TABLE `leaves_responses` CHANGE `created_at` `created_at` TIMESTAMP NULL COMMENT '新增時間';

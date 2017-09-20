@@ -94,23 +94,9 @@
                         <td align="center">
                           <div>{{$user->employee_no}}</div>
                           <div>
-                              @if ($user->role == "director")
-                                <small class="label bg-red">
-                                最高管理者
-                                </small>
-                              @elseif ($user->role == "admin")
-                                <small class="label bg-red">
-                                主管
-                                </small>
-                              @elseif ($user->role == "hr")
-                                <small class="label bg-red">
-                                人資
-                                </small>
-                              @else
-                                <small class="label bg-blue">
-                                員工
-                                </small>
-                              @endif
+                            <small class="label bg-red">
+                              {{UserHelper::getRoleByUserId($user->id)}}
+                            </small>
                           </div>
                         </td>
                         <td>{{$user->nickname}}</td>
@@ -133,12 +119,14 @@
                         </td>
                         <td>
                           @foreach (App\UserAgent::getUserAgentByUserId($user->id) as $agent)
+                            @if($agent->fetchUser->status == 1)
                             <img src="{{UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}" class="img-circle" alt="{{$agent->fetchUser->avatar}}" width="50px">
+                            @endif
                           @endforeach
                         </td>
                         <td>
                           @foreach (App\UserTeam::getUserTeamByUserId($user->id) as $user_team)
-                            @if(!empty($user_team->team))
+                            @if(!empty($user_team->fetchTeam))
                               <small class="label" style="background-color:{{$user_team->fetchTeam->color}};">{{$user_team->fetchTeam->name}}</small>
                             @endif
                           @endforeach
