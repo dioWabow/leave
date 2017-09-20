@@ -118,6 +118,11 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'report/index',
             'uses' => 'ReportController@postIndex',
         ]);
+
+        Route::get('vacation',[
+            'as' => 'report/vacation',
+            'uses' => 'ReportController@getUserData'
+        ]);
     });
 
 

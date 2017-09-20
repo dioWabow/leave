@@ -5,6 +5,9 @@
   <title>請假系統 DEMO</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 @include('layouts.head_css')
+  <style>
+	th {cursor: pointer;}
+  </style>
 
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini">
@@ -57,8 +60,6 @@
 										</label>
 										<label><button type="submit" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
 										&nbsp;
-										<input id="sort" type="hidden" name="order_by[order_by]" @if(isset($order_by) && count($order_by) > 0)value="{{$order_by['order_by']}}"@endif>
-			                    		<input id="sort_way" type="hidden" name="order_by[order_way]" @if(isset($order_by) && count($order_by) > 0)value="{{$order_by['order_way']}}"@endif>
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									</div>
 								</div>
@@ -67,22 +68,21 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<table class="table table-bordered table-striped table-hover">
-									<table class="table table-bordered table-striped table-hover">
 									<thead>
 										<tr>
 											<th width="3%"></th>
-											<th><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
+											<th><a>名稱</a></th>
 											@foreach($all_type as $type_data)
-											<th><a href="javascript:void(0)" onclick="changeSort('{{$type_data->id}}');">{{$type_data->name}}</a></th>
+											<th><a>{{$type_data->name}}</a></th>
 											@endforeach
-											<th><a href="javascript:void(0)" onclick="changeSort('sum');">總計(Hr)</a></th>
-											<th><a href="javascript:void(0)" onclick="changeSort('deductions');">扣薪</a></th>
+											<th>總計(Hr)</th>
+											<th>扣薪</th>
 										</tr>
 									</thead>
 									<tbody>
 										@if(isset($all_user) && count($all_user) > 0)
 										@foreach($all_user as $user_data)
-											<tr class="clickable-row" data-href="">
+											<tr class="clickable-row" data-href="#">
 												<td>
 													<img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" class="img-circle" alt="{{$user_data->nickname}}" width="60px">
 												</td>
@@ -90,7 +90,7 @@
 												@foreach($report_data as $report_key => $report_value)
 												@foreach($all_type as $type_data)
 												@if("{{$report_key}}" == "{{$user_data->id}}")
-												<td>{{$report_value[$type_data->id]}}</td>
+												<td><a href="{{ route('report/vacation') }}?year={{$year}}&month={{$month}}&user_id={{$user_data->id}}&type_id={{$type_data->id}}">{{$report_value[$type_data->id]}}</a></td>
 												@endif
 												@endforeach
 												@endforeach
@@ -100,7 +100,7 @@
 										@endforeach
 										@endif
 									</tbody>
-									<tfotter>
+									<tfoot>
 										<tr class="text-red">
 											<th></th>
 											<th class="pull-right">總計(Hr)</th>
@@ -114,8 +114,7 @@
 											@endif
 											@endforeach
 										</tr>
-									</tfotter>
-									</table>
+									</tfoot>
 								</table>
 							</div>
 						</div>
@@ -126,17 +125,33 @@
 	</div>
 </section>
 <script>
-function changeSort(sort){
-  order_by = $('#sort').val();
-  order_way = $('#sort_way').val();
-  $('#sort').val(sort);
-  if (order_by == sort && order_way == "DESC") {
-      $('#sort_way').val("ASC");
-  } else {
-    $('#sort_way').val("DESC");
+
+$(document).on('click', 'th', function() {
+  var table = $(this).parents('table').eq(0);
+  var rows = table.find('tbody > tr').toArray().sort(comparer($(this).index()));
+  this.asc = !this.asc;
+  if (!this.asc) {
+    rows = rows.reverse();
   }
-  $("#frmSearch").submit();
+
+  table.children('tbody').empty();
+  console.log(table.children('tbody'));
+  table.children('tbody').html(rows);
+});
+
+function comparer(index) {
+  return function(a, b) {
+    var valA = getCellValue(a, index),
+      valB = getCellValue(b, index);
+    return $.isNumeric(valA) && $.isNumeric(valB) ?
+      valA - valB : valA.localeCompare(valB);
+  };
 }
+
+function getCellValue(row, index) {
+  return $(row).children('td').eq(index).text();
+}
+
 </script>
   </div>
   <!-- /.content-wrapper -->

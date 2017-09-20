@@ -30,21 +30,6 @@ class ReportController extends Controller
 
         }
 
-        // dd($month);
-
-        $order_by = $request->input('order_by');
-        if (empty($order_by)) {
-
-            $order_type = "";
-            $order_way = "";
-
-        } else {
-
-            $order_type = $order_by['order_by'];
-            $order_way = $order_by['order_way'];
-
-        }
-
         $model = new LeaveDay;
         $data_list = $model->search($year, $month);
 
@@ -82,36 +67,28 @@ class ReportController extends Controller
         $report_data = $report_list['result'];
         $report_total = $report_list['resultTotal'];
 
-        // 如果是排序才要進入
-        if(isset($order_by) && !empty($order_type)) {
-
-            // report 是誰 order_type 該 type 的小時
-            foreach ($report_data as $report_key => $report_value) {
-                $compute_report_list[$report_key] = $report_value[$order_type];
-            }
-
-            if ($order_way == "DESC") {
-                arsort($compute_report_list);
-            } else {
-                asort($compute_report_list);
-            }
-
-            $new_user_sort = [];
-            foreach ($compute_report_list as $user_id => $hours) {
-                $new_user_sort[] = $user_id;
-            }
-
-            $all_user_moment = $all_user;
-
-            $all_user_sort = [];
-            foreach ($new_user_sort as $value) {
-                unset($all_user[$value]);
-                $all_user[] = $all_user_moment[$value];
-            }
-        }
-
         return view('report', compact(
-            'year', 'month','order_by', 'data_list',  'all_user', 'all_type', 'report_data', 'report_total'
+            'year', 'month', 'data_list',  'all_user', 'all_type', 'report_data', 'report_total'
+        ));
+    }
+
+    public function getUserData()
+    {
+        $user_id = (!empty($_GET['user_id'])) ? $_GET['user_id'] : "";
+        $type_id = (!empty($_GET['type_id'])) ? $_GET['type_id'] : "";
+        $year = (!empty($_GET['year'])) ? $_GET['year'] : "";
+        $month = (!empty($_GET['month'])) ? $_GET['month'] : "";
+        $order_by = (!empty($_GET['order_by'])) ? $_GET['order_by'] : "";
+        $order_way = (!empty($_GET['order_way'])) ? $_GET['order_way'] : "";
+
+        $model = new Leave;
+        $user_vacation_list = $model->userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way);
+
+        $userModel = new User;
+        $user_data_list = $userModel->getUsersById($user_id);
+
+        return view('report_vacation',compact(
+            'user_id', 'type_id', 'year', 'month', 'order_by', 'order_way', 'user_vacation_list', 'user_data_list'
         ));
     }
 
@@ -138,7 +115,7 @@ class ReportController extends Controller
 
                     }
                 }
-
+                        // 補 總和 跟 扣薪 的值
                         $result[$user_key]['sum'] = 0;
                         $result[$user_key]['deductions'] = 0;
 
@@ -273,8 +250,6 @@ class ReportController extends Controller
                 }
             }
         }
-
-        // dd($result);
 
         return [
             'result' => $result, 'resultTotal' => $resultTotal
