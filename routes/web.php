@@ -146,7 +146,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // 特休結算
     Route::group(['prefix'=>'annual_leave_calculate'], function(){
-        Route::get('view', [
+        Route::any('view', [
         'uses' => 'AnnualHoursController@getView',
         'as' => 'annual_leave_calculate/view',
         ]);

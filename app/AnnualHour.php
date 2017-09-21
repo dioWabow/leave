@@ -6,15 +6,18 @@ class AnnualHour extends BaseModel
 {
     //可以傳入數值的欄位
     protected $fillable = [
+        'user_id',
+        'annual_hours',
+        'used_annual_hours',
+        'remain_annual_hours',
+        'create_time',
         'order_by',
         'order_way',
-        'year',
     ];
 
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'year' => '',
     ];
 
     /**
@@ -24,14 +27,15 @@ class AnnualHour extends BaseModel
      */
     protected $table = 'annuals_hours';
 
-    public static function search($where = array())
+    public function search($where = array())
     {
         $query = self::OrderedBy();
+
         foreach($where as $key => $value){
 
             if ($key == 'year' && isset($value)) {
 
-                $query->where('created_at', 'like' ,$value. '%');
+                $query->whereYear('create_time' , $value);
 
             }
             
@@ -50,6 +54,14 @@ class AnnualHour extends BaseModel
     public function fetchUser()
     {
         $result = $this::hasOne('App\User','id','user_id');
+        return $result;
+    }
+
+    public static function deleteAnnualHourByUserId($id,$create_time) 
+    {
+        $result = self::where('user_id', $id)
+            ->whereYear('create_time' , $create_time)
+            ->delete();
         return $result;
     }
 }
