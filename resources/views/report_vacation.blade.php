@@ -19,13 +19,13 @@
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-github-alt"></i> 報表假單列表
+	<i class="fa fa-github-alt"></i> {{$all_type[$type_id]->name}}列表
 	<small>Report Vacation List</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li><a href="{{ route('report/index') }}">報表</a></li>
-	<li class="active">報表假單列表</li>
+	<li class="active">{{$all_type[$type_id]->name}}列表</li>
   </ol>
 </section>
 
@@ -44,33 +44,28 @@
 										<input type="hidden" name="month" value="{{$month}}">
 										<input type="hidden" name="user_id" value="{{$user_id}}">
 										<input type="hidden" name="type_id" value="{{$type_id}}">
-										<input id="sort" type="hidden" name="order_by" @if(count($order_by) > 0)value="{{$order_by}}"@endif>
-			                    		<input id="sort_way" type="hidden" name="order_way" @if(count($order_way) > 0)value="{{$order_way}}"@endif>
 									</form>
 									<thead>
 										<tr>
-											<th width="4%">請假者</th>
-											<th><a href="javascript:void(0)" onclick="changeSort('start_time');">時間</a></th>
-											<th>原因</th>
-											<th width="8%"><a href="javascript:void(0)" onclick="changeSort('hours');">時數(HR)</a></th>
+											<th width="4%"><a>請假者</a></th>
+											<th><a>時間</a></th>
+											<th><a>原因</a></th>
+											<th width="8%"><a>時數(HR)</a></th>
 										</tr>
 									</thead>
 									<tbody>
-										@foreach($user_data_list as $user_data)
-										@foreach($user_vacation_list as $list_data)
+                    @forelse($user_vacation_list as $list_data)
 										<tr class='clickable-row' data-href='#'>
-											<td><img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" class="img-circle" alt="{{$user_data->nickname}}" width="50px"></td>
+											<td><img src="{{UrlHelper::getUserAvatarUrl($list_data->User->avatar)}}" class="img-circle" alt="{{$list_data->User->nickname}}" width="50px"></td>
 											<td>{{ Carbon\Carbon::parse($list_data->start_time)->format('Y-m-d') }} ~ {{ Carbon\Carbon::parse($list_data->end_time)->format('Y-m-d') }}</td>
 											<td>{{$list_data->reason}}</td>
 											<td>{{$list_data->hours}}</td>
 										</tr>
-										@endforeach
-										@endforeach
-										@if(count($user_vacation_list) == 0)
+                    @empty
 											<tr class="">
 												<td colspan="4" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
 											</tr>
-										@endif
+										@endforelse
 									</tbody>
 								</table>
 								{!! $user_vacation_list->appends(\Request::except('page'))->render() !!}
@@ -82,20 +77,6 @@
 		</div>
 	</div>
 </section>
-<script>
-
-function changeSort(sort){
-  order_by = $('#sort').val();
-  order_way = $('#sort_way').val();
-  $('#sort').val(sort);
-  if (order_by == sort && order_way == "DESC") {
-      $('#sort_way').val("ASC");
-  } else {
-    $('#sort_way').val("DESC");
-  }
-  $("#vacation_list").submit();
-}
-</script>
   </div>
   <!-- /.content-wrapper -->
 

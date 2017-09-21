@@ -38,6 +38,11 @@ class ReportController extends Controller
         foreach ($all_user_tmp as $key => $value) {
 
             if (!empty($value['leave_date'])) {
+
+                if (date('Y',strtotime($value['leave_date'])) < $year) {
+                    unset($all_user_tmp[$key]);
+                }
+
                 if (date('m', strtotime($value['leave_date'])) < $month) {
                     unset($all_user_tmp[$key]);
                 }
@@ -76,17 +81,20 @@ class ReportController extends Controller
         $type_id = (!empty($_GET['type_id'])) ? $_GET['type_id'] : "";
         $year = (!empty($_GET['year'])) ? $_GET['year'] : "";
         $month = (!empty($_GET['month'])) ? $_GET['month'] : "";
-        $order_by = (!empty($_GET['order_by'])) ? $_GET['order_by'] : "";
-        $order_way = (!empty($_GET['order_way'])) ? $_GET['order_way'] : "";
 
         $model = new Leave;
-        $user_vacation_list = $model->userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way);
+        $user_vacation_list = $model->userVacationList($user_id, $type_id, $year, $month);
 
-        $userModel = new User;
-        $user_data_list = $userModel->getUsersById($user_id);
+        $typeModel = new Type;
+        $all_type_temp = $typeModel->getAllTypes();
+
+        $all_type = [];
+        foreach ($all_type_temp as $type_value) {
+            $all_type[$type_value->id] = $type_value;
+        }
 
         return view('report_vacation',compact(
-            'user_id', 'type_id', 'year', 'month', 'order_by', 'order_way', 'user_vacation_list', 'user_data_list'
+            'user_id', 'type_id', 'year', 'month', 'user_vacation_list', 'all_type'
         ));
     }
 

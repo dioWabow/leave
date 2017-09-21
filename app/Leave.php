@@ -31,7 +31,7 @@ class Leave extends BaseModel
     	return $result;
     }
 
-    public function userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way)
+    public function userVacationList($user_id, $type_id, $year, $month)
     {
         $query = $this->where('user_id', $user_id)
             ->where('type_id', $type_id)
@@ -40,10 +40,6 @@ class Leave extends BaseModel
 
             if ($month != 'year') {
                 $query->whereMonth('start_time', $month);
-            }
-
-            if (!empty($order_by) && !empty($order_way)) {
-                $query->orderBy($order_by, $order_way);
             }
 
         $result = $query->paginate(10);
