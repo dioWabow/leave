@@ -8,7 +8,7 @@
 	<small>Teams Leave List</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="{{ route('root_path') }}/index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">團隊假單</li>
   </ol>
 </section>
@@ -47,8 +47,8 @@
 						@include('leave_manager_history')
 					@endif
 					<!-- /.tab-pane -->
-					
-					<!-- /.tab-pane -->
+
+					<!-- /.tab-pane-calendar -->
 					@if(Request::is('leaves/manager/calendar/*'))
 						@include('leave_manager_calendar')
 					@endif

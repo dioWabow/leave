@@ -136,7 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::any('calendar/',[
             'as'=>'leaves/manager/calendar/ajax',
-            'uses'=> 'LeavesManagerController@ajaxGetManagerAvailableLeaveListByDateRange',
+            'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
         ]);
     });
 

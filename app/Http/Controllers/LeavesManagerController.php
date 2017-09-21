@@ -202,6 +202,10 @@ class LeavesManagerController extends Controller
         ));
     }
 
+    /**
+     * 團隊假單
+     *
+     */
     public function getCalendar()
     {
         $getRole = $this->role;
@@ -209,71 +213,6 @@ class LeavesManagerController extends Controller
         return  view('leave_manager', compact(
             'getRole'
         ));
-    }
-
-    /*
-    行事曆
-    * 抓出 該主管 所以有的 team 成員
-    */
-    /**
-     * 1.判斷權限是主還是子 抓不同資料
-     * 2.抓出 team 的 所有 user_id
-     * 3.抓出主單有 相同 user_id 的部分
-     */
-    public function ajaxGetManagerAvailableLeaveListByDateRange(Request $request)
-    {
-        $start_time = date('Y-m-d', $request['start']);
-        $end_time = date('Y-m-d', $request['end']);
-        $getRole = $request['role'];
-
-        $user_id = Auth::user()->id;
-
-        $teams = [];
-
-        if ($this->role == 'Manager' && !empty(Auth::hasManagement())) {
-
-            $teams = Auth::hasManagement();
-            $teams_id = Team::getTeamsByManagerTeam($teams);
-
-        } elseif ($this->role == 'Mini_Manager' && !empty(Auth::hasMiniManagement()) ) {
-
-            $teams = Auth::hasMiniManagement();
-
-        } else {
-
-            return Redirect::route('index')->withErrors(['msg' => '你無權限']);
-
-        }
-
-        $model = new UserTeam;
-        $all_member = $model->getUserByTeams($teams);
-
-        // 撈出全部假單
-        $leaveModel = new Leave;
-        $leave_list = $leaveModel->leaveManagerDataRange($all_member, $start_time, $end_time);
-
-        $result = [];
-        foreach ($leave_list as $key => $value) {
-            // 判斷如果有user 被移除的情況
-            if ($value->fetchUser != null) {
-                // 用關聯方式取值
-                $user_name = $value->fetchUser->nickname;
-                $vacation_name = $value->fetchType->name;
-                $team_color = $value->fetchUserTeam->fetchTeam->color;
-
-                $result[$key]['title'] = addslashes($user_name . ' / ' .  $vacation_name);
-                $result[$key]['start'] = $value['start_time'];
-                $result[$key]['end'] = $value['end_time'];
-                $result[$key]['backgroundColor'] = $team_color;
-                $result[$key]['borderColor'] = $team_color;
-
-            }
-        }
-
-        return json_encode(
-            $result
-        );
-
     }
 
     /**
