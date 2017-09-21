@@ -44,8 +44,7 @@ class LeaveDay extends BaseModel
 
         }
 
-        $result = self::where('start_time',">=", $start_time )->where('end_time',"<=", $end_time)->get();
-
+        $result = self::where('leaves_days.start_time',">=", $start_time )->where('leaves_days.end_time',"<=", $end_time)->leftJoin('leaves', 'leaves.id', '=', 'leaves_days.leave_id')->where('leaves.tag_id', "9")->get();
         return $result;
     }
 

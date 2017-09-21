@@ -94,9 +94,11 @@ class SystemConfController extends Controller
    
     public function testEmail(Request $request)
     {
-        $EmailHelper = new EmailHelper();
-        $EmailHelper->to = 'eno@wabow.com';
-        $EmailHelper->notify(new AgentNoticeEmail("eno","2017-08-18 09:00"));
+        // $EmailHelper = new EmailHelper();
+        // $EmailHelper->to = 'eno@wabow.com';
+        // $EmailHelper->notify(new AgentNoticeEmail("eno","2017-08-18 09:00"));
+        LeaveDay::getTodayLeave();
+
     }
    
 }

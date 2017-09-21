@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
 class DailyLeave extends Command
 {
     // 命令名稱
-    protected $signature = 'notice:DailyLeave';
+    protected $signature = 'Notice:DailyLeave';
 
     // 說明文字
     protected $description = '每日請假人通知';

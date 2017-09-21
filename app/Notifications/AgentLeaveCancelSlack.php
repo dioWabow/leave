@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class AgentNoticeSlack extends Notification
+class UserLeaveSuccessSlack extends Notification
 {
     use Queueable;
 
@@ -23,15 +23,13 @@ class AgentNoticeSlack extends Notification
      *
      * @return void
      */
-    public function __construct($name,$start_time,$to)
+    public function __construct($start_time,$end_time,$to)
     {
-        $this->title .= "假單申請通知：";
+        $this->title .= "假單取消通知：";
 
         $text = "";
-        $text .= $name.' 於 '.$start_time." 將請假並指定您為代理人\n";
-        $text .= "請盡速進行確認是否同意，謝謝。"
+        $text .= "您於 ".$start_time." 至 ".$end_time."期間擔任職務代理人的假單已被取消";
         $this->text .= $text;
-
 
         $this->to .= $to;
     }
@@ -55,7 +53,7 @@ class AgentNoticeSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("agent/index");
+        $url = route("index");
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 
