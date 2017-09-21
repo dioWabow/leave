@@ -114,24 +114,29 @@ Route::group(['middleware' => 'auth'], function () {
 
     # 團隊假單-主管
     Route::group(['prefix'=>'leaves/manager'], function(){
-        Route::any('prove/{user_id}/{role}',[
+        Route::any('prove/{role}',[
+            'as'=>'leaves/manager/prove',
             'uses'=> 'LeavesManagerController@getProve',
-            'as'=>'leaves_manager_prove',
         ]);
         
-        Route::any('upcoming/{user_id}/{role}',[
+        Route::any('upcoming/{role}',[
+            'as'=>'leaves/manager/upcoming',
             'uses'=> 'LeavesManagerController@getUpcoming',
-            'as'=>'leaves_manager_upcoming',
         ]);
         
-        Route::any('history/{user_id}/{role}',[
+        Route::any('history/{role}',[
+            'as'=>'leaves/manager/history',
             'uses'=> 'LeavesManagerController@getHistory',
-            'as'=>'leaves_manager_history',
         ]);
 
-        Route::any('calendar/{user_id}/{role}',[
-            'uses'=> 'LeavesManagerController@getCalendar',
-            'as'=>'leaves_manager_calendar',
+        Route::any('calendar/{role}',[
+            'as'=>'leaves/manager/calendar',
+            'uses'=> 'LeavesManagerController@aaa',
+        ]);
+        
+        Route::any('calendar/',[
+            'as'=>'leaves/manager/calendar/ajax',
+            'uses'=> 'LeavesManagerController@ajaxGetAllAvailableLeaveListByDateRange',
         ]);
     });
     

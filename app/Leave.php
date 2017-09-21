@@ -3,6 +3,7 @@
 namespace App;
 
 use Schema;
+use DB;
 
 class Leave extends BaseModel
 {
@@ -55,13 +56,17 @@ class Leave extends BaseModel
 
                     $query->whereIn('tag_id', $value);
 
-                } elseif ($key == 'id' && is_array($value)) {
+                } elseif ($key == 'id') {
 
                     $query->whereIn('id', $value);
 
                 } elseif ($key == 'user_id') {
 
                     $query->whereIn('user_id', $value);
+
+                } elseif ($key == 'hours') {
+
+                    $query->where('hours', '>', $value);
                     
                 } elseif ($key == 'start_time') {
 
@@ -81,6 +86,11 @@ class Leave extends BaseModel
 
         $result = $query->paginate($this->pagesize);
         return $result;
+    }
+
+    function UpComingSearch() {
+
+        
     }
 
     public function scopeOrderedBy($query)
@@ -118,4 +128,21 @@ class Leave extends BaseModel
         $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
         return $result;
     }
+
+    public static function getfinishedLeavesIdByTodayForManager($today,$id)
+    {
+        $result = self::where('start_time', '<=', $today)
+                        ->where('tag_id', '9')
+                        ->whereIn('id', $id)
+                        ->orWhere('tag_id', '8')
+                        ->get();
+        return $result;
+    }
+    
+    public static function getUpComingLeavesIdByTodayForManager($today, $id)
+    {
+        $result = self::where('start_time', '>=' ,$today)->whereIn('id', $id)->get()->pluck('id');
+        return $result;
+    }
+
 }

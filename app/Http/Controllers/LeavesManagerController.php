@@ -11,12 +11,19 @@ use App\LeaveRespon;
 
 use Auth;  
 use Redirect; 
+use Route;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class LeavesManagerController extends Controller
 {
+    private $role;
+
+    public function __construct(Request $request)
+    {
+        $this->role = $request->role;
+    }
    /**
      * 列表-等待核准 Prvoe
      * 主管 =>該team下 小主管審核過的單 3
@@ -25,25 +32,17 @@ class LeavesManagerController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function getProve(Request $request, $user_id, $role)
+    public function getProve(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
-        //回傳值給頁面，判斷現在在哪
-        $getRole =  (!empty($role)) ? $role : [];
-        
-        if ($role != 'boss' && $role != 'manager' && $role != 'mini_manager') {
+        $getRole = $this->role;
 
-            return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
-
-        }
-       
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leaves_manager');
             $request->session()->push('leaves_manager.search', $search);
             $request->session()->push('leaves_manager.order_by', $order_by);
-            $search = self::getUserManagerTagAndUserId($search, $getRole);
 
         } else {
 
@@ -54,16 +53,42 @@ class LeavesManagerController extends Controller
 
             } else {
 
-                $search = self::getUserManagerTagAndUserId($search, $getRole);
                 $request->session()->forget('leaves_manager');
+
             }
         }
-
-        $model = new Leave;
-        $dataProvider = $model->fill($order_by)->search($search);
         
+        $model = new Leave;
+        if ( $this->role == 'Admin' && Auth::hasAdmin() == true) {
+            
+            $search['tag_id'] = ['4'];
+            $search['hours'] = '24';
+            $dataProvider = $model->fill($order_by)->search($search);
+
+        } elseif ($this->role == 'Manager' && !empty(Auth::hasManagement())) {
+                
+            $search_sub_teams = self::getManagerSubTeamsLeaves();
+            $search_teams = self::getManagerTeamsLeaves();
+            
+            $dataProvider_sub_teams = $model->fill($order_by)->search($search_sub_teams);
+            $dataProvider_teams = $model->fill($order_by)->search($search_teams);
+            $dataProvider = $dataProvider_sub_teams->merge($dataProvider_teams);
+                
+        } elseif ($this->role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
+                
+            $teams = Auth::hasMiniManagement();
+            $search['user_id'] = UserTeam::getUserByTeams($teams);
+            $search ['tag_id'] = ['2'];
+            $dataProvider = $model->fill($order_by)->search($search);
+
+        } else {
+
+            return Redirect::route('index')->withErrors(['msg' => '你無權限']);
+
+        }
+
         return  view('leave_manager', compact(
-            'search', 'getRole' , 'model', 'dataProvider' 
+            'search', 'getRole', 'model', 'dataProvider' 
         ));
     }
 
@@ -73,24 +98,16 @@ class LeavesManagerController extends Controller
      * 
      * @return \Illuminate\Http\Response
     */
-    public function getUpcoming(Request $request, $user_id, $role)
+    public function getUpcoming(Request $request)
     { 
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
-        $getRole =  (!empty($role)) ? $role : [];
-        if (empty($role) || $role != 'boss' && $role != 'manager' && $role != 'mini_manager') {
-            
-            return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
-            
-        } 
-
-       
+        $getRole = $this->role;
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leaves_manager');
             $request->session()->push('leaves_manager.search', $search);
             $request->session()->push('leaves_manager.order_by', $order_by);
-            $search['tag_id'] = [9];
 
         } else {
 
@@ -102,17 +119,19 @@ class LeavesManagerController extends Controller
             } else {
 
                 $request->session()->forget('leaves_manager');
-                $search['tag_id'] = [9];
+                
             }
         }
          //傳入user_id,取得該user的審核單, 再回來進入search()
-        $search['id'] = LeaveRespon::getLeaveIdByUserId($user_id);
+        $leave_id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
+        $serach['id'] = Leave::getUpComingLeavesIdByTodayForManager(Carbon::now(),$leave_id);
+        $search['tag_id'] = [9];
 
         $model = new Leave;
         $dataProvider = $model->fill($order_by)->search($search);
         
         return  view('leave_manager', compact(
-            'search', 'getRole' , 'model', 'dataProvider' 
+            'search' ,'getRole', 'model', 'dataProvider' 
         ));
     }
     /**
@@ -121,17 +140,11 @@ class LeavesManagerController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function getHistory(Request $request, $user_id, $role)
+    public function getHistory(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
-        $getRole =  (!empty($role)) ? $role : [];
-        if ($role != 'boss' && $role != 'manager' && $role != 'mini_manager') {
-            
-            return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
-            
-        }
-
+        $getRole = $this->role;
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leaves_manager');
@@ -146,8 +159,7 @@ class LeavesManagerController extends Controller
                 $order_by = $request->session()->get('leaves_manager.order_by.0');
 
             } else {
-
-                $search['tag_id'] = [8,9];
+                
                 $request->session()->forget('leaves_manager');
 
             }
@@ -163,8 +175,21 @@ class LeavesManagerController extends Controller
             $order_by['end_time'] = $daterange[1];
             
         }
+        //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
+        if (!empty($search['type_id'])) {
+            
+            $order_by['exception'] = $search['type_id'];
+            $search['type_id'] = $model->getTypeIdByException($search['type_id']);
+            
+            
+        } else {
 
-        $search['id'] = LeaveRespon::getLeaveIdByUserId($user_id);
+            $search['type_id'] = [];
+
+        }
+
+        $search['tag_id'] = [8,9];
+        $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
 
         $model = new Leave;
         $dataProvider= $model->fill($order_by)->search($search);
@@ -172,58 +197,84 @@ class LeavesManagerController extends Controller
         $leaves_totle_hours = LeaveHelper::LeavesHoursTotal($dataProvider);
 
         return  view('leave_manager', compact(
-            'search', 'getRole', 'model', 'dataProvider', 'leaves_totle_hours'
+            'search', 'model','getRole', 'dataProvider', 'leaves_totle_hours'
         ));
     }
-    /*
-    行事曆
-    */
-    public function getCalendar(Request $request, $user_id, $role)
-    {
-        $getRole =  (!empty($role)) ? $role : [];
+    public function aaa() {
+        $getRole = $this->role;
+
         return  view('leave_manager', compact(
             'getRole'
         ));
     }
-     /**
-     *  1. 先判斷這人是不是boss，是boss就抓主管審核過的假單
-     *  2. 找出他所屬的team是不是manager
-     *  3. 判斷他在team裡是主管or小主管(parent_id是否為0)
-     *  4. 如果為0 代表為主管，並抓出相關的team_id,再找出teams的user
-     *  3. 如果為1 代表為小主管，抓team_id 後 到 userteam找出相關的user
-     */
-    private static function getUserManagerTagAndUserId($search, $getRole)
+    
+    /*
+    行事曆
+    */
+    public function ajaxGetAllAvailableLeaveListByDateRange(Request $request)
     {
-        if ($getRole == 'boss') {
+        
+        $start_time = date('Y-m-d', $request['start']);
+        $end_time = date('Y-m-d', $request['end']);
 
-            $search['tag_id'] = [4];
+        $result = [];
 
-        } else {
-            
-            //取得主管所在團隊 team_id
-            $manager_teams_id = UserTeam::getManagerTeamByUserId(Auth::user()->id);
-            
-            if ($getRole == 'manager') {
-                //找出主管為parent_id = 0的team_id
-                $team_id = Team::getManagerTeamIdByTeamId($manager_teams_id);
-                //找出該主管下有幾個team
-                $teams_id = Team::getIdByParentId($team_id);
-                //抓出team內有哪些人
-                $search['user_id'] = UserTeam::getUsersIdByTeamsId($teams_id, Auth::user()->id);
-                $search['tag_id'] = [3];
-            
-            } elseif ($getRole == 'mini_manager') {
-                //找出小主管為parent_id != 0的teams_id
-                $team_id = Team::getMiniManagerTeamIdByTeamId($manager_teams_id);
-                //抓出team內有哪些人
-                $search['user_id'] = UserTeam::getUsersIdByTeamsId($team_id, Auth::user()->id);
-                $search['tag_id'] = [2];
+        $model = new Leave;
+
+        // 撈出全部假單
+        $leave_list = $model->leaveDataRange($start_time, $end_time);
+
+        foreach ($leave_list as $key => $value) {
+            // 判斷如果有user 被移除的情況
+            if ($value->fetchUser != null) {
+                // 用關聯方式取值
+                $user_name = $value->fetchUser->nickname;
+                $vacation_name = $value->fetchType->name;
+                $team_color = $value->fetchUserTeam->fetchTeam->color;
+
+                $result[$key]['title'] = addslashes($user_name . ' / ' .  $vacation_name);
+                $result[$key]['start'] = $value['start_time'];
+                $result[$key]['end'] = $value['end_time'];
+                $result[$key]['backgroundColor'] = $team_color;
+                $result[$key]['borderColor'] = $team_color;
 
             }
-               
         }
 
-        return $search;
+        return json_encode(
+            $result
+        );
+
     }
 
+    /**
+     * 1.取得主管的team 
+     * 2.取得該主管的子team
+     * 3.狀態在小主管審核過的user_id 
+     */
+    public static function getManagerSubTeamsLeaves()
+    {
+        
+        $teams = Auth::hasManagement();
+        $teams_id = Team::getTeamsByManagerTeam($teams);
+        $search_sub_teams['user_id'] = UserTeam::getUserByTeams($teams_id);
+        $search_sub_teams['tag_id'] = ['3'];
+
+        return $search_sub_teams;
+    }
+
+    /**
+     * 1.取得主管的team 
+     * 2.取得主管team 的user_id
+     * 3.狀態在職代審核過 
+     */
+
+    public static function getManagerTeamsLeaves()
+    {
+        $teams = Auth::hasManagement();
+        $search_teams['user_id'] = UserTeam::getUserByTeams($teams);
+        $search_teams['tag_id'] = ['2'];
+        return $search_teams;
+
+    }
 }

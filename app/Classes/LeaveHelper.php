@@ -42,31 +42,35 @@ class LeaveHelper
      */
     public static function getProveManagerLeavesTabLable($role)
     {
+
         $manager_team_id = UserTeam::getManagerTeamByUserId(Auth::user()->id);
         
         switch ($role) {
 
-            case 'boss':
-                return self::getBossLeavesTotal();
+            case 'Admin' && !empty(Auth::hasAdmin()):
+                return self::getAdminLeavesTotal();
                 break;
 
-            case 'manager':
+            case 'Manager':
                 return self::getManagerLeavesTotal($manager_team_id);
                 break;
 
-            case 'mini_manager':
+            case 'Mini_Manager':
                 return self::getMiniManagerLeavesTotal($manager_team_id);
                 break;
             
             default:
+                return '0';
                 break;
         }
     }
 
-    private static function getBossLeavesTotal()
+    private static function getAdminLeavesTotal()
     {
-        $tag_id = [4];
-        $result = Leave::where('tag_id', $tag_id)->count();
+        $model = new Leave;
+        $search['tag_id'] = ['4'];
+        $search['hours'] = '24';
+        $result = $model->search($search)->count();
         return $result;
     }
 
@@ -107,22 +111,23 @@ class LeaveHelper
      * 
      * 
      */
-    public function getDiffDaysLabel($start_time)
+    public function getDiffDaysLabel($data)
     {
         $today = Carbon::now();
-        $start_time = Carbon::parse($start_time);
+        $start_time = Carbon::parse($data);
         $result = '';
 
-        if ($start_time->gt($today))  {
+        if ($start_time->gte($today))  {
 
-            $result = '倒數'. $today->diffInDays(Carbon::parse($start_time)) . '天'; 
+            $result = $today->diffInDays(Carbon::parse($start_time));
 
         } 
-       
+    
         return $result;
 
     }
 
+     
     public function LeavesHoursTotal($data)
     {
         $result = $data->whereNotIn('tag_id','7')->sum('hours');

@@ -22,7 +22,7 @@ class LeaveRespon extends BaseModel
      
     public static function getLeaveIdByUserId($id)
     {
-        $result = self::where('user_id', $id)->pluck('leave_id')->all();
+        $result = self::where('user_id', $id)->get()->pluck('leave_id');
         return $result;
     }
 

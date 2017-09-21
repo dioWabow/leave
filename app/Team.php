@@ -21,14 +21,21 @@ class Team extends BaseModel
         return $result;
     }
 
-    public static function getIdByParentId($id)
+    public static function getTeamsByManagerTeam($teams)
     {
-        $result = self::whereIn('parent_id' , $id)->get()->pluck('id');
+        foreach ($teams as $team) {
+
+            $teams_id[] = $team->id;
+            
+        }
+        
+        $result = self::whereIn('parent_id', $teams_id)->get();
         return $result;
     }
     
     public static function getParentIdById($id)
     {
+        
         $result = self::whereIn('id' , $id)->pluck( 'parent_id', 'id');
         return $result;
     }

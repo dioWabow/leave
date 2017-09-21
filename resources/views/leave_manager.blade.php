@@ -19,14 +19,14 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{ Request::is('leaves/manager/prove/*')? 'active' : '' }}"><a href="{{ route('leaves_manager_prove', [ 'user_id' => Auth::user()->id, 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }} New Messages">{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }}</span></a></li>
-					<li class="{{ Request::is('leaves/manager/upcoming/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager_upcoming', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }} New Messages">{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }}</span></a></li>
-					<li class="{{ Request::is('leaves/manager/history/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager_history', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
-					@if ( in_array($getRole,['manager','mini_manager']) )
-						<li class="{{ Request::is('leaves/manager/calendar/*') ? 'active' : '' }}">
-							<a href="{{ route('leaves_manager_calendar', [ 'user_id' => Auth::user()->id, 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('calc') }}
-							</a>
-						</li>
+					<li class="{{ Request::is('leaves/manager/prove/*')? 'active' : '' }}"><a href="{{ route('leaves/manager/prove', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }} New Messages">{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }}</span></a></li>
+					<li class="{{ Request::is('leaves/manager/upcoming/*') ? 'active' : '' }}" ><a href="{{ route('leaves/manager/upcoming', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }} New Messages">{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }}</span></a></li>
+					<li class="{{ Request::is('leaves/manager/history/*') ? 'active' : '' }}" ><a href="{{ route('leaves/manager/history', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
+					@if ( in_array($getRole,['Manager','Mini_Manager']) )
+					<li class="{{ Request::is('leaves/manager/calendar/*') ? 'active' : '' }}">
+						<a href="{{ route('leaves/manager/calendar', [ 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('calc') }}
+						</a>
+					</li>
 					@endif
 				</ul>
 				<div class="tab-content">

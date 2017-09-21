@@ -1,5 +1,5 @@
 <div class="{{(Request::is('leaves/manager/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_upcoming', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}" method="POST">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/manager/upcoming', [ 'role' => $getRole ]) }}" method="POST">
       <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -11,14 +11,13 @@
       <table class="table table-bordered table-striped table-hover"  data-toggle-selector=".footable-toggle" data-show-toggle="false">
         <thead>
           <tr>
-            <th width="3%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+            <th width="8%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
             <th data-breakpoints="xs sm"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
             <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
             <th data-breakpoints="xs sm"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-            <th width="3%" data-breakpoints="xs sm">代理人</a></th>
-            <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
-            <th width="8%" data-breakpoints="xs sm"></th>
-            <th data-breakpoints="lg md"></th>
+            <th width="16%" data-breakpoints="xs sm">代理人</a></th>
+            <th width="2%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
+            <th width="10%" data-breakpoints="xs sm"></th>
           </tr>
         </thead>
         {!!csrf_field()!!}
@@ -38,10 +37,9 @@
           @endforeach
           </td>
           <td>{{ $value->hours }}</td>
-          <td class="text-red">
-            {{ LeaveHelper::getDiffDaysLabel($value->start_time) }}
+          <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+            @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
           </td>
-          <td><span class="footable-toggle fooicon fooicon-plus"></span></td>
         </tr>
       @endforeach
       @if(count($dataProvider) == 0)

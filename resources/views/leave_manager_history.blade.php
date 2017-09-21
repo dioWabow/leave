@@ -1,6 +1,6 @@
 <div class="{{Request::is('leaves/manager/history/*') ? 'active' : ''}} tab-pane" id="list">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager_history', ['user_id' => Auth::user()->id, 'role' => $getRole ]) }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/manager/history', [ 'role' => $getRole ]) }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -27,13 +27,14 @@
               假別：
               <select id="search_leave_type" name="search[type_id]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="1" @if (count($search)>2 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
-                <option value="2" @if (count($search)>2 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
-                <option value="3" @if (count($search)>2 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
-                <option value="4" @if (count($search)>2 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
-                <option value="5" @if (count($search)>2 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
-                <option value="6" @if (count($search)>2 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
-                <option value="7" @if (count($search)>2 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
+                <option value="normal" @if (count($search)>2 && $search['type_id'] == 'normal') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
+                <option value="job_seek" @if (count($search)>2 && $search['type_id'] == 'job_seek') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
+                <option value="paid_sick" @if (count($search)>2 && $search['type_id'] == 'paid_sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
+                <option value="sick" @if (count($search)>2 && $search['type_id'] == 'sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
+                <option value="entertain" @if (count($search)>2 && $search['type_id'] == 'entertain') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
+                <option value="annaul_leave" @if (count($search)>2 && $search['type_id'] == 'annaul_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="lone_stay" @if (count($search)>2 && $search['type_id'] == 'lone_stay') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
+                <option value="birthday" @if (count($search)>2 && $search['type_id'] == 'birthday') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
               &nbsp;
               區間：
@@ -66,8 +67,8 @@
               <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="13%">職代</a></th>
+              <th width="25%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+              <th width="16%">代理人</a></th>
               <th width="9%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
             </tr>
           </thead>
@@ -82,12 +83,17 @@
                   {{ WebHelper::getLeaveTagsLabelForHistory($value->tag_id) }}
                 </button>
               </td>
+              @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
+                <td>
+                  <img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px">
+                </td>
+              @endforeach
               <td>{{ $value->fetchType->name }}</td>
               <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
               <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                 @endforeach
               </td>
               <td id="hours">{{ $value->hours }}</td>
