@@ -34,7 +34,7 @@
 			<div class="box box-info">
 				<div class="box-body">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
-						<form id="frmSearch" name="frmSearch" action="{{route('annual_leave_calculate/view')}}" method="POST">
+						<form id="frmSearch" name="frmSearch" action="{{route('annual_leave_calculate/index')}}" method="POST">
             {!!csrf_field()!!}
               <input id="order_by" type="hidden" name="order_by[order_by]" value="{{$model->order_by}}">
               <input id="order_way" type="hidden" name="order_by[order_way]" value="{{$model->order_way}}">
@@ -74,7 +74,7 @@
 									<tbody>
                     @forelse($dataProvider as $annual_hour)
                       @if($annual_hour->annual_hours>0)
-    										<tr class='clickable-row' data-href='#'>
+    										<tr class='clickable-row' data-href='{{route("annual_leave_calculate/view" , ["id" => $annual_hour->user_id ,"year" => $search["year"]])}}'>
     											<td>
     												<img src="{{UrlHelper::getUserAvatarUrl($annual_hour->fetchUser->avatar)}}" class="img-circle" alt="{{$annual_hour->fetchUser->nickname}}" width="50px">
     											</td>

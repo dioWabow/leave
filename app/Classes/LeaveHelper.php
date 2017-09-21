@@ -407,7 +407,7 @@ class LeaveHelper
 
         }
 
-        if (LeaveDay::getLeaveByUserIdDateType($user_id,$start_time,$end_time,$leave_type)>$hours) {
+        if (LeaveDay::getLeaveHoursByUserIdDateType($user_id,$start_time,$end_time,$leave_type)>$hours) {
 
             return true;
 

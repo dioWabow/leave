@@ -53,4 +53,10 @@ class Leave extends BaseModel
         $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
         return $result;
     }
+
+    public static function getLeaveByIdArr($id)
+    {
+        $result = self::whereIn('id', $id)->get();
+        return $result;
+    }
 }

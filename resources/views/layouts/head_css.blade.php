@@ -516,19 +516,6 @@ $(function () {
 <!-- 特休結算用 -->
 @if(Request::is('annual_leave_calculate/*'))
 <script>
-  function changeSort(sort){
-
-    order_by = '{{$model->order_by}}';
-    order_way = '{{$model->order_way}}';
-    $('#order_by').val(sort);
-    if (order_by == sort && order_way == "DESC") {
-      $('#order_way').val("ASC");
-    } else {
-      $('#order_way').val("DESC");
-    }
-    $("#frmSearch").submit();
-  }
-
   $(document).on('click', 'th', function() {
   var table = $(this).parents('table').eq(0);
   var rows = table.find('tbody > tr').toArray().sort(comparer($(this).index()));

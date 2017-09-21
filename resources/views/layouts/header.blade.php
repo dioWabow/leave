@@ -224,7 +224,7 @@
           <ul class="treeview-menu">
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>報表</a></li>
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
-            <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/view')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>
+            <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>
           </ul>
         </li>
       </ul>

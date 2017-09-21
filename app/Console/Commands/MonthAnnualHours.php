@@ -67,7 +67,7 @@ class MonthAnnualHours extends Command
             $end_time = $now_year . TimeHelper::changeDateValue($user->enter_date,['-,1,day'],'-m-d');
             
             $annual_hours = LeaveHelper::calculateAnnualDate($start_time,$user->id);
-            $used_annual_hours = LeaveDay::getLeaveByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
+            $used_annual_hours = LeaveDay::getLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
             $remain_annual_hours = $annual_hours - $used_annual_hours;
 
             $AnnualHour->fill([

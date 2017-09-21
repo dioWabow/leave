@@ -344,7 +344,7 @@ class LeaveController extends Controller
         //有薪病假剩餘時數不足，拆單成一般病假與有薪病假
         if (LeaveHelper::checkLeaveTypeUsed($user_id,$start_date,$end_date,$paid_sick_type,$remain_hours)) {
 
-            $used_paid_sick_hours = LeaveDay::getLeaveByUserIdDateType($user_id,$start_date,$end_date,$paid_sick_type);
+            $used_paid_sick_hours = LeaveDay::getLeaveHoursByUserIdDateType($user_id,$start_date,$end_date,$paid_sick_type);
 
             $remain_paid_sick_hours = LeaveHelper::getRemainHours($paid_sick_type,$used_paid_sick_hours);
 
