@@ -24,7 +24,7 @@ class UserTeam extends BaseModel
       return $result;
     }
 
-    public static function deleteUserTeamByUserId($id) 
+    public static function deleteUserTeamByUserId($id)
     {
         $result = self::where('user_id', $id)->delete();
         return $result;
@@ -36,25 +36,25 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getTeamIdByUserId($id) 
+    public static function getTeamIdByUserId($id)
     {
         $result = self::where('user_id', $id)->get()->pluck('team_id');
         return $result;
     }
 
-    public static function getUserIdByTeamId($id) 
+    public static function getUserIdByTeamId($id)
     {
         $result = self::where('team_id', $id)->get()->pluck('user_id');
         return $result;
     }
 
-    public static function getUserTeamByUserId($id) 
+    public static function getUserTeamByUserId($id)
     {
         $result = self::where("user_id", $id)->get();
         return $result;
     }
 
-    public static function getManagerTeamByUserId($id) 
+    public static function getManagerTeamByUserId($id)
     {
         $result = self::where('user_id', $id)
             ->where('role', 'manager')
@@ -62,7 +62,7 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getUsersIdByTeamsId($id, $user_id) 
+    public static function getUsersIdByTeamsId($id, $user_id)
     {
         $result = self::whereIn('team_id', $id)
             ->where('user_id', '!=', $user_id)
@@ -71,7 +71,7 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public function fetchTeam() 
+    public function fetchTeam()
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;
@@ -82,8 +82,8 @@ class UserTeam extends BaseModel
         $result = $this::hasOne('App\User','id','user_id');
         return $result;
     }
-    
-    public static function getTeamIdByUserIdInMiniManagement($id) 
+
+    public static function getTeamIdByUserIdInMiniManagement($id)
     {
         $result = [];
         $empty = true;
@@ -114,7 +114,7 @@ class UserTeam extends BaseModel
         }
     }
 
-    public static function getTeamIdByUserIdInManagement($id) 
+    public static function getTeamIdByUserIdInManagement($id)
     {
         $result = [];
         $empty = true;
@@ -148,25 +148,25 @@ class UserTeam extends BaseModel
     public static function getUserByTeams($teams)
     {
         $result = [];
- 
-       foreach ($teams as $team) {
- 
-           $team_user_role = self::where('role', 'user')
+
+        foreach ($teams as $team) {
+
+            $team_user_role = self::where('role', 'user')
                 ->where('team_id', $team->id)
                 ->get();
- 
-           foreach ($team_user_role as $user) {
-               
+
+            foreach ($team_user_role as $user) {
+
                 if (!in_array($user->user_id, $result)) {
- 
-                   $result[] = $user->user_id;
- 
+
+                    $result[] = $user->user_id;
+
                }
- 
+
            }
- 
+
        }
- 
+
        return $result;
     }
 

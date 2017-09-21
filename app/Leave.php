@@ -43,11 +43,11 @@ class Leave extends BaseModel
     {
         $query = self::OrderedBy();
         foreach ($where as $key => $value) {
-            
+
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
                 if ($key == 'tag_id') {
-                    
+
                     if (!is_array($value)){
                         //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
                         $value = explode(',',$value);
@@ -67,11 +67,11 @@ class Leave extends BaseModel
                 } elseif ($key == 'hours') {
 
                     $query->where('hours', '>', $value);
-                    
+
                 } elseif ($key == 'start_time') {
 
                     $query->where('start_time', '>' , $value);
-                    
+
                 } elseif ($key == 'end_time') {
 
                     $query->where('end_time', '<' , $value);
@@ -80,7 +80,7 @@ class Leave extends BaseModel
 
                     $query->where($key, $value);
 
-                } 
+                }
             }
         }
 
@@ -90,7 +90,7 @@ class Leave extends BaseModel
 
     function UpComingSearch() {
 
-        
+
     }
 
     public function scopeOrderedBy($query)
@@ -99,7 +99,7 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public static function getTypeIdByLeaves($id) 
+    public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
         return $result;
@@ -109,6 +109,15 @@ class Leave extends BaseModel
     {
         $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
     	return $result;
+    }
+
+    public function leaveManagerDataRange($all_user, $first_day, $last_day)
+    {
+        $result = $this->whereIn('user_id', $all_user)
+            ->whereBetween('start_time', [$first_day, $last_day])
+            ->where('tag_id', '9')
+            ->get();
+        return $result;
     }
 
     public function fetchUser()
@@ -138,7 +147,7 @@ class Leave extends BaseModel
                         ->get();
         return $result;
     }
-    
+
     public static function getUpComingLeavesIdByTodayForManager($today, $id)
     {
         $result = self::where('start_time', '>=' ,$today)->whereIn('id', $id)->get()->pluck('id');

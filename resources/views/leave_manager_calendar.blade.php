@@ -1,5 +1,7 @@
 <div class="{{(Request::is('leaves/manager/calendar/*')) ? 'active' : ''}} tab-pane" id="calendar">
-    <div id="calendar"></div>
+    <div id="calendar">
+    <input type="hidden" name="role" value="{{$getRole}}" id="role_input">
+</div>
     <script>
   $(function () {
 
@@ -19,7 +21,8 @@
                 // our hypothetical feed requires UNIX timestamps
                 "_token": "{{ csrf_token() }}",
                 start: start.unix(),
-                end: end.unix()
+                end: end.unix(),
+                role: $('#role_input').val()
             },
             success: function(data) {
 
