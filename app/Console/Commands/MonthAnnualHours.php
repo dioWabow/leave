@@ -27,7 +27,7 @@ class MonthAnnualHours extends Command
      *
      * @var string
      */
-    protected $description = '年末特休結算cron';
+    protected $description = 'Annual Hours cron';
 
     /**
      * Create a new command instance.

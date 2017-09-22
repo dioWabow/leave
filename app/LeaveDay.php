@@ -31,7 +31,7 @@ class LeaveDay extends BaseModel
      *
      * @var array
      */
-    protected $leave_tag_arr = [7,8];
+    protected $leave_cancel_and_refuse_tag_arr = [7,8];
 
     /**
      * 通過的狀態
@@ -70,7 +70,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $key => $LeaveDay) {
 
-            if (in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 unset($LeaveDays[$key]);
 
@@ -156,7 +156,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -251,7 +251,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -285,7 +285,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -318,7 +318,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
