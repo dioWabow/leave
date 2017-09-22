@@ -64,7 +64,7 @@ class LeaveController extends Controller
 
                 foreach ($users as $user) {
 
-                    if (!empty(User::find($user))) {
+                    if (!empty(User::find($user))&&User::find($user)->status != 0) {
 
                         $user_arr[] = User::find($user);
 
