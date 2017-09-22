@@ -130,6 +130,10 @@ class ReportController extends Controller
             }
         } else {
             foreach ($all_user as $user_key => $user_value) {
+
+                $result[$user_key]['deductions'] = 0;
+                $result[$user_key]['sum'] = 0;
+
                 foreach ($data_list as $data_key => $data_value) {
                     if ($user_key == $data_value['user_id']) {
 
@@ -159,8 +163,6 @@ class ReportController extends Controller
                         }
 
                         // 如果 是空的 價別 補 0
-                        $result[$user_key]['deductions'] = 0;
-                        $result[$user_key]['sum'] = 0;
 
                         foreach ($all_type as $type_key => $type_value) {
 

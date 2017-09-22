@@ -40,6 +40,7 @@ class Leave extends BaseModel
 
             if ($month != 'year') {
                 $query->whereMonth('start_time', $month);
+                $query->whereMonth('end_time', $month);
             }
 
         $result = $query->paginate(10);
