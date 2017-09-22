@@ -32,7 +32,7 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th width="3%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+												<th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
 												<th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
 												<th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
 												<th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
@@ -55,6 +55,11 @@
                       </td>
 										</tr>
 									@endforeach
+                  @if(count($dataProvider) == 0)
+                    <tr class="">
+                      <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有相關結果</span></td>
+                    </tr>
+                  @endif
 									</tbody>
 								</table>
 							</div>

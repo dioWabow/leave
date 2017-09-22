@@ -6,7 +6,7 @@ use App\Leave;
 use App\LeaveAgent;
 
 use Auth;
-use Schema;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -40,12 +40,12 @@ class LeaveAgentController extends Controller
 
             }
         }
-
+        
+        $model = new Leave;
         // 先取得該登入者所代理的假單
         $search['id'] = LeaveAgent::getLeaveIdByUserId(Auth::user()->id);
-
-        $model = new Leave;
-        $dataProvider = $model->fill($order_by)->search($search);
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $dataProvider = $model->fill($order_by)->searchForLeaveAgent($search);
 
         return  view('leave_agent', compact(
             'search', 'model', 'dataProvider'

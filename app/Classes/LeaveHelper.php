@@ -4,6 +4,8 @@ namespace App\Classes;
 
 use App\Leave;
 use App\LeaveAgent;
+
+use Auth;
 use Carbon\Carbon;
 
 class LeaveHelper
@@ -14,10 +16,12 @@ class LeaveHelper
      * 取得該代理人所代理的的假單數量
      * 
      */
-    public static function getAgentLeavesTotal($id)
+    public static function getAgentLeavesTotal()
     {
+        $id = Auth::user()->id;
+        $today = Carbon::now();
         $leave_id = LeaveAgent::getLeaveIdByUserId($id);
-        $result = Leave::whereIn('id', $leave_id)->count();
+        $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
         return $result;
     }
     
