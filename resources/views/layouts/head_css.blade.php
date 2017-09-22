@@ -101,7 +101,8 @@ $(function () {
 @endif
 
 <!-- 我的假單頁面用 -->
-  <script>
+@if(Request::is('leaves/my/*'))
+<script>
 $(function () {
     $('#search_daterange').daterangepicker({
         showDropdowns: true,
@@ -118,6 +119,7 @@ $(function () {
     });
 });
 </script>
+@endif
 
 
 
@@ -150,40 +152,34 @@ $(function () {
 @if(Request::is('leaves/manager/history/*'))
 <script>
 $(function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  var $search_daterange = $('#search_daterange');
+  var time = $search_daterange.val();
   
-  var $search_daterange_leaves_history = $('#search_daterange_leaves_history');
-  
-  $('#search_daterange_leaves_history').daterangepicker({
-      showDropdowns: true,
-      locale: {format: 'YYYY-MM-DD'},
+  $("#search_daterange").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+    maxDate: yyyy + '-' + mm + '-' + dd
   });
 
+  $("#search_daterange").val(time);
   
   $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
-    $(this).val();
-    if ($search_daterange_leaves_history.val()) {
-
-      $(this).val($search_daterange_leaves_history.val());
-
-    } else {
-
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-
-    }
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
   });
 
   $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
+    $(this).val('');
   });
-    
 
-  $("#leave_view_fileupload").fileinput({
-      initialPreview: [
-          './dist/img/unsplash2.jpg'
-      ],
-      initialPreviewAsData: true,
-  });
 });
+function changePageSize(pagesize)
+{
+  $("#frmOrderby").submit();
+}
 </script>
 @endif
 @if (Request::is('leaves/manager/prove/*','leaves/manager/upcoming/*','leaves/manager/history/*'))
@@ -211,11 +207,6 @@ $(function () {
 
   });
 });
-
-function changePageSize(pagesize)
-{
-  $("#frmOrderby").submit();
-}
 </script>
 @endif
 @endif

@@ -38,7 +38,7 @@
               </select>
               &nbsp;
               區間：
-              <input type="text" id="search_daterange_leaves_history" name="search[daterange]" value="{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}" class="form-control pull-right">
+              <input type="text" id="search_daterange" name="search[daterange]" value="@if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
               </label>
               &nbsp;
               <label>

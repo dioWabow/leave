@@ -105,7 +105,6 @@ class Leave extends BaseModel
 
                 } else {
 
-
                     $query->where($key, $value);
 
                 }

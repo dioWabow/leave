@@ -12,8 +12,8 @@ use App\LeaveDay;
 use App\LeaveRespon;
 
 use Auth;  
-use Redirect; 
 use Route;
+use Redirect;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,6 +24,7 @@ class LeavesManagerController extends Controller
 
     public function __construct(Request $request)
     {
+        //先取得從側邊欄進入的權限
         $this->role = $request->role;
     }
    /**
@@ -131,8 +132,7 @@ class LeavesManagerController extends Controller
         }
 
         //傳入user_id,取得該user的審核單, 再回來進入search()
-        $leave_id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
-        $search['id'] = $leave_id;
+        $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         $search['tag_id'] = '9';
 
@@ -162,22 +162,24 @@ class LeavesManagerController extends Controller
             $request->session()->push('leaves_manager.order_by', $order_by);
             
             if (!empty($search['daterange'])) {
-                
+                // 先去找子單的時間再搜尋主單
                 $date_range = $this->checkDateExpload($search['daterange']);
+                $get_user_leave_id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
+                $search['id'] = LeaveDay::getLeavesIdByDateRangeAndLeavesId($date_range[0], $date_range[1], $get_user_leave_id);
                 
-                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
-
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
                             
             }  else {
 
+                //如果日期進來為空，start_time < 今天 搜尋 以及主管審核過的leave_id
+                $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
                 $search['start_time'] = Carbon::now()->format('Y-m-d');
-
+               
             }
 
         } else {
-
+            
             $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
             $search['start_time'] = Carbon::now()->format('Y-m-d');
 
@@ -191,10 +193,10 @@ class LeavesManagerController extends Controller
                 $request->session()->forget('leaves_manager');
 
             }
+
         }
         
         $model = new Leave;
-        
         //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
         if (!empty($search['exception'])) {
 
@@ -208,11 +210,10 @@ class LeavesManagerController extends Controller
         }
         
         $dataProvider = $model->fill($order_by)->searchForHistoryInManager($search);
-        
         $leaves_totle_hours = LeaveHelper::LeavesHoursTotal($dataProvider);
 
         return  view('leave_manager', compact(
-            'search', 'model','getRole', 'dataProvider', 'leaves_totle_hours'
+            'search', 'model', 'getRole', 'dataProvider', 'leaves_totle_hours'
         ));
     }
 

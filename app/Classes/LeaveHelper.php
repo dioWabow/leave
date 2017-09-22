@@ -2,38 +2,16 @@
 
 namespace App\Classes;
 
-use Auth;
 use App\Team;
 use App\Leave;
 use App\UserTeam;
-use Carbon\Carbon;
 use App\LeaveRespon;
+
+use Auth;
+use Carbon\Carbon;
 
 class LeaveHelper
 {
-    /**
-     * 傳入user_id 取得 user的等待核准假單
-     * tag 狀態 1,2,3,4
-     * 
-     */
-    public static function getProveLeavesTotal($id)
-    {
-        $tag_id = ['1','2','3','4'];
-        $result = Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
-        return $result;
-    }
-
-    /**
-     * 傳入user_id 取得 user的即將放假假單
-     * tag 狀態 9
-     * 
-     */
-    public static function getUpComingLeavesTotal($id)
-    {
-        $tag_id = ['9'];
-        $result = Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
-        return $result;
-    }
     /**
      * 1. 取得登入者
      * 2. boss tag 4 total leaves
@@ -156,7 +134,10 @@ class LeaveHelper
 
     }
 
-     
+    /**
+     * 傳入 dataProvider 取得 假單排除狀態 tag 7(取消) 的時數總和
+     * 
+     */
     public function LeavesHoursTotal($data)
     {
         $result = $data->whereNotIn('tag_id','7')->sum('hours');
