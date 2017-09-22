@@ -129,31 +129,31 @@ Route::group(['middleware' => 'auth'], function () {
     // 我要放假
     Route::group(['prefix'=>'leave'], function(){
         Route::get('create', [
-        'uses' => 'LeaveController@getCreate',
-        'as' => 'leave/create',
+            'as' => 'leave/create',
+            'uses' => 'LeaveController@getCreate',
         ]);
 
         Route::post('insert', [
-            'uses' => 'LeaveController@postInsert',
             'as' => 'leave/insert',
+            'uses' => 'LeaveController@postInsert',
         ]);
 
         Route::post('calculate_hours',[
-            'uses' => 'LeaveController@calculate_hours',
             'as' => 'leave/calculate_hours',
+            'uses' => 'LeaveController@calculate_hours',
         ]);
     });
 
     // 特休結算
     Route::group(['prefix'=>'annual_leave_calculate'], function(){
         Route::any('index', [
-        'uses' => 'AnnualHoursController@getIndex',
-        'as' => 'annual_leave_calculate/index',
+            'as' => 'annual_leave_calculate/index',
+            'uses' => 'AnnualHoursController@getIndex',
         ]);
 
         Route::get('view/{id}/{year}', [
-        'uses' => 'AnnualHoursController@getView',
-        'as' => 'annual_leave_calculate/view',
+            'as' => 'annual_leave_calculate/view',
+            'uses' => 'AnnualHoursController@getView',
         ]);
     });
     

@@ -27,7 +27,7 @@ class MonthAnnualHours extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '年末特休結算cron';
 
     /**
      * Create a new command instance.
@@ -67,7 +67,7 @@ class MonthAnnualHours extends Command
             $end_time = $now_year . TimeHelper::changeDateValue($user->enter_date,['-,1,day'],'-m-d');
             
             $annual_hours = LeaveHelper::calculateAnnualDate($start_time,$user->id);
-            $used_annual_hours = LeaveDay::getLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
+            $used_annual_hours = LeaveDay::getPassLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
             $remain_annual_hours = $annual_hours - $used_annual_hours;
 
             $AnnualHour->fill([
