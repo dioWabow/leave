@@ -5,29 +5,35 @@ namespace App\Classes;
 use App\Leave;
 use Carbon\Carbon;
 
+use Auth;
+
 class LeaveHelper
 {
     /**
-     * 傳入user_id 取得 user的等待核准假單
+     * 我的假單
+     * 取得 user的等待核准假單數量
      * tag 狀態 1,2,3,4
      * 
      */
-    public static function getProveLeavesTotalByUserId($id)
+    public static function getProveMyLeavesTotalByUserId()
     {
-        $tag_id = [1,2,3,4];
+        $id = Auth::user()->id;
+        $tag_id = ['1','2','3','4'];
         return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
     }
 
     /**
-     * 傳入user_id 取得 user的即將放假假單
+     * 我的假單
+     * 取得 user的即將放假假單數量
      * tag 狀態 9
      * 
      */
-    public static function getUpComingLeavesTotalByUserId($id)
+    public static function getUpComingMyLeavesTotalByUserId()
     {
-        $tag_id = [9];
-        $leave_id = Leave::getUpComingLeavesIdByToday(Carbon::now());
-        return Leave::where('user_id', $id)->whereIn('id', $leave_id)->whereIn('tag_id', $tag_id)->count();
+        $id = Auth::user()->id;
+        $today = Carbon::now()->format('Y-m-d');
+        $tag_id = ['9'];
+        return Leave::where('user_id', $id)->where('start_time', '>=', $today)->whereIn('tag_id', $tag_id)->count();
     }
 
     /**

@@ -24,22 +24,22 @@
             <!-- Menu toggle button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">{{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }}</span>
+              @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<span class="label label-warning">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</span>@endif
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have {{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }} notifications</li>
+              <li class="header">You have {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} notifications</li>
               <li>
                 <!-- Inner Menu: contains the notifications -->
                 <ul class="menu">
                   <li><!-- start notification -->
-                    <a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}">
-                      <i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }} 張假單尚未審核
+                    <a href="{{ route('leaves/my/prove') }}">
+                      @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} 張假單尚未審核@endif
                     </a>
                   </li>
                   <!-- end notification -->
                 </ul>
               </li>
-              <li class="footer"><a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}">View all</a></li>
+              <li class="footer"><a href="{{ route('leaves/my/prove') }}">View all</a></li>
             </ul>
           </li>
           <!-- User Account Menu -->
@@ -119,9 +119,9 @@
         <!-- Optionally, you can add icons to the links -->
         <li class=""><a href="#"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li @if(Request::is('leaves/my/*')) class="active" @endif>
-          <a href="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
+          <a href="{{ route('leaves/my/prove') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveLeavesTotalByUserId(Auth::user()->id) }}</small>
+              @if( LeaveHelper::getProveMyLeavesTotalByUserId()>0)<small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</small>@endif
             </span>
           </a>
         </li>

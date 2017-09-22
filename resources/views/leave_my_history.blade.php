@@ -1,7 +1,7 @@
 <!-- /.tab-pane -->
-<div class="{{Request::is('leaves/my/history/*') ? 'active' : ''}} tab-pane">
+<div class="{{Request::is('leaves/my/history') ? 'active' : ''}} tab-pane">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/history', ['user_id' => Auth::user()->id ]) }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/history') }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -26,20 +26,20 @@
           <div class="pull-right">
             <label>
               假別：
-              <select id="search_leave_type" name="search[type_id]" class="form-control">
+              <select id="search_leave_type" name="search[exception]" class="form-control">
                 <option value="" selected="selected">全部</option>
                 <option value="normal" @if (count($model->order_by) >0 && $model->exception == "normal") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
                 <option value="job_seek" @if (count($model->order_by) >0 && $model->exception == "job_seek") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
                 <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == "paid_sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
                 <option value="sick" @if (count($model->order_by) >0 && $model->exception == "sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
                 <option value="entertain" @if (count($model->order_by) >0 && $model->exception == "entertain") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
-                <option value="annaul_leave" @if (count($model->order_by) >0 && $model->exception == "annaul_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == "annual_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
                 <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == "lone_stay") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
                 <option value="birthday" @if (count($model->order_by) >0 && $model->exception == "birthday") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
               &nbsp;
               區間：
-              <input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
+              <input type="text" id="search_daterange" name="search[daterange]" value="@if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
               </label>
               &nbsp;
               <label>
@@ -131,27 +131,3 @@
 </div>
 <!-- /.tab-pane -->
 </div>
-<script>
-$('.sort').on('click', function(){
-
-  var $sortname = $(this).attr('sortname');
-  var $order_by = "{{ $model->order_by }}";
-  var $order_way = "{{ $model->order_way }}";
-
-  $("#order_by").val($sortname);
-
-  if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-  } else {
-    $("#order_way").val("DESC");
-  }
-
-  $("#frmOrderby").submit();
-
-});
-
-function changePageSize(pagesize)
-{
-  $("#frmOrderby").submit();
-}
-</script>

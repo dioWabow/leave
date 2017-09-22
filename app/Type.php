@@ -68,4 +68,12 @@ class Type extends BaseModel
         $result = $query->orderBy($this->order_by, $this->order_way);
         return $result;
     }
+
+    public static function getTypeIdByException($exception)
+    {
+        $result = Type::where('exception', $exception)
+                        ->get()
+                        ->pluck('id');
+        return $result;
+    }
 }

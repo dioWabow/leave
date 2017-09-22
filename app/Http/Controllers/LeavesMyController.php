@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use WebHelper;
 use LeaveHelper;
 use App\Leave;
+use App\LeaveDay;
+use App\Type;
 
 use Auth;
 use Redirect;
@@ -19,7 +21,7 @@ class LeavesMyController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function getProve(Request $request, $user_id)
+    public function getProve(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
@@ -28,10 +30,9 @@ class LeavesMyController extends Controller
             $request->session()->forget('leaves_my');
             $request->session()->push('leaves_my.search', $search);
             $request->session()->push('leaves_my.order_by', $order_by);
-            $search['tag_id'] = [1,2,3,4];
 
-        } else {
-
+        } else {   
+            
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_my')))) {
 
                 $search = $request->session()->get('leaves_my.search.0');
@@ -39,16 +40,17 @@ class LeavesMyController extends Controller
 
             } else {
 
-                $search['tag_id'] = [1,2,3,4];
+                
                 $request->session()->forget('leaves_my');
 
             }
         }
 
         $model = new Leave;
-        $search['user_id'] = $user_id;
-        $dataProvider = $model->fill($order_by)->search($search);
-
+        $search['tag_id'] = ['1','2','3','4'];
+        $search['user_id'] = Auth::user()->id;
+        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInMy($search);
+        
         return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
         ));
@@ -59,7 +61,7 @@ class LeavesMyController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function getUpcoming(Request $request, $user_id)
+    public function getUpcoming(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
@@ -68,7 +70,6 @@ class LeavesMyController extends Controller
             $request->session()->forget('leaves_my');
             $request->session()->push('leaves_my.search', $search);
             $request->session()->push('leaves_my.order_by', $order_by);
-            $search['tag_id'] = [9];
 
         } else {
 
@@ -79,18 +80,17 @@ class LeavesMyController extends Controller
 
             } else {
 
-                $search['tag_id'] = [9];
                 $request->session()->forget('leaves_my');
                 
             }
         }
 
         $model = new Leave;
-        $search['user_id'] = $user_id;
-        // 取得即將放假的假單
-        $search['id'] = $model->getUpComingLeavesIdByToday(Carbon::now());
-        $dataProvider = $model->fill($order_by)->search($search);
-
+        $search['tag_id'] = ['9'];
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $search['user_id'] = Auth::user()->id;
+        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInMy($search);
+        
         return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
         ));
@@ -101,7 +101,7 @@ class LeavesMyController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function getHistory(Request $request, $user_id)
+    public function getHistory(Request $request)
     {
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
@@ -113,54 +113,58 @@ class LeavesMyController extends Controller
             $request->session()->push('leaves_my.search', $search);
             $request->session()->push('leaves_my.order_by', $order_by);
 
+            if (!empty($search['daterange'])) {
+                
+                $date_range = $this->checkDateExpload($search['daterange']);
+                // 先去找子單的時間再搜尋主單
+                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
+                $order_by['start_time'] = $date_range[0];
+                $order_by['end_time'] = $date_range[1];
+                            
+            }  else {
+
+                //如果日期進來為空，start_time < 今天 搜尋
+                $search['start_time'] = Carbon::now()->format('Y-m-d');
+
+            }
+
         } else {
 
+            $search['tag_id'] = ['7','8','9'];
+            $search['start_time'] = Carbon::now()->format('Y-m-d');
+            
             // 沒有搜尋，判斷有沒有page 和 session 是不是空的
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_my')))) {
-
+                
                 //有分頁時，將session 的資料塞給$search
                 $search = $request->session()->get('leaves_my.search.0');
                 $order_by = $request->session()->get('leaves_my.order_by.0');
                
             } else {
-                //沒有搜尋也分頁page時，移除session，走固定tag_id
-                $search['tag_id'] = [7,8,9];
+                
                 $request->session()->forget('leaves_my');
                 
             }
            
         }
         
-        if (!empty($search['daterange'])) {
-
-            $daterange = explode(" - ", $search['daterange']);
-            $search['start_time'] = $daterange[0];
-            $search['end_time'] = $daterange[1];
-            
-            $order_by['start_time'] = $daterange[0];
-            $order_by['end_time'] = $daterange[1];
-              
-        }
-
         $model = new Leave;
-        $search['user_id'] = $user_id;
+        $search['user_id'] = Auth::user()->id;
         //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
-        if (!empty($search['type_id'])) {
+        if (!empty($search['exception'])) {
             
-            $order_by['exception'] = $search['type_id'];
-            $search['type_id'] = $model->getTypeIdByException($search['type_id']);
-            
+            $order_by['exception'] = $search['exception'];
+            $search['type_id'] = Type::getTypeIdByException($search['exception']);
             
         } else {
 
             $search['type_id'] = [];
 
         }
-        // 取得已放完假的假單
-        $search['id'] = $model->getfinishedLeavesIdByToday(Carbon::now());
-        $dataProvider = $model->fill($order_by)->search($search);
+        
+        $dataProvider = $model->fill($order_by)->searchForHistoryInMy($search);
         $leaves_totle_hours = LeaveHelper::getLeavesHoursTotal($dataProvider);
-
+        
         return  view('leave_my', compact(
             'dataProvider', 'search', 'model', 'leaves_totle_hours'
         ));
@@ -175,7 +179,7 @@ class LeavesMyController extends Controller
     {
         $model = $this->loadModel($id)->delete();
         // 代 user_id 回到 leaves 頁面
-        return Redirect::route('leaves/my/prove', [ 'user_id' => Auth::user()->id  ])->withErrors(['msg' => '刪除完畢。']);
+        return Redirect::route('leaves/my/prove', [ 'user_id' => Auth::user()->id  ])->withErrors([ 'msg' => '刪除完畢。' ]);
     }
 
     /**
@@ -201,5 +205,15 @@ class LeavesMyController extends Controller
 
         return $model;
 
+    }
+
+    /*
+     * 把傳進來的日期RANGE分解
+     *
+     */
+    private static function checkDateExpload($data)
+    {
+        $data = explode(" - ", $data);
+        return $data;
     }
 }

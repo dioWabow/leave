@@ -25,14 +25,14 @@ class Leave extends BaseModel
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '5',
+        'pagesize' => '25',
         'start_time' => '',
         'end_time' => '',
         'exception' => '',
     ];
 
     /**
-    * 搜尋table多個資料
+    * 搜尋table多個資料 (我的假單等待審核 + 即將放假)
     * 若有多個傳回第一個
     *
     * @param  array   $where     搜尋條件
@@ -40,7 +40,7 @@ class Leave extends BaseModel
     * @param  int     $pagesize  每頁筆數
     * @return 資料object/false
     */
-    public function search($where = [])
+    public function searchForProveAndUpComInMy($where = [])
     {
         $query = self::OrderedBy();
 
@@ -50,29 +50,15 @@ class Leave extends BaseModel
 
                 if ($key == 'tag_id') {
                     
-                    if (!is_array($value)){
-                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
-                        $value = explode(',',$value);
-
-                    }
-
                     $query->whereIn('tag_id', $value);
 
                  } elseif ($key == 'id') {
                 
                     $query->whereIn('id', $value);
 
-                 } elseif ($key == 'type_id') {
-                
-                    $query->whereIn('type_id', $value);
-
-                } elseif ($key == 'start_time') {
-
-                    $query->where('start_time', '>' , $value);
+                 } elseif ($key == 'start_time') {
                     
-                } elseif ($key == 'end_time') {
-
-                    $query->where('end_time', '<' , $value);
+                    $query->where('start_time', '>=' ,$value);
 
                 } else {
 
@@ -85,6 +71,56 @@ class Leave extends BaseModel
         $result = $query->paginate($this->pagesize);
         return $result;
     }
+    /**
+     * 搜尋table多個資料 (我的假單歷史紀錄)
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+    public function searchForHistoryInMy($where = [])
+    {
+        $query = self::OrderedBy();
+        foreach ($where as $key => $value) {
+            
+            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+
+                if ($key == 'id' && !empty($value)) {
+                    
+                    $query->whereIn('id', $value);
+                
+                } elseif ($key == 'type_id') {
+                    
+                    $query->whereIn('type_id', $value);
+
+                } elseif ($key == 'start_time') {
+
+                    $query->where('start_time','<' ,$value);
+
+                } elseif ($key == 'tag_id') {
+                        
+                    if (!is_array($value)){
+                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                        $value = explode(',', $value);
+
+                    } 
+                    
+                    $query->whereIn('tag_id', $value);
+
+                } else {
+
+                    $query->where($key, $value);
+
+                }
+            }
+        }
+
+        $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
     public function scopeOrderedBy($query)
     {
         $result = $query->orderBy($this->order_by, $this->order_way);
@@ -118,32 +154,6 @@ class Leave extends BaseModel
     public function fetchTag()
     {
         $result = $this->hasOne('App\Tag', 'id', 'tag_id');
-        return $result;
-    }
-
-    public static function getfinishedLeavesIdByToday($today)
-    {
-        $result = self::where('start_time', '<=', $today)
-                        ->where('tag_id', '9')
-                        ->orWhereIn('tag_id', ['7','8'])
-                        ->get()
-                        ->pluck('id');
-        return $result;
-    }
-
-    public static function getUpComingLeavesIdByToday($today)
-    {
-        $result = self::where('start_time', '>=' ,$today)
-                        ->get()
-                        ->pluck('id');
-        return $result;
-    }
-
-    public static function getTypeIdByException($exception)
-    {
-        $result = Type::where('exception', $exception)
-                        ->get()
-                        ->pluck('id');
         return $result;
     }
 }

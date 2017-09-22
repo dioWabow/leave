@@ -1,6 +1,6 @@
 <!-- /.tab-pane -->
-<div class="{{(Request::is('leaves/my/prove/*')) ? 'active' : ''}} tab-pane" id="prove">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/prove', ['user_id' => Auth::user()->id ]) }}" method="POST">
+<div class="{{(Request::is('leaves/my/prove')) ? 'active' : ''}} tab-pane" id="prove">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/prove') }}" method="POST">
     <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -71,19 +71,3 @@
   </div>
 </div>
 <!-- /.tab-pane -->
-<script>
-$('.sort').on('click', function(){
-	var $sortname = $(this).attr('sortname');
-	var $order_by = "{{ $model->order_by }}";
-	var $order_way = "{{ $model->order_way }}";
-
-	$("#order_by").val($sortname);
-
-	if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-	} else {
-    $("#order_way").val("DESC");
-	}
-	$("#frmOrderby").submit();
-});
-</script>
