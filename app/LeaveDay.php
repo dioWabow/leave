@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LeaveDay extends Model
+class LeaveDay extends BaseModel
 {
     /**
      * 與Model關聯的table

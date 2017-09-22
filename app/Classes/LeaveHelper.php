@@ -59,7 +59,7 @@ class LeaveHelper
      */
     public function LeavesHoursTotal($data)
     {
-        $result = $data->whereNotIn('tag_id','7')->sum('hours');
+        $result = $data->whereNotIn('tag_id', '7')->sum('hours');
         return $result;
     }
 

@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use LeaveHelper;
 use WebHelper;
-use App\User;
 use App\Leave;
 use App\Type;
 use App\LeaveDay;
-use App\LeaveRespon;
 
 use Redirect;
 use Carbon\Carbon;

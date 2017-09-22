@@ -92,8 +92,11 @@ class Leave extends BaseModel
                     $value = explode(',', $value);
 
                 } 
-            
                     $query->whereIn('tag_id', $value);
+
+                } elseif ($key == 'id' && !empty($value)) {
+                    
+                    $query->whereIn('id', $value);
 
                 } elseif ($key == 'start_time') {
 
