@@ -30,7 +30,7 @@ class Leave extends BaseModel
     ];
 
     /**
-     * 搜尋table多個資料
+     * 搜尋table多個資料 (同意代理嗎 條件搜尋)
      * 若有多個傳回第一個
      *
      * @param  array   $where     搜尋條件
@@ -38,7 +38,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function search($where = [])
+    public function searchForAgentApprove($where = [])
     {
         $query = self::OrderedBy();
         foreach ($where as $key => $value) {
@@ -46,31 +46,13 @@ class Leave extends BaseModel
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
                 if ($key == 'tag_id') {
-                    
-                    if (!is_array($value)){
-                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
-                        $value = explode(',',$value);
-
-                    }
 
                     $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'id') {
                     
                     $query->whereIn('id', $value);
-
-                } elseif ($key == 'user_id') {
-
-                    $query->whereIn('user_id', $value);
                     
-                } elseif ($key == 'start_time') {
-
-                    $query->where('start_time', '>' , $value);
-                    
-                } elseif ($key == 'end_time') {
-
-                    $query->where('end_time', '<' , $value);
-
                 } else {
 
                     $query->where($key, $value);

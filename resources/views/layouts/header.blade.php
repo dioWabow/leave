@@ -130,7 +130,7 @@
           <a href="{{ route('approve/index') }}">
             <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">{{ LeaveHelper::getAgentApproveLeavesTotal(Auth::user()->id) }}</small>
+              @if(LeaveHelper::getAgentApproveLeavesTotal()>0)<small class="label pull-right bg-red">{{ LeaveHelper::getAgentApproveLeavesTotal() }}</small>@endif
             </span>
           </a>
         </li>

@@ -44,9 +44,8 @@ class AgentApproveController extends Controller
         $search['id'] = LeaveAgent::getLeaveIdByUserId(Auth::user()->id);
         //取得假單在送出的狀態(代理人待核)
         $search['tag_id'] = ['1'];
-
         $model = new Leave;
-        $dataProvider = $model->fill($order_by)->search($search);
+        $dataProvider = $model->fill($order_by)->searchForAgentApprove($search);
 
         return  view('leave_agent_prove', compact(
             'search', 'model', 'dataProvider'

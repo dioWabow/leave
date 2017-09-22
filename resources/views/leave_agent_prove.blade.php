@@ -33,9 +33,9 @@
 										<thead>
 											<tr>
 												<th width="3%"><input type="checkbox" id="checkall" name="checkall" class="flat-red" value="all"></th>
-												<th width="3%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+												<th width="8%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
 												<th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-												<th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+												<th width="35%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
 												<th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
 											</tr>
 										</thead>
