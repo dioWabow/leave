@@ -1,3 +1,33 @@
+--2017-09-20 tony 新增已離職特休計算資料表
+CREATE TABLE `leaved_users` (
+  `id` int(10) NOT NULL COMMENT '流水編號',
+  `user_id` int(10) NOT NULL COMMENT '使用者',
+  `annual_hours` int(10) NOT NULL COMMENT '總特休時數',
+  `used_annual_hours` int(10) NOT NULL COMMENT '已使用特休',
+  `remain_annual_hours` int(10) NOT NULL COMMENT '剩餘特休',
+  `create_time` DATE NULL DEFAULT NULL COMMENT '特休計算時間',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '新增時間',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '最後編輯'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `leaved_users`
+  ADD PRIMARY KEY (`id`);
+  ALTER TABLE `leaved_users`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+--2017-09-20 tony 新增特休結算資料表
+CREATE TABLE `annuals_hours` (
+  `id` int(10) NOT NULL COMMENT '流水編號',
+  `user_id` int(10) NOT NULL COMMENT '使用者',
+  `annual_hours` int(10) NOT NULL COMMENT '總特休時數',
+  `used_annual_hours` int(10) NOT NULL COMMENT '已使用特休',
+  `remain_annual_hours` int(10) NOT NULL COMMENT '剩餘特休',
+  `create_time` DATE NULL DEFAULT NULL COMMENT '特休計算時間',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '新增時間',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '最後編輯'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `annuals_hours`
+  ADD PRIMARY KEY (`id`);
+  ALTER TABLE `annuals_hours`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
 --2017-09-20 tony 修改user role將manage刪除
 ALTER TABLE `users` CHANGE `role` `role` ENUM('user','hr','admin','director') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'user' COMMENT '權限';
 --2017-09-18 tony 修改資料表名稱

@@ -167,6 +167,19 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
+    // 特休結算
+    Route::group(['prefix'=>'annual_leave_calculate'], function(){
+        Route::any('index', [
+            'as' => 'annual_leave_calculate/index',
+            'uses' => 'AnnualHoursController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'annual_leave_calculate/view',
+            'uses' => 'AnnualHoursController@getView',
+        ]);
+    });
+    
 });
 
 Route::match(['get', 'post'], '/demo/image',[

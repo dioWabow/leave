@@ -136,4 +136,10 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getUserByEnterMonth($month)
+    {
+        $result = self::whereMonth('enter_date',$month)->get();
+        return $result;
+    }
+
 }

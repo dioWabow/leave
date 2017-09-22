@@ -7,6 +7,7 @@ use App\Leave;
 use App\LeaveDay;
 use App\User;
 use App\Type;
+use App\AnnualHour;
 use TimeHelper;
 
 use Auth;
@@ -24,11 +25,15 @@ class LeaveHelper
 
     public function __construct($id = '')
     {
-        $this->user_id = Auth::user()->id;
-        $this->birthday = Auth::user()->birthday;
-        $this->enter_date = Auth::user()->enter_date;
-        $this->job_seek = Auth::user()->job_seek;
-        $this->arrive_time = Auth::user()->arrive_time;
+        if (!empty(Auth::user())) {
+
+            $this->user_id = Auth::user()->id;
+            $this->birthday = Auth::user()->birthday;
+            $this->enter_date = Auth::user()->enter_date;
+            $this->job_seek = Auth::user()->job_seek;
+            $this->arrive_time = Auth::user()->arrive_time;
+
+        } 
     }
 
     public function calculateAnnualDate($start_date = '',$user_id = '') 
@@ -402,7 +407,7 @@ class LeaveHelper
 
         }
 
-        if (LeaveDay::getLeaveByUserIdDateType($user_id,$start_time,$end_time,$leave_type)>$hours) {
+        if (LeaveDay::getLeaveHoursByUserIdDateType($user_id,$start_time,$end_time,$leave_type)>$hours) {
 
             return true;
 
@@ -870,4 +875,5 @@ class LeaveHelper
         }
 
     }
+
 }

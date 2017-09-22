@@ -3,6 +3,8 @@
 namespace App;
 
 Use App\Leave;
+Use App\User;
+Use App\Type;
 
 class LeaveDay extends BaseModel
 {
@@ -29,9 +31,105 @@ class LeaveDay extends BaseModel
      *
      * @var array
      */
-    protected $leave_tag_arr = [7,8];
+    protected $leave_cancel_and_refuse_tag_arr = [7,8];
 
-    public static function getLeaveByUserIdDateType($user_id,$start_date,$end_date,$type)
+    /**
+     * 通過的狀態
+     *
+     * @var array
+     */
+    protected $leave_pass_tag_arr = [9];
+
+    /**
+     * 抓取某段時間不包含取消及退回的假單
+     *
+     * @var array
+     */
+    public function getLeaveByUserIdDateType($user_id,$start_date,$end_date,$type)
+    {
+        $query = self::where('user_id' , $user_id);
+
+        if (is_array($type)) {
+
+            $query->whereIn('type_id' , $type);
+
+        } elseif($type != '') {
+
+           $query->where('type_id' , $type);
+
+        }
+
+        if ($start_date != '') {
+
+            $query->where('start_time' , '>=' , $start_date);
+            $query->where('end_time' , '<=' , $end_date);
+
+        }
+
+        $LeaveDays = $query->get();
+
+        foreach ($LeaveDays as $key => $LeaveDay) {
+
+            if (in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
+
+                unset($LeaveDays[$key]);
+
+            }
+
+        }
+
+        $result = $LeaveDays;
+        return $result;
+    }
+
+    /**
+     * 抓取某段時間已經通過的假單
+     *
+     * @var array
+     */
+    public function getPassLeaveByUserIdDateType($user_id,$start_date,$end_date,$type)
+    {
+        $query = self::where('user_id' , $user_id);
+
+        if (is_array($type)) {
+
+            $query->whereIn('type_id' , $type);
+
+        } elseif($type != '') {
+
+           $query->where('type_id' , $type);
+
+        }
+
+        if ($start_date != '') {
+
+            $query->where('start_time' , '>=' , $start_date);
+            $query->where('end_time' , '<=' , $end_date);
+
+        }
+
+        $LeaveDays = $query->get();
+
+        foreach ($LeaveDays as $key => $LeaveDay) {
+
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_pass_tag_arr)) {
+
+                unset($LeaveDays[$key]);
+
+            }
+
+        }
+
+        $result = $LeaveDays;
+        return $result;
+    }
+
+    /**
+     * 抓取某段時間不包含取消及退回的假單的總時數
+     *
+     * @var array
+     */
+    public static function getLeaveHoursByUserIdDateType($user_id,$start_date,$end_date,$type)
     {
         $leave_hours = 0;
 
@@ -58,11 +156,56 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->Leave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
             }
+
+        }
+
+        $result = $leave_hours;
+        return $result;
+    }
+
+    /**
+     * 抓取某段時間已經通過的假單的總時數
+     *
+     * @var array
+     */
+    public static function getPassLeaveHoursByUserIdDateType($user_id,$start_date,$end_date,$type)
+    {
+        $leave_hours = 0;
+
+        $query = self::where('user_id' , $user_id);
+
+        if (is_array($type)) {
+
+            $query->whereIn('type_id' , $type);
+
+        } elseif($type != '') {
+
+           $query->where('type_id' , $type);
+
+        }
+
+        if ($start_date != '') {
+
+            $query->where('start_time' , '>=' , $start_date);
+            $query->where('end_time' , '<=' , $end_date);
+
+        }
+
+        $LeaveDays = $query->get();
+
+        foreach ($LeaveDays as $LeaveDay) {
+
+            if (in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_pass_tag_arr)) {
+
+                $leave_hours += $LeaveDay->hours;
+
+            }
+
         }
 
         $result = $leave_hours;
@@ -108,7 +251,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->Leave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -142,7 +285,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->Leave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -175,7 +318,7 @@ class LeaveDay extends BaseModel
 
         foreach ($LeaveDays as $LeaveDay) {
 
-            if (!in_array($LeaveDay->Leave->tag_id, $LeaveDay->leave_tag_arr)) {
+            if (!in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_cancel_and_refuse_tag_arr)) {
 
                 $leave_hours += $LeaveDay->hours;
 
@@ -186,9 +329,21 @@ class LeaveDay extends BaseModel
         return $result;
     }
 
-    public function Leave()
+    public function fetchLeave()
     {
         $result = $this::hasOne('App\Leave','id','leave_id');
+        return $result;
+    }
+
+    public function fetchUser()
+    {
+        $result = $this::hasOne('App\User','id','user_id');
+        return $result;
+    }
+
+    public function fetchType()
+    {
+        $result = $this::hasOne('App\Type','id','type_id');
         return $result;
     }
 }
