@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('Report:AnnualHours')->dailyAt('10:00')->when(function () {
             return \Carbon\Carbon::now()->endOfMonth()->isToday();
         });
-        $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('10:00')->when(function () {
+        $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('20:00')->when(function () {
             return \Carbon\Carbon::now()->endOfMonth()->isToday();
         });
     }
