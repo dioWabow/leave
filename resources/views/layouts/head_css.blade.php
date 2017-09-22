@@ -119,27 +119,6 @@ $(function () {
 });
 </script>
 
-<!--天災假調整用-->
-<script>
-$(function () {
-    var $naturalDisasterList = $('.naturalDisasterList');
-
-    $naturalDisasterList.hide();
-    $('#settingSearch').on('click', function(){
-        $naturalDisasterList.show();
-    });
-
-    $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    }).each(function(){
-        $(this).val($(this).attr('date'));
-    }).on('change', function(){ 
-        $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
-    });
-});
-</script>
 
 
 <!-- 團隊設定用 -->
@@ -166,6 +145,77 @@ $(function () {
 });
 </script>
 @endif
-<!-- 主管團隊假單用-歷史紀錄(主管&小主管) -->
-@if (Request::is('leaves/manager/calendar/*'))
+<!-- 團隊假單頁面用 主管-->
+@if(Request::is('leaves/manager/*'))
+@if(Request::is('leaves/manager/history/*'))
+<script>
+$(function () {
+  
+  var $search_daterange_leaves_history = $('#search_daterange_leaves_history');
+  
+  $('#search_daterange_leaves_history').daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+  });
+
+  
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val();
+    if ($search_daterange_leaves_history.val()) {
+
+      $(this).val($search_daterange_leaves_history.val());
+
+    } else {
+
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+
+    }
+  });
+
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
+    
+
+  $("#leave_view_fileupload").fileinput({
+      initialPreview: [
+          './dist/img/unsplash2.jpg'
+      ],
+      initialPreviewAsData: true,
+  });
+});
+</script>
+@endif
+@if (Request::is('leaves/manager/prove/*','leaves/manager/upcoming/*','leaves/manager/history/*'))
+<script>
+$(function () {
+  $(".sort").on("click", function(){
+
+    var $sortname = $(this).attr("sortname");
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+
+      $("#order_way").val("ASC");
+
+    } else {
+
+      $("#order_way").val("DESC");
+
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+});
+
+function changePageSize(pagesize)
+{
+  $("#frmOrderby").submit();
+}
+</script>
+@endif
 @endif

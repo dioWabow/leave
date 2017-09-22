@@ -131,7 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::any('calendar/{role}',[
             'as'=>'leaves/manager/calendar',
-            'uses'=> 'LeavesManagerController@aaa',
+            'uses'=> 'LeavesManagerController@getCalendar',
         ]);
         
         Route::any('calendar/',[

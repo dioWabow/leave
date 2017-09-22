@@ -50,22 +50,3 @@
     </tbody>
   </table>
 </div>
-<script>
-$('.sort').on('click', function() {
-
-	var $sortname = $(this).attr('sortname');
-	var $order_by = "{{ $model->order_by }}";
-	var $order_way = "{{ $model->order_way }}";
-
-	$("#order_by").val($sortname);
-
-	if ($order_by == $sortname && $order_way == "DESC") {
-			$("#order_way").val("ASC");
-	} else {
-			$("#order_way").val("DESC");
-	}
-  
-	$("#frmOrderby").submit();
-
-});
-</script>

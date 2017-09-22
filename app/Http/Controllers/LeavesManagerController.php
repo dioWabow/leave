@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use WebHelper;
 use LeaveHelper;
 use App\Team;
+use App\Type;
 use App\Leave;
 use App\UserTeam;
+use App\LeaveDay;
 use App\LeaveRespon;
 
 use Auth;  
@@ -57,29 +59,33 @@ class LeavesManagerController extends Controller
 
             }
         }
-        
         $model = new Leave;
         if ( $this->role == 'Admin' && Auth::hasAdmin() == true) {
-            
+              
             $search['tag_id'] = ['4'];
             $search['hours'] = '24';
-            $dataProvider = $model->fill($order_by)->search($search);
+            $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
         } elseif ($this->role == 'Manager' && !empty(Auth::hasManagement())) {
-                
+
+            /* 確認從左側Manager 如果我是主管(確認我有所屬的team) */
+
+            /*先去找子team，狀態在tag 3 (小主管審核過)的條件*/
             $search_sub_teams = self::getManagerSubTeamsLeaves();
+            /*再去找自己所屬的team下，狀態在tag 2 (職代審核過)的條件*/
             $search_teams = self::getManagerTeamsLeaves();
             
-            $dataProvider_sub_teams = $model->fill($order_by)->search($search_sub_teams);
-            $dataProvider_teams = $model->fill($order_by)->search($search_teams);
+            $dataProvider_sub_teams = $model->fill($order_by)->searchForProveInManager($search_sub_teams);
+            $dataProvider_teams = $model->fill($order_by)->searchForProveInManager($search_teams);
             $dataProvider = $dataProvider_sub_teams->merge($dataProvider_teams);
                 
         } elseif ($this->role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
-                
+            
             $teams = Auth::hasMiniManagement();
             $search['user_id'] = UserTeam::getUserByTeams($teams);
             $search ['tag_id'] = ['2'];
-            $dataProvider = $model->fill($order_by)->search($search);
+            
+            $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
         } else {
 
@@ -103,6 +109,7 @@ class LeavesManagerController extends Controller
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $getRole = $this->role;
+
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leaves_manager');
@@ -122,14 +129,16 @@ class LeavesManagerController extends Controller
                 
             }
         }
-         //傳入user_id,取得該user的審核單, 再回來進入search()
-        $leave_id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
-        $serach['id'] = Leave::getUpComingLeavesIdByTodayForManager(Carbon::now(),$leave_id);
-        $search['tag_id'] = [9];
 
-        $model = new Leave;
-        $dataProvider = $model->fill($order_by)->search($search);
+        //傳入user_id,取得該user的審核單, 再回來進入search()
+        $leave_id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
+        $search['id'] = $leave_id;
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $search['tag_id'] = '9';
+
         
+        $model = new Leave;
+        $dataProvider = $model->fill($order_by)->searchForUpComingInManager($search);
         return  view('leave_manager', compact(
             'search' ,'getRole', 'model', 'dataProvider' 
         ));
@@ -145,13 +154,32 @@ class LeavesManagerController extends Controller
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $getRole = $this->role;
+
         if (!empty($search) || !empty($order_by)) {
 
             $request->session()->forget('leaves_manager');
             $request->session()->push('leaves_manager.search', $search);
             $request->session()->push('leaves_manager.order_by', $order_by);
+            
+            if (!empty($search['daterange'])) {
+                
+                $date_range = $this->checkDateExpload($search['daterange']);
+                
+                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
+
+                $order_by['start_time'] = $date_range[0];
+                $order_by['end_time'] = $date_range[1];
+                            
+            }  else {
+
+                $search['start_time'] = Carbon::now()->format('Y-m-d');
+
+            }
 
         } else {
+
+            $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
+            $search['start_time'] = Carbon::now()->format('Y-m-d');
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_manager')))) {
 
@@ -159,40 +187,27 @@ class LeavesManagerController extends Controller
                 $order_by = $request->session()->get('leaves_manager.order_by.0');
 
             } else {
-                
+
                 $request->session()->forget('leaves_manager');
 
             }
         }
         
-        if (!empty($search['daterange'])) {
-
-            $daterange = explode(" - ", $search['daterange']);
-            $search['start_time'] = $daterange[0];
-            $search['end_time'] = $daterange[1];
-            
-            $order_by['start_time'] = $daterange[0];
-            $order_by['end_time'] = $daterange[1];
-            
-        }
+        $model = new Leave;
+        
         //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
-        if (!empty($search['type_id'])) {
-            
-            $order_by['exception'] = $search['type_id'];
-            $search['type_id'] = $model->getTypeIdByException($search['type_id']);
-            
+        if (!empty($search['exception'])) {
+
+            $order_by['exception'] = $search['exception'];
+            $search['type_id'] = Type::getTypeIdByException($search['exception']);
             
         } else {
 
             $search['type_id'] = [];
 
         }
-
-        $search['tag_id'] = [8,9];
-        $search['id'] = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
-
-        $model = new Leave;
-        $dataProvider= $model->fill($order_by)->search($search);
+        
+        $dataProvider = $model->fill($order_by)->searchForHistoryInManager($search);
         
         $leaves_totle_hours = LeaveHelper::LeavesHoursTotal($dataProvider);
 
@@ -200,20 +215,24 @@ class LeavesManagerController extends Controller
             'search', 'model','getRole', 'dataProvider', 'leaves_totle_hours'
         ));
     }
-    public function aaa() {
+
+    /*
+        行事曆
+    */
+
+    public function getCalendar ()
+    {
         $getRole = $this->role;
+        $model = new Leave;
 
         return  view('leave_manager', compact(
-            'getRole'
+            'getRole','model'
         ));
     }
     
-    /*
-    行事曆
-    */
+   
     public function ajaxGetAllAvailableLeaveListByDateRange(Request $request)
     {
-        
         $start_time = date('Y-m-d', $request['start']);
         $end_time = date('Y-m-d', $request['end']);
 
@@ -252,14 +271,12 @@ class LeavesManagerController extends Controller
      * 2.取得該主管的子team
      * 3.狀態在小主管審核過的user_id 
      */
-    public static function getManagerSubTeamsLeaves()
+    private static function getManagerSubTeamsLeaves()
     {
-        
         $teams = Auth::hasManagement();
         $teams_id = Team::getTeamsByManagerTeam($teams);
         $search_sub_teams['user_id'] = UserTeam::getUserByTeams($teams_id);
         $search_sub_teams['tag_id'] = ['3'];
-
         return $search_sub_teams;
     }
 
@@ -269,12 +286,21 @@ class LeavesManagerController extends Controller
      * 3.狀態在職代審核過 
      */
 
-    public static function getManagerTeamsLeaves()
+    private static function getManagerTeamsLeaves()
     {
         $teams = Auth::hasManagement();
         $search_teams['user_id'] = UserTeam::getUserByTeams($teams);
         $search_teams['tag_id'] = ['2'];
         return $search_teams;
+    }
 
+    /*
+     * 把傳進來的日期RANGE分解
+     *
+     */
+    private static function checkDateExpload($data)
+    {
+        $data = explode(" - ", $data);
+        return $data;
     }
 }

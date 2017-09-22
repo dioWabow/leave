@@ -54,23 +54,6 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getManagerTeamByUserId($id) 
-    {
-        $result = self::where('user_id', $id)
-            ->where('role', 'manager')
-            ->pluck('team_id');
-        return $result;
-    }
-
-    public static function getUsersIdByTeamsId($id, $user_id) 
-    {
-        $result = self::whereIn('team_id', $id)
-            ->where('user_id', '!=', $user_id)
-            ->get()
-            ->pluck('user_id');
-        return $result;
-    }
-
     public function fetchTeam() 
     {
         $result = $this::hasOne('App\Team','id','team_id');

@@ -9,7 +9,7 @@ class LeaveRespon extends BaseModel
      *
      * @var string
      */
-    protected $table = 'leaves_respons';
+    protected $table = 'leaves_responses';
      
     //可以傳入數值的欄位
     protected $fillable = [
@@ -22,7 +22,7 @@ class LeaveRespon extends BaseModel
      
     public static function getLeaveIdByUserId($id)
     {
-        $result = self::where('user_id', $id)->get()->pluck('leave_id');
+        $result = self::where('user_id', $id)->whereIn('tag_id', ['8','9'])->get()->pluck('leave_id');
         return $result;
     }
 

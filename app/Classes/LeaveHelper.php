@@ -13,23 +13,24 @@ class LeaveHelper
 {
     /**
      * 傳入user_id 取得 user的等待核准假單
-     * tag 狀態 2,3,4,5
+     * tag 狀態 1,2,3,4
      * 
      */
     public static function getProveLeavesTotal($id)
     {
-        $tag_id = [2,3,4,5];
-        $result = Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
+        $tag_id = ['1','2','3','4'];
+        $result = Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
         return $result;
     }
+
     /**
      * 傳入user_id 取得 user的即將放假假單
-     * tag 狀態 7
+     * tag 狀態 9
      * 
      */
     public static function getUpComingLeavesTotal($id)
     {
-        $tag_id = [9];
+        $tag_id = ['9'];
         $result = Leave::where('user_id', $id)->whereIn('tag_id',$tag_id)->count();
         return $result;
     }
@@ -42,68 +43,96 @@ class LeaveHelper
      */
     public static function getProveManagerLeavesTabLable($role)
     {
+        if ($role == 'Admin' && !empty(Auth::hasAdmin())) {
 
-        $manager_team_id = UserTeam::getManagerTeamByUserId(Auth::user()->id);
-        
-        switch ($role) {
+            return self::getAdminLeavesTotal();
 
-            case 'Admin' && !empty(Auth::hasAdmin()):
-                return self::getAdminLeavesTotal();
-                break;
+        } elseif ($role == 'Manager' && !empty(Auth::hasManagement())) {
 
-            case 'Manager':
-                return self::getManagerLeavesTotal($manager_team_id);
-                break;
+            return self::getManagerAllLeavesTotal();
 
-            case 'Mini_Manager':
-                return self::getMiniManagerLeavesTotal($manager_team_id);
-                break;
-            
-            default:
-                return '0';
-                break;
-        }
+        } elseif ($role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
+
+            return self::getMiniManagerLeavesTotal();
+
+        } 
     }
 
+    /**
+     * 取得大BOSS的待審核假單
+     * 
+     */
     private static function getAdminLeavesTotal()
     {
         $model = new Leave;
         $search['tag_id'] = ['4'];
         $search['hours'] = '24';
-        $result = $model->search($search)->count();
+        $result = $model->searchForProveInManager($search)->count();
         return $result;
     }
 
-    private static function getManagerLeavesTotal($id)
-    {
-        $team_id = Team::getManagerTeamIdByTeamId($id);
-        $teams_id = Team::getIdByParentId($team_id);
-        $user_id = UserTeam::getUsersIdByTeamsId($teams_id, Auth::user()->id);
-        $tag_id = [3];
-                        
-        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
-        return $result;
-    }
-
-    private static function getMiniManagerLeavesTotal($id)
-    {
-        $team_id = Team::getMiniManagerTeamIdByTeamId($id);
-        $user_id = UserTeam::getUsersIdByTeamsId($team_id, Auth::user()->id);
-        $tag_id = [2];
-
-        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
-        return $result;
-    }
     /**
-     * 傳入該主管的user_id
+     * 取得主管子團隊以及所屬團隊的待審核假單總數量
+     * 
+     */
+    private static function getManagerAllLeavesTotal() 
+    {
+        $result = self::getManagerSubTeamLeavesTotal() + self::getManagerTeamsLeavesTotal();
+        return $result;
+    }
+
+    /**
+     * 取得主管子團隊待審核假單數量
+     * 
+     */
+    private static function getManagerSubTeamLeavesTotal()
+    {
+        $teams = Auth::hasManagement();
+        $teams_id = Team::getTeamsByManagerTeam($teams);
+        $user_id = UserTeam::getUserByTeams($teams_id);
+        $tag_id = ['3'];
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+
+    /**
+     * 取得主管所屬團隊待審核假單數量
+     * 
+     */
+    private static function getManagerTeamsLeavesTotal()
+    {
+        $teams = Auth::hasManagement();
+        $user_id = UserTeam::getUserByTeams($teams);
+        $tag_id = ['2'];
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+
+    /**
+     * 取得小主管所屬團隊下的假單數量
+     * 
+     */
+    private static function getMiniManagerLeavesTotal()
+    {
+        $teams = Auth::hasMiniManagement();
+        $user_id = UserTeam::getUserByTeams($teams);
+        $tag_id = ['2'];
+
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+
+    /**
+     * 取得該
      * 找到審核通過的假單
      * tag 狀態 9
      */
-    public static function getUpComingManagerLeavesTotal($user_id)
+    public static function getUpComingManagerLeavesTotal()
     {
-        $tag_id = [9];
-        $id = LeaveRespon::getLeaveIdByUserId($user_id);
-        $result = Leave::whereIn('id', $id)->whereIn('tag_id',$tag_id)->count();
+        $id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
+        $today = Carbon::now()->format('Y-m-d');
+        $tag_id = ['9'];
+        $result = Leave::whereIn('id', $id)->where('start_time', '>=', $today)->whereIn('tag_id', $tag_id)->count();
         return $result;
     }
     /**

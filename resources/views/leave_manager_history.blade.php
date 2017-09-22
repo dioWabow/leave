@@ -25,28 +25,28 @@
           <div class="pull-right">
             <label>
               假別：
-              <select id="search_leave_type" name="search[type_id]" class="form-control">
+              <select id="search_leave_type" name="search[exception]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="normal" @if (count($search)>2 && $search['type_id'] == 'normal') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
-                <option value="job_seek" @if (count($search)>2 && $search['type_id'] == 'job_seek') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
-                <option value="paid_sick" @if (count($search)>2 && $search['type_id'] == 'paid_sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
-                <option value="sick" @if (count($search)>2 && $search['type_id'] == 'sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
-                <option value="entertain" @if (count($search)>2 && $search['type_id'] == 'entertain') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
-                <option value="annaul_leave" @if (count($search)>2 && $search['type_id'] == 'annaul_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
-                <option value="lone_stay" @if (count($search)>2 && $search['type_id'] == 'lone_stay') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
-                <option value="birthday" @if (count($search)>2 && $search['type_id'] == 'birthday') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
+                <option value="normal" @if (count($model->order_by) >0 && $model->exception == 'normal') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
+                <option value="job_seek" @if (count($model->order_by) >0 && $model->exception == 'job_seek') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
+                <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == 'paid_sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
+                <option value="sick" @if (count($model->order_by) >0 && $model->exception == 'sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
+                <option value="entertain" @if (count($model->order_by) >0 && $model->exception == 'entertain') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
+                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == 'annual_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == 'lone_stay') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
+                <option value="birthday" @if (count($model->order_by) >0 && $model->exception == 'birthday') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
               &nbsp;
               區間：
-              <input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
+              <input type="text" id="search_daterange_leaves_history" name="search[daterange]" value="{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}" class="form-control pull-right">
               </label>
               &nbsp;
               <label>
               狀態：
               <select id="search_tag_id" name="search[tag_id]" class="form-control">
                 <option value="8,9" selected="selected">全部</option>
-                <option value="8" @if (count($search)>0 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
-                <option value="9" @if (count($search)>0 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
+                <option value="8" @if (count($search)>3 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
+                <option value="9" @if (count($search)>3 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
               </select>
             </label>
             &nbsp;
@@ -65,6 +65,7 @@
           <thead>
             <tr>
               <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
+              <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假人</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
               <th width="25%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
@@ -111,6 +112,7 @@
               <th></th>
               <th></th>
               <th></th>
+              <th></th>
               <th class="pull-right">總計(Hr)</th>
               <th>{{ $leaves_totle_hours }}</th>
             </tr>
@@ -131,27 +133,3 @@
     </div>
   </div>
 </div>
-<script>
-$('.sort').on('click', function() {
-
-  var $sortname = $(this).attr('sortname');
-  var $order_by = "{{ $model->order_by }}";
-  var $order_way = "{{ $model->order_way }}";
-
-  $("#order_by").val($sortname);
-
-  if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-  } else {
-    $("#order_way").val("DESC");
-  }
-
-  $("#frmOrderby").submit();
-  
-});
-
-function changePageSize(pagesize)
-{
-  $("#frmOrderby").submit();
-}
-</script>
