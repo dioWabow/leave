@@ -179,6 +179,19 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'AnnualHoursController@getView',
         ]);
     });
+
+    // 離職人員結算
+    Route::group(['prefix'=>'leaved_user_annual_leave_calculate'], function(){
+        Route::any('index', [
+            'as' => 'leaved_user_annual_leave_calculate/index',
+            'uses' => 'LeavedUserAnnualHoursController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'leaved_user_annual_leave_calculate/view',
+            'uses' => 'LeavedUserAnnualHoursController@getView',
+        ]);
+    });
     
 });
 

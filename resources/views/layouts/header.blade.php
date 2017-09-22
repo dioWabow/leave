@@ -208,7 +208,7 @@
             <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
-            <li class="treeview @if(Request::is('annual_leave_calculate/*'))active @endif">
+            <li class="treeview @if(Request::is('annual_leave_calculate/*','leaved_user_annual_leave_calculate/*'))active @endif">
           <a href="#"><i class="fa fa-bar-chart"></i> <span>月/年報表</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -218,6 +218,7 @@
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>報表</a></li>
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
             <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>
+            <li @if(Request::is('leaved_user_annual_leave_calculate/*')) class="active" @endif><a href="{{route('leaved_user_annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算(離職)</a></li>
           </ul>
         </li>
       </ul>

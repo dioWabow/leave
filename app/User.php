@@ -142,4 +142,12 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getUserByLeaveYearAndMonth($year,$month)
+    {
+        $result = self::whereYear('leave_date',$year)
+            ->whereMonth('leave_date',$month)
+            ->get();
+        return $result;
+    }
+
 }

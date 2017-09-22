@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\MonthAnnualHours::class
+        Commands\MonthAnnualHours::class,
+        Commands\LeavedUserAnnualHours::class,
     ];
 
     /**
@@ -26,6 +27,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('Report:AnnualHours')->dailyAt('10:00')->when(function () {
+            return \Carbon\Carbon::now()->endOfMonth()->isToday();
+        });
+        $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('10:00')->when(function () {
             return \Carbon\Carbon::now()->endOfMonth()->isToday();
         });
     }

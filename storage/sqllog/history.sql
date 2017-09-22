@@ -1,3 +1,6 @@
+--2017-09-22 tony 修改已離職總特休時數和剩餘時數到float
+ALTER TABLE `leaved_users` CHANGE `annual_hours` `annual_hours` FLOAT(10) NOT NULL COMMENT '總特休時數';
+ALTER TABLE `leaved_users` CHANGE `remain_annual_hours` `remain_annual_hours` FLOAT(10) NOT NULL COMMENT '剩餘特休';
 --2017-09-20 tony 新增已離職特休計算資料表
 CREATE TABLE `leaved_users` (
   `id` int(10) NOT NULL COMMENT '流水編號',

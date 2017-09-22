@@ -8,6 +8,7 @@ use App\LeaveDay;
 use App\User;
 use App\Type;
 use App\AnnualHour;
+use App\LeavedUser;
 use TimeHelper;
 
 use Auth;
