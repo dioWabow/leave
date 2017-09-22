@@ -80,36 +80,29 @@
 										</tr>
 									</thead>
 									<tbody>
-										@if(isset($all_user) && count($all_user) > 0)
 										@foreach($all_user as $user_data)
 											<tr class="clickable-row" data-href="#">
 												<td>
 													<img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" class="img-circle" alt="{{$user_data->nickname}}" width="60px">
 												</td>
 												<td>{{$user_data->nickname}}</td>
-												@foreach($report_data as $report_key => $report_value)
 												@foreach($all_type as $type_data)
-												@if("{{$report_key}}" == "{{$user_data->id}}")
-												<td><a href="{{ route('report/vacation') }}?year={{$year}}&month={{$month}}&user_id={{$user_data->id}}&type_id={{$type_data->id}}">{{$report_value[$type_data->id]}}</a></td>
-												@endif
-												@endforeach
+												<td><a href="{{ route('report/vacation') }}?year={{$year}}&month={{$month}}&user_id={{$user_data->id}}&type_id={{$type_data->id}}">{{$report_data[$user_data->id][$type_data->id]}}</a></td>
 												@endforeach
 												<td class="text-red">{{$report_data[$user_data->id]['sum']}}</td>
 												<td><span class="label bg-red">{{$report_data[$user_data->id]['deductions']}}</span></td>
 											</tr>
 										@endforeach
-										@endif
 									</tbody>
 									<tfoot>
 										<tr class="text-red">
 											<th></th>
 											<th class="pull-right">總計(Hr)</th>
-                      @foreach($all_type as $key => $type_data)
+                      						@foreach($all_type as $key => $type_data)
   											<td class="text-red">{{$report_total[$key]}}</td>
 											@endforeach
-                      
-                      <td class="text-red">{{$report_total['sum']}}</td>
-                      <td><span class="label bg-red">{{$report_total['deductions']}}</span></td>
+					                    	<td class="text-red">{{$report_total['sum']}}</td>
+					                    	<td><span class="label bg-red">{{$report_total['deductions']}}</span></td>
 										</tr>
 									</tfoot>
 								</table>

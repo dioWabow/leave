@@ -172,7 +172,6 @@ class ReportController extends Controller
                             }
 
                             // 補上 扣薪
-                            // dd($all_type[5]['deductions']);
 
                             if ($result[$user_key][$data_value['type_id']] == $type_key) {
 
