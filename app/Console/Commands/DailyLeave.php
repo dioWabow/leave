@@ -15,7 +15,7 @@ class DailyLeave extends Command
     protected $signature = 'Notice:DailyLeave';
 
     // 說明文字
-    protected $description = '每日請假人通知';
+    protected $description = 'Daily Leave Notice In Channel';
 
     public function __construct()
     {
