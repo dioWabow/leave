@@ -146,6 +146,7 @@
             </span>
           </a>
         </li>
+        @if( !empty( Auth::hasMiniManagement() ) )
         <li class="header">MINI-MANAGER</li>
         <li class="">
           <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -154,7 +155,8 @@
           </span>
               </a>
         </li>
-        
+        @endif
+        @if( !empty(Auth::hasManagement() ) )
         <li class="header">MANAGER</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -163,6 +165,7 @@
           </span>
               </a>
         </li>
+        @endif
         <li class="header">BOSS</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
