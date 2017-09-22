@@ -159,6 +159,8 @@ class ReportController extends Controller
                         }
 
                         // 如果 是空的 價別 補 0
+                        $result[$user_key]['deductions'] = 0;
+                        $result[$user_key]['sum'] = 0;
 
                         foreach ($all_type as $type_key => $type_value) {
 
@@ -174,50 +176,9 @@ class ReportController extends Controller
 
                             if ($result[$user_key][$data_value['type_id']] == $type_key) {
 
+                                if ($all_type[$data_value['type_id']]['deductions'] == 1) {
 
-                                if($all_type[$data_value['type_id']]['deductions'] == 1) {
-
-                                    if (empty($result[$user_key]['deductions'])) {
-
-                                        $result[$user_key]['deductions'] = $data_value['hours'];
-
-                                    } else {
-
-                                        $result[$user_key]['deductions'] += $data_value['hours'];
-
-                                    }
-                                }
-                            }
-
-                            // total 的補 0
-                            if (empty($resultTotal[$type_key])) {
-
-                                $resultTotal[$type_key] = 0;
-
-                            }
-                        }
-
-                        // 補上 total
-
-                        if (empty($result[$user_key]['sum'])) {
-
-                            $result[$user_key]['sum'] = $data_value['hours'];
-
-                        } else {
-
-                            $result[$user_key]['sum'] += $data_value['hours'];
-
-                        }
-
-                        // 補上 total sum
-                        $resultTotal['sum'] = $sum;
-
-                        foreach ($all_type as $type_key => $type_value) {
-
-                            if ($result[$user_key][$data_value['type_id']] == $type_key) {
-
-
-                                if($all_type[$data_value['type_id']]['deductions'] == 1) {
+                                    $result[$user_key]['deductions'] += $data_value['hours'];
 
                                     // 補上 total 扣薪
                                     if (empty($resultTotal['deductions'])) {
@@ -227,7 +188,9 @@ class ReportController extends Controller
                                     }
 
                                     $resultTotal['deductions'] = $deductSum;
+
                                 }
+
                             }
 
                             // total 的補 0
@@ -236,7 +199,14 @@ class ReportController extends Controller
                                 $resultTotal[$type_key] = 0;
 
                             }
+
                         }
+
+                        // 補上 total
+                        $result[$user_key]['sum'] += $data_value['hours'];
+
+                        // 補上 total sum
+                        $resultTotal['sum'] = $sum;
 
                     } else {
 
@@ -270,7 +240,7 @@ class ReportController extends Controller
                 }
             }
         }
-
+        // dd($resultTotal);
         return [
             'result' => $result, 'resultTotal' => $resultTotal
         ];

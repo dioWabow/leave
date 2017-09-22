@@ -104,15 +104,12 @@
 										<tr class="text-red">
 											<th></th>
 											<th class="pull-right">總計(Hr)</th>
-											@foreach($report_total as $key => $total_data)
-											@if($key == "sum")
-											<td class="text-red">{{$total_data}}</td>
-											@elseif($key == "deductions")
-											<td><span class="label bg-red">{{$total_data}}</span></td>
-											@else
-											<th>{{$total_data}}</th>
-											@endif
+                      @foreach($all_type as $key => $type_data)
+  											<td class="text-red">{{$report_total[$key]}}</td>
 											@endforeach
+                      
+                      <td class="text-red">{{$report_total['sum']}}</td>
+                      <td><span class="label bg-red">{{$report_total['deductions']}}</span></td>
 										</tr>
 									</tfoot>
 								</table>
