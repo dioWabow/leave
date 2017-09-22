@@ -113,8 +113,7 @@ class UserTeam extends Model
 
         foreach ($teams as $team) {
 
-            $team_user_role = self::where('role', 'user')
-                ->where('team_id', $team->id)
+            $team_user_role = self::where('team_id', $team->id)
                 ->get();
 
             foreach ($team_user_role as $user) {
