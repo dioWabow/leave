@@ -92,6 +92,11 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'leave_type/update',
             'uses' => 'LeaveTypeController@postUpdate',
         ]);
+
+        Route::post('update_ajax',[
+            'as' => 'leave_type/update_ajax',
+            'uses' => 'LeaveTypeController@ajaxUpdateData',
+        ]);
     });
 
     # 員工管理

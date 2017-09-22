@@ -151,6 +151,49 @@ class LeaveTypeController extends Controller
         }
     }
 
+    /**
+     * 假別列表CheckBox更新 Ajax
+     *
+     * @param Request $request
+     * @return Redirect
+     */
+    public function ajaxUpdateData(Request $request)
+    {
+        $id = $request['id'];
+        $reason = $request['reason'];
+        $prove = $request['prove'];
+        $available = $request['available'];
+        $types = ['reason' => $reason, 'prove' => $prove, 'available' => $available ];
+
+        $model = new Type;
+
+        $model = $this->loadModel($id);
+
+        $model->fill($types);
+
+        if ($model->save()) {
+
+            $result = true;
+
+            return json_encode(
+                array(
+                    'result' => $result,
+                    'id' => $id
+                )
+            );
+
+        } else {
+
+            $result = false;
+            return json_encode(
+                array(
+                    'result' => $result
+                )
+            );
+
+        }
+    }
+    
     private function loadModel($id)
     {
         $model = Type::find($id);
@@ -163,6 +206,8 @@ class LeaveTypeController extends Controller
             
         return $model;
     }
+
+    
 
     private function checkDataValue($data)
     {

@@ -132,13 +132,13 @@
 														</td>
 													<td>{{ $value->hours }}</td>
 													<td>
-														<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
+														<input type="checkbox" name="leave_type[reason]" value="{{$value->id}}" class="leave_type_reason{{$value->id}}"  data-toggle="toggle"  data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
 													</td>
 													<td>
-														<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是"  data-off="否" @if ($value->prove == 1) checked="checked" @endif>
+														<input type="checkbox" name="leave_type[prove]" value="{{$value->id}}" class="leave_type_prove{{$value->id}}"   data-toggle="toggle" data-on="是"  data-off="否" @if ($value->prove == 1) checked="checked" @endif>
 													</td>
 													<td>
-														<input type="checkbox" name="leave_type[available]" class="leave_type_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
+														<input type="checkbox" name="leave_type[available]" value="{{$value->id}}" class="leave_type_available{{$value->id}}"  data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
 													</td>
 													<td>
 														<a href="{{ route('leave_type/delete', ['id'=>$value->id])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
@@ -194,5 +194,35 @@ function changeSort(sort)
 
 	$("#frmSearch").submit();
 }
+
+$(function () {
+  $("input[name^=leave_type]").on("change", function(){
+    var id = $(this).val();
+    var reason = ($(".leave_type_reason" + id).prop("checked")) ? '1' : '0';
+    var prove = ($(".leave_type_prove" + id).prop("checked")) ? '1' : '0';
+    var available = ($(".leave_type_available" +id).prop("checked")) ? '1' : '0';
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('leave_type/update_ajax') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: id,
+        prove: prove,
+        reason: reason,
+        available: available,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
+});
 </script>
 @stop
