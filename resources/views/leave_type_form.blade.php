@@ -39,11 +39,11 @@
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="radio" name="leave_type[exception]" class="flat-red" value="normal" @if ($model->exception == 'normal') checked="checked" @endif>
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="normal" @if ($model->exception == 'normal') checked="checked" @endif checked="checked">
 							一般
 						</label>&emsp;
 						<label>
-							<input type="radio" name="leave_type[exception]" class="flat-red" value="job_seek" @if ($model->exception == 'job_seek') checked="checked" @endif>
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="job_seek" @if ($model->exception == 'job_seek') checked="checked" @endif >
 							謀職假
 						</label>&emsp;
 						<label>
@@ -67,7 +67,7 @@
 							久任假
 						</label>&emsp;
 						<label>
-							<input type="radio" name="leave_type[exception]" class="flat-red" value="birthday" @if ($model->exception == 'birthdayyear') checked="checked" @endif>
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="birthday" @if ($model->exception == 'birthday') checked="checked" @endif>
 							生日假
 						</label>&emsp;
 					</div>
@@ -79,7 +79,7 @@
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="none" @if ($model->reset_time == 'none') checked="checked" @endif>
+							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="none" @if ($model->reset_time == 'none') checked="checked" @endif checked="checked">
 							不重置
 						</label>&emsp;
 						<label>
@@ -122,21 +122,29 @@
 						<label>使用區間</label>
 					</div>
 					<div class="col-md-11">
-            <div class="input-group">
-                <input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
-                <span class="input-group-btn">
-                    <button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
-                </span>
-            </div>
+				<div class="input-group">
+					<input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
+					<span class="input-group-btn">
+						<button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
+					</span>
+				</div>
 					</div>
 				</div></div>
-
+				
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label>扣薪</label>
+					</div>
+					<div class="col-md-11">
+						<input type="checkbox" name="leave_type[deductions]" class="leave_type_deductions" data-toggle="toggle" data-on="是" data-off="否" @if ($model->deductions == 1) checked="checked" @endif>
+					</div>
+				</div></div>
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>理由</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ($model->reason == 1) checked="checked" @endif>
+						<input type="checkbox" name="leave_type[reason]" class="leave_type_reason" data-toggle="toggle" data-on="是" data-off="否" @if ( $model->reason == 1) checked="checked" @endif>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -144,7 +152,7 @@
 						<label>證明</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是" data-off="否" @if ($model->prove == '1') checked="checked" @endif>
+						<input type="checkbox" name="leave_type[prove]" class="leave_type_prove" data-toggle="toggle" data-on="是" data-off="否" @if ( $model->prove == '1') checked="checked" @endif>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">

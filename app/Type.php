@@ -14,6 +14,7 @@ class Type extends BaseModel
         'exception',
         'start_time',
         'end_time',
+        'deductions',
         'reason',
         'prove',
         'available',

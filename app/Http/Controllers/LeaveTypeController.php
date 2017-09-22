@@ -59,9 +59,8 @@ class LeaveTypeController extends Controller
      */
     public function getCreate(Request $request)
     {
-       
         $model = new Type;
-
+        
         $input = $this->checkDataValue($request->old('leave_type'));
         $model->fill($input);
 
@@ -79,8 +78,9 @@ class LeaveTypeController extends Controller
     {
 
         $model = $this->loadModel($id);
-
+        
         $input = $this->checkDataValue($request->old('leave_type'));
+        
         $model->fill($input);
         
         return  view('leave_type_form', compact(
@@ -109,7 +109,7 @@ class LeaveTypeController extends Controller
     public function postInsert(LeaveTypeRequest $request)
     {
         $input = $this->checkDataValue($request->input('leave_type'));
-
+        
         //儲存資料
         $model = new Type;
         $model->fill($input);
@@ -160,10 +160,11 @@ class LeaveTypeController extends Controller
     public function ajaxUpdateData(Request $request)
     {
         $id = $request['id'];
+        $deductions = $request['deductions'];
         $reason = $request['reason'];
         $prove = $request['prove'];
         $available = $request['available'];
-        $types = ['reason' => $reason, 'prove' => $prove, 'available' => $available ];
+        $types = ['deductions' => $deductions,'reason' => $reason, 'prove' => $prove, 'available' => $available ];
 
         $model = new Type;
 
@@ -220,6 +221,7 @@ class LeaveTypeController extends Controller
             $input['end_time'] = isset($available_date[1]) ? $available_date[1]:'';
         }
         // reason prove available 判斷 0 或 1 後存入 
+        $input['deductions']  = empty($input['deductions']) || $input['deductions'] != 'on' ? 0 : 1 ;
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
         $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
