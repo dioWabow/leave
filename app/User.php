@@ -98,6 +98,12 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getAllUsersWithoutLeaved()
+    {
+        $result = self::where('status' , '1')->get();
+        return $result;
+    }
+
     public function fetchUserTeam()
     {
         $result = $this::hasMany('App\UserTeam','user_id','id');

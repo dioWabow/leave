@@ -106,29 +106,30 @@ class UserTeam extends Model
         }
     }
 
+
     public static function getUserByTeams($teams)
     {
         $result = [];
 
-       foreach ($teams as $team) {
+        foreach ($teams as $team) {
 
-           $team_user_role = self::where('role', 'user')
-                ->where('team_id', $team->team_id)
+            $team_user_role = self::where('role', 'user')
+                ->where('team_id', $team->id)
                 ->get();
 
-           foreach ($team_user_role as $user) {
-                
-               if (!in_array($user->user_id, $result)) {
+            foreach ($team_user_role as $user) {
+               
+                if (!in_array($user->user_id, $result)) {
 
-                   $result[] = $user->user_id;
+                    $result[] = $user->user_id;
 
-               }
+                }
 
-           }
+            }
 
-       }
+        }
 
-       return $result;
+        return $result;
     }
 
     public static function getUserIdByTeamId($id) 
@@ -139,12 +140,44 @@ class UserTeam extends Model
 
     public static function getUserTeamByUserId($id) 
     {
-        $result = self::where("user_id", $id)->get();
+        $result = self::where('user_id', $id)->get();
+        return $result;
+    }
+
+    public static function getMiniTeamUsers($id)
+    {
+
+        $result = [];
+        
+        $teams = self::where('user_id', $id)
+            ->where('role', 'manager')
+            ->get();
+
+        $miniteams = Team::whereIn('parent_id' , $teams->pluck('team_id')->toArray())->get();
+
+        foreach ($miniteams as $miniteam) {
+
+            $team_user_role = self::where('user_id' , '!=' , $id)
+                ->where('team_id' , $miniteam->id)
+                ->get();
+
+            foreach ($team_user_role as $user) {
+                    
+                if (!in_array($user->user_id, $result)) {
+
+                    $result[] = $user->user_id;
+
+                }
+
+            }
+            
+        }
+
         return $result;
     }
 
 
-    public function fetchTeam()
+    public function fetchTeam() 
     {
         $result = $this::hasOne('App\Team','id','team_id');
         return $result;
