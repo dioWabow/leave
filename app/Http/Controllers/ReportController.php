@@ -169,6 +169,26 @@ class ReportController extends Controller
 
                             }
 
+                            // 補上 扣薪
+                            // dd($all_type[5]['deductions']);
+
+                            if ($result[$user_key][$data_value['type_id']] == $type_key) {
+
+
+                                if($all_type[$data_value['type_id']]['deductions'] == 1) {
+
+                                    if (empty($result[$user_key]['deductions'])) {
+
+                                        $result[$user_key]['deductions'] = $data_value['hours'];
+
+                                    } else {
+
+                                        $result[$user_key]['deductions'] += $data_value['hours'];
+
+                                    }
+                                }
+                            }
+
                             // total 的補 0
                             if (empty($resultTotal[$type_key])) {
 
@@ -189,36 +209,34 @@ class ReportController extends Controller
 
                         }
 
-                        // 補上 扣薪
-
-                        if (!empty($data_value['deductions'])) {
-
-                            if (empty($result[$user_key]['deductions'])) {
-
-                                $result[$user_key]['deductions'] = $data_value['hours'];
-
-                            } else {
-
-                                $result[$user_key]['deductions'] += $data_value['hours'];
-
-                            }
-                        }
-
                         // 補上 total sum
                         $resultTotal['sum'] = $sum;
 
-                        // 補上 total 扣薪
-                        if (!empty($data_value['deductions'])) {
+                        foreach ($all_type as $type_key => $type_value) {
 
-                            if (empty($resultTotal['deductions'])) {
+                            if ($result[$user_key][$data_value['type_id']] == $type_key) {
 
-                                $deductSum += $data_value['hours'];
 
+                                if($all_type[$data_value['type_id']]['deductions'] == 1) {
+
+                                    // 補上 total 扣薪
+                                    if (empty($resultTotal['deductions'])) {
+
+                                        $deductSum += $data_value['hours'];
+
+                                    }
+
+                                    $resultTotal['deductions'] = $deductSum;
+                                }
                             }
 
-                        }
+                            // total 的補 0
+                            if (empty($resultTotal[$type_key])) {
 
-                        $resultTotal['deductions'] = $deductSum;
+                                $resultTotal[$type_key] = 0;
+
+                            }
+                        }
 
                     } else {
 
