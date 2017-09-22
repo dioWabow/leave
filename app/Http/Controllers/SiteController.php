@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Leave;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -22,6 +23,9 @@ class SiteController extends Controller
     {
         $start_time = date('Y-m-d', $request['start']);
         $end_time = date('Y-m-d', $request['end']);
+
+        $start_time = date('Y-m-d', strtotime("$end_time -2 month"));
+        $end_time = date('Y-m-d', strtotime("$end_time +2 month"));
 
         $result = [];
 
