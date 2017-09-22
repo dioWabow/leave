@@ -19,6 +19,7 @@ class Leave extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
+        'exception',
     ];
 
     protected $attributes = [
@@ -26,11 +27,12 @@ class Leave extends BaseModel
         'order_way' => 'DESC',
         'pagesize' => '25',
         'start_time' => '',
-        'end_time' => ''
+        'end_time' => '',
+        'exception' => ''
     ];
 
     /**
-     * 搜尋table多個資料
+     * 搜尋table多個資料 (HR團隊假單 等待審核 + 即將放假)
      * 若有多個傳回第一個
      *
      * @param  array   $where     搜尋條件
@@ -38,7 +40,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function search($where = [])
+    public function searchForProveAndUpComInHr($where = [])
     {
         $query = self::OrderedBy();
         
@@ -47,27 +49,56 @@ class Leave extends BaseModel
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
                 if ($key == 'tag_id') {
-                    
-                    if (!is_array($value)){
-                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
-                        $value = explode(',',$value);
-
-                    }
 
                     $query->whereIn('tag_id', $value);
 
-                } elseif ($key == 'id' && is_array($value)) {
+                } elseif ($key == 'start_time') {
 
-                    $query->whereIn('id', $value);
+                    $query->where('start_time', '>=' , $value);
+                    
+                } else {
+
+                    $query->where($key, $value);
+
+                } 
+            }
+        }
+
+        $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
+    /**
+     * 搜尋table多個資料 (HR團隊假單 等待審核 + 即將放假)
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+    public function searchForHistoryInHr($where = [])
+    {
+        $query = self::OrderedBy();
+        
+        foreach ($where as $key => $value) {
+            
+            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+
+            if ($key == 'tag_id') {
+                
+                if (!is_array($value)){
+                    //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                    $value = explode(',', $value);
+
+                } 
+            
+                    $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'start_time') {
 
-                    $query->where('start_time', '>' , $value);
+                    $query->where('start_time', '<' , $value);
                     
-                } elseif ($key == 'end_time') {
-
-                    $query->where('end_time', '<' , $value);
-
                 } else {
 
                     $query->where($key, $value);

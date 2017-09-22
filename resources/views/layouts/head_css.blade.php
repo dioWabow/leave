@@ -101,6 +101,7 @@ $(function () {
 @endif
 
 <!-- 我的假單頁面用 -->
+@if(Request::is('leaves/my/*'))
   <script>
 $(function () {
     $('#search_daterange').daterangepicker({
@@ -118,37 +119,61 @@ $(function () {
     });
 });
 </script>
+@endif
 <!-- 團隊假單頁面用-HR -->
-@if(Request::is('leaves/hr/history/*'))
-<script>
-$(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
+@if(Request::is('leaves/hr/*'))
+  @if(Request::is('leaves/hr/history'))
+  <script>
+  $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_daterange = $('#search_daterange');
+    var time = $search_daterange.val();
+
+    $("#search_daterange").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+      maxDate: yyyy + '-' + mm + '-' + dd
     });
+        
+    $("#search_daterange").val(time);
     
     $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
     });
 
     $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
+      $(this).val('');
     });
+  });
+  function changePageSize(pagesize)
+  {
+    $("#frmOrderby").submit();
+  }
+  </script>
+  @endif
+  @if (Request::is('leaves/hr/prove','leaves/hr/upcoming','leaves/hr/history'))
+  <script>
+  $(function () {
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
 
-    @if($model->start_time != '' || $model->end_time != '' ) 
-        $('#search_daterange').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
-    @else
-        $('#search_daterange').val("");
-    @endif
+      $("#order_by").val($sortname);
 
-    $("#leave_view_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/unsplash2.jpg'
-        ],
-        initialPreviewAsData: true,
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderby").submit();
     });
-});
-</script>
+  });
+  </script>
+  @endif
 @endif
 <!--天災假調整用-->
 <script>

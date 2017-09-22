@@ -1,6 +1,6 @@
-<div class="{{(Request::is('leaves/hr/history/*')) ? 'active' : ''}} tab-pane" id="list">
+<div class="{{(Request::is('leaves/hr/history')) ? 'active' : ''}} tab-pane">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_history', [ 'user_id' => Auth::user()->id ]) }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_history') }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -25,19 +25,20 @@
           <div class="pull-right">
             <label>
               假別：
-              <select id="search_leave_type" name="search[type_id]" class="form-control">
+              <select id="search_leave_type" name="search[exception]" class="form-control">
                 <option value="" selected="selected">全部</option>
-                <option value="1" @if (count($search)>1 && $search['type_id'] == '1') selected="selected" @endif>一般</option>
-                <option value="2" @if (count($search)>1 && $search['type_id'] == '2') selected="selected" @endif>謀職假</option>
-                <option value="3" @if (count($search)>1 && $search['type_id'] == '3') selected="selected" @endif>無薪病假</option>
-                <option value="4" @if (count($search)>1 && $search['type_id'] == '4') selected="selected" @endif>善待假</option>
-                <option value="5" @if (count($search)>1 && $search['type_id'] == '5') selected="selected" @endif>特休</option>
-                <option value="6" @if (count($search)>1 && $search['type_id'] == '6') selected="selected" @endif>久任假</option>
-                <option value="7" @if (count($search)>1 && $search['type_id'] == '7') selected="selected" @endif>生日假</option>
+                <option value="normal" @if (count($model->order_by) >0 && $model->exception == "normal") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
+                <option value="job_seek" @if (count($model->order_by) >0 && $model->exception == "job_seek") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
+                <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == "paid_sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
+                <option value="sick" @if (count($model->order_by) >0 && $model->exception == "sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
+                <option value="entertain" @if (count($model->order_by) >0 && $model->exception == "entertain") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
+                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == "annual_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == "lone_stay") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
+                <option value="birthday" @if (count($model->order_by) >0 && $model->exception == "birthday") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
               &nbsp;
               區間：
-              <input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
+              <input type="text" id="search_daterange" name="search[daterange]" value="@if(!empty($model->start_time)) {{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
               </label>
               &nbsp;
               <label>
@@ -65,16 +66,16 @@
             <tr>
               <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
               <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="3%">代理人</a></th>
+              <th width="8%"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
+              <th width="18%"><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
+              <th width="30%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+              <th width="8%">代理人</a></th>
               <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
             </tr>
           </thead>
           <tbody>
            @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="leave_view.html" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
+            <tr class="clickable-row" data-href="{{ route('leaves/hr/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
                   @if($value->tag_id == 8) class="btn bg-maroon"
@@ -117,24 +118,3 @@
     </div>
   </div>
 </div>
-<script>
-$('.sort').on('click', function(){
-  var $sortname = $(this).attr('sortname');
-  var $order_by = "{{ $model->order_by }}";
-  var $order_way = "{{ $model->order_way }}";
-
-  $("#order_by").val($sortname);
-
-  if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-  } else {
-    $("#order_way").val("DESC");
-  }
-  $("#frmOrderby").submit();
-});
-
-function changePageSize(pagesize)
-{
-  $("#frmOrderby").submit();
-}
-</script>

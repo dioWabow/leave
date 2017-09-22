@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Auth;
 use LeaveHelper;
 use WebHelper;
-use App\Leave;
 use App\User;
+use App\Leave;
+use App\Type;
+use App\LeaveDay;
 use App\LeaveRespon;
 
 use Redirect;
@@ -47,16 +49,14 @@ class LeavesHrController extends Controller
 
             } else {
 
-                $search['tag_id'] = [1,2,3,4];
                 $request->session()->forget('leaves_hr');
 
             }
         }
 
         $model = new Leave;
-
-        $search['tag_id'] = [1,2,3,4];
-        $dataProvider = $model->fill($order_by)->search($search);
+        $search['tag_id'] = ['1','2','3','4'];
+        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInHr($search);
 
         return  view('leave_hr', compact(
             'search', 'model', 'dataProvider'
@@ -84,7 +84,6 @@ class LeavesHrController extends Controller
             $request->session()->forget('leaves_hr');
             $request->session()->push('leaves_hr.search', $search);
             $request->session()->push('leaves_hr.order_by', $order_by);
-            $search['tag_id'] = [9];
 
         } else {
 
@@ -95,14 +94,15 @@ class LeavesHrController extends Controller
 
             } else {
                 
-                $search['tag_id'] = [9];
                 $request->session()->forget('leaves_hr');
 
             }
         }
-
+        
         $model = new Leave;
-        $dataProvider = $model->fill($order_by)->search($search);
+        $search['tag_id'] = ['9'];
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInHr($search);
 
         return  view('leave_hr', compact(
             'search', 'model', 'dataProvider'
@@ -124,14 +124,31 @@ class LeavesHrController extends Controller
 
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
-        
         if (!empty($search) || !empty($order_by)) {
-
+            
             $request->session()->forget('leaves_hr');
             $request->session()->push('leaves_hr.search', $search);
             $request->session()->push('leaves_hr.order_by', $order_by);
+
+            if (!empty($search['daterange'])) {
+                
+                $date_range = $this->checkDateExpload($search['daterange']);
+                // 先去找子單的時間再搜尋主單
+                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
+                $order_by['start_time'] = $date_range[0];
+                $order_by['end_time'] = $date_range[1];
+                            
+            } else {
+
+                 //如果日期進來為空，start_time < 今天 搜尋
+                 $search['start_time'] = Carbon::now()->format('Y-m-d');
+
+            }
             
         } else {
+
+            $search['tag_id'] = ['8','9'];
+            $search['start_time'] = Carbon::now()->format('Y-m-d');
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_hr')))) {
 
@@ -140,29 +157,63 @@ class LeavesHrController extends Controller
 
             } else {
 
-                $search['tag_id'] = [8,9];
                 $request->session()->forget('leaves_hr');
 
             }
 
         }
         
-        if (!empty($search['daterange'])) {
+        //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
+        if (!empty($search['exception'])) {
+            
+            $order_by['exception'] = $search['exception'];
+            $search['type_id'] = Type::getTypeIdByException($search['exception']);
+            
+        } else {
 
-            $daterange = explode(" - ", $search['daterange']);
-            $search['start_time'] = $daterange[0];
-            $search['end_time'] = $daterange[1];
-            
-            $order_by['start_time'] = $daterange[0];
-            $order_by['end_time'] = $daterange[1];
-            
+            $search['type_id'] = [];
+
         }
-
+        
         $model = new Leave;
-        $dataProvider= $model->fill($order_by)->search($search);
-
+        $dataProvider = $model->fill($order_by)->searchForHistoryInHr($search);
+        
         return  view('leave_hr', compact(
             'dataProvider', 'search', 'model'
         ));
     }
+
+    /**
+     * 檢視
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEdit(Request $request, $id)
+    {
+        return  view('leave_manager_view');
+    }
+
+    private function loadModel($id)
+    {
+        $model = Leave::find($id);
+
+        if ($model===false) {
+
+            throw new CHttpException(404,'資料不存在');
+
+        }
+
+        return $model;
+
+    }
+
+    /*
+    * 把傳進來的日期RANGE分解
+    *
+    */
+   private static function checkDateExpload($data)
+   {
+       $data = explode(" - ", $data);
+       return $data;
+   }
 }

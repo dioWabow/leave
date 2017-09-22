@@ -19,23 +19,23 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{Request::is('leaves/hr/prove/*')? 'active' : ''}}"><a href="{{ route('leaves_hr_prove', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getHrProveLeavesTotal() }} New Messages">{{ LeaveHelper::getHrProveLeavesTotal() }}</span></a></li>
-					<li class="{{Request::is('leaves/hr/upcoming/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_upcoming', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getHrUpComingLeavesTotal() }} New Messages">{{ LeaveHelper::getHrUpComingLeavesTotal() }}</span></a></li>
-					<li class="{{Request::is('leaves/hr/history/*') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_history', ['user_id' => Auth::user()->id ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
+					<li class="{{Request::is('leaves/hr/prove')? 'active' : ''}}"><a href="{{ route('leaves_hr_prove') }}">{{ WebHelper::getLeaveTabLabel('prove') }}@if(LeaveHelper::getHrProveLeavesTotal()>0)<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getHrProveLeavesTotal() }} New Messages">{{ LeaveHelper::getHrProveLeavesTotal() }}</span>@endif</a></li>
+					<li class="{{Request::is('leaves/hr/upcoming') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_upcoming') }}">{{ WebHelper::getLeaveTabLabel('upcoming') }} @if(LeaveHelper::getHrUpComingLeavesTotal()>0)<span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getHrUpComingLeavesTotal() }} New Messages">{{ LeaveHelper::getHrUpComingLeavesTotal() }}</span>@endif</a></li>
+					<li class="{{Request::is('leaves/hr/history') ? 'active' : ''}}" ><a href="{{ route('leaves_hr_history') }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
 				</ul>
 				<div class="tab-content">
 					<!-- /.tab-pane -->
-          @if(Request::is('leaves/hr/prove/*'))
+          @if(Request::is('leaves/hr/prove'))
 						@include('leave_hr_prove')
 					@endif
 					<!-- /.tab-pane -->
 					<!-- /.tab-pane -->
-           @if(Request::is('leaves/hr/upcoming/*'))
+           @if(Request::is('leaves/hr/upcoming'))
 						@include('leave_hr_upcoming')
 					@endif
 					<!-- /.tab-pane -->
 					<!-- /.tab-pane -->
-					@if(Request::is('leaves/hr/history/*'))
+					@if(Request::is('leaves/hr/history'))
 						@include('leave_hr_history')
 					@endif
 					<!-- /.tab-pane -->

@@ -1,5 +1,5 @@
-<div class="{{(Request::is('leaves/hr/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
-<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_upcoming', [ 'user_id' => Auth::user()->id ]) }}" method="POST">
+<div class="{{(Request::is('leaves/hr/upcoming')) ? 'active' : ''}} tab-pane">
+<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_upcoming') }}" method="POST">
   <table class="table table-bordered table-striped table-hover">
     @if(count($model->order_by)>0)
       <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -10,11 +10,11 @@
     @endif
     <thead>
       <tr>
-        <th width="10%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+        <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-        <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-        <th width="5%">代理人</a></th>
+        <th width="30%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+        <th width="15%">代理人</a></th>
         <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
         <th width="8%"></th>
       </tr>
@@ -23,7 +23,7 @@
     </form>
     <tbody>
        @foreach ($dataProvider as $value)
-        <tr class="clickable-row" data-href="leave_manager_view.html">
+        <tr class="clickable-row" data-href="{{ route('leaves/hr/edit', [ 'id' => $value->id ]) }}">
           <td>
             <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
           </td>
@@ -36,35 +36,11 @@
           @endforeach
           </td>
           <td>{{ $value->hours }}</td>
-          <td class="text-red">
-            {{ LeaveHelper::getDiffDaysLabel($value->start_time) }}
+          <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+            @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
           </td>
         </tr>
       @endforeach
     </tbody>
   </table>
 </div>
-<script>
-$('.sort').on('click', function(){
-
-  var $sortname = $(this).attr('sortname');
-  var $order_by = "{{ $model->order_by }}";
-  var $order_way = "{{ $model->order_way }}";
-
-  $("#order_by").val($sortname);
-
-  if ($order_by == $sortname && $order_way == "DESC") {
-    $("#order_way").val("ASC");
-  } else {
-    $("#order_way").val("DESC");
-  }
-
-  $("#frmOrderby").submit();
-
-});
-
-function changePageSize(pagesize)
-{
-  $("#frmOrderby").submit();
-}
-</script>
