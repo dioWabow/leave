@@ -4,8 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LeaveNotice extends Model
+class LeaveNotice extends BaseModel
 {
+    //可以傳入數值的欄位
+    protected $fillable = [
+        'leave_id',
+        'user_id',
+        'send_time',
+    ];
+
     /**
      * 與Model關聯的table
      *
