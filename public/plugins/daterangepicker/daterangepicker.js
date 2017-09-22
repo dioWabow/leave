@@ -867,8 +867,8 @@
 
             html = '<select class="hourselect">';
 
-            var start = this.timePicker24Hour ? 0 : 1;
-            var end = this.timePicker24Hour ? 23 : 12;
+            var start = this.timePicker24Hour ? 9 : 1;
+            var end = this.timePicker24Hour ? 18 : 12;
 
             for (var i = start; i <= end; i++) {
                 var i_in_24 = i;
