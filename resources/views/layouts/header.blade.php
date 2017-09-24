@@ -166,6 +166,7 @@
               </a>
         </li>
         @endif
+        @if( Auth::hasAdmin() )
         <li class="header">BOSS</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -174,6 +175,8 @@
           </span>
               </a>
         </li>
+        @endif
+        @if( Auth::hasHr() )
         <li class="header">HUMAN-RESOURCE</li>
         <li class="">
           <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -185,6 +188,7 @@
         <li class="">
           <a href="#"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
+        @endif
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
