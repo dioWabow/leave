@@ -60,7 +60,7 @@
 <!-- 全部共用 -->
 <script>
 $(function () {
-  $(".clickable-row").click(function(e) {
+  $('.table').on("click", ".clickable-row", function(e) {
     if($(e.target).hasClass('ignore')) return;
 
     var ignore = ['input', 'a', 'button', 'textarea', 'label'];
