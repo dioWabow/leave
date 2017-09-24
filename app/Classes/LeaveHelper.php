@@ -107,10 +107,11 @@ class LeaveHelper
      */
     public static function getUpComingManagerLeavesTotal()
     {
-        $id = LeaveRespon::getLeaveIdByUserId(Auth::user()->id);
-        $today = Carbon::now()->format('Y-m-d');
-        $tag_id = ['9'];
-        $result = Leave::whereIn('id', $id)->where('start_time', '>=', $today)->whereIn('tag_id', $tag_id)->count();
+        $search['id'] = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+
+        $model = new Leave;
+        $result = $model->searchForUpComingInManager($search)->count();
         return $result;
     }
     /**

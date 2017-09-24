@@ -20,10 +20,24 @@ class LeaveRespon extends BaseModel
     ];
 
      
-    public static function getLeaveIdByUserId($id)
+    public static function getLeavesIdByUserIdAndTagIdForNotLeave($id, $tag_id)
     {
-        $result = self::where('user_id', $id)->whereIn('tag_id', ['8','9'])->get()->pluck('leave_id');
+        if (!is_array($tag_id)) {
+
+            $result = self::where('user_id', $id)->where('tag_id', $tag_id )->get()->pluck('leave_id');
+
+        } else {
+
+            $result = self::where('user_id', $id)->whereIn('tag_id', $tag_id )->get()->pluck('leave_id');
+
+        }
+        
         return $result;
     }
 
+    public static function getLeavesIdByUserIdForUpComing($id)
+    {
+        $result = self::where('user_id', $id)->where('tag_id', '9' )->get()->pluck('leave_id');
+        return $result;
+    }
 }
