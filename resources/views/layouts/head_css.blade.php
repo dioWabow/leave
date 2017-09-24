@@ -71,7 +71,7 @@ $(function () {
     var ignore = ['input', 'a', 'button', 'textarea', 'label'];
     var clicked = e.target.nodeName.toLowerCase();
     if($.inArray(clicked, ignore) > -1) return;
-    
+
     window.location = $(this).data('href');
   });
 
@@ -88,6 +88,11 @@ $(function () {
   //預設圖片
   $("img").error(function () {
    $(this).unbind("error").attr("src", "{{route('root_path')}}/dist/img/users/default.png");
+  });
+
+  // alert 消失用
+  $(".msg_alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".msg_alert").slideUp(500);
   });
 
 });
