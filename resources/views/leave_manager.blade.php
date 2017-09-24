@@ -61,20 +61,4 @@
 		</div>
 	</div>
 </section>
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h1>確定此批假單 <span class="text-red">不允許放假</span> 嗎？</h1>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send</button>
-      </div>
-    </div>
-  </div>
-</div>
 @stop

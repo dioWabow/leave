@@ -138,6 +138,16 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves/manager/calendar/ajax',
             'uses'=> 'LeavesManagerController@ajaxGetAllAvailableLeaveListByDateRange',
         ]);
+
+        Route::post('insert/{role}',[
+            'as' => 'leaves/manager/insert',
+            'uses' => 'LeavesManagerController@postInsert',
+        ]);
+
+        Route::get('edit/{id}',[
+            'as' => 'leaves/manager/edit',
+            'uses' => 'LeavesManagerController@getEdit',
+        ]);
     });
     
 });

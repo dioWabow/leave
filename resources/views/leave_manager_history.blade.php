@@ -75,7 +75,7 @@
           </thead>
           <tbody>
           @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="leave_view.html" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
+            <tr class="clickable-row" data-href="{{ route('leaves/manager/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
                   @if($value->tag_id == 8) class="btn bg-maroon"
@@ -113,8 +113,8 @@
               <th></th>
               <th></th>
               <th></th>
-              <th class="pull-right">總計(Hr)</th>
-              <th>{{ $leaves_totle_hours }}</th>
+              <th class="pull-right"></th>
+              <th></th>
             </tr>
           </tfotter>
         </table>

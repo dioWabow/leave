@@ -10,6 +10,7 @@ use App\Leave;
 use App\UserTeam;
 use App\LeaveDay;
 use App\LeaveRespon;
+use App\Http\Requests\ManagerProveRequest;
 
 use Auth;  
 use Route;
@@ -79,7 +80,7 @@ class LeavesManagerController extends Controller
             $dataProvider_sub_teams = $model->fill($order_by)->searchForProveInManager($search_sub_teams);
             $dataProvider_teams = $model->fill($order_by)->searchForProveInManager($search_teams);
             $dataProvider = $dataProvider_sub_teams->merge($dataProvider_teams);
-                
+            
         } elseif ($this->role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
             
             $teams = Auth::hasMiniManagement();
@@ -262,6 +263,99 @@ class LeavesManagerController extends Controller
     }
 
     /**
+    * 新增 & 修改 => leaveResponses & Leave
+    *
+    * @param Request $request
+    * @return Redirect
+    */
+    public function postInsert(ManagerProveRequest $request)
+    {
+        $getRole = $this->role;
+        
+        if (!empty($request->input('leave'))) {
+
+            $input = $request->input('leave');
+            
+            if ($input['agree'] == 1) {
+
+                foreach ($input['leave_id'] as $leave_id) {
+                    
+                    $input_create['tag_id'] = '9';
+                    $input_create['user_id'] = Auth::user()->id;
+                    $input_create['leave_id'] = $leave_id;
+                    $input_create['memo'] = $input['memo'];
+                    
+                     //新增記錄
+                    $leaveRespon= new LeaveRespon;
+                    $leaveRespon->fill($input_create);
+                    $leaveRespon->save();
+                    //修改主單記錄
+                    $leave = new Leave;
+                    $leave = $this->loadModel($leave_id);
+                    $input_update['id'] = $leave_id;
+                    $input_update['tag_id'] = '9';
+                    $leave->fill($input_update);
+                    $leave->save();
+
+                }
+
+            } else {
+
+                foreach ($input['leave_id'] as $leave_id) {
+                    
+                    $input_create['tag_id'] = '8';
+                    $input_create['user_id'] = Auth::user()->id;
+                    $input_create['leave_id'] = $leave_id;
+                    $input_create['memo'] = $input['memo'];
+                      //新增記錄
+                    $leaveRespon= new LeaveRespon;
+                    $leaveRespon->fill($input_create);
+                    $leaveRespon->save();
+                     //修改主單記錄
+                    $leave = new Leave;
+                    $leave = $this->loadModel($leave_id);
+                    $input_update['tag_id'] = '8';
+                    $input_update['id'] = $leave_id;
+                    $leave->fill($input_update);
+                    $leave->save();
+
+                }
+
+            }
+            
+            return Redirect::route('leaves/manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
+
+        }
+    }
+
+    /**
+     * 檢視
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getEdit(Request $request, $id)
+    {
+        $model = $this->loadModel($id);
+
+        return  view('leave_manager_view', compact(
+            'model'
+        ));
+    }
+
+    private function loadModel($id)
+    {
+        $model = Leave::find($id);
+
+        if ($model===false) {
+
+            throw new CHttpException(404,'資料不存在');
+
+        }
+            
+        return $model;
+    }
+
+    /**
      * 1.取得主管的team 
      * 2.取得該主管的子team
      * 3.狀態在小主管審核過的user_id 
@@ -318,7 +412,6 @@ class LeavesManagerController extends Controller
         $get_allowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time,$end_time,$get_upcoming_leaves_id);
         
         $result = $get_unallowed_id->merge($get_allowed_id);
-        
         return $result;
     }
 }

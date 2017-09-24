@@ -149,6 +149,26 @@ $(function () {
 @endif
 <!-- 團隊假單頁面用 主管-->
 @if(Request::is('leaves/manager/*'))
+@if(Request::is('leaves/manager/prove/*'))
+<script>
+/* 批准假單文字替換*/
+$(function () {
+  $("#disagree").on("click", function(){
+
+    $("#btn_agree").val(0);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>不允許放假</span> 嗎？");
+    
+  });
+
+  $("#agree").on("click", function(){
+
+    $("#btn_agree").val(1);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>允許放假</span> 嗎？");
+
+  });
+});
+</script>
+@endif
 @if(Request::is('leaves/manager/history/*'))
 <script>
 $(function () {
