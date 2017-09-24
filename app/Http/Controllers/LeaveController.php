@@ -51,7 +51,7 @@ class LeaveController extends Controller
             $user_arr = User::getAllUsersWithoutLeaved();
 
         } else {
-            
+
             if (Auth::hasManageMent()) {
 
                 //抓自己昰主管的team的所有人
@@ -86,7 +86,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getCreate(Request $request,$user_id= '') 
+    public function getCreate(Request $request,$user_id= '')
     {
         //判斷是否可以幫此人請假
         if (!empty($user_id) && !Auth::hasHr()) {
@@ -182,7 +182,7 @@ class LeaveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postInsert(LeaveRequest $request) 
+    public function postInsert(LeaveRequest $request)
     {
         $leave = $request->input('leave');
         $user = User::find($leave['user_id']);
@@ -198,14 +198,14 @@ class LeaveController extends Controller
             $leave['hours'] = LeaveHelper::calculateRangeDateHours($leave['date_list']);
 
         } else {
-            
+
             $leave['hours'] = ($leave['dayrange'] == 'allday') ? 8 : 4;
 
             if ($leave['dayrange'] == 'morning') {
 
                 $leave['start_time'] = $leave['timepicker'] . $start;
                 $leave['end_time'] = TimeHelper::changeHourValue($leave['start_time'],['+,4,hour'],'Y-m-d H:i:s');
-                
+
             } elseif ($leave['dayrange'] == 'afternoon') {
 
                 $leave['end_time'] = $leave['timepicker'] . $end;
@@ -217,7 +217,7 @@ class LeaveController extends Controller
                 $leave['end_time'] = $leave['timepicker'] . $end;
 
             }
-           
+
         }
 
         $model = new Leave;
@@ -332,7 +332,7 @@ class LeaveController extends Controller
                     }
 
                 }
-                
+
                 //新增假單代理人
                 if (!empty($leave['agent'])){
 
@@ -378,7 +378,7 @@ class LeaveController extends Controller
                 ]);
                 $leave_response->save();
 
-                return Redirect::route('index')->withErrors(['msg' => '新增成功']);
+                return Redirect::route('index')->with('success', '新增成功 !');
 
             } else {
 
@@ -405,14 +405,14 @@ class LeaveController extends Controller
         $response = array(
           'hours' => $hours,
         );
-        return response()->json($response); 
+        return response()->json($response);
     }
 
     public function createSickLeave($leave_day,$date_list,$user_id,$start_date,$end_date,$paid_sick_type,$sick_type)
     {
         //拆單前半
         $hours = LeaveHelper::calculateRangeDateHours($date_list);
-        
+
         $remain_hours = LeaveHelper::getRemainHours($paid_sick_type,$hours);
 
         //有薪病假剩餘時數不足，拆單成一般病假與有薪病假
@@ -444,7 +444,7 @@ class LeaveController extends Controller
 
                 $leave_day_model = new LeaveDay;
                 $leave_day_model->fill($leave_day);
-                
+
                 if (!$leave_day_model->save()) {
 
                     return Redirect::back()->withInput()->withErrors(['msg' => '新增子單失敗']);
@@ -488,7 +488,7 @@ class LeaveController extends Controller
                 array_pop($date_list);
 
             }
-                
+
             //將剩餘的時數都補上無薪病假
             if (count($date_list) > 0) {
 
@@ -526,7 +526,7 @@ class LeaveController extends Controller
 
                 $leave_day_model = new LeaveDay;
                 $leave_day_model->fill($leave_day);
-                
+
                 if (!$leave_day_model->save()) {
 
                     return Redirect::back()->withInput()->withErrors(['msg' => '新增子單失敗']);

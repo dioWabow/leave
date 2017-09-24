@@ -58,7 +58,7 @@ class UserTeamController extends Controller
 
         if ($type) {
 
-            return Redirect::route('teams/index')->withErrors(['msg' => '更新成功']);
+            return Redirect::route('teams/index')->with('success', '更新成功 !');
 
         } else {
 
