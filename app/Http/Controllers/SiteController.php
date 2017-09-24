@@ -70,7 +70,15 @@ class SiteController extends Controller
                 // 用關聯方式取值
                 $user_name = $value->fetchUser->nickname;
                 $vacation_name = $value->fetchType->name;
-                $team_color = $value->fetchUserTeam->fetchTeam->color;
+                if (empty($value->fetchUserTeam->fetchTeam->color)) {
+
+                    $team_color = "#000";
+
+                } else {
+
+                    $team_color = $value->fetchUserTeam->fetchTeam->color;
+
+                }
 
                 $result[$key]['title'] = addslashes($user_name . ' / ' .  $vacation_name);
                 $result[$key]['start'] = $value['start_time'];

@@ -107,7 +107,9 @@ class Leave extends BaseModel
 
     public function leaveDataRange($first_day, $last_day)
     {
-        $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
+        $result = $this->whereBetween('start_time', [$first_day, $last_day])
+            ->where('tag_id', '9')
+            ->get();
     	return $result;
     }
 
