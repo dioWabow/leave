@@ -153,7 +153,7 @@ $(function () {
     });
 });
 </script>
-
+@if(Request::is('disaster/*'))
 <!--天災假調整用-->
 @if(Request::is('holidies/*'))
 <script>
@@ -177,7 +177,7 @@ $(function () {
 });
 </script>
 @endif
-
+@endif
 
 <!-- 團隊設定用 -->
 @if(Request::is('teams/*'))
@@ -727,8 +727,8 @@ $(function () {
 @endif
 @endif
 
-<!-- 特休結算用 -->
-@if(Request::is('annual_leave_calculate/*'))
+<!-- 特休結算+報表排序用 -->
+@if(Request::is('annual_leave_calculate/*','report/*'))
 <script>
   $(document).on('click', 'th', function() {
   var table = $(this).parents('table').eq(0);

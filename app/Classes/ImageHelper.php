@@ -10,7 +10,7 @@ use Image;
 class ImageHelper
 {
     public $upload_path;
-    
+
     private $_save_folder;
     private $_file_path;
     private $_file_name;
@@ -96,7 +96,7 @@ class ImageHelper
     private function saveImage($file)
     {
         $file_extension = $file->getClientOriginalExtension();
-        
+
         if (!empty($this->_file_name)) {
 
             $filename = $this->_file_name . '.' . $file_extension; //若有指定命名時使用指定名字

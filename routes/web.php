@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth'], function () {
         'as' => 'index/ajax',
         'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
     ]);
-    
+
     # 國定假日/補班
     Route::group(['prefix'=>'holidies'], function(){
         Route::match(['get', 'post'], 'index', [
@@ -126,27 +126,27 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'leave_type',
             'uses' => 'LeaveTypeController@getIndex',
         ]);
-        
+
         Route::get('create',[
             'as' =>'leave_type/create',
             'uses' => 'LeaveTypeController@getCreate',
         ]);
-        
+
         Route::get('edit/{id}',[
             'as' => 'leave_type/edit',
             'uses' => 'LeaveTypeController@getEdit',
         ]);
-        
+
         Route::get('delete/{id}',[
             'as' => 'leave_type/delete',
             'uses' => 'LeaveTypeController@postDelete',
         ]);
-        
+
         Route::post('insert',[
             'as' => 'leave_type/insert',
             'uses' => 'LeaveTypeController@postInsert',
         ]);
-        
+
         Route::post('update',[
             'as' => 'leave_type/update',
             'uses' => 'LeaveTypeController@postUpdate',
@@ -277,6 +277,18 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
+    // 報表
+    Route::group(['prefix'=>'report'], function(){
+        Route::any('index',[
+            'as' => 'report/index',
+            'uses' => 'ReportController@postIndex',
+        ]);
+
+        Route::get('vacation',[
+            'as' => 'report/vacation',
+            'uses' => 'ReportController@getUserData'
+        ]);
+    });
 });
 
 Route::match(['get', 'post'], '/demo/image',[

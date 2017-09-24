@@ -21,7 +21,7 @@ class Type extends BaseModel
         'order_way',
         'pagesize',
     ];
-    
+
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
@@ -51,13 +51,13 @@ class Type extends BaseModel
                 }  else {
 
                     $query->where($key, $value);
-                    
+
                 }
 
             }
 
         }
-       
+
         $result = $query->paginate($this->pagesize);
         return $result;
     }

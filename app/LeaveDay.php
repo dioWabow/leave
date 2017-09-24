@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 Use App\Leave;
 Use App\User;
 Use App\Type;
@@ -346,4 +347,27 @@ class LeaveDay extends BaseModel
         $result = $this::hasOne('App\Type','id','type_id');
         return $result;
     }
+
+    public static function getAllData()
+    {
+        $result = self::get();
+        return $result;
+    }
+
+    public function search($year, $month)
+    {
+    	$query = $this->select('leaves.user_id', 'leaves.type_id', 'leaves.tag_id', 'leaves_days.hours', 'leaves_days.start_time')
+		    ->leftJoin('leaves', 'leaves_days.leave_id', '=', 'leaves.id')
+            ->where('leaves.tag_id', '9')
+            ->whereYear('leaves_days.start_time', $year);
+
+            if ($month != 'year') {
+                $query->whereMonth('leaves_days.start_time', $month);
+            }
+
+            $result = $query->get();
+
+		return $result;
+    }
+
 }

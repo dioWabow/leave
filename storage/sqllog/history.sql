@@ -1,3 +1,6 @@
+#2017-09-14 michael 報表 leaves 新增扣薪欄位
+ALTER TABLE `leaves` ADD `deductions` INT(7) NULL DEFAULT NULL COMMENT '扣薪' AFTER `end_time`;
+
 #2017-09-12 michael 團隊設定 patent_id 預設為0
 ALTER TABLE `teams` CHANGE `parent_id` `parent_id` INT(7) NOT NULL DEFAULT '0' COMMENT '上級團隊';
 

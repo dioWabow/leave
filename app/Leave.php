@@ -17,13 +17,13 @@ class Leave extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
-	    'agent',
+	'agent',
         'notice_person',
         'timepicker',
         'dayrange',
     ];
 
-    public static function getTypeIdByLeaves($id) 
+    public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
         return $result;
@@ -33,7 +33,22 @@ class Leave extends BaseModel
     {
         $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
     	return $result;
-    
+    }
+
+    public function userVacationList($user_id, $type_id, $year, $month)
+    {
+        $query = $this->where('user_id', $user_id)
+            ->where('type_id', $type_id)
+            ->where('tag_id', '9')
+            ->whereYear('start_time', $year);
+
+            if ($month != 'year') {
+                $query->whereMonth('start_time', $month);
+                $query->whereMonth('end_time', $month);
+            }
+
+        $result = $query->paginate(10);
+        return $result;
     }
 
     public function fetchUser()
