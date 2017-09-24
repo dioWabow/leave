@@ -90,6 +90,11 @@ $(function () {
    $(this).unbind("error").attr("src", "{{route('root_path')}}/dist/img/users/default.png");
   });
 
+  //Flat red color scheme for iCheck
+  $('input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
 });
 
 </script>
@@ -448,12 +453,6 @@ $(function () {
   var leave_type_single_arr = ['entertain','birthday','lone_stay'];
   var leave_type_notice_arr = ['birthday','lone_stay'];
   var daterangepicker_type = 'isDate';
-
-  //Flat red color scheme for iCheck
-  $('input[type="radio"].flat-red').iCheck({
-    checkboxClass: 'icheckbox_flat-blue',
-    radioClass: 'iradio_flat-blue'
-  });
 
   //通知對象
   $div_leave_notic_person.hide();
