@@ -108,7 +108,7 @@ INSERT INTO `configs` (`id`, `config_key`, `config_value`, `comment`, `created_a
 (NULL, 'company_rules', '', '人事規章url', '2017-08-30 12:36:23', '2017-08-30 04:36:23'),
 (NULL, 'company_mail', '', '異常回報Email', '2017-08-30 12:36:23', '2017-08-30 04:36:23'),
 (NULL, 'company_domain', '', '公司網域(Email檢查網域用)', '2017-08-30 12:36:23', '2017-08-30 04:36:23'),
-(NULL, 'config_smtp_host', '', 'SMTP HOST', '2017-08-30 09:18:18', '2017-08-30 09:18:18'),
+(NULL, 'smtp_host', '', 'SMTP HOST', '2017-08-30 09:18:18', '2017-08-30 09:18:18'),
 (NULL, 'smtp_port', '', 'SMTP PORT', '2017-08-30 09:18:18', '2017-08-30 09:18:18'),
 (NULL, 'smtp_username', '', 'SMTP Username', '2017-08-30 09:18:18', '2017-08-30 09:18:18'),
 (NULL, 'smtp_password', '', 'SMTP Password', '2017-08-30 09:18:18', '2017-08-30 09:18:18'),
