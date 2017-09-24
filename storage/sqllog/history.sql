@@ -1,3 +1,17 @@
+#2017-09-12 michael 團隊設定 patent_id 預設為0
+ALTER TABLE `teams` CHANGE `parent_id` `parent_id` INT(7) NOT NULL DEFAULT '0' COMMENT '上級團隊';
+
+#2017-09-11 michael 團隊設定 user_id 預設給null
+ALTER TABLE `users_teams` CHANGE `user_id` `user_id` INT(7) NULL DEFAULT NULL COMMENT '使用者', CHANGE `team_id` `team_id` INT(11) NULL DEFAULT NULL COMMENT '團隊';
+
+#2017-09-11 michael 團隊 teams 新增開使結束時間欄位
+ALTER TABLE `teams` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間';
+ALTER TABLE `teams` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最後編輯';
+
+#2017-09-11 michael 團隊設定 user_teams 新增開使結束時間欄位
+ALTER TABLE `users_teams` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間';
+ALTER TABLE `users_teams` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最後編輯';
+
 --2017-09-20 tony 新增已離職特休計算資料表
 CREATE TABLE `leaved_users` (
   `id` int(10) NOT NULL COMMENT '流水編號',

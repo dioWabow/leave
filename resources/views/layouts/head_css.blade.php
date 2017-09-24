@@ -17,16 +17,17 @@
 <!-- daterange picker -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.css">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css"> 
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css">
 <!-- Bootstrap fileupload -->
 <link href="{{route('root_path')}}/plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css?v=3">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
-<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css?v=6">
+<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
@@ -53,9 +54,13 @@
 <script src="{{route('root_path')}}/plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
 
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable.js"></script>
-<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=2"></script>
+<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- wabow -->
+<script src="{{route('root_path')}}/js/wabow.js"></script>
+<!-- colorpicker -->
+<script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <!-- 全部共用 -->
 <script>
@@ -150,6 +155,7 @@ $(function () {
 </script>
 
 <!--天災假調整用-->
+@if(Request::is('holidies/*'))
 <script>
 $(function () {
     var $naturalDisasterList = $('.naturalDisasterList');
@@ -170,14 +176,217 @@ $(function () {
     });
 });
 </script>
+@endif
 
 
 <!-- 團隊設定用 -->
+@if(Request::is('teams/*'))
 <script>
-$('#nestable').nestable({
-  maxDepth: 5
+$(document).ready(function () {
+
+  var nestableChange = function (e) {
+    var list = e.length ? e : $(e.target), output = list.data('output');
+
+    $.ajax({
+        method: "POST",
+        url: "{{route('teams/update_drop')}}",
+        data: {
+          "_token": "{{ csrf_token() }}", 
+          "team_json": window.JSON.stringify(list.nestable('serialize'))
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+        alert("更新失敗!");
+    });
+  };
+
+  $('#nestable').nestable({
+    maxDepth: 2,
+    dropCallback : 'sourceId'
+    }).on('change', nestableChange);
+  nestableChange($('#nestable').data('output', $('#nestable-output')));
+
+
+
+  $(".my-colorpicker2").colorpicker();
+
+  // 新增的ajax
+  $('#menu-add').find("button[id='addButton']").click(function() {
+
+    $this = $(this);
+    $team_name = $this.parents().find("input[id='addInputName']").val();
+    $team_color = $this.parents().find("input[id='addInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/create') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        team_name: $team_name,
+        team_color: $team_color,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('新增成功');
+          $('#team_set_list').append(data.html);
+          $('.dd-empty').remove();
+          $this.parents().find("input[id='addInputName']").val('');
+          $this.parents().find("input[id='addInputColor']").val('');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
+
+  $(document).on('click', '.button-edit', prepareEdit);
+
+  // 修改點下去 抓出id 丟給 editButton
+  $(document).on('click', '.button-edit', function(event){
+    $this = $(this);
+    $id = $this.attr("data-owner-id");
+    $('#editButton').val($id);
+
+  });
+
+  $(document).on('click', '#editButton', editMenuItem);
+
+  // 修改的ajax
+  $('#editButton').click(function(){
+    $this = $(this);
+
+    $id = $this.val();
+    $team_name = $this.parents().find("input[id='editInputName']").val();
+    $team_color = $this.parents().find("input[id='editInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/update') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+        team_name: $team_name,
+        team_color: $team_color
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+          $("#menu-editor").fadeOut();
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $(document).on('click', '.button-delete', deleteFromMenu);
+
+  // 刪除的 ajax
+  $(document).on('click', '.button-delete', function(event){
+    $this = $(this);
+
+    $id = $this.attr("data-owner-id");
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/delete') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('刪除成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $('#memberReload').click(function(){
+
+    $.get('index', function(data) {
+      var html = $(data).find('#member_set').html();
+      $('#member_set').html(html);
+      $(".select2").select2();
+    });
+
+  });
+
+  $('form[name=member_form]').submit(function(event){
+
+    // 跑所有team
+    $('.member_list').each(function(){
+
+      $team = $(this).attr('team_id');
+
+      // 跑團隊人員 與 主管人員
+      $team_member = $('#member_'+$team).select2('val');
+      $team_manager = $('#manager_'+$team).select2('val');
+
+      // select2 抓出來型態不是string
+      if(!$team_member == "") {
+        $team_member = $team_member.toString();
+      }
+
+      // 當有選主管才要判斷
+      if($team_manager != ""){
+
+        $team_manager.toString();
+
+        if($team_member === null){
+          event.preventDefault();
+          alert('有主管的情況至少要有一名組員!!');
+        } else {
+
+          if($team_member == $team_manager){
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          } else if($team_member.match($team_manager)) {
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          }
+        }
+      }
+    });
+
 });
+
+
+});
+
 </script>
+@endif
 
 <!-- 假別管理與修改頁面用 -->
 @if(Request::is('leave_type/*'))
@@ -188,7 +397,7 @@ $('#nestable').nestable({
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    @if($model->start_time != '' || $model->end_time != '' ) 
+@if($model->start_time != '' || $model->end_time != '' ) 
     $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
     @else
     $('#leave_type_available_date').val("");
