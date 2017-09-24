@@ -129,23 +129,21 @@ class LeavesHrController extends Controller
 
             if (!empty($search['daterange'])) {
                 
-                $date_range = $this->checkDateExpload($search['daterange']);
-                // 先去找子單的時間再搜尋主單
-                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
+                $date_range = explode(" - ", ($search['daterange']));
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
+                $search['id'] = self::getHistoryLeaveIdForSearch($date_range[0], $date_range[1]);
                             
             } else {
 
-                 //如果日期進來為空，start_time < 今天 搜尋
-                 $search['start_time'] = Carbon::now()->format('Y-m-d');
-
+                 //如果日期進來為空，搜尋所有 < 今天以子單日期為主 的leave_id
+                 $search['id'] = self::getHistoryLeaveIdForToDay();
+                 
             }
             
         } else {
 
-            $search['tag_id'] = ['8','9'];
-            $search['start_time'] = Carbon::now()->format('Y-m-d');
+            $search['id'] = self::getHistoryLeaveIdForToDay();
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_hr')))) {
 
@@ -171,7 +169,6 @@ class LeavesHrController extends Controller
             $search['type_id'] = [];
 
         }
-        
         $model = new Leave;
         $dataProvider = $model->fill($order_by)->searchForHistoryInHr($search);
         
@@ -204,13 +201,40 @@ class LeavesHrController extends Controller
 
     }
 
-    /*
-    * 把傳進來的日期RANGE分解
-    *
-    */
-   private static function checkDateExpload($data)
-   {
-       $data = explode(" - ", $data);
-       return $data;
-   }
+    private static function getHistoryLeaveIdForToDay()
+    {
+        $model = new Leave;
+        //取得所有「不准假」的 假單id
+        $search['tag_id'] = ['8'];
+        $get_not_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+
+        $search['tag_id'] = ['9'];
+        //取得所有「已准假」 的 假單id
+        $get_upcoming_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+        //取得所有小於今天的子單記錄，狀態在「已準假」
+        $get_leaves_id_today = LeaveDay::getLeavesIdByToDay($get_upcoming_leaves_id);
+
+        $result = $get_not_leaves_id->merge($get_leaves_id_today);
+        return $result;
+    }
+
+    private static function getHistoryLeaveIdForSearch($start_time, $end_time)
+    {
+        $model = new Leave;
+        //取得所有「不准假」的 假單id
+        $search['tag_id'] = ['8'];
+        $get_not_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+
+        $search['tag_id'] = ['9'];
+        //取得所有「已准假」 的 假單id
+        $get_upcoming_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+
+        // 取得所有不准假的子單記錄在搜尋的區間內 
+        $get_unallowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_not_leaves_id);
+         // 取得所有已准假的子單記錄在搜尋的區間內 
+        $get_allowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_upcoming_leaves_id);
+        
+        $result = $get_unallowed_id->merge($get_allowed_id);
+        return $result;
+    }
 }

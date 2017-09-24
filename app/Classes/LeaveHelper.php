@@ -26,9 +26,10 @@ class LeaveHelper
      */
     public static function getHrUpComingLeavesTotal()
     {
-        $tag_id = ['9'];
-        $today = Carbon::now()->format('Y-m-d');
-        $result = Leave::where('start_time', '>=', $today)->whereIn('tag_id', $tag_id)->count();
+        $model = new Leave;
+        $search['tag_id'] = ['9'];
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $result = $model->searchForProveAndUpComInHr($search)->count();
         return $result;
     }
 
