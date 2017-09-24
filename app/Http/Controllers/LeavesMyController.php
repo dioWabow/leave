@@ -115,23 +115,22 @@ class LeavesMyController extends Controller
 
             if (!empty($search['daterange'])) {
                 
-                $date_range = $this->checkDateExpload($search['daterange']);
+                $date_range = explode(" - ", $search['daterange']);
                 // 先去找子單的時間再搜尋主單
-                $search['id'] = LeaveDay::getLeavesIdByDateRange($date_range[0], $date_range[1]);
+                $search['id'] = self::getHistoryLeaveIdForSearch($date_range[0], $date_range[1]);
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
                             
             }  else {
 
-                //如果日期進來為空，start_time < 今天 搜尋
-                $search['start_time'] = Carbon::now()->format('Y-m-d');
+                 //如果日期進來為空，搜尋該user < 今天的子單 的leave_id
+                $search['id'] = self::getHistoryLeaveIdForToDay();
 
             }
 
         } else {
 
-            $search['tag_id'] = ['7','8','9'];
-            $search['start_time'] = Carbon::now()->format('Y-m-d');
+            $search['id'] = self::getHistoryLeaveIdForToDay();
             
             // 沒有搜尋，判斷有沒有page 和 session 是不是空的
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_my')))) {
@@ -149,7 +148,7 @@ class LeavesMyController extends Controller
         }
         
         $model = new Leave;
-        $search['user_id'] = Auth::user()->id;
+        // $search['user_id'] = Auth::user()->id;
         //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
         if (!empty($search['exception'])) {
             
@@ -207,13 +206,35 @@ class LeavesMyController extends Controller
 
     }
 
-    /*
-     * 把傳進來的日期RANGE分解
-     *
-     */
-    private static function checkDateExpload($data)
+    private static function getHistoryLeaveIdForToDay()
     {
-        $data = explode(" - ", $data);
-        return $data;
+        $model = new Leave;
+        //取得該user 的「已取消、不准假」 假單
+        $search['tag_id'] = ['7','8'];
+        $search['user_id'] = Auth::user()->id;
+        $get_not_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
+        
+        $search['tag_id'] = ['9'];
+        //取得該user 的「已准假」 假單
+        $get_upcoming_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
+
+        //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
+        $get_leaves_id_today = LeaveDay::getLeavesIdByToDay($get_upcoming_leaves_id);
+        $result = $get_not_leaves_id->merge($get_leaves_id_today);
+        return $result;
     }
+
+    private static function getHistoryLeaveIdForSearch($start_time, $end_time)
+    {
+        $model = new Leave;
+        $search['tag_id'] = ['7','8','9'];
+        $search['user_id'] = Auth::user()->id;
+        //取得user「不准假、已取消、已準假」 假單
+        $get_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
+        // 取得搜尋的區間為該user的子單記錄 
+        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
+        
+        return $result;
+    }
+
 }

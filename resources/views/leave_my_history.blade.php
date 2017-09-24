@@ -46,9 +46,9 @@
               狀態：
               <select id="search_tag_id" name="search[tag_id]" class="form-control">
                 <option value="7,8,9" selected="selected">全部</option>
-                <option value="7" @if (count($search)>0 && $search['tag_id'] == '7') selected="selected" @endif>已取消</option>
-                <option value="8" @if (count($search)>0 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
-                <option value="9" @if (count($search)>0 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
+                <option value="7" @if (count($search)>2 && $search['tag_id'] == '7') selected="selected" @endif>已取消</option>
+                <option value="8" @if (count($search)>2 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
+                <option value="9" @if (count($search)>2 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
               </select>
             </label>
             &nbsp;

@@ -2,10 +2,9 @@
 
 namespace App\Classes;
 
+use Auth;
 use App\Leave;
 use Carbon\Carbon;
-
-use Auth;
 
 class LeaveHelper
 {
@@ -17,9 +16,11 @@ class LeaveHelper
      */
     public static function getProveMyLeavesTotalByUserId()
     {
-        $id = Auth::user()->id;
-        $tag_id = ['1','2','3','4'];
-        return Leave::where('user_id', $id)->whereIn('tag_id', $tag_id)->count();
+        $model = new Leave;
+        $search['user_id'] = Auth::user()->id;
+        $search['tag_id'] = ['1','2','3','4'];
+        $result = $model->searchForProveAndUpComInMy($search)->count();
+        return $result;
     }
 
     /**
@@ -30,10 +31,12 @@ class LeaveHelper
      */
     public static function getUpComingMyLeavesTotalByUserId()
     {
-        $id = Auth::user()->id;
-        $today = Carbon::now()->format('Y-m-d');
-        $tag_id = ['9'];
-        return Leave::where('user_id', $id)->where('start_time', '>=', $today)->whereIn('tag_id', $tag_id)->count();
+        $model = new Leave;
+        $search['user_id'] = Auth::user()->id;
+        $search['tag_id'] = ['9'];
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $result = $model->searchForProveAndUpComInMy($search)->count();
+        return $result;
     }
 
     /**
