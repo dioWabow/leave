@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use WebHelper;
 use App\Leave;
 use App\Type;
 use App\LeaveDay;
 
+use Auth;
 use Redirect;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,7 +23,8 @@ class LeavesHrController extends Controller
     */
     public function getProve(Request $request)
     {
-        if (Auth::user()->role != 'hr') {
+        
+        if (Auth::hasHr() != true) {
 
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
 
@@ -68,7 +69,7 @@ class LeavesHrController extends Controller
     */
     public function getUpcoming(Request $request)
     {
-        if (Auth::user()->role != 'hr') {
+        if (Auth::hasHr() != true) {
             
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
             
@@ -113,7 +114,7 @@ class LeavesHrController extends Controller
     */
     public function getHistory(Request $request)
     {
-        if (Auth::user()->role != 'hr') {
+        if (Auth::hasHr() != true) {
             
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
             

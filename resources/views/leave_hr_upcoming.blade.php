@@ -8,6 +8,8 @@
       <input id="order_by" type="hidden" name="order_by[order_by]" value="">
       <input id="order_way" type="hidden" name="order_by[order_way]" value="">
     @endif
+    {!!csrf_field()!!}
+    </form>
     <thead>
       <tr>
         <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
@@ -19,10 +21,8 @@
         <th width="8%"></th>
       </tr>
     </thead>
-    {!!csrf_field()!!}
-    </form>
     <tbody>
-       @foreach ($dataProvider as $value)
+      @foreach ($dataProvider as $value)
         <tr class="clickable-row" data-href="{{ route('leaves/hr/edit', [ 'id' => $value->id ]) }}">
           <td>
             <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">

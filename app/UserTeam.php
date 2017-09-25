@@ -142,27 +142,18 @@ class UserTeam extends BaseModel
     }
 
     public function fetchTeam() 
-<<<<<<< HEAD
-=======
-    {
-        $result = $this::hasOne('App\Team','id','team_id');
-        return $result;
-    }
-
-    public function fetchUser()
-    {
-        $result = $this::hasOne('App\User','id','user_id');
-        return $result;
-    }
-
-    public function team() 
->>>>>>> hotfix/auth_authority
     {
         $result = $this::hasOne('App\Team', 'id', 'team_id');
         return $result;
     }
 
     public function fetchUser()
+    {
+        $result = $this::hasOne('App\User', 'id', 'user_id');
+        return $result;
+    }
+
+    public function user()
     {
         $result = $this::hasOne('App\User', 'id', 'user_id');
         return $result;

@@ -8,6 +8,8 @@
     <input id="order_by" type="hidden" name="order_by[order_by]" value="">
     <input id="order_way" type="hidden" name="order_by[order_way]" value="">
   @endif
+  {!!csrf_field()!!}
+</form>
     <div class="row">
       <div class="col-sm-12">
         <table class="table table-bordered table-striped table-hover">
@@ -23,9 +25,7 @@
               <th width="8%"></th>
             </tr>
           </thead>
-          {!!csrf_field()!!}
           <tbody>
-          </form>
             @foreach ($dataProvider as $value)
             <tr class="clickable-row" data-href="{{ route('leaves/hr/edit', [ 'id' => $value->id ]) }}">
               <td>

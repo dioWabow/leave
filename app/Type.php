@@ -75,5 +75,17 @@ class Type extends BaseModel
                         ->pluck('id');
         return $result;
     }
+
+    public static function getAllType() 
+    {
+        $result = self::get();
+        return $result;
+    }
+
+    public static function getTypeByException($exception)
+    {
+        $result = self::whereIn('exception', $exception)->get();
+        return $result;
+    }
 }
 

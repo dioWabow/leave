@@ -134,8 +134,42 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeavesHrController@getEdit',
         ]);
     });
+
+    // 系統設定
+    Route::group(['prefix'=>'config'], function(){
+        Route::get('edit',[
+            'as'=>'config/edit',
+            'uses'=> 'SystemConfController@getIndex',
+        ]);
+
+
+        Route::post('update',[
+            'as'=>'config/update',
+            'uses'=> 'SystemConfController@postUpdate',
+        ]);
+    });
+    
+    // 我要放假
+    Route::group(['prefix'=>'leave'], function(){
+        Route::get('create', [
+            'as' => 'leave/create',
+            'uses' => 'LeaveController@getCreate',
+        ]);
+
+        Route::post('insert', [
+            'as' => 'leave/insert',
+            'uses' => 'LeaveController@postInsert',
+        ]);
+
+        Route::post('calculate_hours',[
+            'as' => 'leave/calculate_hours',
+            'uses' => 'LeaveController@calculate_hours',
+        ]);
+    });
     
 });
+
+
 
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
