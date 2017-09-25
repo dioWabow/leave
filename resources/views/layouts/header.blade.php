@@ -144,9 +144,9 @@
         </li>
         <li class="header">MINI-MANAGER</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'Mini_Manager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves/manager/prove', [ 'role' => 'minimanager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
-              @if (LeaveHelper::getProveManagerLeavesTabLable('Mini_Manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('Mini_Manager') }}</small>@endif
+              @if (LeaveHelper::getProveManagerLeavesTabLable('minimanager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('minimanager') }}</small>@endif
             </span>
           </a>
         </li>
@@ -156,9 +156,9 @@
         </li>
         <li class="header">MANAGER</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'Manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves/manager/prove', [ 'role' => 'manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
-                @if (LeaveHelper::getProveManagerLeavesTabLable('Manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('Manager') }}</small>@endif
+                @if (LeaveHelper::getProveManagerLeavesTabLable('manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('manager') }}</small>@endif
             </span>
           </a>
         </li>
@@ -168,9 +168,9 @@
         </li>
         <li class="header">BOSS</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'Admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves/manager/prove', [ 'role' => 'admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
-              @if(LeaveHelper::getProveManagerLeavesTabLable('Admin')> 0) <small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('Admin') }}</small>@endif
+              @if(LeaveHelper::getProveManagerLeavesTabLable('admin')> 0) <small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('admin') }}</small>@endif
             </span>
           </a>
         </li>

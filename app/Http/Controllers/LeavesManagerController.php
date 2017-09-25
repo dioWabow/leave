@@ -62,13 +62,13 @@ class LeavesManagerController extends Controller
             }
         }
         $model = new Leave;
-        if ( $this->role == 'Admin' && Auth::hasAdmin() == true) {
+        if ( $this->role == 'admin' && Auth::hasAdmin() == true) {
               
             $search['tag_id'] = ['4'];
             $search['hours'] = '24';
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
-        } elseif ($this->role == 'Manager' && !empty(Auth::hasManagement())) {
+        } elseif ($this->role == 'manager' && !empty(Auth::hasManagement())) {
 
             /* 確認從左側Manager 如果我是主管(確認我有所屬的team) */
 
@@ -81,12 +81,11 @@ class LeavesManagerController extends Controller
             $dataProvider_teams = $model->fill($order_by)->searchForProveInManager($search_teams);
             $dataProvider = $dataProvider_sub_teams->merge($dataProvider_teams);
             
-        } elseif ($this->role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
+        } elseif ($this->role == 'minimanager' && !empty(Auth::hasMiniManagement())) {
             
             $teams = Auth::hasMiniManagement();
             $search['user_id'] = UserTeam::getUserByTeams($teams);
             $search ['tag_id'] = ['2'];
-            
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
         } else {
@@ -108,6 +107,12 @@ class LeavesManagerController extends Controller
     */
     public function getUpcoming(Request $request)
     { 
+        if (!in_array($this->role,['manager','minimanager','admin'])) {
+
+            return Redirect::route('index')->withErrors(['msg' => '你無權限']);
+
+        }
+
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $getRole = $this->role;
@@ -150,6 +155,13 @@ class LeavesManagerController extends Controller
      */
     public function getHistory(Request $request)
     {
+
+        if (!in_array($this->role, ['manager','minimanager','admin'])) {
+            
+            return Redirect::route('index')->withErrors(['msg' => '你無權限']);
+        
+        }
+
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $getRole = $this->role;
@@ -279,52 +291,71 @@ class LeavesManagerController extends Controller
             if ($input['agree'] == 1) {
 
                 foreach ($input['leave_id'] as $leave_id) {
+
+                    $model = $this->loadModel($leave_id);
                     
-                    $input_create['tag_id'] = '9';
+                    if ($this->role == 'minimanager') {
+                        
+                        $input['tag_id'] = '3';
+    
+                    } elseif ($this->role == 'manager') {
+                        
+                        if ($model->hours > 24) {
+
+                            $input['tag_id'] = '4';
+
+                        } else {
+
+                            $input['tag_id'] = '9';
+
+                        }
+
+                    } elseif ($this->role == 'admin') {
+
+                        $input['tag_id'] = '9';
+
+                    }
+                    //修改主單記錄
+                    $input_update['id'] = $leave_id;
+                    $input_update['tag_id'] = $input['tag_id'];
+                    //新增記錄
                     $input_create['user_id'] = Auth::user()->id;
                     $input_create['leave_id'] = $leave_id;
                     $input_create['memo'] = $input['memo'];
-                    
-                     //新增記錄
-                    $leaveRespon= new LeaveRespon;
-                    $leaveRespon->fill($input_create);
-                    $leaveRespon->save();
-                    //修改主單記錄
-                    $leave = new Leave;
-                    $leave = $this->loadModel($leave_id);
-                    $input_update['id'] = $leave_id;
-                    $input_update['tag_id'] = '9';
-                    $leave->fill($input_update);
-                    $leave->save();
+                    $input_create['tag_id'] = $input['tag_id'];
 
                 }
 
             } else {
 
                 foreach ($input['leave_id'] as $leave_id) {
-                    
-                    $input_create['tag_id'] = '8';
-                    $input_create['user_id'] = Auth::user()->id;
+
+                    // 修改主單記錄
+                    $model = $this->loadModel($leave_id);
+                    $input_update['id'] = $leave_id;
+                    $input_update['tag_id'] = '8';
+
+                    //新增記錄
                     $input_create['leave_id'] = $leave_id;
+                    $input_create['user_id'] = Auth::user()->id;
+                    $input_create['tag_id'] = '8';
                     $input_create['memo'] = $input['memo'];
-                      //新增記錄
-                    $leaveRespon= new LeaveRespon;
-                    $leaveRespon->fill($input_create);
-                    $leaveRespon->save();
-                     //修改主單記錄
-                    $leave = new Leave;
-                    $leave = $this->loadModel($leave_id);
+                    
+                    
                     $input_update['tag_id'] = '8';
                     $input_update['id'] = $leave_id;
-                    $leave->fill($input_update);
-                    $leave->save();
+                    $model->fill($input_update);
+                    $model->save();
+
+                    $leave_respon = new LeaveRespon;
+                    $leave_respon->fill($input_create);
+                    $leave_respon->save();
 
                 }
 
             }
-            
-            return Redirect::route('leaves/manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
 
+            return Redirect::route('leaves/manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
         }
     }
 
@@ -407,9 +438,9 @@ class LeavesManagerController extends Controller
         $get_upcoming_leaves_id = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
         
         // 取得搜尋的區間為該主管不准假的子單記錄 
-        $get_unallowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time,$end_time,$get_not_leaves_id);
+        $get_unallowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_not_leaves_id);
         // 取得搜尋的區間為該主管已準假的子單記錄 
-        $get_allowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time,$end_time,$get_upcoming_leaves_id);
+        $get_allowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_upcoming_leaves_id);
         
         $result = $get_unallowed_id->merge($get_allowed_id);
         return $result;

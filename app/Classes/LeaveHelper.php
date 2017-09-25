@@ -21,15 +21,15 @@ class LeaveHelper
      */
     public static function getProveManagerLeavesTabLable($role)
     {
-        if ($role == 'Admin' && !empty(Auth::hasAdmin())) {
+        if ($role == 'admin' && !empty(Auth::hasAdmin())) {
 
             return self::getAdminLeavesTotal();
 
-        } elseif ($role == 'Manager' && !empty(Auth::hasManagement())) {
+        } elseif ($role == 'manager' && !empty(Auth::hasManagement())) {
 
             return self::getManagerAllLeavesTotal();
 
-        } elseif ($role == 'Mini_Manager' && !empty(Auth::hasMiniManagement())) {
+        } elseif ($role == 'minimanager' && !empty(Auth::hasMiniManagement())) {
 
             return self::getMiniManagerLeavesTotal();
 

@@ -29,7 +29,7 @@
               </thead>
             <tbody>
               @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="{{ route('leave/manager/edit', [ 'id' => $value->id ]) }}">
+              <tr class="clickable-row" data-href="{{ route('leaves/manager/edit', [ 'id' => $value->id ]) }}">
                 <td>
                   <input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
                 </td>
