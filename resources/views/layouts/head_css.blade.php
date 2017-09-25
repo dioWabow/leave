@@ -190,12 +190,14 @@ $(function () {
   /* 同不同意代理文字替換*/
   $('.btn-danger').on('click', function(){
     
+    $("#btn_agree").val(0);
     $(".modal-body h1").html("確定 <span class='text-red'>不能代理</span> 嗎？");
     
   });
 
   $('.btn-info').on('click', function(){
     
+    $("#btn_agree").val(1);
     $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");
 
   });

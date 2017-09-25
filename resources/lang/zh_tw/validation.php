@@ -149,6 +149,9 @@ return [
         'user.avatar' => [
             'image' => '大頭貼請選擇圖片',
         ],
+        'leave.leave_id' => [
+            'required' => '至少勾選一項',
+        ],
     ],
 
     /*

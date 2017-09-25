@@ -11,5 +11,13 @@ class LeaveRespon extends Model
      *
      * @var string
      */
-    protected $table = 'leaves_respons';
+    protected $table = 'leaves_responses';
+
+     //可以傳入數值的欄位
+     protected $fillable = [
+        'leave_id',
+        'user_id',
+        'tag_id',
+        'memo',
+    ];
 }

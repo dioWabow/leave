@@ -27,6 +27,9 @@
 							<input id="order_by" type="hidden" name="order_by[order_by]" value="">
 							<input id="order_way" type="hidden" name="order_by[order_way]" value="">
 						@endif
+						{!!csrf_field()!!}
+						</form>
+						<form action="{{ route('approve/insert') }}" method="POST">
 							<div class="row">
 								<div class="col-sm-12">
 									<table class="table table-bordered table-striped table-hover">
@@ -39,13 +42,11 @@
 												<th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
 											</tr>
 										</thead>
-									{!!csrf_field()!!}
-									</form>
 									<tbody>
 										@foreach ($dataProvider as $value)
 											<tr class="clickable-row" data-href="{{ route('approve/edit', [ 'id' => $value->id ]) }}">
 												<td>
-													<input type="checkbox" name="check" class="flat-red check" value="">
+													<input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
 												</td>
 												<td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
 													<td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
@@ -53,6 +54,11 @@
 												<td>{{ $value->hours }}</td>
 											</tr>
 										@endforeach
+										@if(count($dataProvider) == 0)
+											<tr class="">
+												<td colspan="9" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+											</tr>
+              			@endif
 									</tbody>
 								</table>
 							</div>
@@ -63,7 +69,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-commenting-o"></i>
 									</div>
-									<input type="text" id="leave_reason" name="leave[reason]" class="form-control pull-right" placeholder="請填寫原因(可不填）">
+									<input type="text" id="leave_reason" name="leave[memo]" class="form-control pull-right" placeholder="請填寫原因(可不填）">
 								</div>
 								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalConfirm">不同意代理</button>
 								<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalConfirm">同意代理</button>
@@ -86,9 +92,12 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn btn-primary">Send</button>
       </div>
     </div>
   </div>
 </div>
+<input type="hidden" id="btn_agree" name="leave[agree]" value="1">
+{!!csrf_field()!!}
+</form>
 @stop

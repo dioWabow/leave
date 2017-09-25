@@ -133,6 +133,11 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'AgentApproveController@getIndex',
         ]);
 
+        Route::post('insert',[
+            'as'=>'approve/insert',
+            'uses'=> 'AgentApproveController@postInsert',
+        ]);
+
         Route::any('edit/{id}',[
             'as'=>'approve/edit',
             'uses'=> 'AgentApproveController@getEdit',

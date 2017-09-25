@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Leave;
 use App\LeaveAgent;
+use App\LeaveRespon;
+use App\Http\Requests\AgentApproveRequest;
 
 use Auth;
+use Redirect;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -64,6 +67,71 @@ class AgentApproveController extends Controller
         return  view('leave_agent_view', compact(
             'model'
         ));
+    }
+
+    /**
+    * 新增 & 修改 => leaveResponses & Leave
+    *
+    * @param Request $request
+    * @return Redirect
+    */
+    public function postInsert(AgentApproveRequest $request)
+    {
+
+        if (!empty($request->input('leave'))) {
+
+            $input = $request->input('leave');
+            
+            if ($input['agree'] == 1) {
+
+                foreach ($input['leave_id'] as $leave_id) {
+                    
+                    $input_create['tag_id'] = '2';
+                    $input_create['user_id'] = Auth::user()->id;
+                    $input_create['leave_id'] = $leave_id;
+                    $input_create['memo'] = $input['memo'];
+                    
+                     //新增記錄
+                    $leaveRespon = new LeaveRespon;
+                    $leaveRespon->fill($input_create);
+                    $leaveRespon->save();
+                    //修改主單記錄
+                    $leave = new Leave;
+                    $leave = $this->loadModel($leave_id);
+                    $input_update['id'] = $leave_id;
+                    $input_update['tag_id'] = '2';
+                    $leave->fill($input_update);
+                    $leave->save();
+
+                }
+
+            } else {
+
+                foreach ($input['leave_id'] as $leave_id) {
+                    
+                    $input_create['tag_id'] = '8';
+                    $input_create['user_id'] = Auth::user()->id;
+                    $input_create['leave_id'] = $leave_id;
+                    $input_create['memo'] = $input['memo'];
+                      //新增記錄
+                    $leaveRespon= new LeaveRespon;
+                    $leaveRespon->fill($input_create);
+                    $leaveRespon->save();
+                     //修改主單記錄
+                    $leave = new Leave;
+                    $leave = $this->loadModel($leave_id);
+                    $input_update['tag_id'] = '8';
+                    $input_update['id'] = $leave_id;
+                    $leave->fill($input_update);
+                    $leave->save();
+
+                }
+
+            }
+            
+            return Redirect::route('approve/index')->with('success', '批准成功 !');
+
+        }
     }
 
     /**
