@@ -112,12 +112,14 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li @if(Request::is('user/*'))class="active" @endif>
+        <li @if(Request::is('index/*'))class="active" @endif>
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class=""><a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li @if(Request::is('leave/*'))class="active" @endif>
+          <a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a>
+        </li>
         <li class="">
           <a href="#"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
@@ -125,7 +127,7 @@
             </span>
           </a>
         </li>
-        <li class="">
+        <li @if(Request::is('leave_assist/*'))class="active" @endif>
           <a href="{{ route('leave_assist/getIndex') }}"><i class="fa fa-hand-spock-o"></i> <span>協助申請請假</span>
           </a>
         </li>
