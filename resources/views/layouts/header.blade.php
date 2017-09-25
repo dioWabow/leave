@@ -5,9 +5,9 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="{{ UrlHelper::getCompanyLogoUrl(ConfigHelper::getConfigValueByKey('company_logo') )}}"></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>哇寶</b>請假系統</span>
+      <span class="logo-lg"><b>{{ConfigHelper::getConfigValueByKey('company_short_name')}}</b>請假系統</span>
     </a>
 
     <!-- Header Navbar -->
@@ -65,7 +65,7 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">{{LeaveHelper::calculateAnnualDate()}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
@@ -117,7 +117,7 @@
         </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class=""><a href="#"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
+        <li class=""><a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
         <li class="">
           <a href="#"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
@@ -199,7 +199,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="#"><i class="fa fa-circle-o"></i>系統設定</a></li>
+            <li class=""><a href="{{ route('config/edit') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>團隊設定</a></li>
               <li @if(Request::is('user/*'))class="active" @endif><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>

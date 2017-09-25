@@ -211,7 +211,7 @@ $(function () {
     $("#user_fileupload").fileinput({
         @if(!empty($model->avatar))
         initialPreview: [
-            '{{route("root_path")}}/storage/avatar/{{$model->avatar}}?v=' + Math.random()
+            '{{UrlHelper::getUserAvatarUrl($model->avatar)}}'
         ],
         @endif
         initialPreviewAsData: true,

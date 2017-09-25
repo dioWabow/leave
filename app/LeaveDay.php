@@ -6,6 +6,17 @@ use Carbon\Carbon;
 
 class LeaveDay extends BaseModel
 {
+    //可以傳入數值的欄位
+    protected $fillable = [
+        'leave_id',
+        'type_id',
+        'start_time',
+        'end_time',
+        'hours',
+        'create_user_id',
+        'user_id',
+    ];
+
     /**
      * 與Model關聯的table
      *

@@ -149,6 +149,13 @@ return [
         'user.avatar' => [
             'image' => '大頭貼請選擇圖片',
         ],
+	 'leave.timepicker' => [
+            'required' => '請選擇請假時間',
+        ],
+        'leave.type_id' => [
+            'required' => '請選擇假別',
+            'Integer' => '請選擇假別',
+        ],
     ],
 
     /*

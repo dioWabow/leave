@@ -23,7 +23,7 @@ class BaseModel extends Model
 
         static::saving(function ($model) {
             foreach ($model->getAttributes() as $key => $value) {
-                if(!Schema::hasColumn($model->getTable(), $key)) 
+                if(!Schema::hasColumn($model->getTable(), $key))
                     unset($model->$key);
             }
         });

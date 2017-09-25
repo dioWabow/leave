@@ -188,6 +188,18 @@ return [
          * Custom Service Providers...
          */
         App\Providers\ImageHelperServiceProvider::class,
+        /*
+         * 假別計算
+         */
+        App\Providers\LeaveHelperServiceProvider::class,
+        /*
+         * 時間套件
+         */
+        App\Providers\TimeHelperServiceProvider::class,
+        /*
+         * 上傳檔案
+         */
+        App\Providers\AttachHelperServiceProvider::class,
         App\Providers\WebHelperServiceProvider::class,
         App\Providers\UrlHelperServiceProvider::class,
         App\Providers\LeaveHelperServiceProvider::class,
@@ -246,6 +258,9 @@ return [
         /**
          * HELPER
          */
+        'LeaveHelper' => App\Facades\LeaveHelper::class,
+        'TimeHelper' => App\Facades\TimeHelper::class,
+        'AttachHelper' => App\Facades\AttachHelper::class,
         'ImageHelper' => App\Facades\ImageHelper::class,
         'WebHelper' => App\Facades\WebHelper::class,
         'UrlHelper' => App\Facades\UrlHelper::class,

@@ -15,7 +15,7 @@ class Leave extends BaseModel
         'hours',
         'reason',
         'prove',
-        'creat_user_id',
+        'create_user_id',
         'order_by',
         'order_way',
         'pagesize',
@@ -130,6 +130,7 @@ class Leave extends BaseModel
     {
         $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
     	return $result;
+    
     }
 
     public function fetchUser()

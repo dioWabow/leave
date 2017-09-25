@@ -23,11 +23,10 @@ class Type extends BaseModel
     ];
     
     protected $attributes = [
-        'order_by' => "id",
-        'order_way' => "DESC",
+        'order_by' => 'id',
+        'order_way' => 'DESC',
         'pagesize' => '25',
     ];
-
 
     /**
      * 搜尋table多個資料
@@ -77,3 +76,4 @@ class Type extends BaseModel
         return $result;
     }
 }
+
