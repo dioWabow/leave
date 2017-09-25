@@ -63,11 +63,6 @@
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <!-- 全部共用 -->
-<style type="text/css">
-  li .active {
-    border-left: 3px solid #3c8dbc;
-  }
-</style>
 <script>
 $(function () {
   $('.table').on("click", ".clickable-row", function(e) {
