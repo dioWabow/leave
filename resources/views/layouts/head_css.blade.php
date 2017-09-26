@@ -820,3 +820,58 @@ $(function () {
 });
 </script>
 @endif
+<!-- 團隊假單頁面用-HR -->
+@if(Request::is('leaves_hr/*'))
+  @if(Request::is('leaves_hr/history'))
+  <script>
+  $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_daterange = $('#search_daterange');
+    var time = $search_daterange.val();
+
+    $("#search_daterange").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+      maxDate: yyyy + '-' + mm + '-' + dd
+    });
+        
+    $("#search_daterange").val(time);
+    
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+  });
+  function changePageSize(pagesize)
+  {
+    $("#frmOrderby").submit();
+  }
+  </script>
+  @endif
+  @if (Request::is('leaves_hr/prove','leaves_hr/upcoming','leaves_hr/history'))
+  <script>
+  $(function () {
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderby").submit();
+    });
+  });
+  </script>
+  @endif
+@endif

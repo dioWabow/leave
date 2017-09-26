@@ -57,12 +57,6 @@ class LeaveAgent extends BaseModel
         return $result;
     }
 
-    public function fetchLeave()
-    {
-        $result = $this->hasOne('App\Leave', 'id' , 'leave_id');
-        return $result;
-    }
-
     public static function getLeaveIdByUserId($id) {
         
         $result = self::where('agent_id', $id)->get()->pluck('leave_id');
@@ -73,6 +67,18 @@ class LeaveAgent extends BaseModel
     public static function getAgentIdByLeaveId($leave_id)
     {
         $result = self::where('leave_id', $leave_id)->get();
+
+    }
+    
+    public static function getLeaveIdByAgentId($leave_id)
+    {
+        $result = self::where('leave_id',$leave_id)->get();
+        return $result;
+    }
+
+    public function fetchLeave()
+    {
+        $result = $this->hasOne('App\Leave', 'id' , 'leave_id');
         return $result;
     }
 
@@ -81,5 +87,4 @@ class LeaveAgent extends BaseModel
         $result = self::hasOne('App\User', 'id', 'agent_id');
         return $result;
     }
-
 }

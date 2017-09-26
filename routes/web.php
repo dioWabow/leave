@@ -96,20 +96,6 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-    # 特休報表
-    Route::group(['prefix'=>'annual_report'], function(){
-        Route::any('index',[
-            'as'=>'annual_report/index',
-            'uses'=> 'AnnualReportController@getIndex',
-        ]);
-
-        Route::get('view/{id}/{year}', [
-            'as' => 'annual_report/view',
-            'uses' => 'AnnualReportController@getView',
-        ]);
-    });
-    
-
     // 團隊設定
     Route::group(['prefix'=>'teams'], function(){
         Route::get('index',[
@@ -232,6 +218,30 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+   
+    # 團隊假單-HR
+    Route::group(['prefix'=>'leaves_hr'], function(){
+        Route::any('prove',[
+            'as'=>'leaves_hr/prove',
+            'uses'=> 'LeavesHrController@getProve',
+        ]);
+        
+        Route::any('upcoming',[
+            'as'=>'leaves_hr/upcoming',
+            'uses'=> 'LeavesHrController@getUpcoming',
+        ]);
+        
+        Route::any('history',[
+            'as'=>'leaves_hr/history',
+            'uses'=> 'LeavesHrController@getHistory',
+        ]);
+
+        Route::get('edit/{id}',[
+            'as'=>'leaves_hr/edit',
+            'uses'=> 'LeavesHrController@getEdit',
+        ]);
+    });
+
     // 報表
     Route::group(['prefix'=>'report'], function(){
         Route::any('index',[
@@ -242,6 +252,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('vacation',[
             'as' => 'report/vacation',
             'uses' => 'ReportController@getUserData'
+        ]);
+    });
+
+    # 特休報表
+    Route::group(['prefix'=>'annual_report'], function(){
+        Route::any('index',[
+            'as'=>'annual_report/index',
+            'uses'=> 'AnnualReportController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'annual_report/view',
+            'uses' => 'AnnualReportController@getView',
         ]);
     });
 
@@ -284,7 +307,27 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeavesMyController@getEdit',
         ]);
     });
+    
+    // 我要放假
+    Route::group(['prefix'=>'leave'], function(){
+        Route::get('create', [
+            'as' => 'leave/create',
+            'uses' => 'LeaveController@getCreate',
+        ]);
+
+        Route::post('insert', [
+            'as' => 'leave/insert',
+            'uses' => 'LeaveController@postInsert',
+        ]);
+
+        Route::post('calculate_hours',[
+            'as' => 'leave/calculate_hours',
+            'uses' => 'LeaveController@calculate_hours',
+        ]);
+    });
 });
+
+
 
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',

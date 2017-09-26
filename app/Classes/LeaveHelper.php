@@ -2,22 +2,20 @@
 
 namespace App\Classes;
 
-use App\Holiday;
+use TimeHelper;
 use App\Leave;
-use App\LeaveDay;
-use App\LeaveAgent;
 use App\User;
 use App\Type;
 use App\AnnualHour;
-use TimeHelper;
+use App\LeaveAgent;
+use App\LeaveDay;
 
 use Auth;
-use Session;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Input;
 
 class LeaveHelper
 {
+
     private  $user_id;
     private  $birthday;
     private  $enter_date;
@@ -892,27 +890,8 @@ class LeaveHelper
          return $result;
      }
      
-     /**
-      * 傳入start_time 取得 倒數天數
-      * 
-      * 
-      */
-     public function getDiffDaysLabel($data)
-     {
-         $today = Carbon::now();
-         $start_time = Carbon::parse($data);
-         $result = '';
- 
-         if ($start_time->gte($today))  {
- 
-             $result = $today->diffInDays(Carbon::parse($start_time));
- 
-         } 
- 
-         return $result;
-     }
 
-      /**
+    /**
      * 我的假單
      * 取得 user的等待核准假單數量
      * tag 狀態 1,2,3,4
@@ -933,13 +912,60 @@ class LeaveHelper
      * tag 狀態 9
      * 
      */
-    public static function getUpComingMyLeavesTotalByUserId()
+     public static function getUpComingMyLeavesTotalByUserId()
+     {
+         $model = new Leave;
+         $search['user_id'] = Auth::user()->id;
+         $search['tag_id'] = ['9'];
+         $search['start_time'] = Carbon::now()->format('Y-m-d');
+         $result = $model->searchForProveAndUpComInMy($search)->count();
+         return $result;
+     }
+    
+    /**
+     * 計算HR可查看等待審核的假單
+     * tag 狀態 1,2,3,4
+     * 
+     */
+    public static function getHrProveLeavesTotal()
+    {
+        $tag_id = ['1','2','3','4'];
+        $result = Leave::whereIn('tag_id', $tag_id)->count();
+        return $result;
+    }
+    
+    /*
+     * 計算HR可查看即將放假的假單
+     * tag 狀態 9
+     * 
+     */
+    public static function getHrUpComingLeavesTotal()
     {
         $model = new Leave;
-        $search['user_id'] = Auth::user()->id;
         $search['tag_id'] = ['9'];
         $search['start_time'] = Carbon::now()->format('Y-m-d');
-        $result = $model->searchForProveAndUpComInMy($search)->count();
+        $result = $model->searchForProveAndUpComInHr($search)->count();
+        return $result;
+    }
+
+    
+    /**
+     * 傳入start_time 取得 倒數天數
+     * 
+     * 
+     */
+    public function getDiffDaysLabel($data)
+    {
+        $today = Carbon::now();
+        $start_time = Carbon::parse($data);
+        $result = '';
+
+        if ($start_time->gte($today))  {
+
+            $result = $today->diffInDays(Carbon::parse($start_time));
+
+        } 
+
         return $result;
     }
 

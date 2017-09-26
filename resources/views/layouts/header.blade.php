@@ -180,10 +180,10 @@
         @endif
         @if( Auth::hasHr() )
         <li class="header">HUMAN-RESOURCE</li>
-        <li class="">
-          <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+        <li @if(Request::is('leaves_hr/*')) class="active" @endif>
+          <a href="{{ route('leaves_hr/prove') }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">2</small>
+              @if(LeaveHelper::getHrProveLeavesTotal()>0) <small class="label pull-right bg-red">{{ LeaveHelper::getHrProveLeavesTotal() }}</small>@endif
             </span>
           </a>
         </li>
@@ -226,7 +226,6 @@
           </a>
           <ul class="treeview-menu">
             <li  @if(Request::is('report/*')) class="active" @endif><a href="{{ route('report/index') }}"><i class="fa fa-circle-o"></i>報表</a></li>
-            <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
             @if( Auth::hasAdmin() )
             <li @if(Request::is('annual_report/*')) class="active" @endif ><a href="{{ route('annual_report/index') }}"><i class="fa fa-circle-o"></i>特休報表</a></li>
             <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>

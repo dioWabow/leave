@@ -33,7 +33,7 @@ class Leave extends BaseModel
         'end_time' => '',
         'exception' => '',
     ];
-    
+
     /**
     * 搜尋table多個資料 (我的假單等待審核 + 即將放假)
     * 若有多個傳回第一個
@@ -74,16 +74,16 @@ class Leave extends BaseModel
         $result = $query->paginate($this->pagesize);
         return $result;
     }
-    
+
     /**
-    * 搜尋table多個資料 (我的假單歷史紀錄)
-    * 若有多個傳回第一個
-    *
-    * @param  array   $where     搜尋條件
-    * @param  int     $page      頁數(1為開始)
-    * @param  int     $pagesize  每頁筆數
-    * @return 資料object/false
-    */
+     * 搜尋table多個資料 (我的假單歷史紀錄)
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
     public function searchForHistoryInMy($where = [])
     {
         $query = self::OrderedBy();
@@ -126,7 +126,7 @@ class Leave extends BaseModel
     }
 
     /**
-     * 搜尋table多個資料 - 我是代理人條件搜尋
+     * 搜尋table多個資料 (HR團隊假單 等待審核 + 即將放假)
      * 若有多個傳回第一個
      *
      * @param  array   $where     搜尋條件
@@ -134,32 +134,79 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForLeaveAgent($where = [])
-    {
-        $query = self::OrderedBy();
-        foreach ($where as $key => $value) {
-
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
-
-                if ($key == 'id') {
-                    
-                    $query->whereIn('id', $value);
-
-                } elseif ($key == 'start_time') {
-                    
-                    $query->where('start_time', '>=', $value);
-
-                } else {
-
-                    $query->where($key, $value);
-
-                } 
-            }
-        }
-
-        $result = $query->paginate($this->pagesize);
-        return $result;
-    }
+     public function searchForProveAndUpComInHr($where = [])
+     {
+         $query = self::OrderedBy();
+         
+         foreach ($where as $key => $value) {
+             
+             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+ 
+                 if ($key == 'tag_id') {
+ 
+                     $query->whereIn('tag_id', $value);
+ 
+                 } elseif ($key == 'start_time') {
+ 
+                     $query->where('start_time', '>=' , $value);
+                     
+                 } else {
+ 
+                     $query->where($key, $value);
+ 
+                 } 
+             }
+         }
+ 
+         $result = $query->paginate($this->pagesize);
+         return $result;
+     }
+ 
+     /**
+      * 搜尋table多個資料 (HR團隊假單 等待審核 + 即將放假)
+      * 若有多個傳回第一個
+      *
+      * @param  array   $where     搜尋條件
+      * @param  int     $page      頁數(1為開始)
+      * @param  int     $pagesize  每頁筆數
+      * @return 資料object/false
+      */
+     public function searchForHistoryInHr($where = [])
+     {
+         $query = self::OrderedBy();
+         
+         foreach ($where as $key => $value) {
+             
+             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+ 
+             if ($key == 'tag_id') {
+                 
+                 if (!is_array($value)){
+                     //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                     $value = explode(',', $value);
+ 
+                 } 
+                     $query->whereIn('tag_id', $value);
+ 
+                 } elseif ($key == 'id' && !empty($value)) {
+                     
+                     $query->whereIn('id', $value);
+ 
+                 } elseif ($key == 'start_time') {
+ 
+                     $query->where('start_time', '<' , $value);
+                     
+                 } else {
+ 
+                     $query->where($key, $value);
+ 
+                 } 
+             }
+         }
+ 
+         $result = $query->paginate($this->pagesize);
+         return $result;
+     }
 
     public function scopeOrderedBy($query)
     {
@@ -195,6 +242,43 @@ class Leave extends BaseModel
         return $result;
     }
 
+    /**
+     * 搜尋table多個資料 - 我是代理人條件搜尋
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+     public function searchForLeaveAgent($where = [])
+     {
+         $query = self::OrderedBy();
+         foreach ($where as $key => $value) {
+ 
+             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+ 
+                 if ($key == 'id') {
+                     
+                     $query->whereIn('id', $value);
+ 
+                 } elseif ($key == 'start_time') {
+                     
+                     $query->where('start_time', '>=', $value);
+ 
+                 } else {
+ 
+                     $query->where($key, $value);
+ 
+                 } 
+             }
+         }
+ 
+         $result = $query->paginate($this->pagesize);
+         return $result;
+     }
+ 
+    
     public function fetchUser()
     {
         $result = $this->hasOne('App\User', 'id' , 'user_id');
@@ -207,15 +291,15 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public function fetchUserTeam()
-    {
-        $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
-        return $result;
-    }
-
     public function fetchTag()
     {
         $result = $this->hasOne('App\Tag', 'id', 'tag_id');
+        return $result;
+    }
+
+    public function fetchUserTeam()
+    {
+        $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
         return $result;
     }
 

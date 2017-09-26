@@ -1,7 +1,6 @@
-<!-- /.tab-pane -->
-<div class="{{Request::is('leaves_my/history') ? 'active' : ''}} tab-pane">
+<div class="{{(Request::is('leaves_hr/history')) ? 'active' : ''}} tab-pane">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my/history') }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr/history') }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -15,7 +14,7 @@
             <label>
               每頁
               <select name="order_by[pagesize]" class="form-control input-sm" onchange="changePageSize(this.value);">
-                <option value="25"@if(count($model->order_by) >0 && $model->pagesize == "25") selected="selected" @endif>25</option>
+                  <option value="25"@if(count($model->order_by) >0 && $model->pagesize == "25") selected="selected" @endif>25</option>
                   <option value="50"@if(count($model->order_by) >0 && $model->pagesize == "50") selected="selected" @endif>50</option>
                   <option value="100"@if(count($model->order_by) >0 && $model->pagesize == "100") selected="selected" @endif>100</option>
               </select>
@@ -39,14 +38,13 @@
               </select>
               &nbsp;
               區間：
-              <input type="text" id="search_daterange" name="search[daterange]" value="@if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
+              <input type="text" id="search_daterange" name="search[daterange]" value="@if(!empty($model->start_time)) {{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
               </label>
               &nbsp;
               <label>
               狀態：
               <select id="search_tag_id" name="search[tag_id]" class="form-control">
-                <option value="7,8,9" selected="selected">全部</option>
-                <option value="7" @if (count($search)>2 && $search['tag_id'] == '7') selected="selected" @endif>已取消</option>
+                <option value="8,9" selected="selected">全部</option>
                 <option value="8" @if (count($search)>2 && $search['tag_id'] == '8') selected="selected" @endif>不准假</option>
                 <option value="9" @if (count($search)>2 && $search['tag_id'] == '9') selected="selected" @endif>已准假</option>
               </select>
@@ -59,7 +57,7 @@
           </div>
         </div>
       </div>
-      {!!csrf_field()!!}
+    {!!csrf_field()!!}
     </form>
     <div class="row">
       <div class="col-sm-12">
@@ -67,34 +65,37 @@
           <thead>
             <tr>
               <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="13%">代理人</a></th>
-              <th width="9%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
+              <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+              <th width="8%"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
+              <th width="18%"><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
+              <th width="30%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+              <th width="8%">代理人</a></th>
+              <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
             </tr>
           </thead>
           <tbody>
-          @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="{{ route('leaves_my/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
+           @foreach ($dataProvider as $value)
+            <tr class="clickable-row" data-href="{{ route('leaves_hr/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
-                  @if($value->tag_id == 7) class="btn"
-                  @elseif($value->tag_id == 8) class="btn bg-maroon"
+                  @if($value->tag_id == 8) class="btn bg-maroon"
                   @elseif($value->tag_id == 9) class="btn bg-navy"
                   @endif>
                   {{ WebHelper::getLeaveTagsLabelForHistory($value->tag_id) }}
                 </button>
               </td>
-              <td>{{ $value->fetchType->name }}</td>
-              <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
-              <td>{{ $value->reason }}</td>
+            <td>
+              <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{$value->fetchUser->nickname}}" width="50px">
+            </td>
+            <td>{{ $value->fetchType->name }}</td>
+            <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+            <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{$agent->fetchUser->nickname}}" width="50px">
                 @endforeach
               </td>
-              <td>{{ $value->hours }}</td>
+              <td id="hours">{{ $value->hours }}</td>
             </tr>
             @endforeach
             @if(count($dataProvider) == 0)
@@ -103,16 +104,6 @@
             </tr>
             @endif
           </tbody>
-          <tfotter>
-            <tr class="text-red">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="pull-right">總計(Hr)</th>
-              <th>{{ $leaves_totle_hours }}</th>
-            </tr>
-          </tfotter>
         </table>
       </div>
     </div>
@@ -120,14 +111,10 @@
       <div class="col-sm-12">
         <ul class="pagination">
           <li class="paginate_button previous disabled">
-            <li>
-              {{ $dataProvider->links() }}
-            </li>
+            {{ $dataProvider->links() }}
           </li>
         </ul>
       </div>
     </div>
   </div>
-</div>
-<!-- /.tab-pane -->
 </div>

@@ -68,6 +68,14 @@ class Type extends BaseModel
         return $result;
     }
     
+    public static function getTypeIdByException($exception)
+    {
+        $result = Type::where('exception', $exception)
+                        ->get()
+                        ->pluck('id');
+        return $result;
+    }
+
     public static function getAllType() 
     {
         $result = self::get();
@@ -77,15 +85,6 @@ class Type extends BaseModel
     public static function getTypeByException($exception)
     {
         $result = self::whereIn('exception', $exception)->get();
-        return $result;
-    }
-
-
-    public static function getTypeIdByException($exception)
-    {
-        $result = Type::where('exception', $exception)
-                        ->get()
-                        ->pluck('id');
         return $result;
     }
 }

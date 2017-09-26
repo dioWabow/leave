@@ -31,7 +31,7 @@
                 <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
                 <td>{{ $value->reason }}</td>
                 <td>
-                  @foreach (App\LeaveAgent::getAgentIdByLeaveId($value->id) as $agent)
+                  @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
                     <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                   @endforeach
                 </td>
