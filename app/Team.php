@@ -2,14 +2,22 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Team extends Model
+class Team extends BaseModel
 {
     /**
      * 與Model關聯的table
      *
      * @var string
      */
-    protected $table = 'teams';
+    public static function getAllTeam() 
+    {
+        $result = self::get();
+        return $result;
+    }
+    
+    public static function getColorByKey($key = '')
+    {
+	$result = self::where('id', $key)->pluck('color')->first();
+	return $result;
+    }
 }
