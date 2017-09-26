@@ -73,7 +73,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getEdit(Request $request,$id = '') 
+    public function getEdit(Request $request, $id = '') 
     {
 
         $model = $this->loadModel($id);

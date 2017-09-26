@@ -22,6 +22,15 @@ class UrlHelper
     {
         return (!empty($filename)) ? url(Storage::url('avatar/' . $filename)) . self::getRandom() : '#';
     }
+    /**
+     * 取得上傳檔案路徑
+     *
+     *  @return string
+     */
+    public static function getLeaveProveUrl($filename)
+    {
+        return (!empty($filename)) ? url(Storage::url('prove/' . $filename)) . self::getRandom() : '#';
+    }
 
     public function getCompanyLogoUrl($filename)
     {

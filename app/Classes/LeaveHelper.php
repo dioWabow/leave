@@ -8,6 +8,10 @@ use App\LeaveDay;
 use App\User;
 use App\Type;
 use App\AnnualHour;
+use App\LeaveResponse;
+use App\UserTeam;
+use App\Team;
+use App\LeaveAgent;
 use TimeHelper;
 
 use Auth;
@@ -873,6 +877,67 @@ class LeaveHelper
             } 
 
         }
+
+    }
+
+    public function getLeaveProveProcess($id)
+    {
+        $leave_prove_process = [];
+
+        $leave_user_id = Leave::find($id)->user_id;
+
+        // 判斷有沒有代理人審核
+        $leave_response = LeaveResponse::getResponseByLeaveIdAndTagId($id , '2');
+        if (count($leave_response) > 0) {
+
+            //如果有就走該代理人後續的審核流程顯示
+            $agent_user_id = $leave_response->first()->user_id;
+
+        } else {
+
+            //如果沒有找尋其中一個代理人顯示
+            if (count(LeaveAgent::getAgentByLeaveId($id)) > 0) {
+
+                $agent_user_id = LeaveAgent::getAgentByLeaveId($id)->first()->agent_id;
+
+            }
+
+        }
+
+        if (!empty($agent_user_id)) {
+
+            $leave_prove_process['agent'] = User::find($agent_user_id);
+
+        }
+
+        //請假人team id
+        $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
+
+        //請假人team裡的主管id
+        $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
+
+        //請假人的parent_team id
+        $team_parent_id = Team::find($leave_user_team_id)->parent_id;
+
+        if (empty($team_parent_id)) {
+
+            $leave_prove_process['manager'] = User::find($team_manger_id);
+
+        } else {
+
+            $leave_prove_process['minimanager'] = User::find($team_manger_id);
+
+            $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+
+        }
+
+        if (Leave::find($id)->hours > 24) {
+
+            $leave_prove_process['admin'] = User::getUserByRole('admin')->first();
+
+        }
+
+        return $leave_prove_process;
 
     }
 

@@ -17,4 +17,9 @@ class LeaveAgent extends BaseModel
      */
     protected $table = 'leaves_agents';
     
+    public static function getAgentByLeaveId($leave_id)
+    {
+        $result = self::where('leave_id', $leave_id)->get();
+        return $result;
+    }
 }

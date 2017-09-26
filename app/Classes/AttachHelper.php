@@ -106,4 +106,17 @@ class AttachHelper
 
         }
     }
+
+    public function deleteFile($name, $folder = 'tmp')
+    {
+        if (Storage::delete($this->upload_path . $folder . '/' . $name)) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
 }

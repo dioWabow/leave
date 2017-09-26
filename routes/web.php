@@ -131,8 +131,9 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
-    // 我要放假
+    
     Route::group(['prefix'=>'leave'], function(){
+        // 我要放假
         Route::get('create', [
             'as' => 'leave/create',
             'uses' => 'LeaveController@getCreate',
@@ -146,6 +147,32 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('calculate_hours',[
             'as' => 'leave/calculate_hours',
             'uses' => 'LeaveController@calculate_hours',
+        ]);
+
+        //我的假單詳細頁
+        Route::any('edit/{id}', [
+            'as' => 'leave/edit',
+            'uses' => 'LeaveController@getEdit',
+        ]);
+
+        Route::post('update', [
+            'as' => 'leave/update',
+            'uses' => 'LeaveController@postUpdate',
+        ]);
+
+        Route::post('update', [
+            'as' => 'leave/update',
+            'uses' => 'LeaveController@postUpdate',
+        ]);
+
+        Route::post('upload', [
+            'as' => 'leave/upload',
+            'uses' => 'LeaveController@postUpload',
+        ]);
+
+        Route::post('delete', [
+            'as' => 'leave/delete',
+            'uses' => 'LeaveController@postDelete',
         ]);
     });
 

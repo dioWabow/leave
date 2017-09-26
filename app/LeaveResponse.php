@@ -20,4 +20,32 @@ class LeaveResponse extends Model
         'tag_id',
         'memo',
     ];
+
+    public static function getResponseByLeaveId($leave_id)
+    {
+        $result = self::where('leave_id' , $leave_id)
+            ->orderBy('created_at','DESC')
+            ->get();
+        return $result;
+    }
+
+    public static function getResponseByLeaveIdAndTagId($leave_id , $tag_id)
+    {
+        $result = self::where('leave_id' , $leave_id)
+            ->where('tag_id' , $tag_id)
+            ->get();
+        return $result;
+    }
+
+    public function fetchUser()
+    {
+        $result = $this::hasOne('App\User','id','user_id');
+        return $result;
+    }
+
+    public function fetchTag()
+    {
+        $result = $this::hasOne('App\Tag','id','tag_id');
+        return $result;
+    }
 }
