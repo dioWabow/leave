@@ -113,24 +113,24 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 團隊假單-HR
-    Route::group(['prefix'=>'leaves/hr'], function(){
+    Route::group(['prefix'=>'leaves_hr'], function(){
         Route::any('prove',[
+            'as'=>'leaves_hr/prove',
             'uses'=> 'LeavesHrController@getProve',
-            'as'=>'leaves_hr_prove',
         ]);
         
         Route::any('upcoming',[
+            'as'=>'leaves_hr/upcoming',
             'uses'=> 'LeavesHrController@getUpcoming',
-            'as'=>'leaves_hr_upcoming',
         ]);
         
         Route::any('history',[
+            'as'=>'leaves_hr/history',
             'uses'=> 'LeavesHrController@getHistory',
-            'as'=>'leaves_hr_history',
         ]);
 
         Route::get('edit/{id}',[
-            'as'=>'leaves/hr/edit',
+            'as'=>'leaves_hr/edit',
             'uses'=> 'LeavesHrController@getEdit',
         ]);
     });

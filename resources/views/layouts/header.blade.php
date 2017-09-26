@@ -175,8 +175,8 @@
               </a>
         </li>
         <li class="header">HUMAN-RESOURCE</li>
-        <li @if(Request::is('leaves/hr/*')) class="active" @endif>
-          <a href="{{ route('leaves_hr_prove') }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+        <li @if(Request::is('leaves_hr/*')) class="active" @endif>
+          <a href="{{ route('leaves_hr/prove') }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               @if(LeaveHelper::getHrProveLeavesTotal()>0) <small class="label pull-right bg-red">{{ LeaveHelper::getHrProveLeavesTotal() }}</small>@endif
             </span>

@@ -1,5 +1,5 @@
-<div class="{{(Request::is('leaves/hr/upcoming')) ? 'active' : ''}} tab-pane">
-<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr_upcoming') }}" method="POST">
+<div class="{{(Request::is('leaves_hr/upcoming')) ? 'active' : ''}} tab-pane">
+<form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_hr/upcoming') }}" method="POST">
   <table class="table table-bordered table-striped table-hover">
     @if(count($model->order_by)>0)
       <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       @foreach ($dataProvider as $value)
-        <tr class="clickable-row" data-href="{{ route('leaves/hr/edit', [ 'id' => $value->id ]) }}">
+        <tr class="clickable-row" data-href="{{ route('leaves_hr/edit', [ 'id' => $value->id ]) }}">
           <td>
             <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
           </td>

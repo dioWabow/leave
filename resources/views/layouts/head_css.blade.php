@@ -119,8 +119,8 @@ $(function () {
 </script>
 @endif
 <!-- 團隊假單頁面用-HR -->
-@if(Request::is('leaves/hr/*'))
-  @if(Request::is('leaves/hr/history'))
+@if(Request::is('leaves_hr/*'))
+  @if(Request::is('leaves_hr/history'))
   <script>
   $(function () {
     var today = new Date();
@@ -152,7 +152,7 @@ $(function () {
   }
   </script>
   @endif
-  @if (Request::is('leaves/hr/prove','leaves/hr/upcoming','leaves/hr/history'))
+  @if (Request::is('leaves_hr/prove','leaves_hr/upcoming','leaves_hr/history'))
   <script>
   $(function () {
     $(".sort").on("click", function(){
