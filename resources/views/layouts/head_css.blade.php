@@ -147,23 +147,61 @@ $(function () {
 @endif
 
 <!-- 我的假單頁面用 -->
+@if(Request::is('leaves_my/*'))
+  @if(Request::is('leaves_my/history'))
   <script>
-$(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
+    $(function () {
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      var $search_daterange = $('#search_daterange');
+      var time = $search_daterange.val();
+      $("#search_daterange").daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+          maxDate: yyyy + '-' + mm + '-' + dd
+      });
+      
+      $("#search_daterange").val(time);
+      
+      $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      });
 
-    $('#search_daterange').val('');
-
-    $("#leave_view_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/unsplash2.jpg'
-        ],
-        initialPreviewAsData: true,
+      $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+      });
     });
-});
-</script>
+    
+    function changePageSize(pagesize)
+    {
+      $("#frmOrderby").submit();
+    }
+  </script>
+  @endif
+  @if (Request::is('leaves_my/prove','leaves_my/upcoming','leaves_my/history'))
+  <script>
+  $(function () {
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderby").submit();
+    });
+  });
+  </script>
+  @endif
+@endif
+
 @if(Request::is('disaster/*'))
 <!--天災假調整用-->
 @if(Request::is('holidies/*'))
@@ -680,7 +718,6 @@ $(function () {
 });
 </script>
 @endif
-
 <!-- 員工管理用 -->
 @if(Request::is('user/*'))
 @if(Request::is('user/index'))

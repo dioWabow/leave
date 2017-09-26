@@ -148,4 +148,9 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getAgentIdByUsers($agent_id)
+    {
+        $result = self::where('id', $agent_id)->get();
+        return $result;
+    }
 }

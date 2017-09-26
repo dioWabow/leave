@@ -24,22 +24,22 @@
             <!-- Menu toggle button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
+              @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<span class="label label-warning">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</span>@endif
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} notifications</li>
               <li>
                 <!-- Inner Menu: contains the notifications -->
                 <ul class="menu">
                   <li><!-- start notification -->
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 張假單尚未審核
+                    <a href="{{ route('leaves_my/prove') }}">
+                      @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} 張假單尚未審核@endif
                     </a>
                   </li>
                   <!-- end notification -->
                 </ul>
               </li>
-              <li class="footer"><a href="#">View all</a></li>
+              <li class="footer"><a href="{{ route('leaves_my/prove') }}">View all</a></li>
             </ul>
           </li>
           <!-- User Account Menu -->
@@ -120,10 +120,10 @@
         <li @if(Request::is('leave/*'))class="active" @endif>
           <a href="{{ route('leave/create') }}"><i class="fa fa-plane"></i> <span>我要放假</span></a>
         </li>
-        <li class="">
-          <a href="#"><i class="fa fa-calendar"></i> <span>我的假單</span>
+        <li @if(Request::is('leaves_my/*')) class="active" @endif>
+          <a href="{{ route('leaves_my/prove') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red" alt="待審核假單">3</small>
+              @if( LeaveHelper::getProveMyLeavesTotalByUserId()>0)<small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</small>@endif
             </span>
           </a>
         </li>
