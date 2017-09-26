@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Schema;
+
 class Leave extends BaseModel
 {
     protected $fillable = [
@@ -17,12 +19,20 @@ class Leave extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
-	'agent',
+	    'agent',
         'notice_person',
         'timepicker',
         'dayrange',
     ];
 
+    protected $attributes = [
+        'order_by' => 'id',
+        'order_way' => 'DESC',
+        'pagesize' => '25',
+        'start_time' => '',
+        'end_time' => ''
+    ];
+    
     public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
@@ -50,6 +60,48 @@ class Leave extends BaseModel
         $result = $query->paginate(10);
         return $result;
     }
+    /**
+     * 搜尋table多個資料 - 我是代理人條件搜尋
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+     public function searchForLeaveAgent($where = [])
+     {
+         $query = self::OrderedBy();
+         foreach ($where as $key => $value) {
+ 
+             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+ 
+                 if ($key == 'id') {
+                     
+                     $query->whereIn('id', $value);
+ 
+                 } elseif ($key == 'start_time') {
+                     
+                     $query->where('start_time', '>=', $value);
+ 
+                 } else {
+ 
+                     $query->where($key, $value);
+ 
+                 } 
+             }
+         }
+ 
+         $result = $query->paginate($this->pagesize);
+         return $result;
+     }
+ 
+     public function scopeOrderedBy($query)
+     {
+         $result = $query->orderBy($this->order_by, $this->order_way);
+         return $result;
+     }
+ 
 
     public function fetchUser()
     {

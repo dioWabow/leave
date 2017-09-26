@@ -277,6 +277,19 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
+    # 我是代理人
+    Route::group(['prefix'=>'agent'], function(){
+        Route::any('index',[
+            'as'=>'agent/index',
+            'uses'=> 'LeaveAgentController@getIndex',
+        ]);
+
+        Route::get('edit/{id}',[
+            'as'=>'agent/edit',
+            'uses'=> 'LeaveAgentController@getEdit',
+        ]);
+    });
+    
     // 報表
     Route::group(['prefix'=>'report'], function(){
         Route::any('index',[
