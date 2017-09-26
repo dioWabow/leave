@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         });
 
         $schedule->command('Report:AnnualYears')->dailyAt('11:00')->when(function () {
-            return \Carbon\Carbon::now()->yearly()->mondays();
+            return (Carbon::now()->format('m-d') == "12-31");
         });
     }
     

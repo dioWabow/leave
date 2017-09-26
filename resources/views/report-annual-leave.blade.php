@@ -20,7 +20,7 @@
 			<div class="box box-info">
 				<div class="box-body">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
-						<form name="frmOrderby" action="{{ route('annual/index') }}" method="POST">
+						<form name="frmOrderby" action="{{ route('annual_report/index') }}" method="POST">
             {!!csrf_field()!!}
 							<div class="row">
 								<div class="col-sm-5">
@@ -31,7 +31,7 @@
 										<label>
 											年份：
 											<select id="setting_year" name="search[year]" class="form-control">
-                        @for ($i = 2016; $i <= Carbon\Carbon::parse()->format('Y'); $i++)
+                        @for ($i = 2015; $i <= Carbon\Carbon::parse()->format('Y'); $i++)
                         <option value="{{$i}}" @if($search['year']==$i)selected="selected"@endif>{{$i}} 年</option>
                         @endfor
 											</select>
@@ -58,12 +58,12 @@
 									</thead>
 									<tbody>
 										@forelse ($dataProvider as $value)
-                      <tr class="clickable-row" data-href="{{  route('annual/view', ['id' => $value->user_id, 'year' => $search['year'] ] ) }}">
+                      <tr class="clickable-row" data-href="{{  route('annual_report/view', ['id' => $value->user_id, 'year' => $search['year'] ] ) }}">
 											<td>
 												<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
 											</td>
 											<td>{{ $value->fetchUser->name }}</td>
-											<td>{{ $value->fetchUser->enter_date }}</td>
+											<td>{{ TimeHelper::changeDateFormat($value->fetchUser->enter_date,'Y-m-d') }}</td>
 											<td>{{ $value->annual_this_years }}</td>
 											<td>{{ $value->annual_next_years }}</td>
 											<td>{{ $value->used_annual_hours }}</td>

@@ -9,7 +9,7 @@ CREATE TABLE `annuals_years` (
   `create_time` DATE NULL DEFAULT NULL COMMENT '特休計算時間',
   `created_at` timestamp NULL DEFAULT NULL COMMENT '新增時間',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT '最後編輯'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `annuals_years` ADD PRIMARY KEY (`id`);
 ALTER TABLE `annuals_years` MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
 

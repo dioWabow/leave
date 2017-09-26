@@ -726,7 +726,7 @@ $(function () {
 @endif
 @endif
 <!-- 特休結算+特休報表+報表排序用 -->
-@if(Request::is('annual_leave_calculate/*','report/*','annual/*'))
+@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*'))
 <script>
   $(document).on("click", "th", function() {
   var table = $(this).parents("table").eq(0);

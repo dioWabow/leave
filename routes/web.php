@@ -245,15 +245,15 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 特休報表
-    Route::group(['prefix'=>'annual'], function(){
+    Route::group(['prefix'=>'annual_report'], function(){
         Route::any('index',[
-            'as'=>'annual/index',
-            'uses'=> 'LeaveAnnualReportController@getIndex',
+            'as'=>'annual_report/index',
+            'uses'=> 'AnnualReportController@getIndex',
         ]);
 
         Route::get('view/{id}/{year}', [
-            'as' => 'annual/view',
-            'uses' => 'LeaveAnnualReportController@getView',
+            'as' => 'annual_report/view',
+            'uses' => 'AnnualReportController@getView',
         ]);
     });
     

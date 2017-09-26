@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class LeaveAnnualReportController extends Controller
+class AnnualReportController extends Controller
 {
     /**
      * 列表
