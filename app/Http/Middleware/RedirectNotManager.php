@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Auth;
+use Redirect;
 use Closure;
 
 class RedirectNotManager
@@ -18,7 +19,7 @@ class RedirectNotManager
     {
         if (empty(Auth::hasManagement())) {
 
-            return redirect('index');
+            return redirect::route('index');
 
         }
 

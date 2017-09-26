@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Auth;
+use Redirect;
 use Closure;
 
 class RedirectNotBoss
@@ -18,7 +19,7 @@ class RedirectNotBoss
     {
         if (empty(Auth::hasAdmin())) {
 
-            return redirect('index');
+            return redirect::route('index');
 
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Auth;
+use Redirect;
 use Closure;
 
 class RedirectNotHr
@@ -18,7 +19,7 @@ class RedirectNotHr
     {
         if (empty(Auth::hasHr())) {
 
-            return redirect('index');
+            return redirect::route('index');
 
         }
 
