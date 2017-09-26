@@ -225,7 +225,9 @@
           <ul class="treeview-menu">
             <li  @if(Request::is('report/*')) class="active" @endif><a href="{{ route('report/index') }}"><i class="fa fa-circle-o"></i>報表</a></li>
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
+            @if( Auth::hasAdmin() )
             <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>
+            @endif
           </ul>
         </li>
       </ul>

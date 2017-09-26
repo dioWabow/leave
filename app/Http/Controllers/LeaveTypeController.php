@@ -97,7 +97,7 @@ class LeaveTypeController extends Controller
     {
         $model = $this->loadModel($id)->delete();
 
-        return Redirect::route('leave_type')->->with('success', '刪除完畢。');
+        return Redirect::route('leave_type')->with('success', '刪除完畢。');
     }
 
     /**
