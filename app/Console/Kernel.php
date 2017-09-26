@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\MonthAnnualHours::class
+        Commands\MonthAnnualHours::class,
+        Commands\ReportAnnualYears::class
     ];
 
     /**
@@ -28,8 +29,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('Report:AnnualHours')->dailyAt('10:00')->when(function () {
             return \Carbon\Carbon::now()->endOfMonth()->isToday();
         });
-    }
 
+        $schedule->command('Report:AnnualYears')->dailyAt('11:00')->when(function () {
+            return (Carbon::now()->format('m-d') == "12-31");
+        });
+    }
+    
     /**
      * Register the Closure based commands for the application.
      *

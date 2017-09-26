@@ -40,7 +40,7 @@ class LeaveHelper
     public function calculateAnnualDate($start_date = '',$user_id = '') 
     {
         self::updateUser($user_id);
-
+        
         $annual_date = 0;
         $annual_hours = 0;
 
@@ -48,17 +48,17 @@ class LeaveHelper
         $start_date_year = (empty($start_date)) ? Carbon::now()->format('Y') : TimeHelper::changeDateFormat($start_date,'Y');
         $enter_date_year = TimeHelper::changeDateFormat($this->enter_date,'Y');
         $service_year = intval($start_date_year - $enter_date_year );
-
+        
         //計算使否足年
         $start_date_month = (empty($start_date)) ? Carbon::now()->format('m') : TimeHelper::changeDateFormat($start_date,'m');
         $enter_date_month = TimeHelper::changeDateFormat($this->enter_date,'m');
         $service_month = intval($start_date_month - $enter_date_month);
-
+        
         //計算是否足月
         $start_date_day = (empty($start_date)) ? Carbon::now()->format('d') : TimeHelper::changeDateFormat($start_date,'d');
         $enter_date_day = TimeHelper::changeDateFormat($this->enter_date,'d');
         $service_day = intval($start_date_day - $enter_date_day);
-
+    
         //當不足1年時，年資-1
         if (($start_date_month - $enter_date_month) <0 ) { //月份不足年資減1
 
