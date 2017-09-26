@@ -192,6 +192,7 @@
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
+        @if( Auth::hasHr() )
         <li class="treeview @if(Request::is('user/*'))active @endif">
           <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
             <span class="pull-right-container">
@@ -223,10 +224,13 @@
           </a>
           <ul class="treeview-menu">
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>報表</a></li>
+            @if( Auth::hasAdmin() )
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
+            @endif
           </ul>
         </li>
       </ul>
+      @endif
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
