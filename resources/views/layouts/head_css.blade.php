@@ -71,7 +71,7 @@ $(function () {
     var ignore = ['input', 'a', 'button', 'textarea', 'label'];
     var clicked = e.target.nodeName.toLowerCase();
     if($.inArray(clicked, ignore) > -1) return;
-    
+
     window.location = $(this).data('href');
   });
 
@@ -95,6 +95,12 @@ $(function () {
     checkboxClass: 'icheckbox_flat-blue',
     radioClass: 'iradio_flat-blue'
   });
+
+  // alert 消失用
+  $(".msg_alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".msg_alert").slideUp(500);
+  });
+
 });
 
 </script>

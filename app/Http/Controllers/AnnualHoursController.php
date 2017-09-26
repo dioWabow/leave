@@ -37,7 +37,7 @@ class AnnualHoursController extends Controller
             $dataAll['annual_hours'] += $data->annual_hours;
             $dataAll['used_annual_hours'] += $data->used_annual_hours;
             $dataAll['remain_annual_hours'] += $data->remain_annual_hours;
-            
+
         }
 
         return view('calculate_annual_leave',compact(
@@ -82,13 +82,13 @@ class AnnualHoursController extends Controller
         ));
     }
 
-    private function loadUser($id) 
+    private function loadUser($id)
     {
         $model = User::find($id);
         if ($model===false) {
             throw new CHttpException(404,'資料不存在');
         }
-            
+
         return $model;
     }
 

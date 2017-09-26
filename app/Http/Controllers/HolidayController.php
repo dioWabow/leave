@@ -131,11 +131,11 @@ class HolidayController extends Controller
 
         if ($model->save()) {
 
-            return Redirect::route('holidies')->withErrors(['msg' => '新增成功']);
+            return Redirect::route('holidies')->with('success', '新增成功 !');
 
         } else {
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+            return Redirect::back()->withInput()->withErrors(['error' => '新增失敗 !']);
 
         }
     }
@@ -157,11 +157,11 @@ class HolidayController extends Controller
 
         if ($model->save()) {
 
-            return Redirect::route('holidies')->withErrors(['msg' => '更新成功']);
+            return Redirect::route('holidies')->with('success', '更新成功 !');
 
         } else {
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '更新失敗']);
+            return Redirect::back()->withInput()->withErrors(['error' => '更新失敗 !']);
 
         }
     }
@@ -175,7 +175,15 @@ class HolidayController extends Controller
     {
         $result = self::loadModel($id)->delete();
 
-        return Redirect::route('holidies')->withErrors(['msg' => '刪除成功']);
+        if ($result) {
+
+            return Redirect::route('holidies')->with('success', '刪除成功 !');
+
+        } else {
+
+            return Redirect::route('holidies')->withErrors(['error' => '刪除失敗 !']);
+
+        }
 
     }
 

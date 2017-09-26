@@ -97,7 +97,7 @@ class LeaveTypeController extends Controller
     {
         $model = $this->loadModel($id)->delete();
 
-        return Redirect::route('leave_type')->withErrors(['msg' => '刪除完畢。']);
+        return Redirect::route('leave_type')->->with('success', '刪除完畢。');
     }
 
     /**
@@ -116,7 +116,7 @@ class LeaveTypeController extends Controller
 
         if ($model->save()) {
 
-            return Redirect::route('leave_type')->withErrors(['msg' => '新增成功']);
+            return Redirect::route('leave_type')->with('success', '新增成功 !');
 
         } else {
 
@@ -142,7 +142,7 @@ class LeaveTypeController extends Controller
 
         if ($model->save()) {
 
-            return Redirect::route('leave_type')->withErrors(['msg' => '更新成功']);
+            return Redirect::route('leave_type')->with('success', '更新成功 !');
 
         } else {
 
