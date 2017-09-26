@@ -444,15 +444,6 @@ class LeaveHelper
         return $agent_arr;
     }
 
-    //時間是否需要-30分鐘
-    public function changeTimeByArriveTime($date,$user_id)
-    {
-        self::updateUser($user_id);
-        $date_new = ($this->arrive_time == '0900') ? $date : TimeHelper::changeDateValue($date,['-,30,minute'],'Y-m-d H:i:s');
-
-        return $date_new;
-    }
-
     //更新判斷人資料
     public function updateUser($user_id)
     {

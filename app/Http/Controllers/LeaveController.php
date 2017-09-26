@@ -192,8 +192,8 @@ class LeaveController extends Controller
 
         if (count(explode(' - ', $leave['timepicker'])) > 1) {
 
-            $leave['start_time'] = LeaveHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['0'],$user->id);
-            $leave['end_time'] = LeaveHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['1'],$user->id);
+            $leave['start_time'] = TimeHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['0'],$user->id,'-');
+            $leave['end_time'] = TimeHelper::changeTimeByArriveTime(explode(' - ', $leave['timepicker'])['1'],$user->id,'-');
             $leave['date_list'] = LeaveHelper::calculateWorkingDate($leave['start_time'],$leave['end_time']);
             $leave['hours'] = LeaveHelper::calculateRangeDateHours($leave['date_list']);
 
