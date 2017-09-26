@@ -87,109 +87,6 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
     ]);
 
-    # 國定假日/補班
-    Route::group(['prefix'=>'holidies'], function(){
-        Route::match(['get', 'post'], 'index', [
-            'as' => 'holidies',
-            'uses' => 'HolidayController@getIndex',
-        ]);
-
-        Route::get('create', [
-            'as' => 'holidies/create',
-            'uses' => 'HolidayController@getCreate',
-        ]);
-
-        Route::get('edit/{id}', [
-            'as' => 'holidies/edit',
-            'uses' => 'HolidayController@getEdit',
-        ]);
-
-        Route::get('delete/{id}', [
-            'as' => 'holidies/delete',
-            'uses' => 'HolidayController@postDelete',
-        ]);
-
-        Route::post('insert', [
-            'as' => 'holidies/insert',
-            'uses' => 'HolidayController@postInsert',
-        ]);
-
-        Route::post('update', [
-            'as' => "holidies/update",
-            'uses' => 'HolidayController@postUpdate',
-        ]);
-    });
-
-    # 假別管理
-    Route::group(['prefix'=>'leave_type'], function(){
-        Route::match(['get', 'post'], 'index',[
-            'as' => 'leave_type',
-            'uses' => 'LeaveTypeController@getIndex',
-        ]);
-
-        Route::get('create',[
-            'as' =>'leave_type/create',
-            'uses' => 'LeaveTypeController@getCreate',
-        ]);
-
-        Route::get('edit/{id}',[
-            'as' => 'leave_type/edit',
-            'uses' => 'LeaveTypeController@getEdit',
-        ]);
-
-        Route::get('delete/{id}',[
-            'as' => 'leave_type/delete',
-            'uses' => 'LeaveTypeController@postDelete',
-        ]);
-
-        Route::post('insert',[
-            'as' => 'leave_type/insert',
-            'uses' => 'LeaveTypeController@postInsert',
-        ]);
-
-        Route::post('update',[
-            'as' => 'leave_type/update',
-            'uses' => 'LeaveTypeController@postUpdate',
-        ]);
-
-        Route::post('update_ajax',[
-            'as' => 'leave_type/update_ajax',
-            'uses' => 'LeaveTypeController@ajaxUpdateData',
-        ]);
-    });
-
-    # 員工管理
-    Route::group(['prefix'=>'user'], function(){
-        Route::any('index',[
-            'as' => 'user/index',
-            'uses' => 'UserController@getIndex',
-        ]);
-
-        Route::post('update',[
-            'as' => 'user/update',
-            'uses' => 'UserController@postUpdate',
-        ]);
-
-        Route::get('edit/{id}', [
-            'as' => 'user/edit',
-            'uses' => 'UserController@getEdit',
-        ]);
-    });
-
-    // 系統設定
-    Route::group(['prefix'=>'config'], function(){
-        Route::get('edit',[
-            'as'=>'config/edit',
-            'uses'=> 'SystemConfController@getIndex',
-        ]);
-
-
-        Route::post('update',[
-            'as'=>'config/update',
-            'uses'=> 'SystemConfController@postUpdate',
-        ]);
-    });
-
     // 我要放假
     Route::group(['prefix'=>'leave'], function(){
         Route::get('create', [
@@ -230,63 +127,194 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@calculate_hours',
         ]);
     });
-    
-    // 特休結算
-    Route::group(['prefix'=>'annual_leave_calculate'], function(){
-        Route::any('index', [
-            'as' => 'annual_leave_calculate/index',
-            'uses' => 'AnnualHoursController@getIndex',
+
+    // 系統設定
+    Route::group(['prefix'=>'config'], function(){
+        Route::get('edit',[
+            'middleware' => 'hr',
+            'as'=>'config/edit',
+            'uses'=> 'SystemConfController@getIndex',
         ]);
 
-        Route::get('view/{id}/{year}', [
-            'as' => 'annual_leave_calculate/view',
-            'uses' => 'AnnualHoursController@getView',
+
+        Route::post('update',[
+            'middleware' => 'hr',
+            'as'=>'config/update',
+            'uses'=> 'SystemConfController@postUpdate',
         ]);
     });
 
     // 團隊設定
     Route::group(['prefix'=>'teams'], function(){
         Route::get('index',[
+            'middleware' => 'hr',
             'as' => 'teams/index',
             'uses' => 'TeamController@getAllTeamAndUser',
         ]);
 
         Route::post('create',[
+            'middleware' => 'hr',
             'as' => 'teams/create',
             'uses' => 'TeamController@ajaxCreateData',
         ]);
 
         Route::post('delete',[
+            'middleware' => 'hr',
             'as' => 'teams/delete',
             'uses' => 'TeamController@ajaxDeleteData',
         ]);
 
         Route::post('update',[
+            'middleware' => 'hr',
             'as' => 'teams/update',
             'uses' => 'TeamController@ajaxUpdateData',
         ]);
 
         Route::post('memberSet',[
+            'middleware' => 'hr',
             'as' => 'teams/memberSet',
             'uses' => 'UserTeamController@postMemberSet',
         ]);
 
         Route::post('update_drop',[
+            'middleware' => 'hr',
             'as' => 'teams/update_drop',
             'uses' => 'TeamController@ajaxUpdateDrop',
         ]);
     });
-    
+
+    # 員工管理
+    Route::group(['prefix'=>'user'], function(){
+        Route::any('index',[
+            'middleware' => 'hr',
+            'as' => 'user/index',
+            'uses' => 'UserController@getIndex',
+        ]);
+
+        Route::post('update',[
+            'middleware' => 'hr',
+            'as' => 'user/update',
+            'uses' => 'UserController@postUpdate',
+        ]);
+
+        Route::get('edit/{id}', [
+            'middleware' => 'hr',
+            'as' => 'user/edit',
+            'uses' => 'UserController@getEdit',
+        ]);
+    });
+
+    # 假別管理
+    Route::group(['prefix'=>'leave_type'], function(){
+        Route::match(['get', 'post'], 'index',[
+            'middleware' => 'hr',
+            'as' => 'leave_type',
+            'uses' => 'LeaveTypeController@getIndex',
+        ]);
+
+        Route::get('create',[
+            'middleware' => 'hr',
+            'as' =>'leave_type/create',
+            'uses' => 'LeaveTypeController@getCreate',
+        ]);
+
+        Route::get('edit/{id}',[
+            'middleware' => 'hr',
+            'as' => 'leave_type/edit',
+            'uses' => 'LeaveTypeController@getEdit',
+        ]);
+
+        Route::get('delete/{id}',[
+            'middleware' => 'hr',
+            'as' => 'leave_type/delete',
+            'uses' => 'LeaveTypeController@postDelete',
+        ]);
+
+        Route::post('insert',[
+            'middleware' => 'hr',
+            'as' => 'leave_type/insert',
+            'uses' => 'LeaveTypeController@postInsert',
+        ]);
+
+        Route::post('update',[
+            'middleware' => 'hr',
+            'as' => 'leave_type/update',
+            'uses' => 'LeaveTypeController@postUpdate',
+        ]);
+
+        Route::post('update_ajax',[
+            'middleware' => 'hr',
+            'as' => 'leave_type/update_ajax',
+            'uses' => 'LeaveTypeController@ajaxUpdateData',
+        ]);
+    });
+
+    # 國定假日/補班
+    Route::group(['prefix'=>'holidies'], function(){
+        Route::match(['get', 'post'], 'index', [
+            'middleware' => 'hr',
+            'as' => 'holidies',
+            'uses' => 'HolidayController@getIndex',
+        ]);
+
+        Route::get('create', [
+            'middleware' => 'hr',
+            'as' => 'holidies/create',
+            'uses' => 'HolidayController@getCreate',
+        ]);
+
+        Route::get('edit/{id}', [
+            'middleware' => 'hr',
+            'as' => 'holidies/edit',
+            'uses' => 'HolidayController@getEdit',
+        ]);
+
+        Route::get('delete/{id}', [
+            'middleware' => 'hr',
+            'as' => 'holidies/delete',
+            'uses' => 'HolidayController@postDelete',
+        ]);
+
+        Route::post('insert', [
+            'middleware' => 'hr',
+            'as' => 'holidies/insert',
+            'uses' => 'HolidayController@postInsert',
+        ]);
+
+        Route::post('update', [
+            'middleware' => 'hr',
+            'as' => "holidies/update",
+            'uses' => 'HolidayController@postUpdate',
+        ]);
+    });
+
     // 報表
     Route::group(['prefix'=>'report'], function(){
         Route::any('index',[
+            'middleware' => 'hr',
             'as' => 'report/index',
             'uses' => 'ReportController@postIndex',
         ]);
 
         Route::get('vacation',[
+            'middleware' => 'hr',
             'as' => 'report/vacation',
             'uses' => 'ReportController@getUserData'
+        ]);
+    });
+
+    // 特休結算
+    Route::group(['prefix'=>'annual_leave_calculate'], function(){
+        Route::any('index', [
+            'middleware' => 'boss',
+            'as' => 'annual_leave_calculate/index',
+            'uses' => 'AnnualHoursController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'middleware' => 'boss',
+            'as' => 'annual_leave_calculate/view',
+            'uses' => 'AnnualHoursController@getView',
         ]);
     });
 });
