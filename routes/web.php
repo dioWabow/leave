@@ -20,14 +20,14 @@ Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback')
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::group(['middleware' => 'auth'], function () {
-    
+
     # dashboard
     Route::get('index', ['uses' => 'SiteController@getIndex'])->name('index');
     Route::post('index', [
         'as' => 'index/ajax',
         'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
     ]);
-    
+
     # 國定假日/補班
     Route::group(['prefix'=>'holidies'], function(){
         Route::match(['get', 'post'], 'index', [
@@ -67,27 +67,27 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'leave_type',
             'uses' => 'LeaveTypeController@getIndex',
         ]);
-        
+
         Route::get('create',[
             'as' =>'leave_type/create',
             'uses' => 'LeaveTypeController@getCreate',
         ]);
-        
+
         Route::get('edit/{id}',[
             'as' => 'leave_type/edit',
             'uses' => 'LeaveTypeController@getEdit',
         ]);
-        
+
         Route::get('delete/{id}',[
             'as' => 'leave_type/delete',
             'uses' => 'LeaveTypeController@postDelete',
         ]);
-        
+
         Route::post('insert',[
             'as' => 'leave_type/insert',
             'uses' => 'LeaveTypeController@postInsert',
         ]);
-        
+
         Route::post('update',[
             'as' => 'leave_type/update',
             'uses' => 'LeaveTypeController@postUpdate',
@@ -118,12 +118,12 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_manager/prove',
             'uses'=> 'LeavesManagerController@getProve',
         ]);
-        
+
         Route::any('upcoming/{role}',[
             'as'=>'leaves_manager/upcoming',
             'uses'=> 'LeavesManagerController@getUpcoming',
         ]);
-        
+
         Route::any('history/{role}',[
             'as'=>'leaves_manager/history',
             'uses'=> 'LeavesManagerController@getHistory',
@@ -133,12 +133,11 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_manager/calendar',
             'uses'=> 'LeavesManagerController@getCalendar',
         ]);
-        
+
         Route::any('calendar/',[
             'as'=>'leaves_manager/calendar/ajax',
-            'uses'=> 'LeavesManagerController@ajaxGetAllAvailableLeaveListByDateRange',
+            'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
         ]);
-
         Route::post('insert/{role}',[
             'as' => 'leaves_manager/insert',
             'uses' => 'LeavesManagerController@postInsert',
@@ -149,7 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeavesManagerController@getEdit',
         ]);
     });
-    
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[

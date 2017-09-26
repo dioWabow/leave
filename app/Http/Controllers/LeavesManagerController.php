@@ -7,6 +7,7 @@ use LeaveHelper;
 use App\Team;
 use App\Type;
 use App\Leave;
+use APP\User;
 use App\UserTeam;
 use App\LeaveDay;
 use App\LeaveResponse;
@@ -32,7 +33,7 @@ class LeavesManagerController extends Controller
      * 列表-等待核准 Prvoe
      * 主管 =>該team下 小主管審核過的單 3
      * 小主管 => 職代審核過的單 tag 2
-     * 大BOSS => 主管審核過的單 tag 4 
+     * 大BOSS => 主管審核過的單 tag 4
      *
      * @return \Illuminate\Http\Response
     */
@@ -95,14 +96,14 @@ class LeavesManagerController extends Controller
         }
 
         return  view('leave_manager', compact(
-            'search', 'getRole', 'model', 'dataProvider' 
+            'search', 'getRole', 'model', 'dataProvider'
         ));
     }
 
      /**
-     * 列表-即將放假 Upcoming 
+     * 列表-即將放假 Upcoming
      * 抓出該主管審核過的單 tag 9 已準假(通過)
-     * 
+     *
      * @return \Illuminate\Http\Response
     */
     public function getUpcoming(Request $request)
@@ -133,7 +134,7 @@ class LeavesManagerController extends Controller
             } else {
 
                 $request->session()->forget('leaves_manager');
-                
+
             }
         }
 
@@ -145,13 +146,13 @@ class LeavesManagerController extends Controller
         $model = new Leave;
         $dataProvider = $model->fill($order_by)->searchForUpComingInManager($search);
         return  view('leave_manager', compact(
-            'search' ,'getRole', 'model', 'dataProvider' 
+            'search' ,'getRole', 'model', 'dataProvider'
         ));
     }
     /**
-     * 列表-歷史紀錄 History 
+     * 列表-歷史紀錄 History
      * 抓出該主管審核過的單 tag在已準假、不准假 8,9
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function getHistory(Request $request)
@@ -201,7 +202,6 @@ class LeavesManagerController extends Controller
                 $request->session()->forget('leaves_manager');
 
             }
-
         }
         
         $model = new Leave;
@@ -226,8 +226,10 @@ class LeavesManagerController extends Controller
     }
 
     /*
-        行事曆
-    */
+     *
+     *
+     *   小主管 & 主管 可看到所屬團隊的假單行事曆
+     */
 
     public function getCalendar ()
     {
@@ -239,42 +241,6 @@ class LeavesManagerController extends Controller
         ));
     }
     
-   
-    public function ajaxGetAllAvailableLeaveListByDateRange(Request $request)
-    {
-        $start_time = date('Y-m-d', $request['start']);
-        $end_time = date('Y-m-d', $request['end']);
-
-        $result = [];
-
-        $model = new Leave;
-
-        // 撈出全部假單
-        $leave_list = $model->leaveDataRange($start_time, $end_time);
-
-        foreach ($leave_list as $key => $value) {
-            // 判斷如果有user 被移除的情況
-            if ($value->fetchUser != null) {
-                // 用關聯方式取值
-                $user_name = $value->fetchUser->nickname;
-                $vacation_name = $value->fetchType->name;
-                $team_color = $value->fetchUserTeam->fetchTeam->color;
-
-                $result[$key]['title'] = addslashes($user_name . ' / ' .  $vacation_name);
-                $result[$key]['start'] = $value['start_time'];
-                $result[$key]['end'] = $value['end_time'];
-                $result[$key]['backgroundColor'] = $team_color;
-                $result[$key]['borderColor'] = $team_color;
-
-            }
-        }
-
-        return json_encode(
-            $result
-        );
-
-    }
-
     /**
     * 新增 & 修改 => leaveResponses & Leave
     *
@@ -399,7 +365,7 @@ class LeavesManagerController extends Controller
     /**
      * 1.取得主管的team 
      * 2.取得該主管的子team
-     * 3.狀態在小主管審核過的user_id 
+     * 3.狀態在小主管審核過的user_id
      */
     private static function getManagerSubTeamsLeaves()
     {
@@ -411,9 +377,9 @@ class LeavesManagerController extends Controller
     }
 
     /**
-     * 1.取得主管的team 
+     * 1.取得主管的team
      * 2.取得主管team 的user_id
-     * 3.狀態在職代審核過 
+     * 3.狀態在職代審核過
      */
 
     private static function getManagerTeamsLeaves()

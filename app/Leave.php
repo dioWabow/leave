@@ -44,11 +44,18 @@ class Leave extends BaseModel
     {
         $query = self::OrderedBy();
         foreach ($where as $key => $value) {
-            
+
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
                 if ($key == 'tag_id') {
                     
+
+                    if (!is_array($value)){
+                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+                        $value = explode(',',$value);
+
+                    }
+
                     $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'id') {
@@ -98,6 +105,12 @@ class Leave extends BaseModel
                 } elseif ($key == 'tag_id') {
                     
                     $query->where('tag_id', $value);
+
+                } elseif ($key == 'start_time') {
+
+                    $query->where('start_time', '>' , $value);
+
+                } elseif ($key == 'end_time') {
 
                 } elseif ($key == 'start_time') {
                     
@@ -170,7 +183,7 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public static function getTypeIdByLeaves($id) 
+    public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
         return $result;
@@ -178,8 +191,19 @@ class Leave extends BaseModel
 
     public function leaveDataRange($first_day, $last_day)
     {
-        $result = $this->whereBetween('start_time', [$first_day, $last_day])->get();
+        $result = $this->whereBetween('start_time', [$first_day, $last_day])
+            ->where('tag_id', '9')
+            ->get();
     	return $result;
+    }
+
+    public function leaveManagerDataRange($all_user, $first_day, $last_day)
+    {
+        $result = $this->whereIn('user_id', $all_user)
+            ->whereBetween('start_time', [$first_day, $last_day])
+            ->where('tag_id', '9')
+            ->get();
+        return $result;
     }
 
     public function fetchUser()

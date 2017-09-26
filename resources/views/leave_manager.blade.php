@@ -8,7 +8,7 @@
 	<small>Teams Leave List</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="{{ route('root_path') }}/index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">團隊假單</li>
   </ol>
 </section>
@@ -22,7 +22,7 @@
 					<li class="{{ Request::is('leaves_manager/prove/*')? 'active' : '' }}"><a href="{{ route('leaves_manager/prove', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('prove') }}@if (LeaveHelper::getProveManagerLeavesTabLable($getRole)>0)<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }} New Messages">{{ LeaveHelper::getProveManagerLeavesTabLable($getRole) }}</span>@endif</a></li>
 					<li class="{{ Request::is('leaves_manager/upcoming/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager/upcoming', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('upcoming') }}@if(LeaveHelper::getUpComingManagerLeavesTotal()>0)<span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingManagerLeavesTotal() }} New Messages">{{ LeaveHelper::getUpComingManagerLeavesTotal(Auth::user()->id) }}</span>@endif</a></li>
 					<li class="{{ Request::is('leaves_manager/history/*') ? 'active' : '' }}" ><a href="{{ route('leaves_manager/history', [ 'role' => $getRole ]) }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
-					@if ( in_array($getRole,['Manager','Mini_Manager']) )
+					@if ( in_array($getRole,['manager','minimanager']) )
 					<li class="{{ Request::is('leaves_manager/calendar/*') ? 'active' : '' }}">
 						<a href="{{ route('leaves_manager/calendar', [ 'role' => $getRole ] ) }}">{{ WebHelper::getLeaveTabLabel('calc') }}
 						</a>

@@ -9,12 +9,12 @@ class Team extends BaseModel
      *
      * @var string
      */
-    public static function getAllTeam() 
+    public static function getAllTeam()
     {
         $result = self::get();
         return $result;
     }
-    
+
     public static function getColorByKey($key = "")
     {
         $result = self::where("id", $key)->pluck('color')->first();
@@ -26,16 +26,16 @@ class Team extends BaseModel
         foreach ($teams as $team) {
 
             $teams_id[] = $team->id;
-            
+
         }
-        
+
         $result = self::whereIn('parent_id', $teams_id)->get();
         return $result;
     }
-    
+
     public static function getParentIdById($id)
     {
-        
+
         $result = self::whereIn('id' , $id)->pluck( 'parent_id', 'id');
         return $result;
     }
@@ -63,5 +63,5 @@ class Team extends BaseModel
             ->pluck('id');
         return $result;
     }
-    
+
 }
