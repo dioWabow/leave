@@ -56,18 +56,61 @@
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=2"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<!-- wabow -->
-<script src="{{route('root_path')}}/js/wabow.js"></script>
+
+<!-- 全部共用 -->
+<script>
+$(function () {
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass('ignore')) return;
+
+    var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data('href');
+  });
+
+  $('#checkall').on('ifChecked ifUnchecked',function(evant){
+    if(evant.type == 'ifChecked')
+      $('.check').iCheck('check');
+    else
+      $('.check').iCheck('uncheck');
+  });
+
+  //代理人、通知對象
+  $(".select2").select2({width: '100%'});
+
+  //預設圖片
+  $("img").error(function () {
+   $(this).unbind("error").attr("src", "{{route('root_path')}}/dist/img/users/default.png");
+  });
+
+});
+
+</script>
 
 <!-- 國定假日/補班與修改頁面 -->
+@if(Request::is('holidies/*'))
   <script>
 $(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
+    $('input[name="search[daterange]"]').daterangepicker({
+        autoUpdateInput: false,
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('#search_daterange').val('');
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    if("{{$model->start_date}}" == "") {
+        $('#search_daterange').val('');
+    } else {
+        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->start_date)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->end_date)->format('Y-m-d') }}");
+    }
 
     $('#holidies_available_date').daterangepicker({
         showDropdowns: true,
@@ -85,165 +128,7 @@ $(function () {
     $('#holidies_date').val($('#holidies_date').attr('date'));
 });
 </script>
-
-<!-- Index頁面 -->
-<script>
-  $(function () {
-
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-    function ini_events(ele) {
-      ele.each(function () {
-
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
-        };
-
-        // store the Event Object in the DOM element so we can get to it later
-        $(this).data('eventObject', eventObject);
-
-        // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex: 1070,
-          revert: true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
-
-      });
-    }
-
-    ini_events($('#external-events div.external-event'));
-
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
-    var date = new Date();
-    var d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
-      },
-      //Random default events
-      events: [
-        {
-          title: 'All Day Event',
-          start: new Date(y, m, 1),
-          backgroundColor: "#f56954", //red
-          borderColor: "#f56954" //red
-        },
-        {
-          title: 'Long Event',
-          start: new Date(y, m, d - 5),
-          end: new Date(y, m, d - 2),
-          backgroundColor: "#f39c12", //yellow
-          borderColor: "#f39c12" //yellow
-        },
-        {
-          title: 'Meeting',
-          start: new Date(y, m, d, 10, 30),
-          allDay: false,
-          backgroundColor: "#0073b7", //Blue
-          borderColor: "#0073b7" //Blue
-        },
-        {
-          title: 'Lunch',
-          start: new Date(y, m, d, 12, 0),
-          end: new Date(y, m, d, 14, 0),
-          allDay: false,
-          backgroundColor: "#00c0ef", //Info (aqua)
-          borderColor: "#00c0ef" //Info (aqua)
-        },
-        {
-          title: 'Birthday Party',
-          start: new Date(y, m, d + 1, 19, 0),
-          end: new Date(y, m, d + 1, 22, 30),
-          allDay: false,
-          backgroundColor: "#00a65a", //Success (green)
-          borderColor: "#00a65a" //Success (green)
-        },
-        {
-          title: 'Click for Google',
-          start: new Date(y, m, 28),
-          end: new Date(y, m, 29),
-          url: 'http://google.com/',
-          backgroundColor: "#3c8dbc", //Primary (light-blue)
-          borderColor: "#3c8dbc" //Primary (light-blue)
-        }
-      ],
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar !!!
-      drop: function (date, allDay) { // this function is called when something is dropped
-
-        // retrieve the dropped element's stored Event Object
-        var originalEventObject = $(this).data('eventObject');
-
-        // we need to copy it, so that multiple events don't have a reference to the same object
-        var copiedEventObject = $.extend({}, originalEventObject);
-
-        // assign it the date that was reported
-        copiedEventObject.start = date;
-        copiedEventObject.allDay = allDay;
-        copiedEventObject.backgroundColor = $(this).css("background-color");
-        copiedEventObject.borderColor = $(this).css("border-color");
-
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-        // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
-          $(this).remove();
-        }
-
-      }
-    });
-
-    /* ADDING EVENTS */
-    var currColor = "#3c8dbc"; //Red by default
-    //Color chooser button
-    var colorChooser = $("#color-chooser-btn");
-    $("#color-chooser > li > a").click(function (e) {
-      e.preventDefault();
-      //Save color
-      currColor = $(this).css("color");
-      //Add color effect to button
-      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-    });
-    $("#add-new-event").click(function (e) {
-      e.preventDefault();
-      //Get value and make sure it is not null
-      var val = $("#new-event").val();
-      if (val.length == 0) {
-        return;
-      }
-
-      //Create events
-      var event = $("<div />");
-      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-      event.html(val);
-      $('#external-events').prepend(event);
-
-      //Add draggable funtionality
-      ini_events(event);
-
-      //Remove event from text input
-      $("#new-event").val("");
-    });
-  });
-</script>
+@endif
 
 <!-- 我的假單頁面用 -->
   <script>
@@ -294,7 +179,315 @@ $('#nestable').nestable({
 });
 </script>
 
-<!-- 員工管理與修改頁面用 -->
+<!-- 假別管理與修改頁面用 -->
+@if(Request::is('leave_type/*'))
+<script>
+$(function () {
+  $("#leave_type_available_date").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+  });
+
+@if($model->start_time != '' || $model->end_time != '' ) 
+  $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{\Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+@else
+  $('#leave_type_available_date').val("");
+@endif
+});
+</script>
+@endif
+
+<!-- 我要請假用 -->
+@if(Request::is('leave/*') || Request::is('leave_assist/*'))
+<script>
+$(function () {
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass('ignore')) return;
+
+    var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data('href');
+  });
+
+  $('#checkall').on('ifChecked ifUnchecked',function(evant){
+    if(evant.type == 'ifChecked')
+      $('.check').iCheck('check');
+    else
+      $('.check').iCheck('uncheck');
+  });
+
+  var $leave_dayrange           = $('#leave_dayrange');
+  var $leave_timepicker         = $('#leave_timepicker');
+  var $leave_dayrange_allday    = $('#leave_dayrange_allday');
+  var $leave_dayrange_morning   = $('#leave_dayrange_morning');
+  var $leave_dayrange_afternoon = $('#leave_dayrange_afternoon');
+  var $leave_spent_hours        = $('#leave_spent_hours');
+  var $leave_spent_hours_hide   = $('#leave_spent_hours_hide');
+  var $label_leave_spent_hours  = $('#label_leave_spent_hours');
+  var $label_leave_dayrange     = $('#label_leave_dayrange');
+  var $div_leave_spent_hours    = $('#div_leave_spent_hours');
+  var $div_leave_dayrange       = $('#div_leave_dayrange');
+  var $input_leave_type_id      = $("input[name='leave\[type_id\]']");
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+  var $keep_dayrange   = $("#keep_dayrange");
+  var $leave_notice = $("#leave_notice");
+
+  var leave_type_arr = ['entertain','birthday','lone_stay'];
+  var leave_type_single_arr = ['entertain','birthday','lone_stay'];
+  var leave_type_notice_arr = ['birthday','lone_stay'];
+  var daterangepicker_type = 'isDate';
+
+  //Flat red color scheme for iCheck
+  $('input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
+
+  //檢查哪些假別已用完
+  $input_leave_type_id.each(function(){
+    if($(this).attr('hour') == 0) $(this).iCheck('disable');
+    if($(this).iCheck('update')[0].checked === true){
+
+      var mydata = $(this).attr('exception');
+      if($.inArray(mydata, leave_type_single_arr) !== -1) {
+        daterangepicker_type = 'isSingleDate';
+      } else {
+        daterangepicker_type = 'isDatetime';
+      }
+      fetchDaterangepicker();
+      if($.inArray(mydata, leave_type_arr) !== -1){
+        $div_leave_spent_hours.hide();
+        $label_leave_spent_hours.hide();
+        
+      }else{
+        $div_leave_dayrange.hide();
+        $label_leave_dayrange.hide();
+        $leave_notice.hide();
+      }
+
+      if($.inArray(mydata, leave_type_notice_arr) !== -1){
+        $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+      }
+      
+      //遇到善待假則 allday 不可選擇
+      if ($keep_dayrange.val()) {
+
+        if ($keep_dayrange.val().trim() == "morning") {
+
+          $leave_dayrange_morning.iCheck('check');
+
+        } else if($keep_dayrange.val().trim() == "afternoon") {
+
+          $leave_dayrange_afternoon.iCheck('check');
+
+        } else {
+
+          $leave_dayrange_allday.iCheck('check');
+
+        }
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == '1') {
+          $leave_dayrange_allday.iCheck('disable');
+        }
+
+      } else {
+
+        $leave_dayrange_allday.iCheck('check');
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == '1') {
+          $leave_dayrange_allday.iCheck('disable');
+          $leave_dayrange_allday.iCheck('uncheck');
+          $leave_dayrange_morning.iCheck('check');
+        }
+
+      }
+    }
+  });
+
+  //請假類別檢查
+  $input_leave_type_id.on('ifChecked', function(event){
+    $leave_timepicker.val('');
+    $leave_spent_hours.val('');
+    $leave_spent_hours_hide.val('');
+
+    var mydata = $(this).attr('exception');
+    if($.inArray(mydata, leave_type_arr) !== -1) {
+      daterangepicker_type = 'isDate';
+      if($.inArray(mydata, leave_type_single_arr) !== -1) daterangepicker_type = 'isSingleDate';
+
+      //只要選到單一天，則將請假時段全開，並預設選擇 allday
+      $("input[name='leave\[dayrange\]']").iCheck('enable'); 
+      $leave_dayrange_allday.iCheck('check');
+
+      //遇到善待假則 allday 不可選擇
+      if(mydata == 'entertain') {
+        $leave_dayrange_allday.iCheck('disable');
+        $leave_dayrange_allday.iCheck('uncheck');
+        $leave_dayrange_morning.iCheck('check');
+      }
+
+      $div_leave_spent_hours.hide();
+      $label_leave_spent_hours.hide();
+
+      $div_leave_dayrange.show();
+      $label_leave_dayrange.show();
+
+      $leave_notice.show();
+    }else{
+      $leave_notice.hide();
+
+      $div_leave_spent_hours.show();
+      $label_leave_spent_hours.show();
+
+      $div_leave_dayrange.hide();
+      $label_leave_dayrange.hide();
+
+      daterangepicker_type = 'isDatetime';
+    }
+
+    if($.inArray(mydata, leave_type_notice_arr) !== -1){
+      $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+    }
+
+    fetchDaterangepicker();
+  });
+
+  //代理人、通知對象
+  $(".select2").select2({width: '100%'});
+
+  //日期選擇器
+  function fetchDaterangepicker(){
+    var options = {};
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var time = $leave_timepicker.val();
+
+    options.locale = {format: 'YYYY-MM-DD'};
+    if(daterangepicker_type == 'isSingleDate') {
+      options.singleDatePicker = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+    }
+    if(daterangepicker_type == 'isDatetime') {
+      if (time) {
+        options.startDate = time.split(" - ")['0'];
+        options.endDate = time.split(" - ")['1'];
+      } else {
+        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      }
+
+      options.timePicker = true;
+      options.timePickerIncrement = 30;
+      options.timePicker24Hour = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+      options.locale = {format: 'YYYY-MM-DD HH:mm'};
+    }
+
+    $leave_timepicker.daterangepicker(options);
+    $leave_timepicker.val(time);
+
+    $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
+      var myStartDate = new Date(picker.startDate);
+      var myEndDate = new Date(picker.endDate);
+
+      //若天數 > 1則，不給選擇上午與下午
+      if(daterangepicker_type == 'isDate') {
+        var day = Math.round((myEndDate - myStartDate)/(24*60*60*1000));
+
+        if(day > 1) {
+          $leave_dayrange_morning.iCheck('disable');
+          $leave_dayrange_afternoon.iCheck('disable');
+          $leave_dayrange_allday.iCheck('check');
+        }else{
+          $leave_dayrange_morning.iCheck('enable');
+          $leave_dayrange_afternoon.iCheck('enable');
+        }
+      }
+    });
+
+    $leave_timepicker.on('show.daterangepicker', function(ev, picker) {
+        $('.hourselect option').each(function(){
+          if($(this).val() < 9 || $(this).val() > 18) $(this).remove(); 
+        });
+    });
+
+    $leave_timepicker.on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $("#ajax_switch").val(1);
+    });
+
+    $leave_timepicker.on('hide.daterangepicker', function(ev, picker) {
+        $leave_spent_hours.val('');
+        $leave_spent_hours_hide.val('');
+        if(daterangepicker_type != 'isSingleDate') {
+
+          calculate_hours();
+
+        }
+    });
+  }
+});
+</script>
+@endif
+
+<!-- 員工管理用 -->
+@if(Request::is('user/*'))
+@if(Request::is('user/index'))
+<script>
+function changePageSize(pagesize){
+  $("#frmSearch").submit();
+}
+function changeSort(sort){
+  order_by = '{{$model->order_by}}';
+  order_way = '{{$model->order_way}}';
+  $('#order_by').val(sort);
+  if (order_by == sort && order_way == "DESC") {
+    $('#order_way').val("ASC");
+  } else {
+    $('#order_way').val("DESC");
+  }
+  $("#frmSearch").submit();
+}
+</script>
+@endif
+@if(Request::is('user/edit/*'))
 <script>
 $(function () {
   $('.single-date').daterangepicker({
@@ -303,13 +496,24 @@ $(function () {
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('.single-date').each(function(){$(this).val($(this).attr('date'));});
+    $('.single-date').each(function(){
+      $(this).val($(this).attr('date'));
+    });
 
     $("#user_fileupload").fileinput({
+        @if(!empty($model->avatar))
         initialPreview: [
-            './dist/img/users/vic.png'
+            '{{UrlHelper::getUserAvatarUrl($model->avatar)}}'
         ],
+        @endif
         initialPreviewAsData: true,
+        showUpload: false,
+    });
+    
+    $("#clear_leave_date").click(function() {
+      $("#user_leave_date").val("");
     });
 });
 </script>
+@endif
+@endif
