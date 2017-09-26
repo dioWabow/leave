@@ -146,6 +146,7 @@
             </span>
           </a>
         </li>
+        @if( !empty( Auth::hasMiniManagement() ) )
         <li class="header">MINI-MANAGER</li>
         <li class="">
           <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -154,7 +155,8 @@
           </span>
               </a>
         </li>
-        
+        @endif
+        @if( !empty(Auth::hasManagement() ) )
         <li class="header">MANAGER</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -163,6 +165,8 @@
           </span>
               </a>
         </li>
+        @endif
+        @if( Auth::hasAdmin() )
         <li class="header">BOSS</li>
         <li class="">
           <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -171,6 +175,8 @@
           </span>
               </a>
         </li>
+        @endif
+        @if( Auth::hasHr() )
         <li class="header">HUMAN-RESOURCE</li>
         <li class="">
           <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
@@ -182,10 +188,11 @@
         <li class="">
           <a href="#"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
+        @endif
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
-
+        @if( Auth::hasHr() )
         <li class="treeview @if(Request::is('teams/*', 'leave_type/*', 'user/*'))active @endif">
           <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
             <span class="pull-right-container">
@@ -222,6 +229,7 @@
           </ul>
         </li>
       </ul>
+      @endif
       <!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
