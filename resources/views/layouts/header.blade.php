@@ -224,9 +224,7 @@
           </a>
           <ul class="treeview-menu">
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>報表</a></li>
-            @if( Auth::hasAdmin() )
             <li class=""><a href="#"><i class="fa fa-circle-o"></i>特休報表</a></li>
-            @endif
           </ul>
         </li>
       </ul>
