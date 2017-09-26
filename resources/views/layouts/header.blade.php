@@ -112,7 +112,7 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li @if(Request::is('index/*'))class="active" @endif>
+        <li @if(Request::is('index/*', 'user/*'))class="active" @endif>
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">PERSONAL</li>
