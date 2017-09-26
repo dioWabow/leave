@@ -1,4 +1,4 @@
-<div class="{{(Request::is('leaves/manager/calendar/*')) ? 'active' : ''}} tab-pane" id="calendar">
+<div class="{{(Request::is('leaves_manager/calendar/*')) ? 'active' : ''}} tab-pane" id="calendar">
     <div id="calendar"></div>
     <script>
   $(function () {
@@ -12,7 +12,7 @@
       //Random default events
       events: function(start, end, timezone, callback) {
         $.ajax({
-            url: '{{url("leaves/manager/calendar")}}',
+            url: '{{url("leaves_manager/calendar")}}',
             type: 'POST',
             dataType: 'json',
             data: {

@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
-
 class LeaveDay extends BaseModel
 {
     /**
@@ -21,12 +19,12 @@ class LeaveDay extends BaseModel
         return $result;
     }
 
-    public static function getLeavesIdByToDay($leave_id)
+    public static function getLeavesIdByDate($leave_id, $date)
     {
-        $today = Carbon::now()->format('Y-m-d');
-        $result = self::whereIn('leave_id', $leave_id)->where('start_time', '<' , $today)
-                    ->groupBy('leave_id')
-                    ->pluck('leave_id');
+        $result = self::whereIn('leave_id', $leave_id)
+            ->where('start_time', '<' , $date)
+            ->groupBy('leave_id')
+            ->pluck('leave_id');
         return $result;
     }
 }

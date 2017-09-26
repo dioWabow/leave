@@ -148,8 +148,8 @@ $(function () {
 </script>
 @endif
 <!-- 團隊假單頁面用 主管-->
-@if(Request::is('leaves/manager/*'))
-@if(Request::is('leaves/manager/prove/*'))
+@if(Request::is('leaves_manager/*'))
+@if(Request::is('leaves_manager/prove/*'))
 <script>
 /* 批准假單文字替換*/
 $(function () {
@@ -169,7 +169,7 @@ $(function () {
 });
 </script>
 @endif
-@if(Request::is('leaves/manager/history/*'))
+@if(Request::is('leaves_manager/history/*'))
 <script>
 $(function () {
   var today = new Date();
@@ -202,7 +202,7 @@ function changePageSize(pagesize)
 }
 </script>
 @endif
-@if (Request::is('leaves/manager/prove/*','leaves/manager/upcoming/*','leaves/manager/history/*'))
+@if (Request::is('leaves_manager/prove/*','leaves_manager/upcoming/*','leaves_manager/history/*'))
 <script>
 $(function () {
   $(".sort").on("click", function(){

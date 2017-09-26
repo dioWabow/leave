@@ -9,7 +9,7 @@ use App\Type;
 use App\Leave;
 use App\UserTeam;
 use App\LeaveDay;
-use App\LeaveRespon;
+use App\LeaveResponse;
 use App\Http\Requests\ManagerProveRequest;
 
 use Auth;  
@@ -138,7 +138,8 @@ class LeavesManagerController extends Controller
         }
 
         //傳入user_id,取得該user的審核單, 再回來進入search()
-        $search['id'] = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
+        $tag_id = ['9'];
+        $search['id'] = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $tag_id);
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         
         $model = new Leave;
@@ -324,7 +325,16 @@ class LeavesManagerController extends Controller
                     $input_create['memo'] = $input['memo'];
                     $input_create['tag_id'] = $input['tag_id'];
 
+                    $model->fill($input_update);
+                    $model->save();
+
+                    $leave_respon = new LeaveResponse;
+                    $leave_respon->fill($input_create);
+                    $leave_respon->save();
+
                 }
+
+                return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
 
             } else {
 
@@ -347,15 +357,15 @@ class LeavesManagerController extends Controller
                     $model->fill($input_update);
                     $model->save();
 
-                    $leave_respon = new LeaveRespon;
+                    $leave_respon = new LeaveResponse;
                     $leave_respon->fill($input_create);
                     $leave_respon->save();
 
                 }
 
-            }
+                return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->with('success', '不准假成功 !');
 
-            return Redirect::route('leaves/manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
+            }
         }
     }
 
@@ -417,32 +427,28 @@ class LeavesManagerController extends Controller
     private static function getHistoryLeaveIdForToDay()
     {
         //取得該主管審核過的「不准假」 假單
-        $tag_id = '8';
-        $get_not_leaves_id = LeaveRespon::getLeavesIdByUserIdAndTagIdForNotLeave(Auth::user()->id, $tag_id);
+        $not_leave_tag_id = ['8'];
+        $get_not_leaves_id = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $not_leave_tag_id);
+        
         //取得該主管審核過的「已准假」 假單
-        $get_upcoming_leaves_id = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
+        $upcoming_tag_id = ['9'];
+        $get_upcoming_leaves_id = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $upcoming_tag_id);
         
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
-        $get_leaves_id_today = LeaveDay::getLeavesIdByToDay($get_upcoming_leaves_id);
-        
+        $today = Carbon::now()->format('Y-m-d');
+        $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
         $result = $get_not_leaves_id->merge($get_leaves_id_today);
         return $result;
     }
 
     private static function getHistoryLeaveIdForSearch($start_time, $end_time)
     {
-        //取得該主管審核過的「不准假」 假單
-        $tag_id = '8';
-        $get_not_leaves_id = LeaveRespon::getLeavesIdByUserIdAndTagIdForNotLeave(Auth::user()->id, $tag_id);
-        //取得該主管審核過的「已准假」 假單
-        $get_upcoming_leaves_id = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
-        
-        // 取得搜尋的區間為該主管不准假的子單記錄 
-        $get_unallowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_not_leaves_id);
-        // 取得搜尋的區間為該主管已準假的子單記錄 
-        $get_allowed_id = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_upcoming_leaves_id);
-        
-        $result = $get_unallowed_id->merge($get_allowed_id);
+        //取得該主管審核過的「已準假、不准假」 假單
+        $tag_id = ['8', '9'];
+        $get_leaves_id = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $tag_id);
+
+        // 取得搜尋的區間為該主管不准假、已準的子單記錄 
+        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
         return $result;
     }
 }

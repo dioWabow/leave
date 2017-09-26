@@ -144,7 +144,7 @@
         </li>
         <li class="header">MINI-MANAGER</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'minimanager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'minimanager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               @if (LeaveHelper::getProveManagerLeavesTabLable('minimanager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('minimanager') }}</small>@endif
             </span>
@@ -156,7 +156,7 @@
         </li>
         <li class="header">MANAGER</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
                 @if (LeaveHelper::getProveManagerLeavesTabLable('manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('manager') }}</small>@endif
             </span>
@@ -168,7 +168,7 @@
         </li>
         <li class="header">BOSS</li>
         <li class="">
-          <a href="{{ route('leaves/manager/prove', [ 'role' => 'admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               @if(LeaveHelper::getProveManagerLeavesTabLable('admin')> 0) <small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('admin') }}</small>@endif
             </span>

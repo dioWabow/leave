@@ -1,5 +1,5 @@
-<div class="{{(Request::is('leaves/manager/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/manager/upcoming', [ 'role' => $getRole ]) }}" method="POST">
+<div class="{{(Request::is('leaves_manager/upcoming/*')) ? 'active' : ''}} tab-pane" id="upcoming">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager/upcoming', [ 'role' => $getRole ]) }}" method="POST">
       <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -25,7 +25,7 @@
        
     <tbody>
       @foreach ($dataProvider as $value)
-        <tr class="clickable-row" data-href="{{ route('leaves/manager/edit', [ 'id' => $value->id ]) }}">
+        <tr class="clickable-row" data-href="{{ route('leaves_manager/edit', [ 'id' => $value->id ]) }}">
           @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
             <td><img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px"></td>
           @endforeach

@@ -113,39 +113,39 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 團隊假單-主管
-    Route::group(['prefix'=>'leaves/manager'], function(){
+    Route::group(['prefix'=>'leaves_manager'], function(){
         Route::any('prove/{role}',[
-            'as'=>'leaves/manager/prove',
+            'as'=>'leaves_manager/prove',
             'uses'=> 'LeavesManagerController@getProve',
         ]);
         
         Route::any('upcoming/{role}',[
-            'as'=>'leaves/manager/upcoming',
+            'as'=>'leaves_manager/upcoming',
             'uses'=> 'LeavesManagerController@getUpcoming',
         ]);
         
         Route::any('history/{role}',[
-            'as'=>'leaves/manager/history',
+            'as'=>'leaves_manager/history',
             'uses'=> 'LeavesManagerController@getHistory',
         ]);
 
         Route::any('calendar/{role}',[
-            'as'=>'leaves/manager/calendar',
+            'as'=>'leaves_manager/calendar',
             'uses'=> 'LeavesManagerController@getCalendar',
         ]);
         
         Route::any('calendar/',[
-            'as'=>'leaves/manager/calendar/ajax',
+            'as'=>'leaves_manager/calendar/ajax',
             'uses'=> 'LeavesManagerController@ajaxGetAllAvailableLeaveListByDateRange',
         ]);
 
         Route::post('insert/{role}',[
-            'as' => 'leaves/manager/insert',
+            'as' => 'leaves_manager/insert',
             'uses' => 'LeavesManagerController@postInsert',
         ]);
 
         Route::get('edit/{id}',[
-            'as' => 'leaves/manager/edit',
+            'as' => 'leaves_manager/edit',
             'uses' => 'LeavesManagerController@getEdit',
         ]);
     });

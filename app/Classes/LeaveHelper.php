@@ -5,7 +5,7 @@ namespace App\Classes;
 use App\Team;
 use App\Leave;
 use App\UserTeam;
-use App\LeaveRespon;
+use App\LeaveResponse;
 
 use Auth;
 use Carbon\Carbon;
@@ -101,13 +101,14 @@ class LeaveHelper
     }
 
     /**
-     * 取得該
+     * 取得該主管
      * 找到審核通過的假單
      * tag 狀態 9
      */
     public static function getUpComingManagerLeavesTotal()
     {
-        $search['id'] = LeaveRespon::getLeavesIdByUserIdForUpComing(Auth::user()->id);
+        $tag_id = ['9'];
+        $search['id'] = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $tag_id);
         $search['start_time'] = Carbon::now()->format('Y-m-d');
 
         $model = new Leave;
@@ -132,7 +133,6 @@ class LeaveHelper
         } 
     
         return $result;
-
     }
 
     /**

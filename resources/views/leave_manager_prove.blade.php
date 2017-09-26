@@ -1,6 +1,6 @@
-<div class="{{(Request::is('leaves/manager/prove/*')) ? 'active' : ''}} tab-pane" id="prove">
+<div class="{{(Request::is('leaves_manager/prove/*')) ? 'active' : ''}} tab-pane" id="prove">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/manager/prove', ['role' => $getRole ]) }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_manager/prove', ['role' => $getRole ]) }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -10,7 +10,7 @@
       @endif
       {!!csrf_field()!!}
     </form>
-    <form name="frmSetting" id="frmSetting" action="{{ route('leaves/manager/insert', ['role' => $getRole ]) }}" method="POST">
+    <form name="frmSetting" id="frmSetting" action="{{ route('leaves_manager/insert', ['role' => $getRole ]) }}" method="POST">
       <div class="dataTables_wrapper form-inline dt-bootstrap">
         <div class="row">
           <div class="col-sm-12">
@@ -29,7 +29,7 @@
               </thead>
             <tbody>
               @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="{{ route('leaves/manager/edit', [ 'id' => $value->id ]) }}">
+              <tr class="clickable-row" data-href="{{ route('leaves_manager/edit', [ 'id' => $value->id ]) }}">
                 <td>
                   <input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
                 </td>
