@@ -725,18 +725,17 @@ $(function () {
 </script>
 @endif
 @endif
-
-<!-- 特休結算+報表排序用 -->
-@if(Request::is('annual_leave_calculate/*','report/*'))
+<!-- 特休結算+特休報表+報表排序用 -->
+@if(Request::is('annual_leave_calculate/*','report/*','annual/*'))
 <script>
-  $(document).on('click', 'th', function() {
-  var table = $(this).parents('table').eq(0);
-  var rows = table.find('tbody > tr').toArray().sort(comparer($(this).index()));
+  $(document).on("click", "th", function() {
+  var table = $(this).parents("table").eq(0);
+  var rows = table.find("tbody > tr").toArray().sort(comparer($(this).index()));
   this.asc = !this.asc;
   if (!this.asc) {
     rows = rows.reverse();
   }
-  table.children('tbody').empty().html(rows);
+  table.children("tbody").empty().html(rows);
   });
 
   function comparer(index) {
@@ -749,8 +748,7 @@ $(function () {
   }
 
   function getCellValue(row, index) {
-    return $(row).children('td').eq(index).text();
+    return $(row).children("td").eq(index).text();
   }
-
 </script>
 @endif

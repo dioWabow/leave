@@ -1,3 +1,18 @@
+#2017-09-25 carrie 特休報表計算資料表
+CREATE TABLE `annuals_years` (
+  `id` int(10) NOT NULL COMMENT '流水編號',
+  `user_id` int(10) NOT NULL COMMENT '使用者',
+  `annual_this_years` int(10) NOT NULL COMMENT '今年總特休',
+  `annual_next_years` int(10) NOT NULL COMMENT '明年總特休',
+  `used_annual_hours` int(10) NOT NULL COMMENT '已使用特休',
+  `remain_annual_hours` int(10) NOT NULL COMMENT '剩餘特休',
+  `create_time` DATE NULL DEFAULT NULL COMMENT '特休計算時間',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '新增時間',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT '最後編輯'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+ALTER TABLE `annuals_years` ADD PRIMARY KEY (`id`);
+ALTER TABLE `annuals_years` MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
+
 #2017-09-14 michael 報表 leaves 新增扣薪欄位
 ALTER TABLE `leaves` ADD `deductions` INT(7) NULL DEFAULT NULL COMMENT '扣薪' AFTER `end_time`;
 

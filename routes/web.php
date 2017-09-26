@@ -244,6 +244,20 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    # 特休報表
+    Route::group(['prefix'=>'annual'], function(){
+        Route::any('index',[
+            'as'=>'annual/index',
+            'uses'=> 'LeaveAnnualReportController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'annual/view',
+            'uses' => 'LeaveAnnualReportController@getView',
+        ]);
+    });
+    
+
     // 團隊設定
     Route::group(['prefix'=>'teams'], function(){
         Route::get('index',[
