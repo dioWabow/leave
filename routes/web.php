@@ -127,28 +127,28 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 我的假單
-    Route::group(['prefix'=>'leaves/my'], function(){
+    Route::group(['prefix'=>'leaves_my'], function(){
         Route::any('prove',[
-            'as'=>'leaves/my/prove',
+            'as'=>'leaves_my/prove',
             'uses'=> 'LeavesMyController@getProve',
         ]);
 
         Route::any('upcoming',[
-            'as'=>'leaves/my/upcoming',
+            'as'=>'leaves_my/upcoming',
             'uses'=> 'LeavesMyController@getUpcoming',
         ]);
 
         Route::any('history',[
-            'as'=>'leaves/my/history',
+            'as'=>'leaves_my/history',
             'uses'=> 'LeavesMyController@getHistory',
         ]);
 
         Route::get('delete/{id}',[
-            'as'=>'leaves/my/delete',
+            'as'=>'leaves_my/delete',
             'uses'=> 'LeavesMyController@postDelete',
         ]);
         Route::get('edit/{id}',[
-            'as'=>'leaves/my/edit',
+            'as'=>'leaves_my/edit',
             'uses'=> 'LeavesMyController@getEdit',
         ]);
     });

@@ -124,13 +124,13 @@ class LeavesMyController extends Controller
             }  else {
 
                  //如果日期進來為空，搜尋該user < 今天的子單 的leave_id
-                $search['id'] = self::getHistoryLeaveIdForToDay();
+                $search['id'] = self::getHistoryLeaveIdForDate();
 
             }
 
         } else {
 
-            $search['id'] = self::getHistoryLeaveIdForToDay();
+            $search['id'] = self::getHistoryLeaveIdForDate();
             
             // 沒有搜尋，判斷有沒有page 和 session 是不是空的
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_my')))) {
@@ -148,7 +148,6 @@ class LeavesMyController extends Controller
         }
         
         $model = new Leave;
-        // $search['user_id'] = Auth::user()->id;
         //傳值近來是exception，先去找該exception的id，再搜尋假單是否有該type_id
         if (!empty($search['exception'])) {
             
@@ -178,7 +177,7 @@ class LeavesMyController extends Controller
     {
         $model = $this->loadModel($id)->delete();
         // 代 user_id 回到 leaves 頁面
-        return Redirect::route('leaves/my/prove', [ 'user_id' => Auth::user()->id  ])->withErrors([ 'msg' => '刪除完畢。' ]);
+        return Redirect::route('leaves_my/prove', [ 'user_id' => Auth::user()->id  ])->withErrors([ 'msg' => '刪除完畢。' ]);
     }
 
     /**
@@ -206,7 +205,7 @@ class LeavesMyController extends Controller
 
     }
 
-    private static function getHistoryLeaveIdForToDay()
+    private static function getHistoryLeaveIdForDate()
     {
         $model = new Leave;
         //取得該user 的「已取消、不准假」 假單
@@ -219,7 +218,8 @@ class LeavesMyController extends Controller
         $get_upcoming_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
 
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
-        $get_leaves_id_today = LeaveDay::getLeavesIdByToDay($get_upcoming_leaves_id);
+        $today = Carbon::now()->format('Y-m-d');
+        $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
         $result = $get_not_leaves_id->merge($get_leaves_id_today);
         return $result;
     }
@@ -233,7 +233,6 @@ class LeavesMyController extends Controller
         $get_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
         // 取得搜尋的區間為該user的子單記錄 
         $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
-        
         return $result;
     }
 

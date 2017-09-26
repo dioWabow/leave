@@ -1,7 +1,7 @@
 <!-- /.tab-pane -->
-<div class="{{Request::is('leaves/my/history') ? 'active' : ''}} tab-pane">
+<div class="{{Request::is('leaves_my/history') ? 'active' : ''}} tab-pane">
   <div class="dataTables_wrapper form-inline dt-bootstrap">
-    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/history') }}" method="POST">
+    <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my/history') }}" method="POST">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
         <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
@@ -76,7 +76,7 @@
           </thead>
           <tbody>
           @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
+            <tr class="clickable-row" data-href="{{ route('leaves_my/edit', [ 'id' => $value->id ]) }}" @if ($value->tag_id == 7) style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
                   @if($value->tag_id == 7) class="btn"

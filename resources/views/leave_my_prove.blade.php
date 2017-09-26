@@ -1,6 +1,6 @@
 <!-- /.tab-pane -->
-<div class="{{(Request::is('leaves/my/prove')) ? 'active' : ''}} tab-pane" id="prove">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/prove') }}" method="POST">
+<div class="{{(Request::is('leaves_my/prove')) ? 'active' : ''}} tab-pane" id="prove">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my/prove') }}" method="POST">
     <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -27,7 +27,7 @@
             <tbody>
             </form>
               @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}">
+              <tr class="clickable-row" data-href="{{ route('leaves_my/edit', [ 'id' => $value->id ]) }}">
                 <td>
                   <button type="button"
                     @if($value->tag_id == 1) class="btn bg-yellow"
@@ -38,7 +38,7 @@
                     {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
                   </button>
                   @if ($value->tag_id == 1 || $value->tag_id == 2)
-                    <a href="{{ route('leaves/my/delete', [ 'id' => $value->id ]) }}">
+                    <a href="{{ route('leaves_my/delete', [ 'id' => $value->id ]) }}">
                       <button type="button" class="btn btn-danger">
                         <i class="fa fa-trash-o"></i>
                       </button>

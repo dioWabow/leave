@@ -101,8 +101,8 @@ $(function () {
 @endif
 
 <!-- 我的假單頁面用 -->
-@if(Request::is('leaves/my/*'))
-  @if(Request::is('leaves/my/history'))
+@if(Request::is('leaves_my/*'))
+  @if(Request::is('leaves_my/history'))
   <script>
     $(function () {
       var today = new Date();
@@ -133,7 +133,7 @@ $(function () {
     }
   </script>
   @endif
-  @if (Request::is('leaves/my/prove','leaves/my/upcoming','leaves/my/history'))
+  @if (Request::is('leaves_my/prove','leaves_my/upcoming','leaves_my/history'))
   <script>
   $(function () {
     $(".sort").on("click", function(){

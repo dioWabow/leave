@@ -32,14 +32,14 @@
                 <!-- Inner Menu: contains the notifications -->
                 <ul class="menu">
                   <li><!-- start notification -->
-                    <a href="{{ route('leaves/my/prove') }}">
+                    <a href="{{ route('leaves_my/prove') }}">
                       @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} 張假單尚未審核@endif
                     </a>
                   </li>
                   <!-- end notification -->
                 </ul>
               </li>
-              <li class="footer"><a href="{{ route('leaves/my/prove') }}">View all</a></li>
+              <li class="footer"><a href="{{ route('leaves_my/prove') }}">View all</a></li>
             </ul>
           </li>
           <!-- User Account Menu -->
@@ -118,8 +118,8 @@
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
         <li class=""><a href="#"><i class="fa fa-plane"></i> <span>我要放假</span></a></li>
-        <li @if(Request::is('leaves/my/*')) class="active" @endif>
-          <a href="{{ route('leaves/my/prove') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
+        <li @if(Request::is('leaves_my/*')) class="active" @endif>
+          <a href="{{ route('leaves_my/prove') }}"><i class="fa fa-calendar"></i> <span>我的假單</span>
             <span class="pull-right-container">
               @if( LeaveHelper::getProveMyLeavesTotalByUserId()>0)<small class="label pull-right bg-red" alt="待審核假單">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</small>@endif
             </span>

@@ -18,18 +18,18 @@
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="{{Request::is('leaves/my/prove')? 'active' : ''}}"><a href="{{ route('leaves/my/prove') }}">{{ WebHelper::getLeaveTabLabel('prove') }} @if( LeaveHelper::getProveMyLeavesTotalByUserId()>0)<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveMyLeavesTotalByUserId() }} New Messages">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</span>@endif</a></li>
-					<li class="{{Request::is('leaves/my/upcoming') ? 'active' : ''}}" ><a href="{{ route('leaves/my/upcoming') }}">{{ WebHelper::getLeaveTabLabel('upcoming') }}@if(LeaveHelper::getUpComingMyLeavesTotalByUserId()>0) <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingMyLeavesTotalByUserId() }} New Messages">{{ LeaveHelper::getUpComingMyLeavesTotalByUserId() }}</span>@endif</a></li>
-					<li class="{{Request::is('leaves/my/history') ? 'active' : ''}}" ><a href="{{ route('leaves/my/history') }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
+					<li class="{{Request::is('leaves_my/prove')? 'active' : ''}}"><a href="{{ route('leaves_my/prove') }}">{{ WebHelper::getLeaveTabLabel('prove') }} @if( LeaveHelper::getProveMyLeavesTotalByUserId()>0)<span data-toggle="tooltip" title="" class="badge bg-red" data-original-title="{{ LeaveHelper::getProveMyLeavesTotalByUserId() }} New Messages">{{ LeaveHelper::getProveMyLeavesTotalByUserId() }}</span>@endif</a></li>
+					<li class="{{Request::is('leaves_my/upcoming') ? 'active' : ''}}" ><a href="{{ route('leaves_my/upcoming') }}">{{ WebHelper::getLeaveTabLabel('upcoming') }}@if(LeaveHelper::getUpComingMyLeavesTotalByUserId()>0) <span data-toggle="tooltip" title="" class="badge bg-green" data-original-title="{{ LeaveHelper::getUpComingMyLeavesTotalByUserId() }} New Messages">{{ LeaveHelper::getUpComingMyLeavesTotalByUserId() }}</span>@endif</a></li>
+					<li class="{{Request::is('leaves_my/history') ? 'active' : ''}}" ><a href="{{ route('leaves_my/history') }}">{{ WebHelper::getLeaveTabLabel('history') }}</a></li>
 				</ul>
 				<div class="tab-content">
-					@if(Request::is('leaves/my/prove'))
+					@if(Request::is('leaves_my/prove'))
 						@include('leave_my_prove')
 					@endif
-					@if(Request::is('leaves/my/upcoming'))
+					@if(Request::is('leaves_my/upcoming'))
 						@include('leave_my_upcoming')
 					@endif
-					@if(Request::is('leaves/my/history'))
+					@if(Request::is('leaves_my/history'))
 						@include('leave_my_history')
 					@endif
 				</div>

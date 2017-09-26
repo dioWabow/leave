@@ -1,6 +1,6 @@
 	<!-- /.tab-pane -->
-<div class="{{ Request::is('leaves/my/upcoming') ? 'active' : '' }} tab-pane" id="upcoming">
-  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves/my/upcoming') }}" method="POST">
+<div class="{{ Request::is('leaves_my/upcoming') ? 'active' : '' }} tab-pane" id="upcoming">
+  <form name="frmOrderby" id="frmOrderby" action="{{ route('leaves_my/upcoming') }}" method="POST">
     <div class="dataTables_wrapper form-inline dt-bootstrap">
       @if(count($model->order_by)>0)
         <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -26,7 +26,7 @@
             <tbody>
             </form>
             @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="{{ route('leaves/my/edit', [ 'id' => $value->id ]) }}">
+              <tr class="clickable-row" data-href="{{ route('leaves_my/edit', [ 'id' => $value->id ]) }}">
                 <td>{{ $value->fetchType->name }}</td>
                 <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
                 <td>{{ $value->reason }}</td>
