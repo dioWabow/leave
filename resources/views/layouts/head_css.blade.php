@@ -542,7 +542,43 @@ $(function () {
       }).on('filedeleted ', function(event, data, previewId, index) {
 
       });
+  
+      $("#cancel").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>取消</span> 此假單嗎？");
+       
+      });
+
+      $("#disagree").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不允許</span> 此假單嗎？");
+       
+      });
+
+      $("#agree").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>允許</span> 此假單嗎？");
+
+      });
+
+      $("#disagree_agent").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不代理</span> 此假單嗎？");
+       
+      });
+
+      $("#agree_agent").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>代理</span> 此假單嗎？");
+
+      });
   });
+
 </script>
 @endif
 

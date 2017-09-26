@@ -424,7 +424,7 @@ class LeaveController extends Controller
         $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
 
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
-        
+
         return view('leave_view',compact(
             'model','leave_response','leave_response_reverse','leave_prove_process','leave_notice','leave_agent'
         ));
@@ -432,9 +432,9 @@ class LeaveController extends Controller
 
     public function postUpdate(Request $request)
     {
+        $message = '';
         $input = $request->input('leave_response');
         $input['user_id'] = Auth::getUser()->id;
-        $input['id'] = $input['leave_id'];
 
         $model = $this->loadModel($input['leave_id']);
 
@@ -445,54 +445,52 @@ class LeaveController extends Controller
         $leave_response = new LeaveResponse;
 
         //取消
-        if (in_array($model->tag_id,[1,2]) && Auth::getUser()->id == $model->user_id) {
+        if (in_array($model->tag_id,['1','2']) && Auth::getUser()->id == $model->user_id) {
 
             //狀態=0代表取消不代理或不准假
             if (!empty($input['status'])) {
 
                 $input['tag_id'] = '7';
+                $message = '已取消';
 
             }
             
         //代理 
-        } elseif ($model->tag_id == 2 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray())) {
+        } elseif ($model->tag_id == '1' && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray())) {
 
             //狀態=0代表不代理
-            if (!empty($input['status'])) {
+            if (empty($input['status'])) {
 
                 $input['tag_id'] = '8';
+                $message = '不代理';
 
             } else {
 
                 $input['tag_id'] = '2';
+                $message = '同意代理';
 
             }
 
         //准假
-        } elseif (in_array($model->tag_id,[3,4]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id])) {
+        } elseif (in_array($model->tag_id,['2','3']) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id])) {
 
             //狀態=0代表不準假
-            if (!empty($input['status'])) {
+            if (empty($input['status'])) {
 
                 $input['tag_id'] = '8';
+                $message = '不准該假單的申請';
 
             } else {
 
                 if (Auth::getUser()->id == $leave_prove_process['minimanager']->id) {
 
                     $input['tag_id'] = '3';
+                    $message = '同意該假單的申請';
 
                 } elseif (Auth::getUser()->id == $leave_prove_process['manager']->id) {
 
-                    if ($model->hours > 24) {
-
-                        $input['tag_id'] = '4';
-
-                    } else {
-
-                        $input['tag_id'] = '9';
-
-                    }
+                    $input['tag_id'] = ($model->hours > 24) ? '4' : '9';
+                    $message = '同意該假單的申請';
 
                 }
 
@@ -504,20 +502,27 @@ class LeaveController extends Controller
 
         if ($leave_response->save()) {
 
-            $model->fill($input);
+            $model->fill(['tag_id' => $leave_response->tag_id]);
+
             if ($model->save()) {
 
-                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with(['success' => '已取消']);
+                if (in_array($model->tag_id, ['2','3','4'])) {
+
+                    LeaveHelper::syncCheckLeave($model->id,$input);
+
+                }
+                
+                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with(['success' => $message]);
 
             } else {
 
-                return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => '取消失敗']);
+                return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
 
             }
 
         } else {
 
-            return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => '取消失敗']);
+            return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
 
         }
 

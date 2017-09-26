@@ -25,7 +25,7 @@
 	<li>
   @if(in_array($model->tag_id,[1,2,7,8]) && Auth::getUser()->id == $model->user_id)
     <a href="./leave.html">我的請假單</a>
-  @elseif($model->tag_id == 2 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
+  @elseif($model->tag_id == 1 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
     <a href="./leave.html">同意代理嗎</a>
   @elseif(in_array($model->tag_id,[3,4]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
     <a href="./leave.html">團隊假單</a>
@@ -73,12 +73,15 @@
                 @elseif($key == 'minimanager')
                   @php ($tag_name = '小主管核准')
                   @php ($tag_id = 3)
-                @elseif($key == 'manager')
+                @elseif($key == 'manager' && !empty($leave_prove['admin']))
                   @php ($tag_name = '主管核准')
                   @php ($tag_id = 4)
+                @elseif($key == 'manager' && empty($leave_prove['admin']))
+                  @php ($tag_name = '主管核准')
+                  @php ($tag_id = 9)
                 @elseif($key == 'admin')
                   @php ($tag_name = '大ＢＯＳＳ核准')
-                  @php ($tag_id = 5)
+                  @php ($tag_id = 9)
                 @endif
                 <li>
                   <a href="#step-{{$index}}" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
@@ -138,7 +141,7 @@
             @if(in_array($model->tag_id,[1,2]) && Auth::getUser()->id == $model->user_id)
               <a href="#" class="btn btn-danger btn-block" id="cancel" data-toggle="modal" data-target="#myModalConfirm"><b>我要取消</b></a>
 
-            @elseif($model->tag_id == 2 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
+            @elseif($model->tag_id == 1 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">
@@ -154,7 +157,7 @@
                 </div>
               </div></div>
 
-            @elseif(in_array($model->tag_id,[3,4]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
+            @elseif(in_array($model->tag_id,[2,3]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">
@@ -171,7 +174,23 @@
                   </div>
                 </div>
               </div>
-
+            @elseif($model->tag_id == 4 && Auth::getUser()->id == $leave_prove_process['admin']->id)
+              <div class="form-group"><div class="row">
+              <div class="col-md-2">說點話</div>
+              <div class="col-md-10">
+                <input type="text" id="leave_memo" name="leave_response[memo]" class="form-control pull-right">
+              </div>
+              </div></div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6">
+                    <a href="#" class="btn btn-danger btn-block" id="disagree" data-toggle="modal" data-target="#myModalConfirm"><b>不允許</b></a>
+                  </div>
+                  <div class="col-md-6">
+                    <a href="#" class="btn btn-info btn-block" id="agree" data-toggle="modal" data-target="#myModalConfirm"><b>允許放假</b></a>
+                  </div>
+                </div>
+              </div>
             @endif
             <!-- Modal -->
             <div class="modal fade" id="myModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -254,7 +273,7 @@
             <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
               {!!csrf_field()!!}
               <input type="hidden" name="leave_view[id]" value="{{$model->id}}">
-              <input id="leave_view_fileupload" @if(Auth::getUser()->id != $model->user_id) disabled @endif name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
+              <input id="leave_view_fileupload" @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) disabled @endif name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
             </form>
           </div>
         
@@ -279,41 +298,3 @@
 <!-- ./wrapper -->
 </body>
 </html>
-<script>
-
-  $("#cancel").on("click", function(){
-
-    $("#leave_status").val(1);
-    $(".modal-body h1").html("確定 <span class='text-red'>取消</span> 此假單嗎？");
-   
-  });
-
-  $("#disagree").on("click", function(){
-
-    $("#leave_status").val(0);
-    $(".modal-body h1").html("確定 <span class='text-red'>不允許</span> 此假單嗎？");
-   
-  });
-
-  $("#agree").on("click", function(){
-
-    $("#leave_status").val(1);
-    $(".modal-body h1").html("確定 <span class='text-red'>允許</span> 此假單嗎？");
-
-  });
-
-  $("#disagree_agent").on("click", function(){
-
-    $("#leave_status").val(0);
-    $(".modal-body h1").html("確定 <span class='text-red'>不代理</span> 此假單嗎？");
-   
-  });
-
-  $("#agree_agent").on("click", function(){
-
-    $("#leave_status").val(1);
-    $(".modal-body h1").html("確定 <span class='text-red'>代理</span> 此假單嗎？");
-
-  });
-  
-</script>

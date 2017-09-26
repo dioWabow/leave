@@ -24,7 +24,7 @@ class LeaveResponse extends Model
     public static function getResponseByLeaveId($leave_id)
     {
         $result = self::where('leave_id' , $leave_id)
-            ->orderBy('created_at','DESC')
+            ->orderBy('id','DESC')
             ->get();
         return $result;
     }
@@ -46,6 +46,12 @@ class LeaveResponse extends Model
     public function fetchTag()
     {
         $result = $this::hasOne('App\Tag','id','tag_id');
+        return $result;
+    }
+
+    public function fetchLeave()
+    {
+        $result = $this::hasOne('App\Leave','id','leave_id');
         return $result;
     }
 }

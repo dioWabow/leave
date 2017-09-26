@@ -941,4 +941,107 @@ class LeaveHelper
 
     }
 
+    //同步向上審核
+    public function syncCheckLeave($leave_id,$input)
+    {
+        $leave_prove = self::getLeaveProveProcess($leave_id);
+        $agent_user_id = Auth::getUser()->id;
+
+        while("1" == "1"){
+
+            $leave = Leave::find($leave_id);
+
+            $leave_response = new LeaveResponse;
+
+            if ($leave->tag_id == '2') {
+
+                if (!empty($leave_prove['minimanager'])) {
+
+                    if ($leave_prove['minimanager']->id == $agent_user_id) {
+
+                        $input['tag_id'] = '3';
+
+                        $leave_response->fill($input);
+                        if ($leave_response->save()) {
+
+                            $leave->fill(['tag_id' => $leave_response->tag_id]);
+                            $leave->save();
+
+                        }
+
+                    } else {
+
+                        break;
+
+                    }
+
+                } else {
+
+                    if ($leave_prove['manager']->id == $agent_user_id) {
+
+                        $input['tag_id'] = ($leave->hours < 24) ?'9' : '4';
+
+                        $leave_response->fill($input);
+                        if ($leave_response->save()) {
+
+                            $leave->fill(['tag_id' => $leave_response->tag_id]);
+                            $leave->save();
+
+                        }
+
+                    } else {
+
+                        break;
+
+                    }
+
+                }
+
+            } elseif ($leave->tag_id == '3') {
+
+                if ($leave_prove['manager']->id == $agent_user_id) {
+
+                    $input['tag_id'] = ($leave->hours < 24) ?'9' : '4';
+
+                    $leave_response->fill($input);
+                    if ($leave_response->save()) {
+
+                        $leave->fill(['tag_id' => $leave_response->tag_id]);
+                        $leave->save();
+
+                    }
+
+                } else {
+
+                    break;
+
+                }
+
+            } elseif ($leave->tag_id == '4') {
+
+                if ($leave_prove['admin']->id == $agent_user_id) {
+
+                    $input['tag_id'] = '9';
+
+                    $leave_response->fill($input);
+                    if ($leave_response->save()) {
+
+                        $leave->fill(['tag_id' => $leave_response->tag_id]);
+                        $leave->save();
+
+                    }
+
+                }
+
+                break;
+
+            } else {
+
+                break;
+
+            }
+
+        }
+    }
+
 }
