@@ -156,8 +156,24 @@
                   <a href="#" class="btn btn-info btn-block" id='disagree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>不同意代理</b></a>
                 </div>
               </div></div>
-
-            @elseif(in_array($model->tag_id,[2,3]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
+            @elseif(in_array($model->tag_id,[2,3]) && !empty($leave_prove_process['minimanager']) &&in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
+              <div class="form-group"><div class="row">
+              <div class="col-md-2">說點話</div>
+              <div class="col-md-10">
+                <input type="text" id="leave_memo" name="leave_response[memo]" class="form-control pull-right">
+              </div>
+              </div></div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-6">
+                    <a href="#" class="btn btn-danger btn-block" id="disagree" data-toggle="modal" data-target="#myModalConfirm"><b>不允許</b></a>
+                  </div>
+                  <div class="col-md-6">
+                    <a href="#" class="btn btn-info btn-block" id="agree" data-toggle="modal" data-target="#myModalConfirm"><b>允許放假</b></a>
+                  </div>
+                </div>
+              </div>
+            @elseif(in_array($model->tag_id,[2,3]) && in_array(Auth::getUser()->id,[$leave_prove_process['manager']->id]))
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">
