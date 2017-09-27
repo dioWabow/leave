@@ -67,31 +67,15 @@
             <ul class="wizard_steps">
               @php ($index = 1)
               @foreach($leave_prove_process as $key => $leave_prove)
-                @if($key == 'agent')
-                  @php ($tag_name = '代理人核准')
-                  @php ($tag_id = 2)
-                @elseif($key == 'minimanager')
-                  @php ($tag_name = '小主管核准')
-                  @php ($tag_id = 3)
-                @elseif($key == 'manager' && !empty($leave_prove['admin']))
-                  @php ($tag_name = '主管核准')
-                  @php ($tag_id = 4)
-                @elseif($key == 'manager' && empty($leave_prove['admin']))
-                  @php ($tag_name = '主管核准')
-                  @php ($tag_id = 9)
-                @elseif($key == 'admin')
-                  @php ($tag_name = '大ＢＯＳＳ核准')
-                  @php ($tag_id = 9)
-                @endif
                 <li>
-                  <a href="javascript: void(0)" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
+                  <a href="javascript: void(0)" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
                     <span class="step_no">
-                      <img src="{{urlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
+                      <img src="{{urlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
                     </span>
-                    <span class="step_descr @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) disabled @endif">
+                    <span class="step_descr @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) disabled @endif">
                         Step {{$index}}<br />
                         <small>
-                        {{$tag_name}}
+                        {{$leave_prove_tag_name[$key]['name']}}
                         </small>
                     </span>
                   </a>

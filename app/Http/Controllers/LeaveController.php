@@ -420,13 +420,45 @@ class LeaveController extends Controller
         }
 
         $leave_prove_process = LeaveHelper::getLeaveProveProcess($id);
+        $leave_prove_tag_name = [];
+
+        foreach ($leave_prove_process as $key => $leave_prove) {
+
+            if ($key == 'agent') {
+
+                $leave_prove_tag_name[$key]['id'] = 2;
+                $leave_prove_tag_name[$key]['name'] = '代理人核准';
+
+            } elseif ($key == 'minimanager') {
+
+                $leave_prove_tag_name[$key]['id'] = 3;
+                $leave_prove_tag_name[$key]['name'] = '小主管核准';
+
+            } elseif ($key == 'manager' && !empty($leave_prove['admin'])) {
+
+                $leave_prove_tag_name[$key]['id'] = 4;
+                $leave_prove_tag_name[$key]['name'] = '主管核准';
+
+            } elseif ($key == 'manager' && empty($leave_prove['admin'])) {
+
+                $leave_prove_tag_name[$key]['id'] = 9;
+                $leave_prove_tag_name[$key]['name'] = '主管核准';
+
+            } elseif ($key == 'admin') {
+
+                $leave_prove_tag_name[$key]['id'] = 9;
+                $leave_prove_tag_name[$key]['name'] = '大ＢＯＳＳ核准';
+
+            }
+
+        }
 
         $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
 
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
 
         return view('leave_view',compact(
-            'model','leave_response','leave_response_reverse','leave_prove_process','leave_notice','leave_agent'
+            'model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
         ));
     }
 
