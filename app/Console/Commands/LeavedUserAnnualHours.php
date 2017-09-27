@@ -46,6 +46,54 @@ class LeavedUserAnnualHours extends Command
      */
     public function handle()
     {
-        
+        $now_year = Carbon::now()->format('Y');
+        $now_month = Carbon::now()->format('m');
+
+        $users = User::getUserByLeaveYearAndMonth($now_year,$now_month);
+
+        //抓出特休的type_id
+        $leave_type_arr = [];
+        foreach (Type::getTypeByException(['annual_leave']) as $type) {
+
+            $leave_type_arr[] = $type->id;
+
+        }
+
+        foreach($users as $user) {
+
+            LeavedUser::deleteAnnualHourByUserId($user->id,$now_year);
+
+            $LeavedUser = new LeavedUser;
+            if (TimeHelper::changeDateFormat($user->leave_date,'m-d') > TimeHelper::changeDateFormat($user->enter_date,'m-d')) {
+
+                $start_time = TimeHelper::changeDateFormat($now_year,'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
+
+            } else {
+
+                $start_time = TimeHelper::changeDateValue($now_year,['-,1,year'],'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
+
+            }
+            
+            $end_time = $now_year . TimeHelper::changeDateFormat($user->leave_date,'-m-d');
+            
+            $annual_hours = LeaveHelper::calculateAnnualDate($start_time,$user->id);
+            $dt_start = Carbon::parse($start_time);
+            $dt_end = Carbon::parse($end_time);
+            $work_days = $dt_start->diffInDays($dt_end);
+            $work_rate = ($work_days/365 >1 ) ? 1 : $work_days/365;
+            $real_annual_hours = number_format($annual_hours * $work_rate , 1);
+            $used_annual_hours = LeaveDay::getPassLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
+            $remain_annual_hours = $real_annual_hours - $used_annual_hours;
+
+            $LeavedUser->fill([
+                'user_id' => $user->id,
+                'annual_hours' => $real_annual_hours,
+                'used_annual_hours' => $used_annual_hours,
+                'remain_annual_hours' => $remain_annual_hours,
+                'create_time' => Carbon::now()->format('Y-m-d'),
+            ]);
+            $LeavedUser->save();
+
+        }
     }
 }

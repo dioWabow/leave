@@ -9,7 +9,7 @@
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li><a href="{{ route('annual_leave_calculate/index') }}">特休結算(離職)</a></li>
+  <li><a href="{{ route('leaved_user_annual_leave_calculate/index') }}">特休結算(離職)</a></li>
   <li class="active">特休假單列表(離職)</li>
   </ol>
 </section>
