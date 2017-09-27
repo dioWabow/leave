@@ -167,12 +167,12 @@ $(function () {
 </script>
 @endif
 <!-- 同意代理嗎? 頁面用 -->
-@if(Request::is('approve/index'))
+@if(Request::is('agent_approve/index'))
 <script>
 $(function () {
-  $('.sort').on('click', function(){
+  $(".sort").on("click", function(){
 
-    var $sortname = $(this).attr('sortname');
+    var $sortname = $(this).attr("sortname");
     var $order_by = "{{ $model->order_by }}";
     var $order_way = "{{ $model->order_way }}";
 
@@ -188,14 +188,14 @@ $(function () {
 
   });
   /* 同不同意代理文字替換*/
-  $('.btn-danger').on('click', function(){
+  $(".btn-danger").on("click", function(){
     
     $("#btn_agree").val(0);
     $(".modal-body h1").html("確定 <span class='text-red'>不能代理</span> 嗎？");
     
   });
 
-  $('.btn-info').on('click', function(){
+  $(".btn-info").on("click", function(){
     
     $("#btn_agree").val(1);
     $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");

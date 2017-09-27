@@ -18,7 +18,7 @@
 		<div class="col-xs-12">
 			<div class="box box-info">
 				<div class="box-body">
-				<form name="frmOrderby" id="frmOrderby" action="{{ route('approve/index') }}" method="POST">
+				<form name="frmOrderby" id="frmOrderby" action="{{ route('agent_approve/index') }}" method="POST">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
 						@if(count($model->order_by)>0)
 							<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
@@ -29,7 +29,7 @@
 						@endif
 						{!!csrf_field()!!}
 						</form>
-						<form action="{{ route('approve/insert') }}" method="POST">
+						<form action="{{ route('agent_approve/insert') }}" method="POST">
 							<div class="row">
 								<div class="col-sm-12">
 									<table class="table table-bordered table-striped table-hover">
@@ -44,7 +44,7 @@
 										</thead>
 									<tbody>
 										@foreach ($dataProvider as $value)
-											<tr class="clickable-row" data-href="{{ route('approve/edit', [ 'id' => $value->id ]) }}">
+											<tr class="clickable-row" data-href="{{ route('agent_approve/edit', [ 'id' => $value->id ]) }}">
 												<td>
 													<input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
 												</td>
