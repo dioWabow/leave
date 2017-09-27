@@ -22,167 +22,25 @@ use Illuminate\Support\Facades\Auth;
 
 class NaturalController extends Controller
 {
-    protected $image_path;
 
-    /**
-    * Instantiate a new UserController instance.
-    */
-    public function __construct()
-    {
-        $this->image_path = '';
-    }
-    /**
-     * 更新
-     *
-     * @param Request $request
-     * @return Redirect
-     */
-
-     public function postUpdate(Request $request)
-     {
-        $natural_disasters = [];
-        $natural_add = [];
-        $natural_cancel = [];
-        $natural_start_time = "";
-        $natural_end_time = "";
-        $natural_add_total = [
-            "leave_hour_before" => 0,
-            "natural_hour" => 0,
-            "leave_hour_after" => 0,
-        ];
-        $natural_cancel_total = [
-            "leave_hour_before" => 0,
-            "natural_hour" => 0,
-            "leave_hour_after" => 0,
-        ];
-        $natural_hours = 0;
-
-        $input = $request->input('natural');
-        if ( !empty($input["type_id"]) && Type::checkTypeIdNaturalDisaster($input["type_id"]) ) {
-
-            if (!empty($input["date"]) && !empty($input["range"]) ) {
-
-                switch ($input["range"]) {
-                    case 'all_day':
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
-                        $natural_hours = 8;
-                        break;
-                    case 'morning':
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("14:00"));
-                        $natural_hours = 4;
-                        break;   
-                    case 'afternoon':
-                        $natural_start_time = date("H:i:s",strtotime("14:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
-                        $natural_hours = 4;
-                        break;                        
-                    default:
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
-                        $natural_hours = 8;
-                        break;
-                }
-
-                $natural_disasters = Type::getTypeInNaturalDisaster();
-                $natural_disasters_id = $natural_disasters->pluck("id")->ToArray();
-                $natural_disasters_in_date = LeaveDay::getNaturalDisasterInDate($natural_disasters_id,$input["date"]);
-
-                //如果已有天災假,進行取消
-                if ($input["update"] == "cancel") {
-
-                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input["date"]);
-
-                    if (!empty($not_natural_disasters_in_date->ToArray())) {
-
-                        foreach ($not_natural_disasters_in_date as $key => $not_natural_disaster_in_date) {
-
-                            $natural_hours = $this->compute_natural_hours(
-                                $not_natural_disaster_in_date->start_time,
-                                $not_natural_disaster_in_date->end_time,
-                                $natural_start_time,
-                                $natural_end_time
-                            );
-
-                            $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours;
-                        }
-
-                    }
-
-                    $error = $this->cancel_natural_leaves($natural_disasters_in_date, $not_natural_disasters_in_date);
-
-                    if ($error) {
-                        return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
-                    }else{
-                        return Redirect::route('natural/index')->withErrors(['msg' => '取消成功']);
-                    }
-
-                //如果沒有天災假,進行新增
-                }elseif ($input["update"] == "add") {
-
-                    //找出是否有該天請假的假單
-                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input["date"]);
-
-                    if (!empty($not_natural_disasters_in_date->ToArray())) {
-
-                        foreach ($not_natural_disasters_in_date as $key => $not_natural_disaster_in_date) {
-
-                            $natural_hours = $this->compute_natural_hours(
-                                $not_natural_disaster_in_date->start_time,
-                                $not_natural_disaster_in_date->end_time,
-                                $natural_start_time,
-                                $natural_end_time
-                            );
-
-                            $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours;
-                        }
-
-                    }
-
-                    $error = $this->add_natural_leaves(
-                        $input["date"],
-                        $natural_start_time,
-                        $natural_end_time,
-                        $natural_hours,
-                        $not_natural_disasters_in_date,
-                        $input["type_id"]
-                    );
-
-                    if ($error) {
-                        return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
-                    }else{
-                        return Redirect::route('natural/index')->withErrors(['msg' => '新增成功']);
-                    }
-                }
-
-                
-
-            }else{
-
-                return Redirect::route('natural/index')->withErrors(['msg' => '請填寫完整資訊']);
-
-            }
-
-        }else{
-
-            return Redirect::route('index')->withErrors(['msg' => '無此天災假別']);
-
-        }
-    }
 
     public function getIndex()
     {
         $natural_disasters = [];
         $natural_add = [];
         $natural_cancel = [];
+        $input = [
+            'type_id' => '',
+            'date' => '',
+            'range' => '',
+        ];
 
         $natural_disasters = Type::getTypeInNaturalDisaster();
 
+        $input['date'] = date("Y-m-d");
+
         return view('natural_disaster',compact(
-            'natural_disasters',
-            'natural_add',
-            'natural_cancel'
+            'natural_disasters', 'natural_add', 'natural_cancel', 'input'
         ));
     }
 
@@ -191,57 +49,57 @@ class NaturalController extends Controller
         $natural_disasters = [];
         $natural_add = [];
         $natural_cancel = [];
-        $natural_start_time = "";
-        $natural_end_time = "";
+        $natural_start_time = '';
+        $natural_end_time = '';
         $natural_cancel_total = [
-            "start_time" => "",
-            "end_time" => "",
-            "hours" => "",
+            'start_time' => '',
+            'end_time' => '',
+            'hours' => '',
         ];
         $natural_add_total = [
-            "leave_hour_before" => 0,
-            "natural_hour" => 0,
-            "leave_hour_after" => 0,
+            'leave_hour_before' => 0,
+            'natural_hour' => 0,
+            'leave_hour_after' => 0,
         ];
 
 
         $input = $request->input('natural');
-        if ( !empty($input["type_id"]) && Type::checkTypeIdNaturalDisaster($input["type_id"]) ) {
+        if ( !empty($input['type_id']) && Type::checkTypeIdNaturalDisaster($input['type_id']) ) {
 
-            if (!empty($input["date"]) && !empty($input["range"]) ) {
+            if (!empty($input['date']) && !empty($input['range']) ) {
 
-                switch ($input["range"]) {
+                switch ($input['range']) {
                     case 'all_day':
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
                         break;
                     case 'morning':
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("14:00"));
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('14:00'));
                         break;   
                     case 'afternoon':
-                        $natural_start_time = date("H:i:s",strtotime("14:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
+                        $natural_start_time = date("H:i:s",strtotime('14:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
                         break;                        
                     default:
-                        $natural_start_time = date("H:i:s",strtotime("09:00"));
-                        $natural_end_time = date("H:i:s",strtotime("18:00"));
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
                         break;
                 }
 
                 $natural_disasters = Type::getTypeInNaturalDisaster();
-                $natural_disasters_id = $natural_disasters->pluck("id")->ToArray();
-                $natural_disasters_in_date = LeaveDay::getNaturalDisasterInDate($natural_disasters_id,$input["date"]);
+                $natural_disasters_id = $natural_disasters->pluck('id')->ToArray();
+                $natural_disasters_in_date = LeaveDay::getNaturalDisasterInDate($natural_disasters_id,$input['date']);
 
                 //如果已有天災假,出現進行取消分頁
                 if (!empty($natural_disasters_in_date->ToArray())) {
 
-                    $natural_cancel_total["start_time"] = $natural_disasters_in_date->first()->start_time;
-                    $natural_cancel_total["end_time"] = $natural_disasters_in_date->first()->end_time;
-                    $natural_cancel_total["hours"] = $natural_disasters_in_date->first()->hours;
+                    $natural_cancel_total['start_time'] = $natural_disasters_in_date->first()->start_time;
+                    $natural_cancel_total['end_time'] = $natural_disasters_in_date->first()->end_time;
+                    $natural_cancel_total['hours'] = $natural_disasters_in_date->first()->hours;
 
 
-                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input["date"]);
+                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input['date']);
 
                     if (!empty($not_natural_disasters_in_date->ToArray())) {
 
@@ -265,7 +123,7 @@ class NaturalController extends Controller
                 }else{
 
                     //找出是否有該天請假的假單
-                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input["date"]);
+                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input['date']);
 
                     if (!empty($not_natural_disasters_in_date->ToArray())) {
 
@@ -279,9 +137,9 @@ class NaturalController extends Controller
                             );
 
                             $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours;
-                            $natural_add_total["leave_hour_before"] += $not_natural_disasters_in_date[$key]->hours;
-                            $natural_add_total["natural_hour"] += $natural_hours;
-                            $natural_add_total["leave_hour_after"] += ( $not_natural_disasters_in_date[$key]->hours - $natural_hours);
+                            $natural_add_total['leave_hour_before'] += $not_natural_disasters_in_date[$key]->hours;
+                            $natural_add_total['natural_hour'] += $natural_hours;
+                            $natural_add_total['leave_hour_after'] += ( $not_natural_disasters_in_date[$key]->hours - $natural_hours);
                         }
 
                     }
@@ -303,13 +161,141 @@ class NaturalController extends Controller
         }
 
         return view('natural_disaster',compact(
-            'natural_disasters',
-            'natural_add',
-            'natural_cancel',
-            'natural_add_total',
-            'natural_cancel_total',
-            'input'
+            'natural_disasters', 'natural_add', 'natural_cancel', 'natural_add_total', 'natural_cancel_total', 'input'
         ));
+    }
+
+     public function postUpdate(Request $request)
+     {
+        $natural_disasters = [];
+        $natural_add = [];
+        $natural_cancel = [];
+        $natural_start_time = '';
+        $natural_end_time = '';
+        $natural_add_total = [
+            'leave_hour_before' => 0,
+            'natural_hour' => 0,
+            'leave_hour_after' => 0,
+        ];
+        $natural_cancel_total = [
+            'leave_hour_before' => 0,
+            'natural_hour' => 0,
+            'leave_hour_after' => 0,
+        ];
+        $natural_hours = 0;
+
+        $input = $request->input('natural');
+        if ( !empty($input['type_id']) && Type::checkTypeIdNaturalDisaster($input['type_id']) ) {
+
+            if (!empty($input['date']) && !empty($input['range']) ) {
+
+                switch ($input['range']) {
+                    case 'all_day':
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
+                        $natural_hours = 8;
+                        break;
+                    case 'morning':
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('14:00'));
+                        $natural_hours = 4;
+                        break;   
+                    case 'afternoon':
+                        $natural_start_time = date("H:i:s",strtotime('14:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
+                        $natural_hours = 4;
+                        break;                        
+                    default:
+                        $natural_start_time = date("H:i:s",strtotime('09:00'));
+                        $natural_end_time = date("H:i:s",strtotime('18:00'));
+                        $natural_hours = 8;
+                        break;
+                }
+
+                $natural_disasters = Type::getTypeInNaturalDisaster();
+                $natural_disasters_id = $natural_disasters->pluck('id')->ToArray();
+                $natural_disasters_in_date = LeaveDay::getNaturalDisasterInDate($natural_disasters_id,$input['date']);
+
+                //如果已有天災假,進行取消
+                if ($input['update'] == 'cancel') {
+
+                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input['date']);
+
+                    if (!empty($not_natural_disasters_in_date->ToArray())) {
+
+                        foreach ($not_natural_disasters_in_date as $key => $not_natural_disaster_in_date) {
+
+                            $natural_hours_one = $this->compute_natural_hours(
+                                $not_natural_disaster_in_date->start_time,
+                                $not_natural_disaster_in_date->end_time,
+                                $natural_start_time,
+                                $natural_end_time
+                            );
+
+                            $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours_one;
+                        }
+
+                    }
+
+                    $error = $this->cancel_natural_leaves($natural_disasters_in_date, $not_natural_disasters_in_date);
+
+                    if ($error) {
+                        return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
+                    }else{
+                        return Redirect::route('natural/index')->withErrors(['msg' => '取消成功']);
+                    }
+
+                //如果沒有天災假,進行新增
+                }elseif ($input['update'] == 'add') {
+
+                    //找出是否有該天請假的假單
+                    $not_natural_disasters_in_date = LeaveDay::getNotNaturalDisasterInDate($natural_disasters_id,$input['date']);
+
+                    if (!empty($not_natural_disasters_in_date->ToArray())) {
+
+                        foreach ($not_natural_disasters_in_date as $key => $not_natural_disaster_in_date) {
+
+                            $natural_hours_one = $this->compute_natural_hours(
+                                $not_natural_disaster_in_date->start_time,
+                                $not_natural_disaster_in_date->end_time,
+                                $natural_start_time,
+                                $natural_end_time
+                            );
+
+                            $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours_one;
+                        }
+
+                    }
+
+                    $error = $this->add_natural_leaves(
+                        $input['date'],
+                        $natural_start_time,
+                        $natural_end_time,
+                        $natural_hours,
+                        $not_natural_disasters_in_date,
+                        $input['type_id']
+                    );
+
+                    if ($error) {
+                        return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
+                    }else{
+                        return Redirect::route('natural/index')->withErrors(['msg' => '新增成功']);
+                    }
+                }
+
+                
+
+            }else{
+
+                return Redirect::route('natural/index')->withErrors(['msg' => '請填寫完整資訊']);
+
+            }
+
+        }else{
+
+            return Redirect::route('index')->withErrors(['msg' => '無此天災假別']);
+
+        }
     }
 
     //計算拆單與天災假重疊的時間
@@ -350,10 +336,10 @@ class NaturalController extends Controller
             $leave['user_id'] = $user->id;
             $leave['type_id'] = $type_id;
             $leave['tag_id'] = 9;
-            $leave['start_time'] = date( "Y-m-d H:i:s" , strtotime( $date ." ". $natural_start_time ) );
-            $leave['end_time'] = date( "Y-m-d H:i:s" , strtotime( $date ." ". $natural_end_time ) );
+            $leave['start_time'] = date( "Y-m-d H:i:s" , strtotime( $date .' '. $natural_start_time ) );
+            $leave['end_time'] = date( "Y-m-d H:i:s" , strtotime( $date .' '. $natural_end_time ) );
             $leave['hours'] = $natural_hour;
-            $leave['reason'] = "天災假新增";
+            $leave['reason'] = '天災假新增';
             $leave['create_user_id'] = Auth::user()->id;
 
             $leave_model = new Leave;
@@ -398,7 +384,7 @@ class NaturalController extends Controller
 
         foreach ($leave_list as $key => $leave) {
 
-            $this->leave_natural_hour($leave,"minus");
+            $this->leave_natural_hour($leave,'minus');
         }
 
         return $error;
@@ -411,7 +397,7 @@ class NaturalController extends Controller
         $error = false;
         foreach ($natural_leave_list as $key => $natural_leave) {
 
-            $natural_leave_after["tag_id"] = 7;
+            $natural_leave_after['tag_id'] = 7;
             $leave_model = Leave::find( $natural_leave->id );
             $leave_model->fill( $natural_leave_after );
             $leave_model->save();
@@ -420,7 +406,7 @@ class NaturalController extends Controller
 
         foreach ($leave_list as $key => $leave) {
 
-            $this->leave_natural_hour($leave,"add");
+            $this->leave_natural_hour($leave,'add');
 
         }
         return $error;
@@ -428,8 +414,8 @@ class NaturalController extends Controller
 
     protected function leave_natural_hour($leave_day_before,$type)
     {
-        if ($type == "minus") {
-            $leave_day_after["hours"] = ($leave_day_before->leave_hours - $leave_day_before->natural_hours);
+        if ($type == 'minus') {
+            $leave_day_after['hours'] = ($leave_day_before->leave_hours - $leave_day_before->natural_hours);
 
             $leave_day_model = LeaveDay::find($leave_day_before->id);
             $leave_day_model->fill($leave_day_after);
@@ -437,14 +423,14 @@ class NaturalController extends Controller
 
             $leave_before = LeaveDay::getLeaveByLeaveDayId( $leave_day_before->id );
 
-            $leave_day_after["hours"] = ( $leave_before->hours - $leave_day_before->natural_hours );
+            $leave_day_after['hours'] = ( $leave_before->hours - $leave_day_before->natural_hours );
 
             $leave_model = Leave::find($leave_before->id);
             $leave_model->fill($leave_day_after);
             $leave_model->save();
 
-        }elseif ($type == "add") {
-            $leave_day_after["hours"] = ($leave_day_before->leave_hours + $leave_day_before->natural_hours);
+        }elseif ($type == 'add') {
+            $leave_day_after['hours'] = ($leave_day_before->leave_hours + $leave_day_before->natural_hours);
 
             $leave_day_model = LeaveDay::find($leave_day_before->id);
             $leave_day_model->fill($leave_day_after);
@@ -452,7 +438,7 @@ class NaturalController extends Controller
 
             $leave_before = LeaveDay::getLeaveByLeaveDayId( $leave_day_before->id );
 
-            $leave_day_after["hours"] = ( $leave_before->hours + $leave_day_before->natural_hours );
+            $leave_day_after['hours'] = ( $leave_before->hours + $leave_day_before->natural_hours );
 
             $leave_model = Leave::find($leave_before->id);
             $leave_model->fill($leave_day_after);

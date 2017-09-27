@@ -10,15 +10,19 @@ $(function () {
         $("#natural_search_frm").submit();
     });
 
+    var default_pre_date = "{{$input["date"]}}";
+    var default_date = new Date(default_pre_date);
     $('.single-date').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
+        startDate: default_date
     }).each(function(){
         $(this).val($(this).attr('date'));
     }).on('change', function(){ 
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
     });
+    $("#natural_date").val(default_pre_date);
 });
 </script>
     <!-- Content Header (Page header) -->
@@ -50,7 +54,7 @@ $(function () {
 											<select id="natural_type_id" name="natural[type_id]" class="form-control">
                                             @if ( count($natural_disasters) > 0 )
                                                 @foreach( $natural_disasters as $natural_disaster)
-                                                    <option value="{{$natural_disaster->id}}">{{$natural_disaster->name}}</option>
+                                                    <option value="{{$natural_disaster->id}}" @if ( $natural_disaster->id == $input["type_id"] ) selected @endif>{{$natural_disaster->name}}</option>
                                                 @endforeach
                                             @else
                                                 <option value="">無天災假</option>
@@ -66,9 +70,9 @@ $(function () {
 										<label>
 											<select id="natural_range" name="natural[range]" class="form-control">
 												<option value="">請選擇</option>
-                                                <option value="all_day">整天</option>
-                                                <option value="morning">上午</option>
-												<option value="afternoon">下午</option>
+                                                <option value="all_day" @if ( "all_day" == $input["range"] ) selected @endif>整天</option>
+                                                <option value="morning" @if ( "morning" == $input["range"] ) selected @endif>上午</option>
+												<option value="afternoon" @if ( "afternoon" == $input["range"] ) selected @endif>下午</option>
 											</select>
 										</label>
                                         <label>
