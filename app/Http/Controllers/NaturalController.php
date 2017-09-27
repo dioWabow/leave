@@ -24,7 +24,7 @@ class NaturalController extends Controller
 {
 
 
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         $natural_disasters = [];
         $natural_add = [];
@@ -35,9 +35,18 @@ class NaturalController extends Controller
             'range' => '',
         ];
 
+        if (!empty( $request->old('natural') )) {
+
+            $input = $request->old('natural');
+
+        }else{
+
+            $input['date'] = date("Y-m-d");
+
+        }
+
         $natural_disasters = Type::getTypeInNaturalDisaster();
 
-        $input['date'] = date("Y-m-d");
 
         return view('natural_disaster',compact(
             'natural_disasters', 'natural_add', 'natural_cancel', 'input'
@@ -62,8 +71,16 @@ class NaturalController extends Controller
             'leave_hour_after' => 0,
         ];
 
+        if (!empty( $request->old('natural') )) {
 
-        $input = $request->input('natural');
+
+            $input = $request->old('natural');
+
+        }elseif ($request->input('natural')) {
+
+            $input = $request->input('natural');
+
+        }
         if ( !empty($input['type_id']) && Type::checkTypeIdNaturalDisaster($input['type_id']) ) {
 
             if (!empty($input['date']) && !empty($input['range']) ) {
@@ -108,8 +125,8 @@ class NaturalController extends Controller
                             $natural_hours = $this->compute_natural_hours(
                                 $not_natural_disaster_in_date->start_time,
                                 $not_natural_disaster_in_date->end_time,
-                                $natural_start_time,
-                                $natural_end_time
+                                $natural_disasters_in_date->first()->start_time,
+                                $natural_disasters_in_date->first()->end_time
                             );
 
                             $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours;
@@ -150,12 +167,12 @@ class NaturalController extends Controller
 
             }else{
 
-                return Redirect::route('natural/index')->withErrors(['msg' => '請填寫完整資訊']);
+                return Redirect::back()->withInput()->withErrors(['msg' => '請填寫完整資訊']);
 
             }
 
         }else{
-
+            exit;
             return Redirect::route('index')->withErrors(['msg' => '無此天災假別，請至假別設定']);
 
         }
@@ -228,8 +245,8 @@ class NaturalController extends Controller
                             $natural_hours_one = $this->compute_natural_hours(
                                 $not_natural_disaster_in_date->start_time,
                                 $not_natural_disaster_in_date->end_time,
-                                $natural_start_time,
-                                $natural_end_time
+                                $natural_disasters_in_date->first()->start_time,
+                                $natural_disasters_in_date->first()->end_time
                             );
 
                             $not_natural_disasters_in_date[$key]->natural_hours = $natural_hours_one;
@@ -293,7 +310,7 @@ class NaturalController extends Controller
 
         }else{
 
-            return Redirect::route('index')->withErrors(['msg' => '無此天災假別']);
+            return Redirect::route('natural/index')->withErrors(['msg' => '無此天災假別，請至假別設定']);
 
         }
     }

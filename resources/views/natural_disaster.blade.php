@@ -69,7 +69,9 @@ $(function () {
 										&nbsp;
 										<label>
 											<select id="natural_range" name="natural[range]" class="form-control">
+                                                @if ( empty($input["range"]) ) 
 												<option value="">請選擇</option>
+                                                @endif
                                                 <option value="all_day" @if ( "all_day" == $input["range"] ) selected @endif>整天</option>
                                                 <option value="morning" @if ( "morning" == $input["range"] ) selected @endif>上午</option>
 												<option value="afternoon" @if ( "afternoon" == $input["range"] ) selected @endif>下午</option>

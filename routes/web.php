@@ -297,7 +297,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'NaturalController@getIndex',
         ]);
 
-        Route::post('edit',[
+        Route::any('edit',[
             'as'=>'natural/edit',
             'uses'=> 'NaturalController@getEdit',
         ]);
