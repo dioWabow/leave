@@ -32,6 +32,9 @@ class SiteController extends Controller
         $start_time = date('Y-m-d', $request['start']);
         $end_time = date('Y-m-d', $request['end']);
 
+        $start_time = date('Y-m-d', strtotime("$end_time -2 month"));
+        $end_time = date('Y-m-d', strtotime("$end_time +2 month"));
+
         $result = [];
 
         if (isset($getRole) && !empty($getRole)) {
