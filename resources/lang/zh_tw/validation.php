@@ -112,7 +112,7 @@ return [
             'date' => '請填入正確的日期格式',
             'unique' => '該日期已經有假日囉~',
         ],
-	'leave_type.name' => [
+	    'leave_type.name' => [
             'required' => '請輸入假別名稱',
         ],
         'leave_type.hours' => [
@@ -149,12 +149,8 @@ return [
         'user.avatar' => [
             'image' => '大頭貼請選擇圖片',
         ],
-	 'leave.timepicker' => [
-            'required' => '請選擇請假時間',
-        ],
-        'leave.type_id' => [
-            'required' => '請選擇假別',
-            'Integer' => '請選擇假別',
+        'leave.leave_id' => [
+            'required' => '至少勾選一項',
         ],
     ],
 

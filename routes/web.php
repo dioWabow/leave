@@ -325,9 +325,44 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@calculate_hours',
         ]);
     });
+    # 團隊假單-主管
+    Route::group(['prefix'=>'leaves_manager'], function(){
+        Route::any('prove/{role}',[
+            'as'=>'leaves_manager/prove',
+            'uses'=> 'LeavesManagerController@getProve',
+        ]);
+
+        Route::any('upcoming/{role}',[
+            'as'=>'leaves_manager/upcoming',
+            'uses'=> 'LeavesManagerController@getUpcoming',
+        ]);
+
+        Route::any('history/{role}',[
+            'as'=>'leaves_manager/history',
+            'uses'=> 'LeavesManagerController@getHistory',
+        ]);
+
+        Route::any('calendar/{role}',[
+            'as'=>'leaves_manager/calendar',
+            'uses'=> 'LeavesManagerController@getCalendar',
+        ]);
+
+        Route::any('calendar/',[
+            'as'=>'leaves_manager/calendar/ajax',
+            'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
+        ]);
+        Route::post('insert/{role}',[
+            'as' => 'leaves_manager/insert',
+            'uses' => 'LeavesManagerController@postInsert',
+        ]);
+
+        Route::get('edit/{id}',[
+            'as' => 'leaves_manager/edit',
+            'uses' => 'LeavesManagerController@getEdit',
+        ]);
+    });
+
 });
-
-
 
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',

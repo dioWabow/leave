@@ -91,23 +91,23 @@ trait GuardHelpers
      *
      * @return array(TeamObj)/false
      */
-    public function hasMiniManagement()
-    {
-        $Teams = false;
-        if (!empty($this->user()->getAuthIdentifier())) {
-            
-            $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
-
-        }
-
-        return $Teams;
-    }
-
+     public function hasMiniManagement()
+     {
+         $Teams = false;
+         if (!empty($this->user()->getAuthIdentifier())) {
+             
+             $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
+ 
+         }
+ 
+         return $Teams;
+     }
+ 
     /**
-     * 取得是否有主管權限
-     *
-     * @return array(TeamObj)/false
-     */
+    * 取得是否有主管權限
+    *
+    * @return array(TeamObj)/false
+    */
     public function hasManagement()
     {
         $Teams = false;
@@ -121,10 +121,10 @@ trait GuardHelpers
     }
 
     /**
-     * 取得是否有HR權限
-     *
-     * @return true/false
-     */
+    * 取得是否有HR權限
+    *
+    * @return true/false
+    */
     public function hasHr()
     {
         if ( $this->user()->role == "hr" || $this->user()->role == "admin" ) {
@@ -139,10 +139,10 @@ trait GuardHelpers
     }
 
     /**
-     * 取得是否有BOSS權限
-     *
-     * @return true/false
-     */
+    * 取得是否有BOSS權限
+    *
+    * @return true/false
+    */
     public function hasAdmin()
     {
         if ( $this->user()->role == "admin" ) {

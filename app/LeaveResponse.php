@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class LeaveResponse extends Model
+class LeaveResponse extends BaseModel
 {
     /**
      * 與Model關聯的table
@@ -12,7 +10,7 @@ class LeaveResponse extends Model
      * @var string
      */
     protected $table = 'leaves_responses';
-
+     
     //可以傳入數值的欄位
     protected $fillable = [
         'leave_id',
@@ -20,4 +18,11 @@ class LeaveResponse extends Model
         'tag_id',
         'memo',
     ];
+
+    public static function getLeavesIdByUserIdAndTagId($id, $tag_id)
+    {
+
+        $result = self::where('user_id', $id)->whereIn('tag_id', $tag_id)->get()->pluck('leave_id');
+        return $result;
+    }
 }

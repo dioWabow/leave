@@ -10,6 +10,7 @@ use Carbon\Carbon;
 
 class LeaveDay extends BaseModel
 {
+
     //可以傳入數值的欄位
     protected $fillable = [
         'leave_id',
@@ -20,7 +21,7 @@ class LeaveDay extends BaseModel
         'create_user_id',
         'user_id',
     ];
-
+    
     /**
      * 與Model關聯的table
      *
@@ -348,7 +349,10 @@ class LeaveDay extends BaseModel
 
     public function fetchLeave()
     {
-        $result = $this::hasOne('App\Leave','id','leave_id');
+        $result = self::whereIn('leave_id', $leave_id)
+            ->where('start_time', '<' , $date)
+            ->groupBy('leave_id')
+            ->pluck('leave_id');
         return $result;
     }
 

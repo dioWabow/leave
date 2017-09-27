@@ -498,6 +498,12 @@ $(function () {
   var leave_type_notice_arr = ['birthday','lone_stay'];
   var daterangepicker_type = 'isDate';
 
+  //Flat red color scheme for iCheck
+  $('input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
   //通知對象
   $div_leave_notic_person.hide();
   $('input[type="checkbox"].flat-red').iCheck({
@@ -718,6 +724,7 @@ $(function () {
 });
 </script>
 @endif
+
 <!-- 員工管理用 -->
 @if(Request::is('user/*'))
 @if(Request::is('user/index'))
@@ -874,4 +881,88 @@ $(function () {
   });
   </script>
   @endif
+@endif
+
+<!-- 團隊假單頁面用 主管-->
+@if(Request::is('leaves_manager/*'))
+@if(Request::is('leaves_manager/prove/*'))
+<script>
+/* 批准假單文字替換*/
+$(function () {
+  $("#disagree").on("click", function(){
+
+    $("#btn_agree").val(0);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>不允許放假</span> 嗎？");
+    
+  });
+
+  $("#agree").on("click", function(){
+
+    $("#btn_agree").val(1);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>允許放假</span> 嗎？");
+
+  });
+});
+</script>
+@endif
+@if(Request::is('leaves_manager/history/*'))
+<script>
+$(function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  var $search_daterange = $('#search_daterange');
+  var time = $search_daterange.val();
+  
+  $("#search_daterange").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+    maxDate: yyyy + '-' + mm + '-' + dd
+  });
+
+  $("#search_daterange").val(time);
+  
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
+
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+  });
+
+});
+function changePageSize(pagesize)
+{
+  $("#frmOrderby").submit();
+}
+</script>
+@endif
+@if (Request::is('leaves_manager/prove/*','leaves_manager/upcoming/*','leaves_manager/history/*'))
+<script>
+$(function () {
+  $(".sort").on("click", function(){
+
+    var $sortname = $(this).attr("sortname");
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+
+      $("#order_way").val("ASC");
+
+    } else {
+
+      $("#order_way").val("DESC");
+
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+});
+</script>
+@endif
 @endif

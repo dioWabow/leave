@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 class LeaveNotice extends BaseModel
 {
     //可以傳入數值的欄位

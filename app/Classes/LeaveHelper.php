@@ -3,15 +3,21 @@
 namespace App\Classes;
 
 use TimeHelper;
+use App\Holiday;
 use App\Leave;
 use App\User;
 use App\Type;
+use App\Team;
+use App\LeaveDay;
+use App\UserTeam;
 use App\AnnualHour;
 use App\LeaveAgent;
-use App\LeaveDay;
+use App\LeaveResponse;
 
 use Auth;
+use Session;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Input;
 
 class LeaveHelper
 {
@@ -308,7 +314,7 @@ class LeaveHelper
         return $date;
 
     }
-
+            
     public function getStartDateAndEndDate($type_id,$date)
     {
         $reset_time = Type::find($type_id)->reset_time;
@@ -466,6 +472,7 @@ class LeaveHelper
 
         }
     }
+
 
     public function judgeLeave($leave,$user_id = '')
     {
@@ -875,28 +882,116 @@ class LeaveHelper
 
     }
 
-     /**
-     * 傳入該代理人的agent_id(Auth::user()->id)
-     * 
-     * 取得該代理人所代理的的假單數量
-     * 
-     */
-     public static function getAgentLeavesTotal()
-     {
-         $id = Auth::user()->id;
-         $today = Carbon::now();
-         $leave_id = LeaveAgent::getLeaveIdByUserId($id);
-         $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
-         return $result;
-     }
-     
+    /**
+    * 1. 取得登入者
+    * 2. boss tag 4 total leaves
+    * 3. manager tag 3 & 主管team下的user total leaves
+    * 3. mini_manager tag 2 & 小主管team下的user total leaves
+    * 
+    */
+    public static function getProveManagerLeavesTabLable($role)
+    {
+        if ($role == 'admin' && !empty(Auth::hasAdmin())) {
+
+            return self::getAdminLeavesTotal();
+
+        } elseif ($role == 'manager' && !empty(Auth::hasManagement())) {
+
+            return self::getManagerAllLeavesTotal();
+
+        } elseif ($role == 'minimanager' && !empty(Auth::hasMiniManagement())) {
+
+            return self::getMiniManagerLeavesTotal();
+
+        } 
+    }
 
     /**
-     * 我的假單
-     * 取得 user的等待核准假單數量
-     * tag 狀態 1,2,3,4
-     * 
-     */
+    * 取得大BOSS的待審核假單
+    * 
+    */
+    private static function getAdminLeavesTotal()
+    {
+        $model = new Leave;
+        $search['tag_id'] = ['4'];
+        $search['hours'] = '24';
+        $result = $model->searchForProveInManager($search)->count();
+        return $result;
+    }
+
+    /**
+    * 取得主管子團隊以及所屬團隊的待審核假單總數量
+    * 
+    */
+    private static function getManagerAllLeavesTotal() 
+    {
+        $result = self::getManagerSubTeamLeavesTotal() + self::getManagerTeamsLeavesTotal();
+        return $result;
+    }
+
+    /**
+    * 取得主管子團隊待審核假單數量
+    * 
+    */
+    private static function getManagerSubTeamLeavesTotal()
+    {
+        $teams = Auth::hasManagement();
+        $teams_id = Team::getTeamsByManagerTeam($teams);
+        $user_id = UserTeam::getUserByTeams($teams_id);
+        $tag_id = ['3'];
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+
+    /**
+    * 取得主管所屬團隊待審核假單數量
+    * 
+    */
+    private static function getManagerTeamsLeavesTotal()
+    {
+        $teams = Auth::hasManagement();
+        $user_id = UserTeam::getUserByTeams($teams);
+        $tag_id = ['2'];
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+
+    /**
+    * 取得小主管所屬團隊下的假單數量
+    * 
+    */
+    private static function getMiniManagerLeavesTotal()
+    {
+        $teams = Auth::hasMiniManagement();
+        $user_id = UserTeam::getUserByTeams($teams);
+        $tag_id = ['2'];
+
+        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        return $result;
+    }
+ 
+    /**
+    * 傳入該代理人的agent_id(Auth::user()->id)
+    * 
+    * 取得該代理人所代理的的假單數量
+    * 
+    */
+    public static function getAgentLeavesTotal()
+    {
+        $id = Auth::user()->id;
+        $today = Carbon::now();
+        $leave_id = LeaveAgent::getLeaveIdByUserId($id);
+        $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
+        return $result;
+    }
+    
+
+/**
+    * 我的假單
+    * 取得 user的等待核准假單數量
+    * tag 狀態 1,2,3,4
+    * 
+    */
     public static function getProveMyLeavesTotalByUserId()
     {
         $model = new Leave;
@@ -906,27 +1001,27 @@ class LeaveHelper
         return $result;
     }
 
+/**
+    * 我的假單
+    * 取得 user的即將放假假單數量
+    * tag 狀態 9
+    * 
+    */
+    public static function getUpComingMyLeavesTotalByUserId()
+    {
+        $model = new Leave;
+        $search['user_id'] = Auth::user()->id;
+        $search['tag_id'] = ['9'];
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $result = $model->searchForProveAndUpComInMy($search)->count();
+        return $result;
+    }
+
     /**
-     * 我的假單
-     * 取得 user的即將放假假單數量
-     * tag 狀態 9
-     * 
-     */
-     public static function getUpComingMyLeavesTotalByUserId()
-     {
-         $model = new Leave;
-         $search['user_id'] = Auth::user()->id;
-         $search['tag_id'] = ['9'];
-         $search['start_time'] = Carbon::now()->format('Y-m-d');
-         $result = $model->searchForProveAndUpComInMy($search)->count();
-         return $result;
-     }
-    
-    /**
-     * 計算HR可查看等待審核的假單
-     * tag 狀態 1,2,3,4
-     * 
-     */
+        * 計算HR可查看等待審核的假單
+        * tag 狀態 1,2,3,4
+        * 
+        */
     public static function getHrProveLeavesTotal()
     {
         $tag_id = ['1','2','3','4'];
@@ -935,10 +1030,10 @@ class LeaveHelper
     }
     
     /*
-     * 計算HR可查看即將放假的假單
-     * tag 狀態 9
-     * 
-     */
+        * 計算HR可查看即將放假的假單
+        * tag 狀態 9
+        * 
+        */
     public static function getHrUpComingLeavesTotal()
     {
         $model = new Leave;
@@ -948,6 +1043,21 @@ class LeaveHelper
         return $result;
     }
 
+    /**
+     * 取得該主管
+     * 找到審核通過的假單
+     * tag 狀態 9
+     */
+    public static function getUpComingManagerLeavesTotal()
+    {
+        $tag_id = ['9'];
+        $search['id'] = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $tag_id);
+        $search['start_time'] = Carbon::now()->format('Y-m-d');
+
+        $model = new Leave;
+        $result = $model->searchForUpComingInManager($search)->count();
+        return $result;
+    }
     
     /**
      * 傳入start_time 取得 倒數天數
@@ -977,7 +1087,4 @@ class LeaveHelper
     {
         return $data->whereNotIn('tag_id','7')->sum('hours');
     }
-
 }
-   
-   

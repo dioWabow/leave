@@ -188,10 +188,6 @@
 		</div>
 	</section>
 </form>
-
-
 <!-- /.content -->
-
-
 @stop
 

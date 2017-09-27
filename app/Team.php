@@ -85,4 +85,16 @@ class Team extends BaseModel
         $result = self::where('parent_id',$id)->get();
         return $result;
     }
+
+    public static function getTeamsByManagerTeam($teams)
+    {
+        foreach ($teams as $team) {
+
+            $teams_id[] = $team->id;
+
+        }
+
+        $result = self::whereIn('parent_id', $teams_id)->get();
+        return $result;
+    }
 }

@@ -42,7 +42,48 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getTeamIdByUserIdInMiniManagement($id) 
+    public static function getUserIdByTeamId($id)
+    {
+        $result = self::where('team_id', $id)->get()->pluck('user_id');
+        return $result;
+    }
+
+    public static function getUserTeamByUserId($id)
+    {
+        $result = self::where("user_id", $id)->get();
+        return $result;
+    }
+
+    public function fetchTeam()
+    {
+        $result = $this::hasOne('App\Team','id','team_id');
+        return $result;
+    }
+
+    public static function getManagerTeamByUserId($id)
+    {
+        $result = self::where('user_id', $id)
+            ->where('role', 'manager')
+            ->pluck('team_id');
+        return $result;
+    }
+
+    public static function getUsersIdByTeamsId($id, $user_id)
+    {
+        $result = self::whereIn('team_id', $id)
+            ->where('user_id', '!=', $user_id)
+            ->get()
+            ->pluck('user_id');
+        return $result;
+    }
+
+    public function fetchUser()
+    {
+        $result = $this::hasOne('App\User','id','user_id');
+        return $result;
+    }
+
+    public static function getTeamIdByUserIdInMiniManagement($id)
     {
         $result = [];
         $empty = true;
@@ -73,7 +114,7 @@ class UserTeam extends BaseModel
         }
     }
 
-    public static function getTeamIdByUserIdInManagement($id) 
+    public static function getTeamIdByUserIdInManagement($id)
     {
         $result = [];
         $empty = true;
@@ -129,18 +170,6 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getUserIdByTeamId($id)
-    {
-        $result = self::where('team_id', $id)->get()->pluck('user_id');
-        return $result;
-    }
-
-    public static function getUserTeamByUserId($id)
-    {
-        $result = self::where('user_id', $id)->get();
-        return $result;
-    }
-
     public static function getMiniTeamUsers($id)
     {
 
@@ -170,7 +199,6 @@ class UserTeam extends BaseModel
             
         }
 
-        $result = $this::hasOne('App\Team', 'id', 'team_id');
         return $result;
     }
 
@@ -183,19 +211,6 @@ class UserTeam extends BaseModel
     public static function getAllTeamManager()
     {
         $result = self::where("role", 'manager')->get();
-        return $result;
-    }
-
-    public function fetchTeam() 
-    {
-        $result = $this::hasOne('App\Team','id','team_id');
-        $result = $this::hasOne('App\User', 'id', 'user_id');
-        return $result;
-    }
-
-    public function fetchUser()
-    {
-        $result = $this::hasOne('App\User', 'id', 'user_id');
         return $result;
     }
 }

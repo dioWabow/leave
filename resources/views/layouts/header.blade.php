@@ -5,9 +5,9 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ UrlHelper::getCompanyLogoUrl(ConfigHelper::getConfigValueByKey('company_logo') )}}"></span>
+      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>{{ConfigHelper::getConfigValueByKey('company_short_name')}}</b>請假系統</span>
+      <span class="logo-lg"><b>哇寶</b>請假系統</span>
     </a>
 
     <!-- Header Navbar -->
@@ -65,7 +65,7 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">{{LeaveHelper::calculateAnnualDate()}}小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
@@ -151,31 +151,31 @@
         @if( !empty( Auth::hasMiniManagement() ) )
         <li class="header">MINI-MANAGER</li>
         <li class="">
-          <a href="#"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
-                <span class="pull-right-container">
-            <small class="label pull-right bg-red">3</small>
-          </span>
-              </a>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'minimanager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
+            <span class="pull-right-container">
+              @if (LeaveHelper::getProveManagerLeavesTabLable('minimanager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('minimanager') }}</small>@endif
+            </span>
+          </a>
         </li>
         @endif
         @if( !empty(Auth::hasManagement() ) )
         <li class="header">MANAGER</li>
         <li class="">
-          <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
-                <span class="pull-right-container">
-            <small class="label pull-right bg-red">3</small>
-          </span>
-              </a>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+            <span class="pull-right-container">
+                @if (LeaveHelper::getProveManagerLeavesTabLable('manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('manager') }}</small>@endif
+            </span>
+          </a>
         </li>
         @endif
         @if( Auth::hasAdmin() )
         <li class="header">BOSS</li>
         <li class="">
-          <a href="#"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
-                <span class="pull-right-container">
-            <small class="label pull-right bg-red">1</small>
-          </span>
-              </a>
+          <a href="{{ route('leaves_manager/prove', [ 'role' => 'admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
+            <span class="pull-right-container">
+              @if(LeaveHelper::getProveManagerLeavesTabLable('admin')> 0) <small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('admin') }}</small>@endif
+            </span>
+          </a>
         </li>
         @endif
         @if( Auth::hasHr() )

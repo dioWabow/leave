@@ -54,25 +54,25 @@ interface Guard
      * @return array(TeamObj)/false
      */
     public function hasMiniManagement();
-
+    
     /**
-     * 取得是否有主管權限
-     *
-     * @return array(TeamObj)/false
-     */
+    * 取得是否有主管權限
+    *
+    * @return array(TeamObj)/false
+    */
     public function hasManagement();
 
     /**
-     * 取得是否有HR權限
-     *
-     * @return true/false
-     */
+    * 取得是否有HR權限
+    *
+    * @return true/false
+    */
     public function hasHr();
 
     /**
-     * 取得是否有BOSS權限
-     *
-     * @return true/false
-     */
+    * 取得是否有BOSS權限
+    *
+    * @return true/false
+    */
     public function hasAdmin();
 }

@@ -6,7 +6,7 @@
       <b>Version</b> 2.0
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016-2017 <a href="{{ConfigHelper::getConfigValueByKey('company_website')}}" target="_blank">{{ConfigHelper::getConfigValueByKey('company_short_name')}}</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2016-2017 <a href="http://www.wabow.com" target="_blank">WABOW</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
@@ -22,7 +22,7 @@
         <h3 class="control-sidebar-heading">Recent Activity</h3>
         <ul class="control-sidebar-menu">
           <li>
-            <a href="{{ConfigHelper::getConfigValueByKey('company_rules')}}">
+            <a href="javascript:;">
               <i class="menu-icon fa fa-file-text-o bg-blue"></i>
 
               <div class="menu-info">

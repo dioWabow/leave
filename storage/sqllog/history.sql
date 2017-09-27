@@ -148,6 +148,8 @@ ALTER TABLE `users` ADD `annual_date` INT(5) NULL COMMENT '特休時數' AFTER `
 ALTER TABLE `configs` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間';
 ALTER TABLE `configs` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最後編輯'
 
+#2017-09-24 carrie 假單記錄 修改memo可以為空
+ALTER TABLE `leaves_responses` CHANGE `memo` `memo` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '備註';
 #2017-08-29 carrie 假別管理 types 修改開始時間欄位名稱
 ALTER TABLE `types` CHANGE `strart_time` `start_time` TIMESTAMP NULL DEFAULT NULL COMMENT '可用區間(開始)';
 
