@@ -23,7 +23,6 @@ class LeavesHrController extends Controller
     */
     public function getProve(Request $request)
     {
-        
         if (Auth::hasHr() != true) {
 
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
@@ -37,7 +36,7 @@ class LeavesHrController extends Controller
             $request->session()->forget('leaves_hr');
             $request->session()->push('leaves_hr.search', $search);
             $request->session()->push('leaves_hr.order_by', $order_by);
-            
+
         } else {
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_hr')))) {
@@ -62,17 +61,17 @@ class LeavesHrController extends Controller
     }
 
      /**
-     * 列表-即將放假 Upcoming 
+     * 列表-即將放假 Upcoming
      * HR可以看所有準假的假單 tag 9 (已準假)
-     * 
+     *
      * @return \Illuminate\Http\Response
     */
     public function getUpcoming(Request $request)
     {
         if (Auth::hasHr() != true) {
-            
+
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
-            
+
         }
 
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
@@ -107,7 +106,7 @@ class LeavesHrController extends Controller
         ));
     }
     /**
-     * 列表-歷史紀錄 History 
+     * 列表-歷史紀錄 History
      * HR可以看所有的假單 tag 8,9
      *
      * @return \Illuminate\Http\Response
@@ -115,21 +114,21 @@ class LeavesHrController extends Controller
     public function getHistory(Request $request)
     {
         if (Auth::hasHr() != true) {
-            
+
             return Redirect::route('index')->withErrors(['msg' => '無權限可觀看']);
-            
+
         }
 
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         if (!empty($search) || !empty($order_by)) {
-            
+
             $request->session()->forget('leaves_hr');
             $request->session()->push('leaves_hr.search', $search);
             $request->session()->push('leaves_hr.order_by', $order_by);
 
             if (!empty($search['daterange'])) {
-                
+
                 $date_range = explode(" - ", ($search['daterange']));
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];

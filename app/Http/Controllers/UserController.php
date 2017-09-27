@@ -19,14 +19,14 @@ use Illuminate\Support\Facades\Input;
 class UserController extends Controller
 {
     protected $image_path;
-    
+
     public function __construct()
     {
         $this->image_path = 'avatar/';
     }
 
     /**
-     * 
+     *
      *
      * 列表
      *

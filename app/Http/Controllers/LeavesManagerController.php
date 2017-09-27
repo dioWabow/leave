@@ -13,7 +13,7 @@ use App\LeaveDay;
 use App\LeaveResponse;
 use App\Http\Requests\ManagerProveRequest;
 
-use Auth;  
+use Auth;
 use Route;
 use Redirect;
 use Carbon\Carbon;
@@ -64,7 +64,7 @@ class LeavesManagerController extends Controller
         }
         $model = new Leave;
         if ( $this->role == 'admin' && Auth::hasAdmin() == true) {
-              
+
             $search['tag_id'] = ['4'];
             $search['hours'] = '24';
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
@@ -77,14 +77,14 @@ class LeavesManagerController extends Controller
             $search_sub_teams = self::getManagerSubTeamsLeaves();
             /*再去找自己所屬的team下，狀態在tag 2 (職代審核過)的條件*/
             $search_teams = self::getManagerTeamsLeaves();
-            
+
             $dataProvider_sub_teams = $model->fill($order_by)->searchForProveInManager($search_sub_teams);
             $dataProvider_teams = $model->fill($order_by)->searchForProveInManager($search_teams);
-            
+
             $dataProvider = $dataProvider_sub_teams->merge($dataProvider_teams);
-            
+
         } elseif ($this->role == 'minimanager' && !empty(Auth::hasMiniManagement())) {
-            
+
             $teams = Auth::hasMiniManagement();
             $search['user_id'] = UserTeam::getUserByTeams($teams);
             $search ['tag_id'] = ['2'];
@@ -108,7 +108,7 @@ class LeavesManagerController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function getUpcoming(Request $request)
-    { 
+    {
         if (!in_array($this->role,['manager','minimanager','admin'])) {
 
             return Redirect::route('index')->withErrors(['msg' => '你無權限']);
@@ -160,9 +160,9 @@ class LeavesManagerController extends Controller
     {
 
         if (!in_array($this->role, ['manager','minimanager','admin'])) {
-            
+
             return Redirect::route('index')->withErrors(['msg' => '你無權限']);
-        
+
         }
 
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
@@ -174,7 +174,7 @@ class LeavesManagerController extends Controller
             $request->session()->forget('leaves_manager');
             $request->session()->push('leaves_manager.search', $search);
             $request->session()->push('leaves_manager.order_by', $order_by);
-            
+
             if (!empty($search['daterange'])) {
                 // 先去找子單的時間再搜尋主單
                 $date_range = explode(" - ", $search['daterange']);

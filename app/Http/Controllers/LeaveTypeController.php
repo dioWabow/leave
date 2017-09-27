@@ -110,7 +110,7 @@ class LeaveTypeController extends Controller
     public function postInsert(LeaveTypeRequest $request)
     {
         $input = $this->checkDataValue($request->input('leave_type'));
-        
+
         //儲存資料
         $model = new Type;
         $model->fill($input);

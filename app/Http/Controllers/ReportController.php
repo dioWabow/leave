@@ -30,7 +30,7 @@ class ReportController extends Controller
 
         $model = new LeaveDay;
         $data_list = $model->search($year, $month);
-        
+
         $userModel = new User;
         $all_user_tmp = $userModel->getAllUsers();
 

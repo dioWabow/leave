@@ -162,7 +162,7 @@ class LeavesMyController extends Controller
         
         $dataProvider = $model->fill($order_by)->searchForHistoryInMy($search);
         $leaves_totle_hours = LeaveHelper::getLeavesHoursTotal($dataProvider);
-        
+
         return  view('leave_my', compact(
             'dataProvider', 'search', 'model', 'leaves_totle_hours'
         ));
@@ -177,7 +177,7 @@ class LeavesMyController extends Controller
     {
         $model = $this->loadModel($id)->delete();
         // 代 user_id 回到 leaves 頁面
-        return Redirect::route('leaves_my/prove', [ 'user_id' => Auth::user()->id  ])->withErrors([ 'msg' => '刪除完畢。' ]);
+        return Redirect::route('leaves_my/prove', [ 'user_id' => Auth::user()->id  ])->with('success', '假單已取消。');
     }
 
     /**
@@ -190,7 +190,7 @@ class LeavesMyController extends Controller
         return  view('leave_view');
     }
 
-    
+
     private function loadModel($id)
     {
         $model = Leave::find($id);

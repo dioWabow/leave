@@ -543,8 +543,8 @@ class LeaveController extends Controller
                     LeaveHelper::syncCheckLeave($model->id,$input);
 
                 }
-                
-                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with(['success' => $message]);
+
+                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with('success', $message);
 
             } else {
 

@@ -37,7 +37,7 @@ class LeavedUserAnnualHoursController extends Controller
             $dataAll['annual_hours'] += $data->annual_hours;
             $dataAll['used_annual_hours'] += $data->used_annual_hours;
             $dataAll['remain_annual_hours'] += $data->remain_annual_hours;
-            
+
         }
 
         return view('leaved_user_annual_hour',compact(

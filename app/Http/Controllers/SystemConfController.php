@@ -62,7 +62,7 @@ class SystemConfController extends Controller
             }
 
         }
-        
+
         if (!$error) {
 
             return Redirect::route('config/edit');
