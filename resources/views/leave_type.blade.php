@@ -67,7 +67,8 @@
 													<option value="entertain" @if (count($search)>0 && $search['exception'] == 'entertain') selected="selected" @endif>善待假</option>
 													<option value="annaul_leave" @if (count($search)>0 && $search['exception'] == 'annaul_leave') selected="selected" @endif>特休</option>
 													<option value="lone_stay" @if (count($search)>0 && $search['exception'] == 'lone_stay') selected="selected" @endif>久任假</option>
-													<option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>生日假</option>
+                                                    <option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>生日假</option>
+                                                    <option value="natural_disaster" @if (count($search)>0 && $search['exception'] == 'natural_disaster') selected="selected" @endif>天災假</option>
 												</select>
 											</label>
 											&nbsp;
@@ -119,6 +120,7 @@
 															@elseif ($value->exception == 'entertain') 善待假
 															@elseif ($value->exception == 'annaul_leave') 特休
 															@elseif ($value->exception == 'lone_stay') 久任假
+                                                            @elseif ($value->exception == 'natural_disaster') 天災假
 															@elseif ($value->exception == 'birthday') 生日假
 															@endif
 														</td>

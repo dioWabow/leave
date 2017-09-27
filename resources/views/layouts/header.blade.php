@@ -188,7 +188,7 @@
           </a>
         </li>
         <li class="">
-          <a href="#"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
+          <a href="{{ route('natural/index') }}"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
         @endif
       <!--<li class="">

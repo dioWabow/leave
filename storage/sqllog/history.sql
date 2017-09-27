@@ -1,3 +1,5 @@
+--2017-09-25 eno 天災假欄位
+ALTER TABLE `types` CHANGE `exception` `exception` ENUM('normal','job_seek','paid_sick','sick','entertain','annual_leave','lone_stay','birthday','natural_disaster') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'normal' COMMENT '例外規則(normal:一般假別,job_seek:謀職假,paid_sick:有薪病假,sick:無薪病假,entertain:善待假,annaul_leave:特休,lone_stay:久任假,birthday:生日假,natural_disaster:天災假)';
 --2017-09-22 tony 修改已離職總特休時數和剩餘時數到float
 ALTER TABLE `leaved_users` CHANGE `annual_hours` `annual_hours` FLOAT(10) NOT NULL COMMENT '總特休時數';
 ALTER TABLE `leaved_users` CHANGE `remain_annual_hours` `remain_annual_hours` FLOAT(10) NOT NULL COMMENT '剩餘特休';

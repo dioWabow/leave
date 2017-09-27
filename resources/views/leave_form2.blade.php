@@ -32,7 +32,7 @@
 					</div>
 					<div class="col-md-11">
 						@foreach( $types as $type)
-							@if($type->exception!='paid_sick')
+							@if($type->exception!='paid_sick' && $type->exception!='natural_disaster')
 								<label>
 									<input type="radio" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
 									{{$type->name}}

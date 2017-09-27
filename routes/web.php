@@ -420,6 +420,24 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 天災假設定
+    Route::group(['prefix'=>'natural'], function(){
+        Route::get('index',[
+            'as'=>'natural/index',
+            'uses'=> 'NaturalController@getIndex',
+        ]);
+
+        Route::any('edit',[
+            'as'=>'natural/edit',
+            'uses'=> 'NaturalController@getEdit',
+        ]);
+
+        Route::post('update',[
+            'as'=>'natural/update',
+            'uses'=> 'NaturalController@postUpdate',
+        ]);
+    });
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[

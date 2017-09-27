@@ -90,4 +90,18 @@ class Type extends BaseModel
         return $result;
     }
 
+    public static function getTypeInNaturalDisaster()
+    {
+        $result = self::where('exception', "natural_disaster")->get();
+        return $result;
+    }
+
+    public static function checkTypeIdNaturalDisaster($id)
+    {
+        $result = self::where('exception', "natural_disaster")
+            ->where("id",$id)
+            ->get();
+        return (!empty($result)) ? true : false;
+    }
+
 }
