@@ -403,7 +403,7 @@ class LeaveController extends Controller
 
         $model = $this->loadModel($id);
 
-        if ($model === false) {
+        if (empty($model)) {
 
             return Redirect::route('index')->withErrors(['msg' => '無此假單']);
 
