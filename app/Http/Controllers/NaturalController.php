@@ -73,7 +73,6 @@ class NaturalController extends Controller
 
         if (!empty( $request->old('natural') )) {
 
-
             $input = $request->old('natural');
 
         }elseif ($request->input('natural')) {
@@ -172,7 +171,7 @@ class NaturalController extends Controller
             }
 
         }else{
-            exit;
+
             return Redirect::route('index')->withErrors(['msg' => '無此天災假別，請至假別設定']);
 
         }
