@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\User;
+
 use Carbon\Carbon;
 
 class TimeHelper
@@ -148,4 +150,66 @@ class TimeHelper
         $dt = Carbon::parse($date);
         return $dt->hour;
     }
+
+    public function changeViewTime($start_time,$end_time,$user_id)
+    {
+        $reverse_time = '';
+
+        if (self::changeDateFormat($start_time,'m-d') != self::changeDateFormat($end_time,'m-d')) {
+
+            if (self::changeDateFormat($start_time,'H:i') == '09:00') {
+
+                $reverse_time = self::changeDateFormat($start_time,'Y-m-d');
+
+            } else {
+
+                $reverse_time = self::changeDateFormat(self::changeTimeByArriveTime($start_time , $user_id , '+'),'Y-m-d H:i');
+
+            }
+
+            $reverse_time .= ' ~ ';
+
+            if (self::changeDateFormat($end_time,'H:i') == '18:00') {
+
+                $reverse_time .= self::changeDateFormat($end_time,'Y-m-d');
+
+            } else {
+
+                $reverse_time .= self::changeDateFormat(self::changeTimeByArriveTime($end_time , $user_id , '+'),'Y-m-d H:i');
+
+            }
+
+        } else {
+
+            if (self::changeDateFormat($start_time,'H:i') == '09:00' && self::changeDateFormat($end_time,'H:i') == '14:00') {
+
+                $reverse_time = self::changeDateFormat($start_time,'Y-m-d') . '(早上)';
+
+            } elseif(self::changeDateFormat($start_time,'H:i') == '14:00' && self::changeDateFormat($end_time,'H:i') == '18:00') {
+
+                $reverse_time = self::changeDateFormat($start_time,'Y-m-d') . '(下午)';
+
+            } elseif(self::changeDateFormat($start_time,'H:i') == '09:00' && self::changeDateFormat($end_time,'H:i') == '18:00') {
+
+                $reverse_time = self::changeDateFormat($start_time,'Y-m-d') . '(整天)';
+
+            } else {
+
+                $reverse_time = self::changeDateFormat(self::changeTimeByArriveTime($start_time , $user_id , '+'),'Y-m-d H:i') . ' ~ ' . self::changeDateFormat(self::changeTimeByArriveTime($end_time , $user_id , '+'),'Y-m-d H:i');
+
+            }
+
+        }
+
+        return $reverse_time;
+    }
+
+    //時間是否需要+-30分鐘
+    public function changeTimeByArriveTime($date,$user_id,$operator)
+    {
+        $user = User::find($user_id);
+        $date_new = ($user->arrive_time == '0900') ? $date : TimeHelper::changeDateValue($date,[$operator . ',30,minute'],'Y-m-d H:i:s');
+        return $date_new;
+    }
+
 }
