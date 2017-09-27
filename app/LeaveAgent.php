@@ -57,19 +57,19 @@ class LeaveAgent extends BaseModel
         return $result;
     }
 
-    public static function getLeaveIdByUserId($id) {
+    public static function getLeaveIdByUserId($id) 
+    {
         
         $result = self::where('agent_id', $id)->get()->pluck('leave_id');
         return $result;     
     }
 
-
-    public static function getAgentIdByLeaveId($leave_id)
+    public static function getAgentByLeaveId($leave_id)
     {
         $result = self::where('leave_id', $leave_id)->get();
-
+        return $result;
     }
-    
+ 	    
     public static function getLeaveIdByAgentId($leave_id)
     {
         $result = self::where('leave_id',$leave_id)->get();

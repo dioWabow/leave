@@ -6,6 +6,7 @@ use LeaveHelper;
 use TimeHelper;
 use AttachHelper;
 use UserHelper;
+use UrlHelper;
 use App\User;
 use App\Team;
 use App\Leave;
@@ -374,7 +375,6 @@ class LeaveController extends Controller
                     'leave_id' => $model->id,
                     'user_id' => $model->create_user_id,
                     'tag_id' => '1',
-                    'memo' => '提出請假申請',
                 ]);
                 $leave_response->save();
 
@@ -393,7 +393,278 @@ class LeaveController extends Controller
         }
     }
 
-    public function calculate_hours(Request $request){
+    public function getEdit(Request $request, $id)
+    {
+        if (empty($id)) {
+
+            return Redirect::route('index')->withErrors(['msg' => '無此假單']);
+
+        } 
+
+        $model = $this->loadModel($id);
+
+        if (empty($model)) {
+
+            return Redirect::route('index')->withErrors(['msg' => '無此假單']);
+
+        }
+
+        $leave_response = LeaveResponse::getResponseByLeaveId($id);
+
+        $leave_response_reverse = [];
+        foreach($leave_response as $response) {
+            $key = TimeHelper::changeDateValue($response->created_at,['+,8,hour'],'Y-m-d');
+
+            $leave_response_reverse[$key][] = $response;
+
+        }
+
+        $leave_prove_process = LeaveHelper::getLeaveProveProcess($id);
+        $leave_prove_tag_name = [];
+
+        foreach ($leave_prove_process as $key => $leave_prove) {
+
+            if ($key == 'agent') {
+
+                $leave_prove_tag_name[$key]['id'] = 2;
+                $leave_prove_tag_name[$key]['name'] = '代理人核准';
+
+            } elseif ($key == 'minimanager') {
+
+                $leave_prove_tag_name[$key]['id'] = 3;
+                $leave_prove_tag_name[$key]['name'] = '小主管核准';
+
+            } elseif ($key == 'manager' && !empty($leave_prove['admin'])) {
+
+                $leave_prove_tag_name[$key]['id'] = 4;
+                $leave_prove_tag_name[$key]['name'] = '主管核准';
+
+            } elseif ($key == 'manager' && empty($leave_prove['admin'])) {
+
+                $leave_prove_tag_name[$key]['id'] = 9;
+                $leave_prove_tag_name[$key]['name'] = '主管核准';
+
+            } elseif ($key == 'admin') {
+
+                $leave_prove_tag_name[$key]['id'] = 9;
+                $leave_prove_tag_name[$key]['name'] = '大ＢＯＳＳ核准';
+
+            }
+
+        }
+
+        $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
+
+        $leave_agent = LeaveAgent::getAgentByLeaveId($id);
+
+        return view('leave_view',compact(
+            'model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
+        ));
+    }
+
+    public function postUpdate(Request $request)
+    {
+        $message = '';
+        $input = $request->input('leave_response');
+        $input['user_id'] = Auth::getUser()->id;
+
+        $model = $this->loadModel($input['leave_id']);
+
+        $leave_agent = LeaveAgent::getAgentByLeaveId($input['leave_id']);
+
+        $leave_prove_process = LeaveHelper::getLeaveProveProcess($input['leave_id']);
+
+        $leave_response = new LeaveResponse;
+
+        //取消
+        if (in_array($model->tag_id,['1','2']) && Auth::getUser()->id == $model->user_id) {
+
+            //狀態=0代表取消不代理或不准假
+            if (!empty($input['status'])) {
+
+                $input['tag_id'] = '7';
+                $message = '已取消';
+
+            }
+            
+        //代理 
+        } elseif ($model->tag_id == '1' && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray())) {
+
+            //狀態=0代表不代理
+            if (empty($input['status'])) {
+
+                $input['tag_id'] = '8';
+                $message = '不代理';
+
+            } else {
+
+                $input['tag_id'] = '2';
+                $message = '同意代理';
+
+            }
+
+        //准假
+        } elseif (in_array($model->tag_id,['2','3']) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id])) {
+
+            //狀態=0代表不準假
+            if (empty($input['status'])) {
+
+                $input['tag_id'] = '8';
+                $message = '不准該假單的申請';
+
+            } else {
+
+                if (Auth::getUser()->id == $leave_prove_process['minimanager']->id) {
+
+                    $input['tag_id'] = '3';
+                    $message = '同意該假單的申請';
+
+                } elseif (Auth::getUser()->id == $leave_prove_process['manager']->id) {
+
+                    $input['tag_id'] = ($model->hours > 24) ? '4' : '9';
+                    $message = '同意該假單的申請';
+
+                }
+
+            }
+
+        }
+
+        $leave_response->fill($input);
+
+        if ($leave_response->save()) {
+
+            $model->fill(['tag_id' => $leave_response->tag_id]);
+
+            if ($model->save()) {
+
+                if (in_array($model->tag_id, ['2','3','4'])) {
+
+                    LeaveHelper::syncCheckLeave($model->id,$input);
+
+                }
+                
+                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with(['success' => $message]);
+
+            } else {
+
+                return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
+
+            }
+
+        } else {
+
+            return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
+
+        }
+
+    }
+
+    public function postUpload(Request $request)
+    {
+        $leave = [];
+        $leave['id'] = $request->all()['id'];
+        $leave['prove'] = $this->loadModel($leave['id'])->prove;
+
+        if(Input::hasFile('fileupload')) {
+            $file_name = AttachHelper::uploadFiles('fileupload','prove');
+
+            if (!empty($file_name)) {
+
+                if (!empty($leave['prove'])) {
+
+                    $leave['prove'] .= ',' . implode(',' , $file_name);
+
+                } else {
+
+                    $leave['prove'] = implode(',' , $file_name);
+
+                }
+
+                $model = $this->loadModel($leave['id']);
+
+                $model->fill($leave);
+                
+                if ($model->save()) {
+
+                    $response['initialPreview'] = [UrlHelper::getLeaveProveUrl(implode(',' , $file_name))];
+                    $response['initialPreviewConfig'] = [[
+                        'caption' => implode(',' , $file_name),
+                        'url' => route("leave/delete"),
+                        'extra' => ["_token" => csrf_token(),
+                          "id" => $model->id,
+                          "file" => implode(',' , $file_name),
+                        ]
+                    ]];
+
+                    return response()->json($response); 
+
+                } else {
+
+                    $response = array(
+                      'message' => '更新資料庫失敗',
+                    );
+                    return response()->json($response); 
+
+                }
+
+            } else {
+
+                $response = array(
+                  'message' => '上傳證明失敗',
+                );
+                return response()->json($response); 
+
+            }
+        }
+    }
+
+    public function postDelete(Request $request)
+    {
+        $leave = [];
+        $leave['id'] = $request->all()['id'];
+        $prove = explode(',', $this->loadModel($leave['id'])->prove);
+
+        $filename = $request->all()['file'];
+
+        if (in_array($filename, $prove)) unset($prove[array_search($filename, $prove)]);
+
+        if (AttachHelper::deleteFile($filename,'prove')) {
+
+            $leave['prove'] = implode(',' , $prove);
+
+            $model = $this->loadModel($leave['id']);
+
+            $model->fill($leave);
+            
+            if ($model->save()) {
+
+                $response = array(
+                  'message' => '刪除成功',
+                );
+                return response()->json($response); 
+
+            } else {
+
+                $response = array(
+                  'message' => '更新資料庫失敗',
+                );
+                return response()->json($response); 
+
+            }
+
+        } else {
+
+            $response = array(
+              'message' => '刪除檔案失敗',
+            );
+            return response()->json($response); 
+
+        }
+    }
+
+    public function calculate_hours(Request $request)
+    {
         $hours = 0;
         $date_range = $request->input('date_range');
         $start_time = explode(' - ', $date_range)['0'];
@@ -536,5 +807,15 @@ class LeaveController extends Controller
             }
 
         }
+    }
+
+    private function loadModel($id) 
+    {
+        $model = Leave::find($id);
+        if ($model===false) {
+            throw new CHttpException(404,'資料不存在');
+        }
+            
+        return $model;
     }
 }

@@ -17,4 +17,16 @@ class LeaveNotice extends BaseModel
      * @var string
      */
     protected $table = 'leaves_notices';
+
+    public static function getNoticeByLeaveId($leave_id)
+    {
+        $result = self::where('leave_id',$leave_id)->get();
+        return $result;
+    }
+
+    public function fetchUser()
+    {
+        $result = $this::hasOne('App\User','id','user_id');
+        return $result;
+    }
 }

@@ -170,12 +170,28 @@ class UserTeam extends BaseModel
         return $result;
     }
 
-    public static function getMiniTeamUsers($id)
+    public static function getUserIdByTeamIdAndRole($team_id,$role) 
+    {
+        $result = self::where('team_id', $team_id)
+            ->where('role' , $role)
+            ->get();
+        return $result;
+    }
+
+    public static function getTeamIdByUserIdAndRole($user_id,$role) 
+    {
+        $result = self::where('user_id', $user_id)
+            ->where('role' , $role)
+            ->get();
+        return $result;
+    }
+
+    public static function getMiniTeamUsers($user_id)
     {
 
         $result = [];
         
-        $teams = self::where('user_id', $id)
+        $teams = self::where('user_id', $user_id)
             ->where('role', 'manager')
             ->get();
 
@@ -183,7 +199,7 @@ class UserTeam extends BaseModel
 
         foreach ($miniteams as $miniteam) {
 
-            $team_user_role = self::where('user_id' , '!=' , $id)
+            $team_user_role = self::where('user_id' , '!=' , $user_id)
                 ->where('team_id' , $miniteam->id)
                 ->get();
 
@@ -213,4 +229,5 @@ class UserTeam extends BaseModel
         $result = self::where("role", 'manager')->get();
         return $result;
     }
+    
 }

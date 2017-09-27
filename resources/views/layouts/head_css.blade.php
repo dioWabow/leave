@@ -456,7 +456,7 @@ $(document).ready(function () {
 @endif
 
 <!-- 我要請假用 -->
-@if(Request::is('leave/*') || Request::is('leave_assist/*'))
+@if(Request::is('leave/*','leave_assist/*'))
 <script>
 $(function () {
   $(".clickable-row").click(function(e) {
@@ -722,6 +722,140 @@ $(function () {
     });
   }
 });
+</script>
+@endif
+
+<!-- 假單詳細頁面 -->
+@if(Request::is('leave/edit/*'))
+<script>
+  $(function () {      
+
+      $('#search_daterange').daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+      });
+
+      $('#search_daterange').val('');
+
+      $("#leave_view_fileupload").fileinput({
+          uploadUrl: "{{route('leave/upload')}}",
+          uploadAsync: false,
+          maxFileCount: 5,
+          overwriteInitial: false,
+          showUpload: false,
+          initialPreviewAsData: true,
+          uploadExtraData : {
+            "_token": "{{ csrf_token() }}",
+            "id": "{{$model->id}}",
+          },
+          @if($model->prove)
+          initialPreview: [
+            @foreach(explode(',',$model->prove) as $prove)
+            "{{UrlHelper::getLeaveProveUrl($prove)}}",
+            @endforeach
+          ],
+          initialPreviewConfig: [
+          @foreach(explode(',',$model->prove) as $prove)
+          {
+            caption : "{{$prove}}",
+            url: '{{route("leave/delete")}}',
+            extra: {"_token" : "{{ csrf_token() }}",
+              "id" : "{{$model->id}}",
+              "file" : "{{$prove}}",
+            },
+          },
+          @endforeach
+          ],
+          @endif
+      preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
+      previewFileIconSettings: { // configure your icon file extensions
+          'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+          'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+          'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+          'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+          'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+          'htm': '<i class="fa fa-file-code-o text-info"></i>',
+          'txt': '<i class="fa fa-file-text-o text-info"></i>',
+          'mov': '<i class="fa fa-file-movie-o text-warning"></i>',
+          'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
+          // note for these file types below no extension determination logic 
+          // has been configured (the keys itself will be used as extensions)
+          'jpg': '<i class="fa fa-file-photo-o text-danger"></i>', 
+          'gif': '<i class="fa fa-file-photo-o text-muted"></i>', 
+          'png': '<i class="fa fa-file-photo-o text-primary"></i>'    
+      },
+      previewFileExtSettings: { // configure the logic for determining icon file extensions
+          'doc': function(ext) {
+              return ext.match(/(doc|docx)$/i);
+          },
+          'xls': function(ext) {
+              return ext.match(/(xls|xlsx)$/i);
+          },
+          'ppt': function(ext) {
+              return ext.match(/(ppt|pptx)$/i);
+          },
+          'zip': function(ext) {
+              return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+          },
+          'htm': function(ext) {
+              return ext.match(/(htm|html)$/i);
+          },
+          'txt': function(ext) {
+              return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+          },
+          'mov': function(ext) {
+              return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+          },
+          'mp3': function(ext) {
+              return ext.match(/(mp3|wav)$/i);
+          }
+      }
+      }).on("filebatchselected", function(event, data, previewId, index) {
+          $("#leave_view_fileupload").fileinput("upload");
+      }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
+
+      }).on('filepredelete ', function(event, data, previewId, index) {
+          // console.log(event);
+      }).on('filedeleted ', function(event, data, previewId, index) {
+
+      });
+  
+      $("#cancel").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>取消</span> 此假單嗎？");
+       
+      });
+
+      $("#disagree").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不允許</span> 此假單嗎？");
+       
+      });
+
+      $("#agree").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>允許</span> 此假單嗎？");
+
+      });
+
+      $("#disagree_agent").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不代理</span> 此假單嗎？");
+       
+      });
+
+      $("#agree_agent").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>代理</span> 此假單嗎？");
+
+      });
+  });
+
 </script>
 @endif
 

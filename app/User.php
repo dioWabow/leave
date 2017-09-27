@@ -60,9 +60,9 @@ class User extends BaseModel
                 if ($key == 'keywords' && isset($value)) {
 
                     $query->Where(function ($query1) use ($value) {
-                        $query1->orWhere("employee_no", $value);
-                        $query1->orWhere("name", 'like', '%'.$value.'%');
-                        $query1->orWhere("nickname", 'like', '%'.$value.'%');
+                        $query1->orWhere('employee_no', $value);
+                        $query1->orWhere('name', 'like', '%'.$value.'%');
+                        $query1->orWhere('nickname', 'like', '%'.$value.'%');
                     });
 
                 } elseif ($key == 'teams' && isset($value)) {
@@ -106,7 +106,7 @@ class User extends BaseModel
 
     public static function getUsersById($id)
     {
-        $result = self::where("id",$id)->get();
+        $result = self::where('id',$id)->get();
         return $result;
     }
 
@@ -156,9 +156,16 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getUserByRole($role)
+    {
+        $result = self::where('role',$role)->get();
+        return $result;
+    }
+
     public static function getAgentIdByUsers($agent_id)
     {
         $result = self::where('id', $agent_id)->get();
         return $result;
     }
+
 }
