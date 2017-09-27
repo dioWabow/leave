@@ -60,7 +60,8 @@
 <!-- 全部共用 -->
 <script>
 $(function () {
-  $(".clickable-row").click(function(e) {
+
+  $('.table').on('click','.clickable-row',function(e){
     if($(e.target).hasClass('ignore')) return;
 
     var ignore = ['input', 'a', 'button', 'textarea', 'label'];
@@ -518,17 +519,17 @@ $(function () {
 @endif
 @endif
 
-<!-- 特休結算用 -->
-@if(Request::is('annual_leave_calculate/*'))
+<!-- 特休結算+特休報表+報表+離職人員特休結算排序用 -->
+@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*','leaved_user_annual_leave_calculate/*'))
 <script>
-  $(document).on('click', 'th', function() {
-  var table = $(this).parents('table').eq(0);
-  var rows = table.find('tbody > tr').toArray().sort(comparer($(this).index()));
+  $(document).on("click", "th", function() {
+  var table = $(this).parents("table").eq(0);
+  var rows = table.find("tbody > tr").toArray().sort(comparer($(this).index()));
   this.asc = !this.asc;
   if (!this.asc) {
     rows = rows.reverse();
   }
-  table.children('tbody').empty().html(rows);
+  table.children("tbody").empty().html(rows);
   });
 
   function comparer(index) {
@@ -541,8 +542,7 @@ $(function () {
   }
 
   function getCellValue(row, index) {
-    return $(row).children('td').eq(index).text();
+    return $(row).children("td").eq(index).text();
   }
-
 </script>
 @endif
