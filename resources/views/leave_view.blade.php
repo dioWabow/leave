@@ -173,7 +173,7 @@
                   </div>
                 </div>
               </div>
-            @elseif(in_array($model->tag_id,[2,3]) && in_array(Auth::getUser()->id,[$leave_prove_process['manager']->id]))
+            @elseif(in_array($model->tag_id,[2,3]) && !empty($leave_prove_process['manager']) && in_array(Auth::getUser()->id,[$leave_prove_process['manager']->id]))
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">
