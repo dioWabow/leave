@@ -393,6 +393,43 @@ class Leave extends BaseModel
         return $result;
     }
 
+    /**
+     * 搜尋table多個資料 (同意代理嗎 條件搜尋)
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+    public function searchForAgentApprove($where = [])
+    {
+        $query = self::OrderedBy();
+        foreach ($where as $key => $value) {
+
+            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+
+                if ($key == 'tag_id') {
+
+                    $query->whereIn('tag_id', $value);
+
+                } elseif ($key == 'id') {
+                    
+                    $query->whereIn('id', $value);
+                    
+                } else {
+
+                    $query->where($key, $value);
+
+                } 
+            }
+        }
+
+        $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
+
     public static function getTypeIdByLeaves($id) 
     {
         $result = self::where('type_id', $id)->get();

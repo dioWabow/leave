@@ -65,7 +65,7 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">100小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">{{LeaveHelper::calculateAnnualDate()}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
@@ -132,11 +132,11 @@
           </a>
         </li>
         <li class="header">Agent</li>
-        <li class="">
-          <a href="#">
+        <li @if(Request::is('agent_approve/*')) class="active" @endif>
+          <a href="{{ route('agent_approve/index') }}">
             <i class="fa fa-user-secret"></i> <span>同意代理嗎？</span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
+              @if(LeaveHelper::getAgentApproveLeavesTotal()>0)<small class="label pull-right bg-red">{{ LeaveHelper::getAgentApproveLeavesTotal() }}</small>@endif
             </span>
           </a>
         </li>

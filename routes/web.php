@@ -307,6 +307,24 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeavesMyController@getEdit',
         ]);
     });
+
+    # 同意代理嗎?
+    Route::group(['prefix'=>'agent_approve'], function(){
+        Route::any('index',[
+            'as'=>'agent_approve/index',
+            'uses'=> 'AgentApproveController@getIndex',
+        ]);
+
+        Route::post('insert',[
+            'as'=>'agent_approve/insert',
+            'uses'=> 'AgentApproveController@postInsert',
+        ]);
+
+        Route::any('edit/{id}',[
+            'as'=>'agent_approve/edit',
+            'uses'=> 'AgentApproveController@getEdit',
+        ]);
+    });
     
     // 我要放假
     Route::group(['prefix'=>'leave'], function(){
