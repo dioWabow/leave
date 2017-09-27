@@ -77,7 +77,6 @@ class AgentApproveController extends Controller
     */
     public function postInsert(AgentApproveRequest $request)
     {
-
         if (!empty($request->input('leave'))) {
 
             $input = $request->input('leave');
@@ -105,6 +104,8 @@ class AgentApproveController extends Controller
 
                 }
 
+                return Redirect::route('agent_approve/index')->with('success', '批准成功 !');
+
             } else {
 
                 foreach ($input['leave_id'] as $leave_id) {
@@ -127,10 +128,9 @@ class AgentApproveController extends Controller
 
                 }
 
+                 return Redirect::route('agent_approve/index')->with('success', '不准假成功 !');
+                 
             }
-            
-            return Redirect::route('approve/index')->with('success', '批准成功 !');
-
         }
     }
 
