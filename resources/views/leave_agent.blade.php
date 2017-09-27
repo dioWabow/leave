@@ -43,7 +43,7 @@
 										</form>
 									<tbody>
 									@foreach ($dataProvider as $value)
-										<tr class="clickable-row" data-href="{{ route('agent/edit', [ 'id' => $value->id ]) }}">
+										<tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $value->id ]) }}">
 											<td>
                       	<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->avatar }}" width="50px">
                     	</td>

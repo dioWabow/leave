@@ -23,7 +23,7 @@
     </thead>
     <tbody>
       @foreach ($dataProvider as $value)
-        <tr class="clickable-row" data-href="{{ route('leaves_hr/edit', [ 'id' => $value->id ]) }}">
+        <tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $value->id ]) }}">
           <td>
             <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
           </td>

@@ -26,7 +26,7 @@
             </thead>
             <tbody>
             @foreach ($dataProvider as $value)
-              <tr class="clickable-row" data-href="{{ route('leaves_my/edit', [ 'id' => $value->id ]) }}">
+              <tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $value->id ]) }}">
                 <td>{{ $value->fetchType->name }}</td>
                 <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
                 <td>{{ $value->reason }}</td>

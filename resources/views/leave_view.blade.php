@@ -27,7 +27,8 @@
     <a href="./leave.html">我的請假單</a>
   @elseif($model->tag_id == 1 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
     <a href="./leave.html">同意代理嗎</a>
-  @elseif(in_array($model->tag_id,[3,4]) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
+  @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['manager'])  && (Auth::getUser()->id == $leave_prove_process['manager']->id) )
+  @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['minimanager']) && (Auth::getUser()->id == $leave_prove_process['minimanager']->id))
     <a href="./leave.html">團隊假單</a>
   @elseif(in_array($model->tag_id,[9]))
     <a href="{{route('annual_leave_calculate/index')}}">特休結算</a>
