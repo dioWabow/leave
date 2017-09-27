@@ -39,7 +39,7 @@
                   </thead>
                   <tbody>
                     @forelse($dataProvider as $leave)
-                    <tr class='clickable-row' data-href='#'>
+                    <tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $leave->id ]) }}">
                       <td><img src="{{UrlHelper::getUserAvatarUrl($leave->fetchUser->avatar)}}" class="img-circle" alt="{{$leave->fetchUser->avatar}}" width="50px"></td>
                       <td>{{$leave->fetchType->name}}</td>
                       <td>{{ Carbon\Carbon::parse($leave->start_time)->format('Y-m-d H:i:s') }} ~ {{ Carbon\Carbon::parse($leave->end_time)->format('Y-m-d H:i:s') }}</td>
