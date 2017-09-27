@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Config;
 use App\User;
 use App\Notifications\AgentNoticeEmail;
-use \App\Classes\ImageHelper;
-use \App\Classes\ConfigHelper;
-use \App\Classes\UrlHelper;
-use \App\Classes\EmailHelper;
+use ImageHelper;
+use ConfigHelper;
+use UrlHelper;
+use EmailHelper;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
