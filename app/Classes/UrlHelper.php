@@ -20,7 +20,7 @@ class UrlHelper
      */
     public static function getUserAvatarUrl($filename)
     {
-        return (!empty($filename)) ? url(Storage::url('avatar/' . $filename)) . self::getRandom() : '#';
+        return (is_file(substr_replace(Storage::url('avatar/' . $filename), '', 0, 1))) ? url(Storage::url('avatar/' . $filename)) . self::getRandom() : route('root_path') . '/dist/img/users/default.png';
     }
     /**
      * 取得上傳檔案路徑
