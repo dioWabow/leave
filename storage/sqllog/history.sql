@@ -30,6 +30,8 @@ ALTER TABLE `teams` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAM
 ALTER TABLE `users_teams` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '新增時間';
 ALTER TABLE `users_teams` ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最後編輯';
 
+--2017-09-22 carrie 假別管理新增狀態
+ALTER TABLE `types` ADD `deductions` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '扣薪' AFTER `end_time`;
 --2017-09-20 tony 新增已離職特休計算資料表
 CREATE TABLE `leaved_users` (
   `id` int(10) NOT NULL COMMENT '流水編號',

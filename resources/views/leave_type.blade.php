@@ -99,7 +99,8 @@
 												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
 												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('exception');">類型</a></th>
 												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('reset_time');">重置形式</a></th>
-												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('hours');">上限(HR)</a></th>
+												<th width="13%"><a href="javascript:void(0)" onclick="changeSort('hours');">上限(HR)</a></th>
+												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('reason');">扣薪</a></th>
 												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('reason');">理由</a></th>
 												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('prove');">證明</a></th>
 												<th width="10%"><a href="javascript:void(0)" onclick="changeSort('available');">狀態</a></th>
@@ -131,6 +132,9 @@
 															@endif
 														</td>
 													<td>{{ $value->hours }}</td>
+													<td>
+														<input type="checkbox" name="leave_type[deductions]" value="{{$value->id}}" class="leave_type_deductions{{$value->id}}"  data-toggle="toggle"  data-on="是" data-off="否" @if ($value->deductions == 1) checked="checked" @endif>
+													</td>
 													<td>
 														<input type="checkbox" name="leave_type[reason]" value="{{$value->id}}" class="leave_type_reason{{$value->id}}"  data-toggle="toggle"  data-on="是" data-off="否" @if ($value->reason == 1) checked="checked" @endif>
 													</td>
@@ -198,6 +202,7 @@ function changeSort(sort)
 $(function () {
   $("input[name^=leave_type]").on("change", function(){
     var id = $(this).val();
+    var deductions = ($(".leave_type_deductions" + id).prop("checked")) ? '1' : '0';
     var reason = ($(".leave_type_reason" + id).prop("checked")) ? '1' : '0';
     var prove = ($(".leave_type_prove" + id).prop("checked")) ? '1' : '0';
     var available = ($(".leave_type_available" +id).prop("checked")) ? '1' : '0';
@@ -209,6 +214,7 @@ $(function () {
       data: {
         "_token": "{{ csrf_token() }}",
         id: id,
+        deductions: deductions,
         prove: prove,
         reason: reason,
         available: available,
