@@ -557,6 +557,8 @@ $(function () {
 
       if($.inArray(mydata, leave_type_notice_arr) !== -1){
         $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+      } else {
+        $leave_notice.hide();
       }
       
       //遇到善待假則 allday 不可選擇
@@ -639,6 +641,8 @@ $(function () {
 
     if($.inArray(mydata, leave_type_notice_arr) !== -1){
       $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+    } else {
+      $leave_notice.hide();
     }
 
     fetchDaterangepicker();
