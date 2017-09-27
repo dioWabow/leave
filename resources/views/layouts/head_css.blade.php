@@ -201,30 +201,29 @@ $(function () {
   @endif
 @endif
 
-@if(Request::is('disaster/*'))
 <!--天災假調整用-->
-@if(Request::is('holidies/*'))
+@if(Request::is('natural/*'))
 <script>
 $(function () {
-    var $naturalDisasterList = $('.naturalDisasterList');
-
-    $naturalDisasterList.hide();
-    $('#settingSearch').on('click', function(){
-        $naturalDisasterList.show();
+    $('#natural_search').on('click', function(){
+        $("#natural_search_frm").submit();
     });
 
+    var default_pre_date = "{{$input["date"]}}";
+    var default_date = new Date(default_pre_date);
     $('.single-date').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
+        startDate: default_date
     }).each(function(){
         $(this).val($(this).attr('date'));
     }).on('change', function(){ 
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
     });
+    $("#natural_date").val(default_pre_date);
 });
 </script>
-@endif
 @endif
 
 <!-- 團隊設定用 -->
