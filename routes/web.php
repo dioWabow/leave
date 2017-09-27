@@ -287,7 +287,7 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_my/prove',
             'uses'=> 'LeavesMyController@getProve',
         ]);
-
+    // 離職人員結算
         Route::any('upcoming',[
             'as'=>'leaves_my/upcoming',
             'uses'=> 'LeavesMyController@getUpcoming',
@@ -404,6 +404,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('edit/{id}',[
             'as' => 'leaves_manager/edit',
             'uses' => 'LeavesManagerController@getEdit',
+        ]);
+    });
+    
+    // 離職人員結算
+    Route::group(['prefix'=>'leaved_user_annual_leave_calculate'], function(){
+        Route::any('index', [
+            'as' => 'leaved_user_annual_leave_calculate/index',
+            'uses' => 'LeavedUserAnnualHoursController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'leaved_user_annual_leave_calculate/view',
+            'uses' => 'LeavedUserAnnualHoursController@getView',
         ]);
     });
 

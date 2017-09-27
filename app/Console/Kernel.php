@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\MonthAnnualHours::class,
         Commands\ReportAnnualYears::class,
         Commands\DailyLeave::class,
+	Commands\LeavedUserAnnualHours::class,
     ];
 
     /**
@@ -28,6 +29,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('Report:AnnualHours')->dailyAt('10:15')->when(function () {
+            return \Carbon\Carbon::now()->endOfMonth()->isToday();
+        });
+        $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('20:00')->when(function () {
             return Carbon::now()->endOfMonth()->isToday();
         });
 

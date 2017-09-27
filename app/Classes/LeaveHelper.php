@@ -11,6 +11,7 @@ use App\Team;
 use App\LeaveDay;
 use App\UserTeam;
 use App\AnnualHour;
+use App\LeavedUser;
 
 use App\LeaveAgent;
 use App\LeaveResponse;

@@ -4,13 +4,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-  <i class="fa fa-github-alt"></i> 特休假單列表
-  <small>Annual Leave List</small>
+  <i class="fa fa-github-alt"></i> 特休假單列表(離職)
+  <small>Leaved User Annual Leave List</small>
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li><a href="{{ route('annual_leave_calculate/index') }}">特休結算</a></li>
-  <li class="active">特休假單列表</li>
+  <li><a href="{{ route('leaved_user_annual_leave_calculate/index') }}">特休結算(離職)</a></li>
+  <li class="active">特休假單列表(離職)</li>
   </ol>
 </section>
 
@@ -30,7 +30,7 @@
                   </form>
                   <thead>
                     <tr>
-                      <th width="8%">請假者</th>
+                      <th width="8%"><a href="javascript:void(0)" >請假者</a></th>
                       <th><a href="javascript:void(0)" >假別</a></th>
                       <th><a href="javascript:void(0)" >時間</a></th>
                       <th><a href="javascript:void(0)">原因</a></th>
@@ -39,7 +39,7 @@
                   </thead>
                   <tbody>
                     @forelse($dataProvider as $leave)
-                    <tr class='clickable-row' data-href="{{ route('leave/edit',['id'=>$leave->id])}}">
+                    <tr class='clickable-row' data-href='#'>
                       <td><img src="{{UrlHelper::getUserAvatarUrl($leave->fetchUser->avatar)}}" class="img-circle" alt="{{$leave->fetchUser->avatar}}" width="50px"></td>
                       <td>{{$leave->fetchType->name}}</td>
                       <td>{{ Carbon\Carbon::parse($leave->start_time)->format('Y-m-d H:i:s') }} ~ {{ Carbon\Carbon::parse($leave->end_time)->format('Y-m-d H:i:s') }}</td>

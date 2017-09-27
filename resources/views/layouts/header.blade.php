@@ -5,9 +5,9 @@
     <!-- Logo -->
     <a href="{{ route('index') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><img src="{{ route('root_path') }}dist/img/wabow_logo.png"></span>
+      <span class="logo-mini"><img src="{{ UrlHelper::getCompanyLogoUrl(ConfigHelper::getConfigValueByKey('company_logo') )}}"></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>哇寶</b>請假系統</span>
+      <span class="logo-lg"><b>{{ConfigHelper::getConfigValueByKey('company_short_name')}}</b>請假系統</span>
     </a>
 
     <!-- Header Navbar -->
@@ -218,7 +218,7 @@
             <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
-            <li class="treeview @if(Request::is('report/*','annual_report/*','annual_leave_calculate/*'))active @endif">
+            <li class="treeview @if(Request::is('report/*','annual_report/*','annual_leave_calculate/*','leaved_user_annual_leave_calculate/*'))active @endif">
           <a href="#"><i class="fa fa-bar-chart"></i> <span>月/年報表</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -229,6 +229,7 @@
             @if( Auth::hasAdmin() )
             <li @if(Request::is('annual_report/*')) class="active" @endif ><a href="{{ route('annual_report/index') }}"><i class="fa fa-circle-o"></i>特休報表</a></li>
             <li @if(Request::is('annual_leave_calculate/*')) class="active" @endif><a href="{{route('annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算</a></li>
+	    <li @if(Request::is('leaved_user_annual_leave_calculate/*')) class="active" @endif><a href="{{route('leaved_user_annual_leave_calculate/index')}}"><i class="fa fa-circle-o"></i>特休結算(離職)</a></li>
             @endif
           </ul>
         </li>

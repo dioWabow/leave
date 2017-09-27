@@ -167,5 +167,13 @@ class User extends BaseModel
         $result = self::where('id', $agent_id)->get();
         return $result;
     }
+    
+    public static function getUserByLeaveYearAndMonth($year,$month)
+    {
+        $result = self::whereYear('leave_date',$year)
+            ->whereMonth('leave_date',$month)
+            ->get();
+        return $result;
+    }
 
 }

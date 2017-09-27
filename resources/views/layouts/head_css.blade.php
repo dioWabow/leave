@@ -57,8 +57,7 @@
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<!-- wabow -->
-<script src="{{route('root_path')}}/js/wabow.js"></script>
+
 <!-- colorpicker -->
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
@@ -909,8 +908,9 @@ $(function () {
 </script>
 @endif
 @endif
-<!-- 特休結算+特休報表+報表排序用 -->
-@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*'))
+
+<!-- 特休結算+特休報表+報表+離職人員特休結算排序用 -->
+@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*','leaved_user_annual_leave_calculate/*'))
 <script>
   $(document).on("click", "th", function() {
   var table = $(this).parents("table").eq(0);
@@ -936,7 +936,6 @@ $(function () {
   }
 </script>
 @endif
-
 <!-- 我是代理人頁面用 -->
 @if(Request::is('agent/index'))
 <script>

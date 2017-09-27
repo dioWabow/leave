@@ -60,24 +60,34 @@ class MonthAnnualHours extends Command
         }
 
         foreach($users as $user) {
-            AnnualHour::deleteAnnualHourByUserId($user->id,$now_year);
+            $leave_date_year = TimeHelper::changeDateFormat($user->leave_date,'Y');
+            $leave_date_month_day = TimeHelper::changeDateFormat($user->leave_date,'m-d');
+            $enter_date_month_day = TimeHelper::changeDateFormat($user->enter_date,'m-d');
+            //在到職日前已離職的員工就不算特休，因為在離職那邊算了
+            if ((empty($user->leave_date)) 
+                || ($leave_date_year == $now_year && $leave_date_month_day > $enter_date_month_day)
+            ) {
 
-            $AnnualHour = new AnnualHour;
-            $start_time = TimeHelper::changeDateValue($now_year,['-,1,year'],'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
-            $end_time = $now_year . TimeHelper::changeDateValue($user->enter_date,['-,1,day'],'-m-d');
-            
-            $annual_hours = LeaveHelper::calculateAnnualDate($start_time,$user->id);
-            $used_annual_hours = LeaveDay::getPassLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
-            $remain_annual_hours = $annual_hours - $used_annual_hours;
+                AnnualHour::deleteAnnualHourByUserId($user->id,$now_year);
 
-            $AnnualHour->fill([
-                'user_id' => $user->id,
-                'annual_hours' => $annual_hours,
-                'used_annual_hours' => $used_annual_hours,
-                'remain_annual_hours' => $remain_annual_hours,
-                'create_time' => Carbon::now()->format('Y-m-d'),
-            ]);
-            $AnnualHour->save();
+                $AnnualHour = new AnnualHour;
+                $start_time = TimeHelper::changeDateValue($now_year,['-,1,year'],'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
+                $end_time = $now_year . TimeHelper::changeDateValue($user->enter_date,['-,1,day'],'-m-d');
+                
+                $annual_hours = LeaveHelper::calculateAnnualDate($start_time,$user->id);
+                $used_annual_hours = LeaveDay::getPassLeaveHoursByUserIdDateType($user->id,$start_time,$end_time,$leave_type_arr);
+                $remain_annual_hours = $annual_hours - $used_annual_hours;
+
+                $AnnualHour->fill([
+                    'user_id' => $user->id,
+                    'annual_hours' => $annual_hours,
+                    'used_annual_hours' => $used_annual_hours,
+                    'remain_annual_hours' => $remain_annual_hours,
+                    'create_time' => Carbon::now()->format('Y-m-d'),
+                ]);
+                $AnnualHour->save();
+
+            }
         }
     }
 }
