@@ -30,7 +30,7 @@
                   </form>
                   <thead>
                     <tr>
-                      <th width="8%">請假者</th>
+                      <th width="8%"><a href="javascript:void(0)" >請假者</a></th>
                       <th><a href="javascript:void(0)" >假別</a></th>
                       <th><a href="javascript:void(0)" >時間</a></th>
                       <th><a href="javascript:void(0)">原因</a></th>
