@@ -84,7 +84,7 @@
                   @php ($tag_id = 9)
                 @endif
                 <li>
-                  <a href="#step-{{$index}}" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
+                  <a href="javascript: void(0)" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
                     <span class="step_no">
                       <img src="{{urlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($tag_id,$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
                     </span>
@@ -102,23 +102,23 @@
           </div>
 					<ul class="list-group list-group-unbordered">
 						<li class="list-group-item">
-							<b>假別</b> <a class="pull-right">{{$model->fetchType->name}}</a>
+							<b>假別</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->fetchType->name}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>開始時間</b> <a class="pull-right">{{$model->start_time}}</a>
+							<b>開始時間</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->start_time}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>結束時間</b> <a class="pull-right">{{$model->end_time}}</a>
+							<b>結束時間</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->end_time}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>代理人</b> <a class="pull-right">@if (!empty($leave_prove_process['agent'])){{$leave_prove_process['agent']->nickname}}@endif</a>
+							<b>代理人</b> <font style="color: #3C8DBC;" class="pull-right">@if (!empty($leave_prove_process['agent'])){{$leave_prove_process['agent']->nickname}}@endif</font>
 						</li>
 						<li class="list-group-item">
-							<b>原因</b> <a class="pull-right">{{$model->reason}}</a>
+							<b>原因</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->reason}}</font>
 						</li>
 						<li class="list-group-item">
 							<b>額外通知</b> 
-              <a class="pull-right">
+              <font style="color: #3C8DBC;" class="pull-right">
                 @foreach($leave_notice as $notice)
                   @if($loop->last)
                     {{$notice->fetchUser->nickname}}
@@ -126,10 +126,10 @@
                     {{$notice->fetchUser->nickname}}、
                   @endif
                 @endforeach
-              </a>
+              </font>
 						</li>
 						<li class="list-group-item">
-							<b>建立時間</b> <a class="pull-right">{{\Carbon\Carbon::parse($model->created_at)->addHours(8)->format('Y-m-d H:i:s')}}</a>
+							<b>建立時間</b> <font style="color: #3C8DBC;" class="pull-right">{{\Carbon\Carbon::parse($model->created_at)->addHours(8)->format('Y-m-d H:i:s')}}</font>
 						</li>
 					</ul>
 

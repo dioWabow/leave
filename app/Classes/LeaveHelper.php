@@ -950,7 +950,7 @@ class LeaveHelper
         $leave_prove = self::getLeaveProveProcess($leave_id);
         $agent_user_id = Auth::getUser()->id;
 
-        while("1" == "1"){
+        while(true){
 
             $leave = Leave::find($leave_id);
 
