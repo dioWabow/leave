@@ -349,10 +349,7 @@ class LeaveDay extends BaseModel
 
     public function fetchLeave()
     {
-        $result = self::whereIn('leave_id', $leave_id)
-            ->where('start_time', '<' , $date)
-            ->groupBy('leave_id')
-            ->pluck('leave_id');
+        $result = $this::hasOne('App\Leave','id','leave_id');
         return $result;
     }
 
@@ -389,4 +386,37 @@ class LeaveDay extends BaseModel
 
 		return $result;
     }
+
+    public static function getTodayLeave($type = "") 
+    {
+        $start_time = "";
+        $end_time = "";
+        switch ($type) {
+            
+            case 'morning':
+                $start_time = date("Y-m-d 09:00:00");
+                $end_time = date("Y-m-d 14:00:00");
+                break;
+
+            case 'afternoon':
+                $start_time = date("Y-m-d 14:00:00");
+                $end_time = date("Y-m-d 18:00:00");
+                break;
+
+            case 'all_day':
+                $start_time = date("Y-m-d 09:00:00");
+                $end_time = date("Y-m-d 18:00:00");
+                break;
+
+            default:
+                $start_time = date("Y-m-d 09:00:00");
+                $end_time = date("Y-m-d 18:00:00");
+                break;
+
+        }
+
+        $result = self::where('leaves_days.start_time',">=", $start_time )->where('leaves_days.end_time',"<=", $end_time)->leftJoin('leaves', 'leaves.id', '=', 'leaves_days.leave_id')->where('leaves.tag_id', "9")->get();
+        return $result;
+    }
+
 }
