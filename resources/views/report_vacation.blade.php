@@ -56,7 +56,7 @@
 									<tbody>
                     @forelse($user_vacation_list as $list_data)
 										<tr class='clickable-row' data-href='#'>
-											<td><img src="{{UrlHelper::getUserAvatarUrl($list_data->User->avatar)}}" class="img-circle" alt="{{$list_data->User->nickname}}" width="50px"></td>
+											<td><img src="{{UrlHelper::getUserAvatarUrl($list_data->fetchUser->avatar)}}" class="img-circle" alt="{{$list_data->fetchUser->nickname}}" width="50px"></td>
 											<td>{{ Carbon\Carbon::parse($list_data->start_time)->format('Y-m-d') }} ~ {{ Carbon\Carbon::parse($list_data->end_time)->format('Y-m-d') }}</td>
 											<td>{{$list_data->reason}}</td>
 											<td>{{$list_data->hours}}</td>
