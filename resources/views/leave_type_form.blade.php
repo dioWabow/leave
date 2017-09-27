@@ -70,6 +70,10 @@
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="birthday" @if ($model->exception == 'birthdayyear') checked="checked" @endif>
 							生日假
 						</label>&emsp;
+						<label>
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="natural_disaster" @if ($model->exception == 'natural_disaster') checked="checked" @endif>
+							天災假
+						</label>&emsp;
 					</div>
 				</div></div>
 

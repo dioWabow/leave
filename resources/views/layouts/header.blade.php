@@ -180,7 +180,7 @@
           </a>
         </li>
         <li class="">
-          <a href="#"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
+          <a href="{{ route('natural/index') }}"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
       <!--<li class="">
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>

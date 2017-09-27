@@ -289,6 +289,24 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'ReportController@getUserData'
         ]);
     });
+
+    // 天災假設定
+    Route::group(['prefix'=>'natural'], function(){
+        Route::get('index',[
+            'as'=>'natural/index',
+            'uses'=> 'NaturalController@getIndex',
+        ]);
+
+        Route::post('edit',[
+            'as'=>'natural/edit',
+            'uses'=> 'NaturalController@getEdit',
+        ]);
+
+        Route::post('update',[
+            'as'=>'natural/update',
+            'uses'=> 'NaturalController@postUpdate',
+        ]);
+    });
 });
 
 Route::match(['get', 'post'], '/demo/image',[

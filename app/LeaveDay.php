@@ -370,4 +370,43 @@ class LeaveDay extends BaseModel
 		return $result;
     }
 
+    public static function getNaturalDisasterInDate($type_id,$date)
+    {
+        $result = self::whereIn('leaves_days.type_id',$type_id)
+            ->whereDate("leaves_days.start_time",$date)
+            ->where("tag_id","9")
+            ->leftJoin("leaves","leaves.id", "=", "leaves_days.leave_id")
+            ->leftJoin("users","users.id", "=", "leaves_days.user_id")
+            ->select('leaves_days.*')
+            ->addSelect('users.*')
+            ->addSelect('leaves.*')
+            ->addSelect('leaves_days.hours as leave_hours')
+            ->get();
+        return $result;
+    }
+
+    public static function getNotNaturalDisasterInDate($type_id,$date)
+    {
+        $result = self::whereNotIn('leaves_days.type_id' ,$type_id)
+            ->whereDate("leaves_days.start_time",$date)
+            ->where("tag_id","9")
+            ->leftJoin("leaves","leaves.id", "=", "leaves_days.leave_id")
+            ->leftJoin("users","users.id", "=", "leaves_days.user_id")
+            ->select('leaves_days.*')
+            ->addSelect('users.*')
+            ->addSelect('leaves.*')
+            ->addSelect('leaves_days.hours as leave_hours')
+            ->get();
+        return $result;
+    }
+
+    public static function getLeaveByLeaveDayId($leave_id)
+    {
+        $result = self::where('id' ,$leave_id)->get();
+        foreach ($result as $key => $value) {
+            $result[$key] = $value->fetchLeave;
+        }
+        return $result->first();
+    }
+
 }

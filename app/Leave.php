@@ -17,7 +17,7 @@ class Leave extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
-	'agent',
+        'agent',
         'notice_person',
         'timepicker',
         'dayrange',
