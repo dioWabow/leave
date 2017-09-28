@@ -1,15 +1,15 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar-check-o"></i> 假單檢視
 	<small>View Leave</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="./leave_hr.html">團隊假單</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('leaves_hr/prove') }}">團隊假單</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>
