@@ -1,7 +1,7 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar-check-o"></i> 假單檢視
@@ -177,18 +177,4 @@
 </section>
 <!-- /.content -->
 
-<!-- Modal -->
-<div class="modal fade" id="myModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h1>確定 <span class="text-red">同意擔任代理人</span> 嗎？</h1>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send</button>
-      </div>
-    </div>
-  </div>
-</div>
 @stop

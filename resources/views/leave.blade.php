@@ -1,7 +1,24 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+  <script>
+$(function () {
+    $('#search_daterange').daterangepicker({
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'},
+    });
+
+    $('#search_daterange').val('');
+
+    $("#leave_view_fileupload").fileinput({
+        initialPreview: [
+            './dist/img/unsplash2.jpg'
+        ],
+        initialPreviewAsData: true,
+    });
+});
+</script>
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar"></i> 我的請假單

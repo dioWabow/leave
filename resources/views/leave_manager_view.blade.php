@@ -1,7 +1,7 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar-check-o"></i> 假單檢視
@@ -202,4 +202,7 @@
     </div>
   </div>
 </div>
+  </div>
+  <!-- /.content-wrapper -->
+
 @stop
