@@ -22,7 +22,7 @@
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="{{ route('leaves_manager/prove') }}">團隊假單</a></li>
+	<li><a href="{{ route('leaves_hr/prove') }}">團隊假單</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>
