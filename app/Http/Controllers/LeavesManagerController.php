@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use WebHelper;
 use LeaveHelper;
+use ConfigHelper;
 use App\Team;
 use App\Type;
 use App\Leave;
@@ -66,7 +67,7 @@ class LeavesManagerController extends Controller
         if ( $this->role == 'admin' && Auth::hasAdmin() == true) {
 
             $search['tag_id'] = ['4'];
-            $search['hours'] = '24';
+            $search['hours'] = ConfigHelper::getConfigValueByKey('boss_days') * 8;
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
         } elseif ($this->role == 'manager' && !empty(Auth::hasManagement())) {
@@ -268,7 +269,7 @@ class LeavesManagerController extends Controller
     
                     } elseif ($this->role == 'manager') {
                         
-                        if ($model->hours > 24) {
+                        if ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) {
 
                             $input['tag_id'] = '4';
 

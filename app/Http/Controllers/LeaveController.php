@@ -7,6 +7,7 @@ use TimeHelper;
 use AttachHelper;
 use UserHelper;
 use UrlHelper;
+use ConfigHelper;
 use App\User;
 use App\Team;
 use App\Leave;
@@ -528,7 +529,7 @@ class LeaveController extends Controller
 
                 } elseif (Auth::getUser()->id == $leave_prove_process['manager']->id) {
 
-                    $input['tag_id'] = ($model->hours > 24) ? '4' : '9';
+                    $input['tag_id'] = ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) ? '4' : '9';
                     $message = '同意該假單的申請';
 
                 }

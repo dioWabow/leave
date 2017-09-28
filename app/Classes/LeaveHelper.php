@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use TimeHelper;
+use ConfigHelper;
 use App\Holiday;
 use App\Leave;
 use App\User;
@@ -12,7 +13,6 @@ use App\LeaveDay;
 use App\UserTeam;
 use App\AnnualHour;
 use App\LeavedUser;
-
 use App\LeaveAgent;
 use App\LeaveResponse;
 
@@ -975,7 +975,7 @@ class LeaveHelper
     {
         $model = new Leave;
         $search['tag_id'] = ['4'];
-        $search['hours'] = '24';
+        $search['hours'] = ConfigHelper::getConfigValueByKey('boss_days')*8;
         $result = $model->searchForProveInManager($search)->count();
         return $result;
     }
@@ -1219,7 +1219,7 @@ class LeaveHelper
 
         }
 
-        if (Leave::find($id)->hours > 24) {
+        if (Leave::find($id)->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) {
 
             $leave_prove_process['admin'] = User::getUserByRole('admin')->first();
 
@@ -1267,7 +1267,7 @@ class LeaveHelper
 
                     if ($leave_prove['manager']->id == $agent_user_id) {
 
-                        $input['tag_id'] = ($leave->hours < 24) ?'9' : '4';
+                        $input['tag_id'] = ($leave->hours < ConfigHelper::getConfigValueByKey('boss_days')*8 ) ?'9' : '4';
 
                         $leave_response->fill($input);
                         if ($leave_response->save()) {
@@ -1289,7 +1289,7 @@ class LeaveHelper
 
                 if ($leave_prove['manager']->id == $agent_user_id) {
 
-                    $input['tag_id'] = ($leave->hours < 24) ?'9' : '4';
+                    $input['tag_id'] = ($leave->hours < ConfigHelper::getConfigValueByKey('boss_days')*8 ) ?'9' : '4';
 
                     $leave_response->fill($input);
                     if ($leave_response->save()) {
