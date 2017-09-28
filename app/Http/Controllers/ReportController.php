@@ -190,11 +190,11 @@ class ReportController extends Controller
 
                                     $resultTotal['deductions'] = $deductSum;
 
-                                } else {
-
-                                    $resultTotal['deductions'] = $deductSum;
-
                                 }
+
+                            } else {
+
+                                $resultTotal['deductions'] = $deductSum;
 
                             }
 
