@@ -17,7 +17,8 @@ class Kernel extends ConsoleKernel
         Commands\MonthAnnualHours::class,
         Commands\ReportAnnualYears::class,
         Commands\DailyLeave::class,
-	Commands\LeavedUserAnnualHours::class,
+	    Commands\LeavedUserAnnualHours::class,
+        Commands\EveryDayAnnualHours::class,
     ];
 
     /**
@@ -29,8 +30,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('Report:AnnualHours')->dailyAt('10:15')->when(function () {
-            return \Carbon\Carbon::now()->endOfMonth()->isToday();
+            return Carbon::now()->endOfMonth()->isToday();
         });
+        
         $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('20:00')->when(function () {
             return Carbon::now()->endOfMonth()->isToday();
         });
@@ -39,8 +41,9 @@ class Kernel extends ConsoleKernel
             return (Carbon::now()->format('m-d') == "12-31");
         });
 
-        $schedule->command('Notice:DailyLeave')->daily('10:00');//每天10點通知今日請假人
+        $schedule->command('Notice:DailyLeave')->dailyAt('10:00');//每天10點通知今日請假人
 
+        $schedule->command('Report:AnnualHoursEveryDay')->dailyAt('17:52'); //每天早上00:05算當日特休
     }
     
     /**

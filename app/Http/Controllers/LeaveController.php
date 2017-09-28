@@ -89,6 +89,7 @@ class LeaveController extends Controller
      */
     public function getCreate(Request $request,$user_id= '')
     {
+        
         //判斷是否可以幫此人請假
         if (!empty($user_id) && !Auth::hasHr()) {
 
