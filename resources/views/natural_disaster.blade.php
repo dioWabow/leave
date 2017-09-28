@@ -109,7 +109,7 @@ $(function () {
                                                     <img src="{{route('root_path')}}/dist/img/users/default.png" width="50px">
                                                 </td>
                                                 <td>全體員工</td>
-                                                <td>{{$natural_cancel_total["start_time"]}} ~ {{$natural_cancel_total["end_time"]}}  </td>
+                                                <td>{{ TimeHelper::changeViewTime($natural_cancel_total["start_time"], $natural_cancel_total["end_time"], 1) }}</td>
                                                 <td>0</td>
                                                 <td>{{$natural_cancel_total["hours"]}}</td>
                                             </tr>
@@ -120,7 +120,7 @@ $(function () {
                                                     <img src="{{UrlHelper::getUserAvatarUrl($natural_cancel_one->avatar)}}" class="img-circle" width="50px">
                                                 </td>
                                                 <td>{{$natural_cancel_one->nickname}}</td>
-                                                <td>{{$natural_cancel_one->start_time}} ~ {{$natural_cancel_one->end_time}}</td>
+                                                <td>{{ TimeHelper::changeViewTime($natural_cancel_one->start_time, $natural_cancel_one->end_time, 1) }}</td>
                                                 <td>{{$natural_cancel_one->hours }}</td>
                                                 <td>{{$natural_cancel_one->natural_hours}}</td>
                                             </tr>
@@ -133,7 +133,7 @@ $(function () {
                                 </form>
                             @endif
 							</div>
-						
+
 							<div class="col-sm-6">
                             @if ( Request::is('natural/edit') && empty($natural_cancel) )
                                 <form id="natural_add_frm" name="natural_add_frm" action="{{ route('natural/update') }}" method="POST">
@@ -161,7 +161,7 @@ $(function () {
                                                         <img src="{{UrlHelper::getUserAvatarUrl($natural_add_one->avatar)}}" class="img-circle" alt="Dio" width="50px">
                                                     </td>
                                                     <td>{{$natural_add_one->nickname}}</td>
-                                                    <td>{{$natural_add_one->start_time}} ~ {{$natural_add_one->end_time}}  </td>
+                                                    <td>{{ TimeHelper::changeViewTime($natural_add_one->start_time, $natural_add_one->end_time, 1) }}</td>
                                                     <td>{{$natural_add_one->hours}}</td>
                                                     <td>{{$natural_add_one->natural_hours}}</td>
                                                     <td class="text-red">{{ ($natural_add_one->hours - $natural_add_one->natural_hours) }}</td>

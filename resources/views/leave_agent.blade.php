@@ -47,7 +47,7 @@
 											<td>
                       	<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->avatar }}" width="50px">
                     	</td>
-											<td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+											<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->id) }}</td>
 											<td>{{ $value->reason }}</td>
 											<td>{{ $value->hours }}</td>
 											<td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>

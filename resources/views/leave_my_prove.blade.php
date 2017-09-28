@@ -47,7 +47,7 @@
                   @endif
                 </td>
                 <td>{{ $value->fetchType->name }}</td>
-                <td>{{ $value->start_time }} ~ {{ $value->end_time }}</td>
+                <td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->id) }}</td>
                 <td>{{ $value->reason }}</td>
                 <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)

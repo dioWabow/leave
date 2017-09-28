@@ -21,7 +21,7 @@
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">公司資料</h3>
-                </div> 
+                </div>
                 <form id="form_config_company" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
