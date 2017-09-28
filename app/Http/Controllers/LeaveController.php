@@ -226,6 +226,13 @@ class LeaveController extends Controller
         $response = LeaveHelper::judgeLeave($leave,$leave['user_id']);
         if (empty($response)) {
 
+            // 一定要有代理人
+            if (empty($leave['agent'])) {
+
+                return Redirect::back()->withInput()->withErrors(['msg' => '請選擇代理人，若無代理人請洽HR']);
+
+            }
+
             if(Input::hasFile('fileupload')) {
                 $file_name = AttachHelper::uploadFiles('fileupload','prove');
                 if (!empty($file_name)) {

@@ -723,6 +723,33 @@ $(function () {
         }
     });
   }
+
+  function calculate_hours() {
+    if ($("#leave_timepicker").val()) {
+      $.ajax({
+        url: '{{route("leave/calculate_hours")}}',
+        type: 'POST',
+        data: {"_token": "{{ csrf_token() }}", date_range:$("#leave_timepicker").val()},
+        dataType: 'JSON',
+        success: function (data) { 
+          $.each(data, function(index, element) {
+              if ($("#ajax_switch").val() == 0) {
+                $('#leave_spent_hours').val(element);
+                $('#leave_spent_hours_hide').val(element);
+              } else {
+                $("#ajax_switch").val(0);
+              }
+          });
+        }
+      });
+    }
+  }
+
+  $("#leave_fileupload").fileinput({
+    initialPreviewAsData: true,
+    showUpload: false,
+  });
+
 });
 </script>
 @endif
