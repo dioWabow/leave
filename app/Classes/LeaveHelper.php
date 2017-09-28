@@ -1196,30 +1196,34 @@ class LeaveHelper
         }
 
         //請假人team id
-        $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
+        if (count(UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')) > 0) {
 
-        //請假人team裡的主管id
-        if (count(UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')) > 0 ) {
-            $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
+            $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
 
-            //請假人的parent_team id
-            $team_parent_id = Team::find($leave_user_team_id)->parent_id;
+            //請假人team裡的主管id
+            if (count(UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')) > 0 ) {
+                $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
 
-            if (empty($team_parent_id)) {
+                //請假人的parent_team id
+                $team_parent_id = Team::find($leave_user_team_id)->parent_id;
 
-                $leave_prove_process['manager'] = User::find($team_manger_id);
+                if (empty($team_parent_id)) {
 
-            } else {
+                    $leave_prove_process['manager'] = User::find($team_manger_id);
 
-                $leave_prove_process['minimanager'] = User::find($team_manger_id);
+                } else {
 
-                $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+                    $leave_prove_process['minimanager'] = User::find($team_manger_id);
+
+                    $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+
+                }
 
             }
 
         }
 
-        if (Leave::find($id)->hours > 24) {
+        if (Leave::find($id)->hours > 24 && count(User::getUserByRole('admin')) > 0 ) {
 
             $leave_prove_process['admin'] = User::getUserByRole('admin')->first();
 
