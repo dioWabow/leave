@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>請假系統 DEMO</title>
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-@include('layouts.head_css')
+@extends('default')
 
-</head>
-<body class="hold-transition skin-blue-light sidebar-mini">
-<div class="wrapper">
-
-@include('layouts.header')
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+@section('content')
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
@@ -115,8 +102,5 @@
 		</div>
 	</div>
 </section>
-  </div>
+@stop
 
-<!-- ./wrapper -->
-</body>
-</html>

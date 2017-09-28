@@ -37,7 +37,7 @@ class AnnualReportController extends Controller
                 
         }
 
-        return  view('report-annual-leave', compact(
+        return  view('report_annual_leave', compact(
             'search', 'model', 'dataProvider', 'dataAll'
         ));
     }

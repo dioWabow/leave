@@ -19,6 +19,7 @@
 <form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" method="POST" enctype="multipart/form-data">
 {!!csrf_field()!!}
 	<section class="content">
+        <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
 		<div class="box box-info">
 			<div class="box-header with-border">
 				<h3 class="box-title">{{$model->name}} {{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
@@ -177,7 +178,6 @@
 			</div>
 		</div>
 	</section>
-        <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
 </form>
 <!-- /.content -->
 <script>

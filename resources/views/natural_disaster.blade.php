@@ -201,8 +201,5 @@ $(function () {
 		</div>
 	</div>
 </section>
-  </div>
-  <!-- /.content-wrapper -->
-
 @stop
 

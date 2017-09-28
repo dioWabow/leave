@@ -283,6 +283,7 @@
             </div>
         </div>
     </div>
+</section>
 <!-- /.content -->
 
 <script>
