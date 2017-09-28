@@ -9,6 +9,7 @@ use App\Type;
 use App\AnnualHour;
 use App\LeaveAgent;
 use App\LeaveDay;
+use App\Holiday;
 
 use Auth;
 use Carbon\Carbon;
