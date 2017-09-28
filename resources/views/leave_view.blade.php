@@ -34,7 +34,7 @@
 			<!-- Profile Image -->
 			<div class="box box-primary">
 				<div class="box-body box-profile">
-					<img class="profile-user-img img-responsive img-circle" src="{{urlHelper::getUserAvatarUrl($model->fetchUser->avatar)}}" alt="{{$model->fetchUser->nickname}}">
+					<img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($model->fetchUser->avatar)}}" alt="{{$model->fetchUser->nickname}}">
           <h3 class="profile-username text-center">{{$model->fetchUser->nickname}}</h3>
           <h3 class="text-center">
             <span class="label label-default bg-green">
@@ -58,7 +58,7 @@
                 <li>
                   <a href="javascript: void(0)" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
                     <span class="step_no">
-                      <img src="{{urlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
+                      <img src="{{UrlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
                     </span>
                     <span class="step_descr @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) disabled @endif">
                         Step {{$index}}<br />
@@ -225,7 +225,7 @@
               <!-- timeline item -->
               <li>
                 <i class="fa bg-blue">
-                  <img class="profile-user-img img-responsive img-circle" src="{{urlHelper::getUserAvatarUrl($response->fetchUser->avatar)}}" alt="Neo">
+                  <img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($response->fetchUser->avatar)}}" alt="Neo">
                 </i>
 
                 <div class="timeline-item">
