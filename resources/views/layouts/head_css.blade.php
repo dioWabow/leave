@@ -439,16 +439,27 @@ $(document).ready(function () {
 @if(Request::is('leave_type/*'))
 <script>
   $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_daterange = $('#leave_type_available_date');
+    var time = $search_daterange.val();
+
     $("#leave_type_available_date").daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+    });
+        
+    $("#leave_type_available_date").val(time);
+    
+    $('input[name="leave_type[available_date]"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
     });
 
-@if($model->start_time != '' || $model->end_time != '' ) 
-    $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
-    @else
-    $('#leave_type_available_date').val("");
-    @endif
+    $('input[name="leave_type[available_date]"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
   });
 </script>
 @endif
@@ -1164,6 +1175,7 @@ $(function () {
     $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");
 
   });
+  
 });
 </script>
 @endif

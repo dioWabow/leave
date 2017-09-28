@@ -67,8 +67,8 @@
 													<option value="entertain" @if (count($search)>0 && $search['exception'] == 'entertain') selected="selected" @endif>善待假</option>
 													<option value="annaul_leave" @if (count($search)>0 && $search['exception'] == 'annaul_leave') selected="selected" @endif>特休</option>
 													<option value="lone_stay" @if (count($search)>0 && $search['exception'] == 'lone_stay') selected="selected" @endif>久任假</option>
-                                                    <option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>生日假</option>
-                                                    <option value="natural_disaster" @if (count($search)>0 && $search['exception'] == 'natural_disaster') selected="selected" @endif>天災假</option>
+													<option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>生日假</option>
+													<option value="natural_disaster" @if (count($search)>0 && $search['exception'] == 'natural_disaster') selected="selected" @endif>天災假</option>
 												</select>
 											</label>
 											&nbsp;
@@ -118,9 +118,9 @@
 															@elseif ($value->exception == 'paid_sick') 有薪病假
 															@elseif ($value->exception == 'sick') 無薪病假
 															@elseif ($value->exception == 'entertain') 善待假
-															@elseif ($value->exception == 'annaul_leave') 特休
+															@elseif ($value->exception == 'annual_leave') 特休
 															@elseif ($value->exception == 'lone_stay') 久任假
-                                                            @elseif ($value->exception == 'natural_disaster') 天災假
+															@elseif ($value->exception == 'natural_disaster') 天災假
 															@elseif ($value->exception == 'birthday') 生日假
 															@endif
 														</td>
@@ -147,7 +147,11 @@
 														<input type="checkbox" name="leave_type[available]" value="{{$value->id}}" class="leave_type_available{{$value->id}}"  data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($value->available == 1) checked="checked" @endif>
 													</td>
 													<td>
-														<a href="{{ route('leave_type/delete', ['id'=>$value->id])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
+														<a href="{{ route('leave_type/delete', [ 'id' => $value->id ]) }}">
+															<button type="button" class="btn btn-danger"  @if(count(App\Leave::getTypeIdByLeaves($value->id))>0) disabled="disabled" @endif >
+																<i class="fa fa-trash-o"></i>
+															</button>
+														</a>
 													</td>
                         </tr>
                       </tr>

@@ -41,39 +41,39 @@
 					<div class="col-md-11">
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="normal" @if ($model->exception == 'normal') checked="checked" @endif checked="checked">
-							一般
+							{{ WebHelper::getTypesExceptionLabel('normal') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="job_seek" @if ($model->exception == 'job_seek') checked="checked" @endif >
-							謀職假
+							{{ WebHelper::getTypesExceptionLabel('job_seek') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="paid_sick" @if ($model->exception == 'paid_sick') checked="checked" @endif>
-							有薪病假
+							{{ WebHelper::getTypesExceptionLabel('paid_sick') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="sick" @if ($model->exception == 'sick') checked="checked" @endif>
-							無薪病假
+							{{ WebHelper::getTypesExceptionLabel('sick') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="entertain" @if ($model->exception == 'entertain') checked="checked" @endif>
-							善待假
+							{{ WebHelper::getTypesExceptionLabel('entertain') }}
 						</label>&emsp;
 						<label>
-							<input type="radio" name="leave_type[exception]" class="flat-red" value="annaul_leave" @if ($model->exception == 'annaul_leave') checked="checked" @endif>
-							特休
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="annual_leave" @if ($model->exception == 'annual_leave') checked="checked" @endif>
+							{{ WebHelper::getTypesExceptionLabel('annual_leave') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="lone_stay" @if ($model->exception == 'lone_stay') checked="checked" @endif>
-							久任假
+							{{ WebHelper::getTypesExceptionLabel('lone_stay') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="birthday" @if ($model->exception == 'birthday') checked="checked" @endif>
-							生日假
+							{{ WebHelper::getTypesExceptionLabel('birthday') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="natural_disaster" @if ($model->exception == 'natural_disaster') checked="checked" @endif>
-							天災假
+							{{ WebHelper::getTypesExceptionLabel('natural_disaster') }}
 						</label>&emsp;
 					</div>
 				</div></div>
@@ -85,27 +85,27 @@
 					<div class="col-md-11">
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="none" @if ($model->reset_time == 'none') checked="checked" @endif checked="checked">
-							不重置
+							{{ WebHelper::getTypesResetTimeLabel('none') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="week" @if ($model->reset_time == 'week') checked="checked" @endif>
-							每週重置
+							{{ WebHelper::getTypesResetTimeLabel('week') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="month" @if ($model->reset_time == 'month') checked="checked" @endif>
-							每月重置
+							{{ WebHelper::getTypesResetTimeLabel('month') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="season" @if ($model->reset_time == 'season') checked="checked" @endif>
-							每季重置
+							{{ WebHelper::getTypesResetTimeLabel('season') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="year" @if ($model->reset_time == 'year') checked="checked" @endif>
-							每年重置
+							{{ WebHelper::getTypesResetTimeLabel('year') }}
 						</label>&emsp;
 						<label>
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="other" @if ($model->reset_time == 'other') checked="checked" @endif>
-							其他
+							{{ WebHelper::getTypesResetTimeLabel('other') }}
 						</label>&emsp;
 					</div>
 				</div></div>
@@ -127,12 +127,7 @@
 						<label>使用區間</label>
 					</div>
 					<div class="col-md-11">
-				<div class="input-group">
-					<input type="text" id="leave_type_available_date" name="leave_type[available_date]" class="form-control pull-right">
-					<span class="input-group-btn">
-						<button id="clear_leave_type_available_date" type="button" class="btn btn-secondary btn-danger">x</button>
-					</span>
-				</div>
+					<input type="text" id="leave_type_available_date" name="leave_type[available_date]" value="@if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}}@endif" class="form-control pull-right">
 					</div>
 				</div></div>
 				
