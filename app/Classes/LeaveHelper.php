@@ -560,6 +560,14 @@ class LeaveHelper
 
         }
 
+        //請假時間開始結束不得相同
+        if ($start_time == $end_time) {
+
+            $response = '開始與結束時間相同';
+            return $response;
+
+        }
+
         //當天是否請過假
         if (LeaveDay::getLeaveByUserIdDateRangeType($this->user_id,$start_time,$end_time,'') > 0) {
 
