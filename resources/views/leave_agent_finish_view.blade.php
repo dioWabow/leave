@@ -5,7 +5,7 @@
   <title>請假系統 DEMO</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 @include('layouts.head_css')
-  
+
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini">
 <div class="wrapper">
@@ -20,9 +20,9 @@
 	<small>View Agent Leave</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li>基本設定</li>
-	<li><a href="./leave_agent.html">我是代理人</a></li>
+	<li><a href="{{ route('agent/index') }}">我是代理人</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>

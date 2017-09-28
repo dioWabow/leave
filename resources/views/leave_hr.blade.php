@@ -8,7 +8,7 @@
 	<small>Teams Leave List</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">團隊假單</li>
   </ol>
 </section>

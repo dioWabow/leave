@@ -43,7 +43,7 @@
 <body class="hold-transition login-page">
   <div class="login-box">
   <div class="login-logo">
-    <a href="index.html"><img src="dist/img/wabow_logo.png" width="50"> <b>哇寶</b>請假系統</a>
+    <a href="{{ route('index') }}"><img src="dist/img/wabow_logo.png" width="50"> <b>哇寶</b>請假系統</a>
   </div>
   <button type="button" name="login" id="login" class="btn btn-block btn-warning btn-lg"><i class="fa fa-sign-in"></i> 我要登入</button>
   <br>
