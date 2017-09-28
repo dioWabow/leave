@@ -65,13 +65,13 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">總特休<br><span class="label label-success">{{LeaveHelper::calculateAnnualDate()}}小時</span></a>
+                    <a href="#">總特休<br><span class="label label-success">{{Auth::user()->annual_hours}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">可用時數<br><span class="label label-warning">100小時</span></a>
+                    <a href="#">可用時數<br><span class="label label-warning">{{LeaveHelper::calculateRemainAnnualHours()}}小時</span></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">待審核<br><span class="label label-danger">100小時</span></a>
+                    <a href="#">待審核<br><span class="label label-danger">{{LeaveHelper::calculateAuunalUsedHours()}}小時</span></a>
                   </div>
                 </div>
                 <!-- /.row -->

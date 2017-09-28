@@ -44,6 +44,13 @@ class LeaveDay extends BaseModel
     protected $leave_pass_tag_arr = [9];
 
     /**
+     * 待審核的狀態
+     *
+     * @var array
+     */
+    protected $leave_in_check = [1,2,3,4,5,6];
+
+    /**
      * 抓取某段時間不包含取消及退回的假單
      *
      * @var array
@@ -210,6 +217,53 @@ class LeaveDay extends BaseModel
             }
 
         }
+
+        $result = $leave_hours;
+        return $result;
+    }
+
+    /**
+     * 抓取某段時間待審核的總時數
+     *
+     * @var array
+     */
+    public static function getLeaveInCheckHoursByUserIdDateType($user_id,$start_date,$end_date,$type)
+    {
+        $leave_hours = 0;
+
+        $query = self::where('user_id' , $user_id);
+
+        if (is_array($type)) {
+
+            $query->whereIn('type_id' , $type);
+
+        } elseif($type != '') {
+
+           $query->where('type_id' , $type);
+
+        }
+
+        if ($start_date != '') {
+
+            $query->where('start_time' , '>=' , $start_date);
+            $query->where('end_time' , '<=' , $end_date);
+
+        }
+
+        $LeaveDays = $query->get();
+
+        foreach ($LeaveDays as $LeaveDay) {
+
+            if (in_array($LeaveDay->fetchLeave->tag_id, $LeaveDay->leave_in_check)) {
+
+                $leave_hours += $LeaveDay->hours;
+
+            }
+
+        }
+
+        $result = $leave_hours;
+        return $result;
     }
 
     public static function getLeavesIdByDateRangeAndLeavesId($start_time,$end_time, $leave_id)

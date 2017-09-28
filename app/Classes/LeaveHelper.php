@@ -39,6 +39,7 @@ class LeaveHelper
             $this->enter_date = Auth::user()->enter_date;
             $this->job_seek = Auth::user()->job_seek;
             $this->arrive_time = Auth::user()->arrive_time;
+            $this->annual_hours = Auth::user()->annual_hours;
 
         } 
     }
@@ -122,6 +123,74 @@ class LeaveHelper
         return $annual_hours;
     }
 
+    // 計算特休待審核時數
+    public function calculateAuunalUsedHours($date = '',$user_id = '')
+    {
+        $user_id = (empty($date)) ? Auth::getUser()->id : $user_id;
+        $date = (empty($date)) ? Carbon::now()->format('Y-m-d') : $date;
+
+        self::updateUser($user_id);
+
+        //抓出特休的type_id
+        $leave_type_arr = [];
+        foreach (Type::getTypeByException(['annual_leave']) as $type) {
+
+            $leave_type_arr[] = $type->id;
+
+        }
+
+        if (TimeHelper::changeDateFormat($date,'m-d') > TimeHelper::changeDateFormat($this->enter_date,'m-d')) {
+
+            $start_time = TimeHelper::changeDateFormat($date,'Y') . TimeHelper::changeDateFormat($this->enter_date,'-m-d');
+            $end_time = TimeHelper::changeDateValue($date,['+,1,year'],'Y') . TimeHelper::changeDateValue($this->enter_date,['-,1,day'],'-m-d');
+
+        } else {
+
+            $start_time = TimeHelper::changeDateValue($date,['-,1,year'],'Y') . TimeHelper::changeDateFormat($this->enter_date,'-m-d');
+            $end_time = TimeHelper::changeDateFormat($date,'Y') . TimeHelper::changeDateValue($this->enter_date,['-,1,day'],'-m-d');
+
+        }
+
+        $in_check_annual_hours = LeaveDay::getLeaveInCheckHoursByUserIdDateType($user_id,$start_time,$end_time,$leave_type_arr);
+
+        return $in_check_annual_hours;
+
+    }
+
+    // 算出可用特休時數
+    public function calculateRemainAnnualHours($date = '',$user_id = '')
+    {
+        $user_id = (empty($date)) ? Auth::getUser()->id : $user_id;
+        $date = (empty($date)) ? Carbon::now()->format('Y-m-d') : $date;
+
+        self::updateUser($user_id);
+
+        //抓出特休的type_id
+        $leave_type_arr = [];
+        foreach (Type::getTypeByException(['annual_leave']) as $type) {
+
+            $leave_type_arr[] = $type->id;
+
+        }
+
+        if (TimeHelper::changeDateFormat($date,'m-d') > TimeHelper::changeDateFormat($this->enter_date,'m-d')) {
+
+            $start_time = TimeHelper::changeDateFormat($date,'Y') . TimeHelper::changeDateFormat($this->enter_date,'-m-d');
+            $end_time = TimeHelper::changeDateValue($date,['+,1,year'],'Y') . TimeHelper::changeDateValue($this->enter_date,['-,1,day'],'-m-d');
+
+        } else {
+
+            $start_time = TimeHelper::changeDateValue($date,['-,1,year'],'Y') . TimeHelper::changeDateFormat($this->enter_date,'-m-d');
+            $end_time = TimeHelper::changeDateFormat($date,'Y') . TimeHelper::changeDateValue($this->enter_date,['-,1,day'],'-m-d');
+
+        }
+
+        $remain_annual_hours = $this->annual_hours - LeaveDay::getPassLeaveHoursByUserIdDateType($user_id,$start_time,$end_time,$leave_type_arr) - self::calculateAuunalUsedHours($date , $user_id);
+
+        return $remain_annual_hours;
+
+    }
+
     //將一個區間的時間排除國定假日及放入補班之後輸出成陣列
     public function calculateWorkingDate($start_time,$end_time)
     {
@@ -181,10 +250,8 @@ class LeaveHelper
     }
 
     //計算一個range的時間
-    public function calculateRangeDateHours($date_list , $user_id = '') 
+    public function calculateRangeDateHours($date_list) 
     {
-        self::updateUser($user_id);
-
         $hours = 0;
 
         foreach ($date_list as $date) {
@@ -398,9 +465,9 @@ class LeaveHelper
         return $remain_hours - $hours;
     }
 
-    public function getAnnulLeaveRemainHours($date,$hours)
+    public function getAnnulLeaveRemainHours($date,$hours,$user_id)
     {
-        $remain_hours = self::calculateAnnualDate($date);
+        $remain_hours = self::calculateAnnualDate($date,$user_id);
         return $remain_hours - $hours;
     }
 
@@ -462,6 +529,7 @@ class LeaveHelper
             $this->enter_date = $user->enter_date;
             $this->job_seek = $user->job_seek;
             $this->arrive_time = $user->arrive_time;
+            $this->annual_hours = $user->annual_hours;
 
         }
     }
@@ -644,7 +712,7 @@ class LeaveHelper
                 }
 
                 $hours = self::calculateRangeDateHours($date_list);
-                $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours);
+                $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours,$user_id);
 
                 if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
@@ -660,7 +728,7 @@ class LeaveHelper
                     $end_date = self::getStartDateAndEndDateByEnterDate($this->enter_date,$new_date_list['0']['start_time'])['end_date'];
 
                     $hours = self::calculateRangeDateHours($new_date_list);
-                    $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours);
+                    $remain_hours = self::getAnnulLeaveRemainHours($start_date,$hours,$user_id);
 
                     if (self::checkLeaveTypeUsed($this->user_id,$start_date,$end_date,$leave['type_id'],$remain_hours)) {
 
@@ -696,7 +764,7 @@ class LeaveHelper
             //久任
             case 'lone_stay':    
                 //請假當月年資是否滿兩年
-                if (self::calculateAnnualDate($leave_date) < 80) {
+                if (self::calculateAnnualDate($leave_date,$user_id) < 80) {
 
                     $response = '年資未滿兩年，無法使用' . $leave_name;
                     return $response;
