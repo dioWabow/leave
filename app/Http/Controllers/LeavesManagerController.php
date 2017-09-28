@@ -336,20 +336,6 @@ class LeavesManagerController extends Controller
         }
     }
 
-    /**
-     * 檢視
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getEdit(Request $request, $id)
-    {
-        $model = $this->loadModel($id);
-
-        return  view('leave_manager_view', compact(
-            'model'
-        ));
-    }
-
     private function loadModel($id)
     {
         $model = Leave::find($id);

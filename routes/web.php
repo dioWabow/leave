@@ -218,30 +218,6 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-   
-    # 團隊假單-HR
-    Route::group(['prefix'=>'leaves_hr'], function(){
-        Route::any('prove',[
-            'as'=>'leaves_hr/prove',
-            'uses'=> 'LeavesHrController@getProve',
-        ]);
-        
-        Route::any('upcoming',[
-            'as'=>'leaves_hr/upcoming',
-            'uses'=> 'LeavesHrController@getUpcoming',
-        ]);
-        
-        Route::any('history',[
-            'as'=>'leaves_hr/history',
-            'uses'=> 'LeavesHrController@getHistory',
-        ]);
-
-        Route::get('edit/{id}',[
-            'as'=>'leaves_hr/edit',
-            'uses'=> 'LeavesHrController@getEdit',
-        ]);
-    });
-
     // 報表
     Route::group(['prefix'=>'report'], function(){
         Route::any('index',[
@@ -281,13 +257,26 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 離職人員結算
+    Route::group(['prefix'=>'leaved_user_annual_leave_calculate'], function(){
+        Route::any('index', [
+            'as' => 'leaved_user_annual_leave_calculate/index',
+            'uses' => 'LeavedUserAnnualHoursController@getIndex',
+        ]);
+
+        Route::get('view/{id}/{year}', [
+            'as' => 'leaved_user_annual_leave_calculate/view',
+            'uses' => 'LeavedUserAnnualHoursController@getView',
+        ]);
+    });
+
     # 我的假單
     Route::group(['prefix'=>'leaves_my'], function(){
         Route::any('prove',[
             'as'=>'leaves_my/prove',
             'uses'=> 'LeavesMyController@getProve',
         ]);
-    // 離職人員結算
+
         Route::any('upcoming',[
             'as'=>'leaves_my/upcoming',
             'uses'=> 'LeavesMyController@getUpcoming',
@@ -301,10 +290,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}',[
             'as'=>'leaves_my/delete',
             'uses'=> 'LeavesMyController@postDelete',
-        ]);
-        Route::get('edit/{id}',[
-            'as'=>'leaves_my/edit',
-            'uses'=> 'LeavesMyController@getEdit',
         ]);
     });
 
@@ -326,9 +311,9 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
-    
+    // 我要放假
     Route::group(['prefix'=>'leave'], function(){
-        // 我要放假
+        
         Route::get('create', [
             'as' => 'leave/create',
             'uses' => 'LeaveController@getCreate',
@@ -370,6 +355,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@postDelete',
         ]);
     });
+
     # 團隊假單-主管
     Route::group(['prefix'=>'leaves_manager'], function(){
         Route::any('prove/{role}',[
@@ -407,16 +393,26 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
     
-    // 離職人員結算
-    Route::group(['prefix'=>'leaved_user_annual_leave_calculate'], function(){
-        Route::any('index', [
-            'as' => 'leaved_user_annual_leave_calculate/index',
-            'uses' => 'LeavedUserAnnualHoursController@getIndex',
+    # 團隊假單-HR
+    Route::group(['prefix'=>'leaves_hr'], function(){
+        Route::any('prove',[
+            'as'=>'leaves_hr/prove',
+            'uses'=> 'LeavesHrController@getProve',
+        ]);
+        
+        Route::any('upcoming',[
+            'as'=>'leaves_hr/upcoming',
+            'uses'=> 'LeavesHrController@getUpcoming',
+        ]);
+        
+        Route::any('history',[
+            'as'=>'leaves_hr/history',
+            'uses'=> 'LeavesHrController@getHistory',
         ]);
 
-        Route::get('view/{id}/{year}', [
-            'as' => 'leaved_user_annual_leave_calculate/view',
-            'uses' => 'LeavedUserAnnualHoursController@getView',
+        Route::get('edit/{id}',[
+            'as'=>'leaves_hr/edit',
+            'uses'=> 'LeavesHrController@getEdit',
         ]);
     });
 

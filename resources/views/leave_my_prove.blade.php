@@ -38,7 +38,7 @@
                     @endif>
                     {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
                   </button>
-                  @if ($value->tag_id == 1 || $value->tag_id == 2)
+                  @if (in_array($value->tag_id, ['1','2']))
                     <a href="{{ route('leaves_my/delete', [ 'id' => $value->id ]) }}">
                       <button type="button" class="btn btn-danger">
                         <i class="fa fa-trash-o"></i>
