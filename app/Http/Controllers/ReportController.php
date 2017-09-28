@@ -175,6 +175,8 @@ class ReportController extends Controller
 
                             // 補上 扣薪
 
+                            $resultTotal['deductions'] = $deductSum;
+
                             if ($result[$user_key][$data_value['type_id']] == $type_key) {
 
                                 if ($all_type[$data_value['type_id']]['deductions'] == 1) {
@@ -192,10 +194,6 @@ class ReportController extends Controller
 
                                 }
 
-                            } else {
-
-                                $resultTotal['deductions'] = $deductSum;
-
                             }
 
                             // total 的補 0
@@ -212,10 +210,10 @@ class ReportController extends Controller
 
                         // 補上 total sum
                         $resultTotal['sum'] = $sum;
-                        
+
                     } else {
 
-                        // 沒有架別資料的人 都補0
+                        // 沒有假別資料的人 都補0
 
                         foreach ($all_type as $type_key => $type_value) {
 
@@ -245,7 +243,7 @@ class ReportController extends Controller
                 }
             }
         }
-        
+
         return [
             'result' => $result, 'resultTotal' => $resultTotal
         ];
