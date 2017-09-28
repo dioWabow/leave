@@ -175,7 +175,7 @@ class LeavesMyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function postDelete(Request $request, $id)
+    public function postUpdate(Request $request, $id)
     {
 
         $model = $this->loadModel($id);

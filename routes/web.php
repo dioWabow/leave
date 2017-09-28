@@ -287,9 +287,9 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeavesMyController@getHistory',
         ]);
 
-        Route::get('delete/{id}',[
-            'as'=>'leaves_my/delete',
-            'uses'=> 'LeavesMyController@postDelete',
+        Route::get('update/{id}',[
+            'as'=>'leaves_my/update',
+            'uses'=> 'LeavesMyController@postUpdate',
         ]);
     });
 
