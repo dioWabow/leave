@@ -8,7 +8,7 @@
 	<small>Taken a lot of time off</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">我要放假</li>
   </ol>
 </section>

@@ -11,9 +11,9 @@
 	<li><a href="{{route('index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li>
   @if(in_array($model->tag_id,[1,2,7,8]) && Auth::getUser()->id == $model->user_id)
-    <a href="./leave.html">我的請假單</a>
+    <a href="{{route('leaves_my/prove')}}">我的請假單</a>
   @elseif($model->tag_id == 1 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
-    <a href="./leave.html">同意代理嗎</a>
+    <a href="{{route('agent_approve/index')}}">同意代理嗎</a>
   @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['manager'])  && (Auth::getUser()->id == $leave_prove_process['manager']->id) )
   @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['minimanager']) && (Auth::getUser()->id == $leave_prove_process['minimanager']->id))
     <a href="./leave.html">團隊假單</a>

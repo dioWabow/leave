@@ -8,8 +8,8 @@
 	<small>View Leave</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="./leave_agent_prove.html">同意代理嗎？</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('agent_approve/index') }}">同意代理嗎？</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>

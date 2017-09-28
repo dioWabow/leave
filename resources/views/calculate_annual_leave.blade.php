@@ -9,7 +9,7 @@
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{route('index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>報表</li>
+	<li>月/年報表</li>
 	<li class="active">特休結算</li>
   </ol>
 </section>

@@ -9,7 +9,7 @@
 	<small>Revise Personal Info</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="{{route('root_path')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li>基本設定</li>
 	<li><a href="{{ route('user/index') }}">員工管理</a></li>
 	<li class="active">基本資料修改</li>
