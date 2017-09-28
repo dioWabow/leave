@@ -69,7 +69,7 @@ class ReportController extends Controller
         $report_list = self::getReport($all_user, $all_type, $data_list);
         $report_data = $report_list['result'];
         $report_total = $report_list['resultTotal'];
-        
+
         return view('report', compact(
             'year', 'month', 'data_list',  'all_user', 'all_type', 'report_data', 'report_total'
         ));

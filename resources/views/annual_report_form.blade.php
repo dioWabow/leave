@@ -42,7 +42,7 @@
                     <tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $data->id ]) }}">
                       <td><img src="{{UrlHelper::getUserAvatarUrl($data->fetchUser->avatar)}}" class="img-circle" alt="{{$data->fetchUser->avatar}}" width="50px"></td>
                       <td>{{$data->fetchType->name}}</td>
-                      <td>{{ TimeHelper::changeViewTime($data->start_time, $data->end_time, $data->id) }}</td>
+                      <td>{{ TimeHelper::changeViewTime($data->start_time, $data->end_time, $data->user_id) }}</td>
                       <td>{{$data->reason}}</td>
                       <td>{{$data->hours}}</td>
                     </tr>

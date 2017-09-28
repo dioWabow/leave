@@ -216,7 +216,7 @@
             <!-- timeline time label -->
             <li class="time-label">
               <span class="bg-red">
-                {{\Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}}
+                {{ TimeHelper::changeDateFormat($model->start_time,'Y-m-d') }}
               </span>
             </li>
             <!-- /.timeline-label -->

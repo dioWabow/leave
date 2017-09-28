@@ -49,7 +49,7 @@
 													<input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
 												</td>
 												<td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
-												<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->id) }}</td>
+												<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
 												<td>{{ $value->reason }}</td>
 												<td>{{ $value->hours }}</td>
 											</tr>
