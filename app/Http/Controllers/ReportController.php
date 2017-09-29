@@ -236,8 +236,6 @@ class ReportController extends Controller
             }
         }
 
-        // dd($resultTotal);
-
         return [
             'result' => $result, 'resultTotal' => $resultTotal
         ];
