@@ -28,18 +28,20 @@
             </a>
             <ul class="dropdown-menu">
               <li class="header">You have {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} notifications</li>
+              @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)
               <li>
                 <!-- Inner Menu: contains the notifications -->
                 <ul class="menu">
                   <li><!-- start notification -->
                     <a href="{{ route('leaves_my/prove') }}">
-                      @if(LeaveHelper::getProveMyLeavesTotalByUserId()>0)<i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} 張假單尚未審核@endif
+                      <i class="fa fa-users text-aqua"></i> {{ LeaveHelper::getProveMyLeavesTotalByUserId() }} 張假單尚未審核
                     </a>
                   </li>
                   <!-- end notification -->
                 </ul>
               </li>
               <li class="footer"><a href="{{ route('leaves_my/prove') }}">View all</a></li>
+              @endif
             </ul>
           </li>
           <!-- User Account Menu -->
