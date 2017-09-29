@@ -16,10 +16,10 @@
           <table class="table table-bordered table-striped table-hover">
             <thead>
               <tr>
-                <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
+                <th width="15%"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
                 <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
                 <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-                <th width="13%">代理人</a></th>
+                <th width="20%">代理人</a></th>
                 <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
                 <th width="8%"></th>
               </tr>

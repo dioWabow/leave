@@ -1065,6 +1065,65 @@ $(function () {
     $(".change-body-text h1").html("確定此批假單 <span class='text-red'>允許放假</span> 嗎？");
 
   });
+
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass("ignore")) return;
+
+    var ignore = ["input", "a", "button", "textarea", "label"];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data("href");
+  });
+
+  $("#checkall").on("ifChecked ifUnchecked",function(evant){
+    if(evant.type == "ifChecked")
+      $(".check").iCheck("check");
+    else
+      $(".check").iCheck("uncheck");
+  });
+
+  /*確認check有勾選才可打開核准按鈕*/
+  $("input[name='leave[leave_id][]']").on("ifChanged", function () {
+    if ($('.check:checked').length > 0) {
+      $(".approve_leave").prop("disabled", false);
+    } else {
+      $(".approve_leave").prop("disabled", true);
+    }
+  });
+
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+    
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
 });
 </script>
 @endif
@@ -1093,7 +1152,6 @@ $(function () {
   $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
     $(this).val('');
   });
-
 });
 function changePageSize(pagesize)
 {
@@ -1166,110 +1224,63 @@ $(function () {
   });
 
   $(".clickable-row").click(function(e) {
-      if($(e.target).hasClass("ignore")) return;
+    if($(e.target).hasClass("ignore")) return;
 
-      var ignore = ["input", "a", "button", "textarea", "label"];
-      var clicked = e.target.nodeName.toLowerCase();
-      if($.inArray(clicked, ignore) > -1) return;
-      
-      window.location = $(this).data("href");
-    });
-
-    $("#checkall").on("ifChecked ifUnchecked",function(evant){
-      if(evant.type == "ifChecked")
-        $(".check").iCheck("check");
-      else
-        $(".check").iCheck("uncheck");
-    });
-
-  $(".check").on('ifChanged', function (event) {
-    $("input[name='leave[leave_id][]']:checked").each( function(){            
-        if ($(this).length < 0) {
-          $(".approve_leave").attr("disabled", true);
-        } 
-    });
+    var ignore = ["input", "a", "button", "textarea", "label"];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data("href");
   });
-    
-  /*$('#approve_check').on("check uncheck", function(evant) {
-    
-    if (evant.type == "check")
-      $("#approve_leave").prop("disabled", false);
-    else 
-      $("#approve_leave").prop("disabled", true);
-  });*/
-  /*if($("input[name='leave[leave_id][]']").prop("checked") == true) {
 
-    $(".approve_leave").attr("disabled", false);
+  $("#checkall").on("ifChecked ifUnchecked",function(evant){
+    if(evant.type == "ifChecked")
+      $(".check").iCheck("check");
+    else
+      $(".check").iCheck("uncheck");
+  });
 
-  }*/
-
-     /*$(".approve_leave").click(function(){
-       alert(checked);
-     });*/
-    /*if (checked > 0) {
-      $(".approve_leave").attr("disabled", false);
+  /*確認check有勾選才可打開核准按鈕*/
+  $("input[name='leave[leave_id][]']").on("ifChanged", function () {
+    if ($('.check:checked').length > 0) {
+      $(".approve_leave").prop("disabled", false);
     } else {
-      $(".approve_leave").attr("disabled", true);
-    }*/
-
-    /*if($("input[name='leave[leave_id][]']").attr('checked')==true) {
-      $(".approve_leave").attr("disabled", false);
-    }*/
-
-    /*$(".check").on('ifChanged', function (event) {
-      $(".approve_leave").attr("disabled", false);
-    });*/
-
-    /*$(".check").on('ifUnchecked', function (event) {
-      $(".approve_leave").attr("disabled", true);
-    });*/
-
-    var $div_leave_spent_hours    = $('#div_leave_spent_hours');
-    var $div_leave_dayrange       = $('#div_leave_dayrange');
-    var $input_leave_type_id      = $("input[name='leave\[type_id\]']");
-    var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
-    var $div_leave_notic_person   = $("#div_leave_notic_person");
-
-    var leave_type_arr = ['kindness-leave','birthday-leave','annual-leave','special-leave'];
-    var leave_type_single_arr = ['kindness-leave','birthday-leave','special-leave'];
-    var daterangepicker_type = 'isDate';
-    
-    //Flat red color scheme for iCheck
-    $('input[type="radio"].flat-red').iCheck({
-      checkboxClass: 'icheckbox_flat-blue',
-      radioClass: 'iradio_flat-blue'
-      
-    });
-
-    //通知對象
-    $div_leave_notic_person.hide();
-    $('input[type="checkbox"].flat-red').iCheck({
-      checkboxClass: 'icheckbox_flat-blue',
-      radioClass: 'iradio_flat-blue'
-    });
-
-    $input_leave_notic_person.on('ifChanged', function(event){
-      if(event.target.value == 'none') {
-        if(event.target.checked == true)
-          $div_leave_notic_person.hide();
-        else
-          $div_leave_notic_person.show();
-
-        $input_leave_notic_person.each(function(){
-          if($(this).val() != event.target.value) $(this).iCheck('uncheck');
-        });
-      } else if (event.target.value == 'all') {
-        if(event.target.checked == true){
-          $input_leave_notic_person.each(function(){
-            if($(this).val() != 'none') $(this).iCheck('check');
-          });
-        }else{
-          $input_leave_notic_person.each(function(){
-            $(this).iCheck('uncheck');
-          });
-        }
-      }
-    });
+        $(".approve_leave").prop("disabled", true);
+    }
   });
+
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+    
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
+});
 </script>
 @endif

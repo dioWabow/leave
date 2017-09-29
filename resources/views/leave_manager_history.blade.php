@@ -32,7 +32,7 @@
                 <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == 'paid_sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
                 <option value="sick" @if (count($model->order_by) >0 && $model->exception == 'sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
                 <option value="entertain" @if (count($model->order_by) >0 && $model->exception == 'entertain') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
-                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == 'annual_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == 'annual_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annual_leave') }}</option>
                 <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == 'lone_stay') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
                 <option value="birthday" @if (count($model->order_by) >0 && $model->exception == 'birthday') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
