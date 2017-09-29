@@ -574,7 +574,7 @@ class LeaveHelper
         //請假時間開始結束不得相同
         if ($start_time == $end_time) {
 
-            $response = '開始與結束時間相同';
+            $response = '開始與結束時間不能相同';
             return $response;
 
         }
