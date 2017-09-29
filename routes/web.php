@@ -218,19 +218,19 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-   
+
     # 團隊假單-HR
     Route::group(['prefix'=>'leaves_hr'], function(){
         Route::any('prove',[
             'as'=>'leaves_hr/prove',
             'uses'=> 'LeavesHrController@getProve',
         ]);
-        
+
         Route::any('upcoming',[
             'as'=>'leaves_hr/upcoming',
             'uses'=> 'LeavesHrController@getUpcoming',
         ]);
-        
+
         Route::any('history',[
             'as'=>'leaves_hr/history',
             'uses'=> 'LeavesHrController@getHistory',
@@ -249,7 +249,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'ReportController@postIndex',
         ]);
 
-        Route::get('vacation',[
+        Route::any('vacation/{year}/{month}/{user_id}/{type_id}',[
             'as' => 'report/vacation',
             'uses' => 'ReportController@getUserData'
         ]);
@@ -325,8 +325,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'AgentApproveController@getEdit',
         ]);
     });
-    
-    
+
     Route::group(['prefix'=>'leave'], function(){
         // 我要放假
         Route::get('create', [
@@ -370,6 +369,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@postDelete',
         ]);
     });
+
     # 團隊假單-主管
     Route::group(['prefix'=>'leaves_manager'], function(){
         Route::any('prove/{role}',[
@@ -406,7 +406,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeavesManagerController@getEdit',
         ]);
     });
-    
+
     // 離職人員結算
     Route::group(['prefix'=>'leaved_user_annual_leave_calculate'], function(){
         Route::any('index', [

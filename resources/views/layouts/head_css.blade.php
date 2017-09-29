@@ -940,7 +940,7 @@ $(function () {
 @endif
 
 <!-- 特休結算+特休報表+報表+離職人員特休結算排序用 -->
-@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*','leaved_user_annual_leave_calculate/*'))
+@if(Request::is('annual_leave_calculate/*','report/index','annual_report/*','leaved_user_annual_leave_calculate/*'))
 <script>
   $(document).on("click", "th", function() {
   var table = $(this).parents("table").eq(0);

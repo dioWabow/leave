@@ -430,7 +430,7 @@ class Leave extends BaseModel
     }
 
 
-    public static function getTypeIdByLeaves($id) 
+    public static function getTypeIdByLeaves($id)
     {
         $result = self::where('type_id', $id)->get();
         return $result;
@@ -444,7 +444,7 @@ class Leave extends BaseModel
     	return $result;
     }
 
-    public function userVacationList($user_id, $type_id, $year, $month)
+    public function userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way)
     {
         $query = $this->where('user_id', $user_id)
             ->where('type_id', $type_id)
@@ -453,14 +453,16 @@ class Leave extends BaseModel
 
             if ($month != 'year') {
                 $query->whereMonth('start_time', $month);
-                $query->whereMonth('end_time', $month);
             }
 
-        $result = $query->paginate(10);
+            if (!empty($order_by) && !empty($order_way)) {
+                $query->orderBy($order_by, $order_way);
+            }
+
+        $result = $query->paginate(25);
         return $result;
     }
 
-    
     public function fetchUser()
     {
         $result = $this->hasOne('App\User', 'id' , 'user_id');
