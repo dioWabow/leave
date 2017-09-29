@@ -59,9 +59,8 @@ class LeaveTypeController extends Controller
      */
     public function getCreate(Request $request)
     {
-
         $model = new Type;
-        
+
         $input = $this->checkDataValue($request->old('leave_type'));
         $model->fill($input);
 
@@ -77,13 +76,15 @@ class LeaveTypeController extends Controller
      */
     public function getEdit(Request $request, $id)
     {
-
         $model = $this->loadModel($id);
         
-        $input = $this->checkDataValue($request->old('leave_type'));
-        
-        $model->fill($input);
+        if (!is_null($request->old('leave_type'))) {
+            
+            $input = $this->checkDataValue($request->old('leave_type'));
+            $model->fill($input);
 
+        }
+       
         return  view('leave_type_form', compact(
             'model'
         ));
@@ -110,7 +111,7 @@ class LeaveTypeController extends Controller
     public function postInsert(LeaveTypeRequest $request)
     {
         $input = $this->checkDataValue($request->input('leave_type'));
-
+        
         //儲存資料
         $model = new Type;
         $model->fill($input);
@@ -135,7 +136,7 @@ class LeaveTypeController extends Controller
     public function postUpdate(LeaveTypeRequest $request)
     {
         $input = $this->checkDataValue($request->input('leave_type'));
-
+        
         //更新資料
         $model = new Type;
         $model = $this->loadModel($input['id']);
@@ -214,7 +215,7 @@ class LeaveTypeController extends Controller
     private function checkDataValue($data)
     {
         $input = $data;
-
+        
         // 日期區間用-分別存入
         if (!empty($input['available_date'])) {
             $available_date = explode(" - ", $input['available_date']);
@@ -222,11 +223,12 @@ class LeaveTypeController extends Controller
             $input['end_time'] = isset($available_date[1]) ? $available_date[1]:'';
         }
         // reason prove available 判斷 0 或 1 後存入 
+        
         $input['deductions']  = empty($input['deductions']) || $input['deductions'] != 'on' ? 0 : 1 ;
         $input['reason']  = empty($input['reason']) || $input['reason'] != 'on' ? 0 : 1 ;
         $input['prove']  = empty($input['prove']) || $input['prove'] != 'on' ? 0 : 1 ;
         $input['available']  = empty($input['available']) || $input['available'] != 'on' ? 0 : 1 ;
-
+        
         return $input;
     }
 
