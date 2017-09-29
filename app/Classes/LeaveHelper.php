@@ -227,7 +227,7 @@ class LeaveHelper
 
                 if (in_array(TimeHelper::getWeekNumberByDate($date['start_time']),['0','6']) ) {
 
-                    if (!Holiday::checkHolidayByDateAndType($date['start_time'],'work') > 0) {
+                    if (!Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($date['start_time'],'Y-m-d'),'work') > 0) {
 
                         unset($date_list[$key]);
 
@@ -235,7 +235,7 @@ class LeaveHelper
 
                 } else {
 
-                    if (Holiday::checkHolidayByDateAndType($date['start_time'],'holiday') > 0) {
+                    if (Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($date['start_time'],'Y-m-d'),'holiday') > 0) {
 
                         unset($date_list[$key]);
 
@@ -374,7 +374,7 @@ class LeaveHelper
 
         } else {
 
-            if(TimeHelper::getWeekNumberByDate($date_time) == 5 && TimeHelper::changeDateFormat($date_time,'H') == '18') {
+            if (TimeHelper::getWeekNumberByDate($date_time) == 5 && TimeHelper::changeDateFormat($date_time,'H') == '18') {
 
                 $date = TimeHelper::changeDateValue($date_time,['+,2,day'],'Y-m-d H:i:s');
                 $date = TimeHelper::changeHourValue($date,['+,15,hour'],'Y-m-d H:i:s');
@@ -568,6 +568,56 @@ class LeaveHelper
 
             $response = '不得請以前的假';
             return $response;
+
+        }
+
+        //請假時間開始結束不得相同
+        if ($start_time == $end_time) {
+
+            $response = '開始與結束時間相同';
+            return $response;
+
+        }
+
+
+        //請假時間開始結束不得為假日
+        if (in_array(TimeHelper::getWeekNumberByDate($start_time),['0','6']) ) {
+
+            if (!Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($start_time,'Y-m-d'),'work') > 0) {
+
+                $response = '開始時間不得為假日';
+                return $response;
+
+            }
+
+        } else {
+
+            if (Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($start_time,'Y-m-d'),'holiday') > 0) {
+
+                $response = '開始時間不得為國定假日';
+                return $response;
+
+            }
+
+        }
+
+        if (in_array(TimeHelper::getWeekNumberByDate($end_time),['0','6']) ) {
+
+            if (!Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($end_time,'Y-m-d'),'work') > 0) {
+
+                $response = '結束時間不得為假日';
+                return $response;
+
+            }
+
+        } else {
+
+            if (Holiday::checkHolidayByDateAndType(TimeHelper::changeDateFormat($end_time,'Y-m-d'),'holiday') > 0) {
+
+                $response = '結束時間不得為國定假日';
+                return $response;
+
+            }
 
         }
 
