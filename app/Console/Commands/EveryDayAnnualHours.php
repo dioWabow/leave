@@ -46,16 +46,20 @@ class EveryDayAnnualHours extends Command
      */
     public function handle()
     {
-        $users = User::getAllUsersWithoutLeaved();
+        $users = User::getUserByEnterMonthAndDay(Carbon::now()->format('m'),Carbon::now()->format('d'));
 
         foreach($users as $user) {
 
-            $model = User::find($user->id);
-            $annual_hours = LeaveHelper::calculateAnnualDate(Carbon::now()->format('Y-m-d'),$user->id);
+            if (!empty($user->status)) {
 
-            $model->fill(['annual_hours' => $annual_hours]);
-            $model->save();
+                $model = User::find($user->id);
+                $annual_hours = LeaveHelper::calculateAnnualDate(Carbon::now()->format('Y-m-d'),$user->id);
 
+                $model->fill(['annual_hours' => $annual_hours]);
+                $model->save();
+
+            }
+            
         }
     }
 }
