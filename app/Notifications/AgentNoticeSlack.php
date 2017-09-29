@@ -29,7 +29,7 @@ class AgentNoticeSlack extends Notification
 
         $text = "";
         $text .= $name.' 於 '.$start_time." 將請假並指定您為代理人\n";
-        $text .= "請盡速進行確認是否同意，謝謝。"
+        $text .= "請盡速進行確認是否同意，謝謝。";
         $this->text .= $text;
 
 

@@ -28,23 +28,6 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
     ]);
 
-    // 我要放假
-    Route::group(['prefix'=>'leave'], function(){
-        Route::get('create', [
-            'as' => 'leave/create',
-            'uses' => 'LeaveController@getCreate',
-        ]);
-
-        Route::post('insert', [
-            'as' => 'leave/insert',
-            'uses' => 'LeaveController@postInsert',
-        ]);
-
-        Route::post('calculate_hours',[
-            'as' => 'leave/calculate_hours',
-            'uses' => 'LeaveController@calculate_hours',
-        ]);
-    });
 
     // 主管協助申請請假
     Route::group(['prefix'=>'leave_assist'], function(){

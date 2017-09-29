@@ -12,6 +12,14 @@ use App\UserTeam;
 use App\LeaveDay;
 use App\LeaveResponse;
 use App\Http\Requests\ManagerProveRequest;
+use App\Notifications\UserLeaveSuccessEmail;
+use App\Notifications\UserLeaveSuccessSlack;
+use App\Notifications\AgentLeaveSuccessEmail;
+use App\Notifications\AgentLeaveSuccessSlack;
+use App\Notifications\UserLeaveReturnEmail;
+use App\Notifications\UserLeaveReturnSlack;
+use SlackHelper;
+use \App\Classes\EmailHelper;
 
 use Auth;
 use Route;
@@ -299,6 +307,31 @@ class LeavesManagerController extends Controller
                     $leave_respon->fill($input_create);
                     $leave_respon->save();
 
+
+                    if ( $input['tag_id'] == '9' ) {
+
+                        //送通知給請假人
+                        SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                        $EmailHelper = new EmailHelper;
+                        $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                        $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
+
+                        //送通知給職代
+                        $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
+                        if ( count( $agent_list ) != 0 ) {
+
+                            foreach ( $agent_list as $key => $agent) {
+
+                                SlackHelper::notify(new AgentLeaveSuccessSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                                $EmailHelper = new EmailHelper;
+                                $EmailHelper->to = $agent->fetchUser->email;
+                                $EmailHelper->notify(new AgentLeaveSuccessEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time ) );
+
+                            }
+
+                        }
+
+                    }
                 }
 
                 return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
@@ -327,6 +360,12 @@ class LeavesManagerController extends Controller
                     $leave_respon = new LeaveResponse;
                     $leave_respon->fill($input_create);
                     $leave_respon->save();
+
+                    //送通知給請假人
+                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
 
                 }
 
