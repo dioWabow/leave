@@ -212,7 +212,7 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'ReportController@postIndex',
         ]);
 
-        Route::get('vacation',[
+        Route::any('vacation/{year}/{month}/{user_id}/{type_id}',[
             'as' => 'report/vacation',
             'uses' => 'ReportController@getUserData'
         ]);
@@ -289,11 +289,11 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'LeavesMyController@getHistory',
         ]);
 
-	Route::get('update/{id}',[
+        Route::get('update/{id}',[
             'as'=>'leaves_my/update',
             'uses'=> 'LeavesMyController@postUpdate',
         ]);
-	
+
         Route::any('leave_detail/{id}', [
             'as' => 'leaves_my/leave_detail',
             'uses' => 'LeaveController@getEdit',
@@ -321,10 +321,10 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@getEdit',
         ]);
     });
-    
+
     // 我要放假
     Route::group(['prefix'=>'leave'], function(){
-        
+
         Route::get('create', [
             'as' => 'leave/create',
             'uses' => 'LeaveController@getCreate',
@@ -402,19 +402,19 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'LeaveController@getEdit',
         ]);
     });
-    
+
     # 團隊假單-HR
     Route::group(['prefix'=>'leaves_hr'], function(){
         Route::any('prove',[
             'as'=>'leaves_hr/prove',
             'uses'=> 'LeavesHrController@getProve',
         ]);
-        
+
         Route::any('upcoming',[
             'as'=>'leaves_hr/upcoming',
             'uses'=> 'LeavesHrController@getUpcoming',
         ]);
-        
+
         Route::any('history',[
             'as'=>'leaves_hr/history',
             'uses'=> 'LeavesHrController@getHistory',

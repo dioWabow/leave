@@ -71,7 +71,10 @@
 												</td>
 												<td>{{$user_data->nickname}}</td>
 												@foreach($all_type as $type_data)
-												<td><a href="{{ route('report/vacation') }}?year={{$year}}&month={{$month}}&user_id={{$user_data->id}}&type_id={{$type_data->id}}">{{$report_data[$user_data->id][$type_data->id]}}</a></td>
+												<td>
+													<a href="{{  route('report/vacation' ,['year' => $year, 'month' => $month, 'user_id' => $user_data->id, 'type_id' => $type_data->id])}}">{{$report_data[$user_data->id][$type_data->id]}}
+													</a>
+												</td>
 												@endforeach
 												<td class="text-red">{{$report_data[$user_data->id]['sum']}}</td>
 												<td><span class="label bg-red">{{$report_data[$user_data->id]['deductions']}}</span></td>

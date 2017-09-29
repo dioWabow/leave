@@ -75,15 +75,13 @@ class ReportController extends Controller
         ));
     }
 
-    public function getUserData()
+    public function getUserData($year, $month, $user_id, $type_id)
     {
-        $user_id = (!empty($_GET['user_id'])) ? $_GET['user_id'] : "";
-        $type_id = (!empty($_GET['type_id'])) ? $_GET['type_id'] : "";
-        $year = (!empty($_GET['year'])) ? $_GET['year'] : "";
-        $month = (!empty($_GET['month'])) ? $_GET['month'] : "";
+        $order_by = (!empty($_GET['order_by'])) ? $_GET['order_by'] : "";
+        $order_way = (!empty($_GET['order_way'])) ? $_GET['order_way'] : "";
 
         $model = new Leave;
-        $user_vacation_list = $model->userVacationList($user_id, $type_id, $year, $month);
+        $user_vacation_list = $model->userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way);
 
         $typeModel = new Type;
         $all_type_temp = $typeModel->getAllType();
@@ -94,7 +92,7 @@ class ReportController extends Controller
         }
 
         return view('report_vacation',compact(
-            'user_id', 'type_id', 'year', 'month', 'user_vacation_list', 'all_type'
+            'order_by', 'order_way', 'user_id', 'type_id', 'year', 'month', 'user_vacation_list', 'all_type'
         ));
     }
 

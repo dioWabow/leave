@@ -28,18 +28,16 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<table class="table table-bordered table-striped table-hover">
-									<form name="vacationlist" id="vacation_list" action="{{ route('report/vacation')}}" method="GET">
-										<input type="hidden" name="year" value="{{$year}}">
-										<input type="hidden" name="month" value="{{$month}}">
-										<input type="hidden" name="user_id" value="{{$user_id}}">
-										<input type="hidden" name="type_id" value="{{$type_id}}">
+									<form name="vacationlist" id="vacation_list" action="{{  route('report/vacation' ,['year' => $year, 'month' => $month, 'user_id' => $user_id, 'type_id' => $type_id])}}" method="GET">
+										<input id="sort" type="hidden" name="order_by" @if(count($order_by) > 0)value="{{$order_by}}"@endif>
+			                    		<input id="sort_way" type="hidden" name="order_way" @if(count($order_way) > 0)value="{{$order_way}}"@endif>
 									</form>
 									<thead>
 										<tr>
-											<th width="4%"><a>請假者</a></th>
-											<th><a>時間</a></th>
-											<th><a>原因</a></th>
-											<th width="8%"><a>時數(HR)</a></th>
+											<th width="4%">請假者</th>
+											<th><a href="javascript:void(0)" onclick="changeSort('start_time');">時間</a></th>
+											<th>原因</th>
+											<th width="8%"><a href="javascript:void(0)" onclick="changeSort('hours');">時數(HR)</a></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -66,4 +64,19 @@
 		</div>
 	</div>
 </section>
+<script>
+
+function changeSort(sort){
+  order_by = $('#sort').val();
+  order_way = $('#sort_way').val();
+  $('#sort').val(sort);
+  if (order_by == sort && order_way == "ASC") {
+      $('#sort_way').val("DESC");
+  } else {
+    $('#sort_way').val("ASC");
+  }
+  $("#vacation_list").submit();
+}
+
+</script>
 @stop
