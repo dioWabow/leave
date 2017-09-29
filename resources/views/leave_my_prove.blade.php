@@ -38,8 +38,8 @@
                     @endif>
                     {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
                   </button>
-                  @if ($value->tag_id == 1 || $value->tag_id == 2)
-                    <a href="{{ route('leaves_my/delete', [ 'id' => $value->id ]) }}">
+                  @if (in_array($value->tag_id, ['1','2']))
+                    <a href="{{ route('leaves_my/update', [ 'id' => $value->id ]) }}">
                       <button type="button" class="btn btn-danger">
                         <i class="fa fa-trash-o"></i>
                       </button>
@@ -62,7 +62,7 @@
               @endforeach
               @if(count($dataProvider) == 0)
                 <tr class="">
-                  <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有相關結果</span></td>
+                  <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
                 </tr>
               @endif
           </tbody>

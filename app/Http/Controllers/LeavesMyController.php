@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use WebHelper;
 use LeaveHelper;
+use App\Type;
 use App\Leave;
 use App\LeaveDay;
-use App\Type;
+use App\LeaveResponse;
 
 use Auth;
 use Redirect;
@@ -169,27 +170,47 @@ class LeavesMyController extends Controller
     }
 
     /**
-     * 刪除 - 在等待核准 職代2 和 小主管3 狀態 顯示刪除按鈕(前台)
+     * 取消假單 - 在等待核准 代理人待核1 和 小主管代和2狀態才可取消
+     * 前台會顯示刪除按鈕
      *
      * @return \Illuminate\Http\Response
      */
-    public function postDelete(Request $request, $id)
+    public function postUpdate(Request $request, $id)
     {
-        $model = $this->loadModel($id)->delete();
-        // 代 user_id 回到 leaves 頁面
-        return Redirect::route('leaves_my/prove', [ 'user_id' => Auth::user()->id  ])->with('success', '假單已取消。');
-    }
 
-    /**
-     * 檢視
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getEdit(Request $request, $id)
-    {
-        return  view('leave_view');
-    }
+        $model = $this->loadModel($id);
 
+        if (!in_array($model->tag_id, ['1','2'])) {
+
+            return Redirect::route('leaves_my/prove')->withErrors(['msg' => '您的假單狀態不可取消']);
+
+        }
+        
+        $model->fill(['tag_id' => '7']);
+        if ($model->save()) {
+
+            $leave_respon = new LeaveResponse;
+            $leave_respon->fill(['leave_id' => $id,
+                'user_id' => Auth::user()->id,
+                'tag_id' => '7',
+                'memo' => '假單取消'
+            ]);
+            if ($leave_respon->save()) {
+                
+                return Redirect::route('leaves_my/prove')->with('success', '假單取消成功。');
+
+            } else {
+
+                return Redirect::route('leaves_my/prove')->withErrors(['msg' => '假單取消失敗。']);
+
+            } 
+
+        } else {
+
+            return Redirect::route('leaves_my/prove')->withErrors(['msg' => '假單取消失敗。']);
+
+        }
+    }
 
     private function loadModel($id)
     {
