@@ -100,8 +100,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'user.employee_no' => [
+            'required' => '員工編號一定要填',
         ],
     ],
 
