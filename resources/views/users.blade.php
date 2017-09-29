@@ -8,7 +8,7 @@
   <small>Staff Management</small>
   </h1>
   <ol class="breadcrumb">
-  <li><a href="{{route('root_path')}}/index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
   <li>基本設定</li>
   <li class="active">員工管理</li>
   </ol>
