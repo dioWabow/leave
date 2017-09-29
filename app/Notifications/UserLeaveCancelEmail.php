@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserLeaveSuccessEmail extends Notification
+class UserLeaveCancelEmail extends Notification
 {
     use Queueable;
 
@@ -49,7 +49,7 @@ class UserLeaveSuccessEmail extends Notification
         return (new MailMessage)
             ->from(Config::getConfigValueByKey("smtp_from") , Config::getConfigValueByKey("smtp_display"))
             ->subject("假單取消通知 - ". Config::getConfigValueByKey("smtp_display"))
-            ->line("您於 ".$this->start_time." 至 ".$this->end_time."期間的假單已被取消");
+            ->line("您於 ".$this->start_time." 至 ".$this->end_time."期間的假單<font color='red'>已被取消</font>");
     }
 
 }

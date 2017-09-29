@@ -329,9 +329,9 @@ class LeavesManagerController extends Controller
                     if ( $input['tag_id'] == '9' ) {
 
                         //送通知給請假人
-                        SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                        SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
                         $EmailHelper = new EmailHelper;
-                        $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                        $EmailHelper->to = $model->fetchUser->email;
                         $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
 
                         //送通知給職代
@@ -340,10 +340,10 @@ class LeavesManagerController extends Controller
 
                             foreach ( $agent_list as $key => $agent) {
 
-                                SlackHelper::notify(new AgentLeaveSuccessSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                                SlackHelper::notify(new AgentLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
                                 $EmailHelper = new EmailHelper;
                                 $EmailHelper->to = $agent->fetchUser->email;
-                                $EmailHelper->notify(new AgentLeaveSuccessEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time ) );
+                                $EmailHelper->notify(new AgentLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
 
                             }
 
@@ -388,9 +388,9 @@ class LeavesManagerController extends Controller
                     }
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
-                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->to = $model->fetchUser->email;
                     $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
 
                 }
