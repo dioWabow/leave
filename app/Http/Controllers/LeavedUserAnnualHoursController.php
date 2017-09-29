@@ -78,7 +78,6 @@ class LeavedUserAnnualHoursController extends Controller
         }
 
         $leave_arr = [];
-
         foreach ($leaveday->getPassLeaveByUserIdDateType($id,$start_time,$end_time,$leave_type_arr) as $leave_day) {
 
             $leave_arr[] = $leave_day->leave_id;

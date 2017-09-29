@@ -10,17 +10,43 @@
   <ol class="breadcrumb">
 	<li><a href="{{route('index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li>
-  @if(in_array($model->tag_id,[1,2,7,8]) && Auth::getUser()->id == $model->user_id)
-    <a href="{{route('leaves_my/prove')}}">我的請假單</a>
-  @elseif($model->tag_id == 1 && in_array(Auth::getUser()->id,$leave_agent->pluck('agent_id')->toArray()))
-    <a href="{{route('agent_approve/index')}}">同意代理嗎</a>
-  @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['manager'])  && (Auth::getUser()->id == $leave_prove_process['manager']->id) )
-  @elseif(in_array($model->tag_id,[3,4]) && !empty($leave_prove_process['minimanager']) && (Auth::getUser()->id == $leave_prove_process['minimanager']->id))
-    <a href="./leave.html">團隊假單</a>
-  @elseif(in_array($model->tag_id,[9]))
-    <a href="{{route('annual_leave_calculate/index')}}">特休結算</a>
+  @if(!empty($http_referer))
+    <a href="{{$pre_url}}">
+
+    @if($http_referer == 'leaves_my')
+      我的假單
+
+    @elseif($http_referer == 'agent_approve')
+      同意代理嗎?
+
+    @elseif($http_referer == 'leaves_hr')
+      團隊假單
+
+    @elseif($http_referer == 'leaves_manager')
+      團隊假單
+
+    @elseif($http_referer == 'report')
+      報表
+
+    @elseif($http_referer == 'annual_report')
+      特休假單列表
+
+    @elseif($http_referer == 'annual_leave_calculate')
+      特休假單列表
+
+    @elseif($http_referer == 'leaved_user_annual_leave_calculate')
+      特休假單列表(離職)
+
+    @elseif($http_referer == 'agent')
+      我是代理人
+
+    @endif
+    </a>
+  @else
+    <a href="{{route('leaves_my/prove')}}">
+    我的假單
+    </a>
   @endif
-  
   </li>
 	<li class="active">假單檢視</li>
   </ol>

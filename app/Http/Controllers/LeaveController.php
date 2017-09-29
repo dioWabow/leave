@@ -43,6 +43,7 @@ class LeaveController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->file_path = 'avatar/';
         $this->file_root_path = storage_path() . '/app/public/' . $this->file_path;
     }
@@ -429,6 +430,9 @@ class LeaveController extends Controller
 
     public function getEdit(Request $request, $id)
     {
+        $http_referer = $this->http_referer;
+        $pre_url = $this->pre_url;
+
         if (empty($id)) {
 
             return Redirect::route('index')->withErrors(['msg' => '無此假單']);
@@ -496,7 +500,7 @@ class LeaveController extends Controller
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
         
         return view('leave_view',compact(
-            'model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
+            'pre_url','http_referer','model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
         ));
     }
 
@@ -645,17 +649,17 @@ class LeaveController extends Controller
 
                 }
 
-                return Redirect::route('leave/edit',['id' => $input['leave_id']])->with('success', $message);
+                return Redirect::back()->with('success', $message);
 
             } else {
 
-                return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
+                return Redirect::back()->withErrors(['msg' => $message.'失敗']);
 
             }
 
         } else {
 
-            return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'失敗']);
+            return Redirect::back()->withErrors(['msg' => $message.'失敗']);
 
         }
 

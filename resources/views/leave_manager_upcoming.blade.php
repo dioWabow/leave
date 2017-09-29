@@ -25,7 +25,7 @@
        
     <tbody>
       @foreach ($dataProvider as $value)
-        <tr class="clickable-row" data-href="{{ route('leave/edit',[ 'id' => $value->id ]) }}">
+        <tr class="clickable-row" data-href="{{ route('leaves_manager/leave_detail',[ 'id' => $value->id ]) }}">
           @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
             <td><img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px"></td>
           @endforeach

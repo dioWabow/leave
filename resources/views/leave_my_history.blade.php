@@ -76,7 +76,7 @@
           </thead>
           <tbody>
           @foreach ($dataProvider as $value)
-            <tr class="clickable-row" data-href="{{ route('leave/edit',[ 'id' => $value->id ]) }}" @if ($value->tag_id == '7') style="text-decoration:line-through" @endif>
+            <tr class="clickable-row" data-href="{{ route('leaves_my/leave_detail',[ 'id' => $value->id ]) }}" @if ($value->tag_id == '7') style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
                   @if($value->tag_id == 7) class="btn"
