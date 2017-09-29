@@ -66,7 +66,7 @@
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
-              <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
+              <th width="5%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
