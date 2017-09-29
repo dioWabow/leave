@@ -51,7 +51,7 @@ class UserLeaveSuccessEmail extends Notification
             ->subject("假單取消通知 - ". Config::getConfigValueByKey("smtp_display"))
             ->line("您於 ".$this->start_time." 至 ".$this->end_time."期間的假單已被退回");
             ->line("請至 我的假單-歷史紀錄 檢視原因")
-            ->action('點我進入', route("leaves/my/history"));
+            ->action('點我進入', route("leaves_my/history"));
     }
 
 }

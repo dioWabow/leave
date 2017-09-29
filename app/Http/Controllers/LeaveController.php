@@ -18,6 +18,16 @@ use App\LeaveAgent;
 use App\LeaveNotice;
 use App\LeaveResponse;
 use App\Http\Requests\LeaveRequest;
+use App\Notifications\AgentNoticeSlack;
+use App\Notifications\AgentNoticeEmail;
+use App\Notifications\UserLeaveSuccessEmail;
+use App\Notifications\UserLeaveSuccessSlack;
+use App\Notifications\AgentLeaveSuccessEmail;
+use App\Notifications\AgentLeaveSuccessSlack;
+use App\Notifications\UserLeaveReturnEmail;
+use App\Notifications\UserLeaveReturnSlack;
+use SlackHelper;
+use \App\Classes\EmailHelper;
 
 use Redirect;
 use App\Http\Controllers\Controller;
@@ -385,6 +395,21 @@ class LeaveController extends Controller
                 ]);
                 $leave_response->save();
 
+                //新增職代通知
+                $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
+                if ( count( $agent_list ) != 0 ) {
+
+                    foreach ( $agent_list as $key => $agent) {
+
+                        SlackHelper::notify(new AgentNoticeSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $agent->fetchUser->nickname )  );
+                        $EmailHelper = new EmailHelper;
+                        $EmailHelper->to = $agent->fetchUser->email;
+                        $EmailHelper->notify(new AgentNoticeEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time ) );
+
+                    }
+
+                }
+
                 return Redirect::route('index')->with('success', '新增成功 !');
 
             } else {
@@ -548,6 +573,41 @@ class LeaveController extends Controller
                 if (in_array($model->tag_id, ['2','3','4'])) {
 
                     LeaveHelper::syncCheckLeave($model->id,$input);
+
+                }
+
+                if ( in_array($model->tag_id, ['9']) ) {
+
+                    //送通知給請假人
+                    SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
+
+                    //送通知給職代
+                    $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
+                    if ( count( $agent_list ) != 0 ) {
+
+                        foreach ( $agent_list as $key => $agent) {
+
+                            SlackHelper::notify(new AgentLeaveSuccessSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            $EmailHelper = new EmailHelper;
+                            $EmailHelper->to = $agent->fetchUser->email;
+                            $EmailHelper->notify(new AgentLeaveSuccessEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time ) );
+
+                        }
+
+                    }
+
+                }
+
+                if ( in_array($model->tag_id, ['8']) ) {
+
+                    //送通知給請假人
+                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
 
                 }
 
