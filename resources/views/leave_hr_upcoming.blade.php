@@ -41,6 +41,11 @@
           </td>
         </tr>
       @endforeach
+      @if(count($dataProvider) == 0)
+        <tr class="">
+          <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+        </tr>
+      @endif
     </tbody>
   </table>
 </div>
