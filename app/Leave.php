@@ -460,6 +460,21 @@ class Leave extends BaseModel
         return $result;
     }
 
+    //取得送出之後3 4 7天與之後未審核的假單
+    public static function getWaitProveLeave()
+    {
+        $three_date = date(("Y-m-d"),strtotime("-3 days"));
+        $four_date = date(("Y-m-d"),strtotime("-4 days"));;
+        $seven_datetime = date(("Y-m-d H:i:s"),strtotime("-7 days"));;
+        $result = self::whereIn('tag_id', ['1','2','3','4','5'])
+            ->where(function ($query) use ($three_date,$four_date,$seven_datetime) {
+                $query->whereDate('created_at', $three_date)
+                ->orWhereDate('created_at', '=' , $four_date)
+                ->orWhere('created_at', '<' , $seven_datetime);
+            })
+            ->get();
+        return $result;
+    }
     
     public function fetchUser()
     {
