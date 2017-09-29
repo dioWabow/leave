@@ -466,15 +466,19 @@ class LeaveController extends Controller
                 $leave_prove_tag_name[$key]['id'] = 3;
                 $leave_prove_tag_name[$key]['name'] = '小主管核准';
 
-            } elseif ($key == 'manager' && !empty($leave_prove['admin'])) {
+            } elseif ($key == 'manager') {
 
-                $leave_prove_tag_name[$key]['id'] = 4;
-                $leave_prove_tag_name[$key]['name'] = '主管核准';
+                if (empty($leave_prove_process['admin'])) {
 
-            } elseif ($key == 'manager' && empty($leave_prove['admin'])) {
+                    $leave_prove_tag_name[$key]['id'] = 9;
+                    $leave_prove_tag_name[$key]['name'] = '主管核准';
 
-                $leave_prove_tag_name[$key]['id'] = 9;
-                $leave_prove_tag_name[$key]['name'] = '主管核准';
+                } else {
+
+                    $leave_prove_tag_name[$key]['id'] = 4;
+                    $leave_prove_tag_name[$key]['name'] = '主管核准';
+
+                }
 
             } elseif ($key == 'admin') {
 
@@ -488,7 +492,7 @@ class LeaveController extends Controller
         $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
 
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
-
+        
         return view('leave_view',compact(
             'model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
         ));
@@ -535,8 +539,8 @@ class LeaveController extends Controller
 
             }
 
-        //准假
-        } elseif (in_array($model->tag_id,['2','3']) && in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id])) {
+        //小主管准假
+        } elseif (in_array($model->tag_id,['2']) && !empty($leave_prove_process['minimanager']) && Auth::getUser()->id == $leave_prove_process['minimanager']->id) {
 
             //狀態=0代表不準假
             if (empty($input['status'])) {
@@ -546,19 +550,47 @@ class LeaveController extends Controller
 
             } else {
 
-                if (Auth::getUser()->id == $leave_prove_process['minimanager']->id) {
-
-                    $input['tag_id'] = '3';
-                    $message = '同意該假單的申請';
-
-                } elseif (Auth::getUser()->id == $leave_prove_process['manager']->id) {
-
-                    $input['tag_id'] = ($model->hours > 24) ? '4' : '9';
-                    $message = '同意該假單的申請';
-
-                }
+                $input['tag_id'] = '3';
+                $message = '同意該假單的申請';
 
             }
+
+        //主管准假
+        } elseif (in_array($model->tag_id,['2','3']) && !empty($leave_prove_process['manager']) && Auth::getUser()->id == $leave_prove_process['manager']->id) {
+
+            //狀態=0代表不準假
+            if (empty($input['status'])) {
+
+                $input['tag_id'] = '8';
+                $message = '不准該假單的申請';
+
+            } else {
+
+                $input['tag_id'] = ($model->hours > 24) ? '4' : '9';
+                $message = '同意該假單的申請';
+
+            }
+
+        //BOSS准假
+        }  elseif (in_array($model->tag_id,['4']) && !empty(Auth::hasAdmin())) {
+
+            //狀態=0代表不準假
+            if (empty($input['status'])) {
+
+                $input['tag_id'] = '8';
+                $message = '不允許該假單的申請';
+
+            } else {
+
+                $input['tag_id'] = '9';
+                $message = '允許該假單的申請';
+
+            }
+
+
+        } else {
+
+            return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'無審核權限']);
 
         }
 
