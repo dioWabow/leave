@@ -17,16 +17,17 @@
 <!-- daterange picker -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.css">
 <!-- Bootstrap time Picker -->
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css"> 
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.css">
 <!-- Bootstrap fileupload -->
 <link href="{{route('root_path')}}/plugins/fileupload/css/fileinput.css" media="all" rel="stylesheet" type="text/css"/>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css?v=3">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/nestable/style.css">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/AdminLTE.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
-<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css?v=6">
+<link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
@@ -53,21 +54,78 @@
 <script src="{{route('root_path')}}/plugins/fileupload/js/fileinput.js" type="text/javascript"></script>
 
 <script src="{{route('root_path')}}/plugins/nestable/jquery.nestable.js"></script>
-<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js?v=2"></script>
+<script src="{{route('root_path')}}/plugins/nestable/jquery.nestable2.js"></script>
 
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<!-- wabow -->
-<script src="{{route('root_path')}}/js/wabow.js"></script>
+
+<!-- colorpicker -->
+<script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+<!-- 全部共用 -->
+<script>
+$(function () {
+  $('.table').on("click", ".clickable-row", function(e) {
+    if($(e.target).hasClass('ignore')) return;
+
+    var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+
+    window.location = $(this).data('href');
+  });
+
+  $('#checkall').on('ifChecked ifUnchecked',function(evant){
+    if(evant.type == 'ifChecked')
+      $('.check').iCheck('check');
+    else
+      $('.check').iCheck('uncheck');
+  });
+
+  //代理人、通知對象
+  $(".select2").select2({width: '100%'});
+
+  //預設圖片
+  $("img").error(function () {
+   $(this).unbind("error").attr("src", "{{route('root_path')}}/dist/img/users/default.png");
+  });
+
+  //Flat red color scheme for iCheck
+  $('input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  // alert 消失用
+  $(".msg_alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".msg_alert").slideUp(500);
+  });
+
+});
+
+</script>
 
 <!-- 國定假日/補班與修改頁面 -->
+@if(Request::is('holidies/*'))
   <script>
 $(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
+    $('input[name="search[daterange]"]').daterangepicker({
+        autoUpdateInput: false,
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('#search_daterange').val('');
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    if("{{$model->start_date}}" == "") {
+        $('#search_daterange').val('');
+    } else {
+        $('#search_daterange').val("{{ Carbon\Carbon::parse($model->start_date)->format('Y-m-d') }} - {{ Carbon\Carbon::parse($model->end_date)->format('Y-m-d') }}");
+    }
 
     $('#holidies_available_date').daterangepicker({
         showDropdowns: true,
@@ -85,216 +143,783 @@ $(function () {
     $('#holidies_date').val($('#holidies_date').attr('date'));
 });
 </script>
-
-<!-- Index頁面 -->
-<script>
-  $(function () {
-
-    /* initialize the external events
-     -----------------------------------------------------------------*/
-    function ini_events(ele) {
-      ele.each(function () {
-
-        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-        // it doesn't need to have a start or end
-        var eventObject = {
-          title: $.trim($(this).text()) // use the element's text as the event title
-        };
-
-        // store the Event Object in the DOM element so we can get to it later
-        $(this).data('eventObject', eventObject);
-
-        // make the event draggable using jQuery UI
-        $(this).draggable({
-          zIndex: 1070,
-          revert: true, // will cause the event to go back to its
-          revertDuration: 0  //  original position after the drag
-        });
-
-      });
-    }
-
-    ini_events($('#external-events div.external-event'));
-
-    /* initialize the calendar
-     -----------------------------------------------------------------*/
-    //Date for the calendar events (dummy data)
-    var date = new Date();
-    var d = date.getDate(),
-        m = date.getMonth(),
-        y = date.getFullYear();
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
-      },
-      buttonText: {
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
-      },
-      //Random default events
-      events: [
-        {
-          title: 'All Day Event',
-          start: new Date(y, m, 1),
-          backgroundColor: "#f56954", //red
-          borderColor: "#f56954" //red
-        },
-        {
-          title: 'Long Event',
-          start: new Date(y, m, d - 5),
-          end: new Date(y, m, d - 2),
-          backgroundColor: "#f39c12", //yellow
-          borderColor: "#f39c12" //yellow
-        },
-        {
-          title: 'Meeting',
-          start: new Date(y, m, d, 10, 30),
-          allDay: false,
-          backgroundColor: "#0073b7", //Blue
-          borderColor: "#0073b7" //Blue
-        },
-        {
-          title: 'Lunch',
-          start: new Date(y, m, d, 12, 0),
-          end: new Date(y, m, d, 14, 0),
-          allDay: false,
-          backgroundColor: "#00c0ef", //Info (aqua)
-          borderColor: "#00c0ef" //Info (aqua)
-        },
-        {
-          title: 'Birthday Party',
-          start: new Date(y, m, d + 1, 19, 0),
-          end: new Date(y, m, d + 1, 22, 30),
-          allDay: false,
-          backgroundColor: "#00a65a", //Success (green)
-          borderColor: "#00a65a" //Success (green)
-        },
-        {
-          title: 'Click for Google',
-          start: new Date(y, m, 28),
-          end: new Date(y, m, 29),
-          url: 'http://google.com/',
-          backgroundColor: "#3c8dbc", //Primary (light-blue)
-          borderColor: "#3c8dbc" //Primary (light-blue)
-        }
-      ],
-      editable: true,
-      droppable: true, // this allows things to be dropped onto the calendar !!!
-      drop: function (date, allDay) { // this function is called when something is dropped
-
-        // retrieve the dropped element's stored Event Object
-        var originalEventObject = $(this).data('eventObject');
-
-        // we need to copy it, so that multiple events don't have a reference to the same object
-        var copiedEventObject = $.extend({}, originalEventObject);
-
-        // assign it the date that was reported
-        copiedEventObject.start = date;
-        copiedEventObject.allDay = allDay;
-        copiedEventObject.backgroundColor = $(this).css("background-color");
-        copiedEventObject.borderColor = $(this).css("border-color");
-
-        // render the event on the calendar
-        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-        // is the "remove after drop" checkbox checked?
-        if ($('#drop-remove').is(':checked')) {
-          // if so, remove the element from the "Draggable Events" list
-          $(this).remove();
-        }
-
-      }
-    });
-
-    /* ADDING EVENTS */
-    var currColor = "#3c8dbc"; //Red by default
-    //Color chooser button
-    var colorChooser = $("#color-chooser-btn");
-    $("#color-chooser > li > a").click(function (e) {
-      e.preventDefault();
-      //Save color
-      currColor = $(this).css("color");
-      //Add color effect to button
-      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-    });
-    $("#add-new-event").click(function (e) {
-      e.preventDefault();
-      //Get value and make sure it is not null
-      var val = $("#new-event").val();
-      if (val.length == 0) {
-        return;
-      }
-
-      //Create events
-      var event = $("<div />");
-      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
-      event.html(val);
-      $('#external-events').prepend(event);
-
-      //Add draggable funtionality
-      ini_events(event);
-
-      //Remove event from text input
-      $("#new-event").val("");
-    });
-  });
-</script>
+@endif
 
 <!-- 我的假單頁面用 -->
+@if(Request::is('leaves_my/*'))
+  @if(Request::is('leaves_my/history'))
   <script>
-$(function () {
-    $('#search_daterange').daterangepicker({
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-    });
+    $(function () {
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      var $search_daterange = $('#search_daterange');
+      var time = $search_daterange.val();
+      $("#search_daterange").daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+          maxDate: yyyy + '-' + mm + '-' + dd
+      });
+      
+      $("#search_daterange").val(time);
+      
+      $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      });
 
-    $('#search_daterange').val('');
-
-    $("#leave_view_fileupload").fileinput({
-        initialPreview: [
-            './dist/img/unsplash2.jpg'
-        ],
-        initialPreviewAsData: true,
+      $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+      });
     });
-});
-</script>
+    
+    function changePageSize(pagesize)
+    {
+      $("#frmOrderby").submit();
+    }
+  </script>
+  @endif
+  @if (Request::is('leaves_my/prove','leaves_my/upcoming','leaves_my/history'))
+  <script>
+  $(function () {
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderby").submit();
+    });
+  });
+  </script>
+  @endif
+@endif
 
 <!--天災假調整用-->
+@if(Request::is('natural/*'))
 <script>
 $(function () {
-    var $naturalDisasterList = $('.naturalDisasterList');
-
-    $naturalDisasterList.hide();
-    $('#settingSearch').on('click', function(){
-        $naturalDisasterList.show();
+    $('#natural_search').on('click', function(){
+        $("#natural_search_frm").submit();
     });
 
+    var default_pre_date = "{{$input["date"]}}";
+    var default_date = new Date(default_pre_date);
     $('.single-date').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         locale: {format: 'YYYY-MM-DD'},
+        startDate: default_date
     }).each(function(){
         $(this).val($(this).attr('date'));
     }).on('change', function(){ 
         $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
     });
+    $("#natural_date").val(default_pre_date);
 });
 </script>
-
+@endif
 
 <!-- 團隊設定用 -->
+@if(Request::is('teams/*'))
 <script>
-$('#nestable').nestable({
-  maxDepth: 5
+$(document).ready(function () {
+
+  var nestableChange = function (e) {
+    var list = e.length ? e : $(e.target), output = list.data('output');
+
+    $.ajax({
+        method: "POST",
+        url: "{{route('teams/update_drop')}}",
+        data: {
+          "_token": "{{ csrf_token() }}", 
+          "team_json": window.JSON.stringify(list.nestable('serialize'))
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+        alert("更新失敗!");
+    });
+  };
+
+  $('#nestable').nestable({
+    maxDepth: 2,
+    dropCallback : 'sourceId'
+    }).on('change', nestableChange);
+  nestableChange($('#nestable').data('output', $('#nestable-output')));
+
+
+
+  $(".my-colorpicker2").colorpicker();
+
+  // 新增的ajax
+  $('#menu-add').find("button[id='addButton']").click(function() {
+
+    $this = $(this);
+    $team_name = $this.parents().find("input[id='addInputName']").val();
+    $team_color = $this.parents().find("input[id='addInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/create') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        team_name: $team_name,
+        team_color: $team_color,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('新增成功');
+          $('#team_set_list').append(data.html);
+          $('.dd-empty').remove();
+          $this.parents().find("input[id='addInputName']").val('');
+          $this.parents().find("input[id='addInputColor']").val('');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
+
+  $(document).on('click', '.button-edit', prepareEdit);
+
+  // 修改點下去 抓出id 丟給 editButton
+  $(document).on('click', '.button-edit', function(event){
+    $this = $(this);
+    $id = $this.attr("data-owner-id");
+    $('#editButton').val($id);
+
+  });
+
+  $(document).on('click', '#editButton', editMenuItem);
+
+  // 修改的ajax
+  $('#editButton').click(function(){
+    $this = $(this);
+
+    $id = $this.val();
+    $team_name = $this.parents().find("input[id='editInputName']").val();
+    $team_color = $this.parents().find("input[id='editInputColor']").val();
+
+    if($team_name == '') {
+      alert('請填入組別名稱');
+      return false;
+    }
+
+    if($team_color == ''){
+      alert('請選擇組別顏色');
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/update') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+        team_name: $team_name,
+        team_color: $team_color
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+          $("#menu-editor").fadeOut();
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $(document).on('click', '.button-delete', deleteFromMenu);
+
+  // 刪除的 ajax
+  $(document).on('click', '.button-delete', function(event){
+    $this = $(this);
+
+    $id = $this.attr("data-owner-id");
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('teams/delete') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: $id,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('刪除成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+
+  });
+
+  $('#memberReload').click(function(){
+
+    $.get('index', function(data) {
+      var html = $(data).find('#member_set').html();
+      $('#member_set').html(html);
+      $(".select2").select2();
+    });
+
+  });
+
+  $('form[name=member_form]').submit(function(event){
+
+    // 跑所有team
+    $('.member_list').each(function(){
+
+      $team = $(this).attr('team_id');
+
+      // 跑團隊人員 與 主管人員
+      $team_member = $('#member_'+$team).select2('val');
+      $team_manager = $('#manager_'+$team).select2('val');
+
+      // select2 抓出來型態不是string
+      if(!$team_member == "") {
+        $team_member = $team_member.toString();
+      }
+
+      // 當有選主管才要判斷
+      if($team_manager != ""){
+
+        $team_manager.toString();
+
+        if($team_member === null){
+          event.preventDefault();
+          alert('有主管的情況至少要有一名組員!!');
+        } else {
+
+          if($team_member == $team_manager){
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          } else if($team_member.match($team_manager)) {
+            event.preventDefault();
+            alert('人員不能同時為主管!!');
+
+          }
+        }
+      }
+    });
+
+});
+
+
+});
+
+</script>
+@endif
+
+<!-- 假別管理與修改頁面用 -->
+@if(Request::is('leave_type/*'))
+<script>
+  $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_daterange = $('#leave_type_available_date');
+    var time = $search_daterange.val();
+
+    $("#leave_type_available_date").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+    });
+        
+    $("#leave_type_available_date").val(time);
+    
+    $('input[name="leave_type[available_date]"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="leave_type[available_date]"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+  });
+</script>
+@endif
+
+<!-- 我要請假用 -->
+@if(Request::is('leave/*','leave_assist/*'))
+<script>
+$(function () {
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass('ignore')) return;
+
+    var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data('href');
+  });
+
+  $('#checkall').on('ifChecked ifUnchecked',function(evant){
+    if(evant.type == 'ifChecked')
+      $('.check').iCheck('check');
+    else
+      $('.check').iCheck('uncheck');
+  });
+
+  var $leave_dayrange           = $('#leave_dayrange');
+  var $leave_timepicker         = $('#leave_timepicker');
+  var $leave_dayrange_allday    = $('#leave_dayrange_allday');
+  var $leave_dayrange_morning   = $('#leave_dayrange_morning');
+  var $leave_dayrange_afternoon = $('#leave_dayrange_afternoon');
+  var $leave_spent_hours        = $('#leave_spent_hours');
+  var $leave_spent_hours_hide   = $('#leave_spent_hours_hide');
+  var $label_leave_spent_hours  = $('#label_leave_spent_hours');
+  var $label_leave_dayrange     = $('#label_leave_dayrange');
+  var $div_leave_spent_hours    = $('#div_leave_spent_hours');
+  var $div_leave_dayrange       = $('#div_leave_dayrange');
+  var $input_leave_type_id      = $("input[name='leave\[type_id\]']");
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+  var $keep_dayrange   = $("#keep_dayrange");
+  var $leave_notice = $("#leave_notice");
+
+  var leave_type_arr = ['entertain','birthday','lone_stay'];
+  var leave_type_single_arr = ['entertain','birthday','lone_stay'];
+  var leave_type_notice_arr = ['birthday','lone_stay'];
+  var daterangepicker_type = 'isDate';
+
+  //Flat red color scheme for iCheck
+  $('input[type="radio"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
+
+  //檢查哪些假別已用完
+  $input_leave_type_id.each(function(){
+    if($(this).attr('hour') == 0) $(this).iCheck('disable');
+    if($(this).iCheck('update')[0].checked === true){
+
+      var mydata = $(this).attr('exception');
+      if($.inArray(mydata, leave_type_single_arr) !== -1) {
+        daterangepicker_type = 'isSingleDate';
+      } else {
+        daterangepicker_type = 'isDatetime';
+      }
+      fetchDaterangepicker();
+      if($.inArray(mydata, leave_type_arr) !== -1){
+        $div_leave_spent_hours.hide();
+        $label_leave_spent_hours.hide();
+        
+      }else{
+        $div_leave_dayrange.hide();
+        $label_leave_dayrange.hide();
+        $leave_notice.hide();
+      }
+
+      if($.inArray(mydata, leave_type_notice_arr) !== -1){
+        $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+      } else {
+        $leave_notice.hide();
+      }
+      
+      //遇到善待假則 allday 不可選擇
+      if ($keep_dayrange.val()) {
+
+        if ($keep_dayrange.val().trim() == "morning") {
+
+          $leave_dayrange_morning.iCheck('check');
+
+        } else if($keep_dayrange.val().trim() == "afternoon") {
+
+          $leave_dayrange_afternoon.iCheck('check');
+
+        } else {
+
+          $leave_dayrange_allday.iCheck('check');
+
+        }
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == '1') {
+          $leave_dayrange_allday.iCheck('disable');
+        }
+
+      } else {
+
+        $leave_dayrange_allday.iCheck('check');
+
+        //遇到善待假則 allday 不可選擇
+        if($(this).val() == '1') {
+          $leave_dayrange_allday.iCheck('disable');
+          $leave_dayrange_allday.iCheck('uncheck');
+          $leave_dayrange_morning.iCheck('check');
+        }
+
+      }
+    }
+  });
+
+  //請假類別檢查
+  $input_leave_type_id.on('ifChecked', function(event){
+    $leave_timepicker.val('');
+    $leave_spent_hours.val('');
+    $leave_spent_hours_hide.val('');
+
+    var mydata = $(this).attr('exception');
+    if($.inArray(mydata, leave_type_arr) !== -1) {
+      daterangepicker_type = 'isDate';
+      if($.inArray(mydata, leave_type_single_arr) !== -1) daterangepicker_type = 'isSingleDate';
+
+      //只要選到單一天，則將請假時段全開，並預設選擇 allday
+      $("input[name='leave\[dayrange\]']").iCheck('enable'); 
+      $leave_dayrange_allday.iCheck('check');
+
+      //遇到善待假則 allday 不可選擇
+      if(mydata == 'entertain') {
+        $leave_dayrange_allday.iCheck('disable');
+        $leave_dayrange_allday.iCheck('uncheck');
+        $leave_dayrange_morning.iCheck('check');
+      }
+
+      $div_leave_spent_hours.hide();
+      $label_leave_spent_hours.hide();
+
+      $div_leave_dayrange.show();
+      $label_leave_dayrange.show();
+
+      $leave_notice.show();
+    }else{
+      $leave_notice.hide();
+
+      $div_leave_spent_hours.show();
+      $label_leave_spent_hours.show();
+
+      $div_leave_dayrange.hide();
+      $label_leave_dayrange.hide();
+
+      daterangepicker_type = 'isDatetime';
+    }
+
+    if($.inArray(mydata, leave_type_notice_arr) !== -1){
+      $leave_notice.text("該假別半天會當一天使用，請假之前請先考慮清楚");
+    } else {
+      $leave_notice.hide();
+    }
+
+    fetchDaterangepicker();
+  });
+
+  //代理人、通知對象
+  $(".select2").select2({width: '100%'});
+
+  //日期選擇器
+  function fetchDaterangepicker(){
+    var options = {};
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var time = $leave_timepicker.val();
+
+    options.locale = {format: 'YYYY-MM-DD'};
+    if(daterangepicker_type == 'isSingleDate') {
+      options.singleDatePicker = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+    }
+    if(daterangepicker_type == 'isDatetime') {
+      if (time) {
+        options.startDate = time.split(" - ")['0'];
+        options.endDate = time.split(" - ")['1'];
+      } else {
+        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+      }
+
+      options.timePicker = true;
+      options.timePickerIncrement = 30;
+      options.timePicker24Hour = true;
+      options.minDate = yyyy + '-' + mm + '-' + dd;
+      options.locale = {format: 'YYYY-MM-DD HH:mm'};
+    }
+
+    $leave_timepicker.daterangepicker(options);
+    $leave_timepicker.val(time);
+
+    $leave_timepicker.on('apply.daterangepicker', function(ev, picker) {
+      var myStartDate = new Date(picker.startDate);
+      var myEndDate = new Date(picker.endDate);
+
+      //若天數 > 1則，不給選擇上午與下午
+      if(daterangepicker_type == 'isDate') {
+        var day = Math.round((myEndDate - myStartDate)/(24*60*60*1000));
+
+        if(day > 1) {
+          $leave_dayrange_morning.iCheck('disable');
+          $leave_dayrange_afternoon.iCheck('disable');
+          $leave_dayrange_allday.iCheck('check');
+        }else{
+          $leave_dayrange_morning.iCheck('enable');
+          $leave_dayrange_afternoon.iCheck('enable');
+        }
+      }
+    });
+
+    $leave_timepicker.on('show.daterangepicker', function(ev, picker) {
+        $('.hourselect option').each(function(){
+          if($(this).val() < 9 || $(this).val() > 18) $(this).remove(); 
+        });
+    });
+
+    $leave_timepicker.on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        $("#ajax_switch").val(1);
+    });
+
+    $leave_timepicker.on('hide.daterangepicker', function(ev, picker) {
+        $leave_spent_hours.val('');
+        $leave_spent_hours_hide.val('');
+        if(daterangepicker_type != 'isSingleDate') {
+
+          calculate_hours();
+
+        }
+    });
+  }
+
+  function calculate_hours() {
+    if ($("#leave_timepicker").val()) {
+      $.ajax({
+        url: '{{route("leave/calculate_hours")}}',
+        type: 'POST',
+        data: {"_token": "{{ csrf_token() }}", date_range:$("#leave_timepicker").val()},
+        dataType: 'JSON',
+        success: function (data) { 
+          $.each(data, function(index, element) {
+              if ($("#ajax_switch").val() == 0) {
+                $('#leave_spent_hours').val(element);
+                $('#leave_spent_hours_hide').val(element);
+              } else {
+                $("#ajax_switch").val(0);
+              }
+          });
+        }
+      });
+    }
+  }
+
+  $("#leave_fileupload").fileinput({
+    initialPreviewAsData: true,
+    showUpload: false,
+  });
+
 });
 </script>
+@endif
 
-<!-- 員工管理與修改頁面用 -->
+<!-- 假單詳細頁面 -->
+@if(Request::is('leaves_my/leave_detail/*','report/leave_detail/*','leaves_manager/leave_detail/*','agent_approve/leave_detail/*','leaves_hr/leave_detail/*','annual_report/leave_detail/*','annual_leave_calculate/leave_detail/*','annual_report/leave_detail/*','leaved_user_annual_leave_calculate/leave_detail/*','agent/leave_detail/*'))
+<script>
+  $(function () {      
+
+      $('#search_daterange').daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+      });
+
+      $('#search_daterange').val('');
+
+      $("#leave_view_fileupload").fileinput({
+          uploadUrl: "{{route('leave/upload')}}",
+          uploadAsync: false,
+          maxFileCount: 5,
+          overwriteInitial: false,
+          showUpload: false,
+          initialPreviewAsData: true,
+          uploadExtraData : {
+            "_token": "{{ csrf_token() }}",
+            "id": "{{$model->id}}",
+          },
+          @if($model->prove)
+          initialPreview: [
+            @foreach(explode(',',$model->prove) as $prove)
+            "{{UrlHelper::getLeaveProveUrl($prove)}}",
+            @endforeach
+          ],
+          initialPreviewConfig: [
+          @foreach(explode(',',$model->prove) as $prove)
+          {
+            caption : "{{$prove}}",
+            url: '{{route("leave/delete")}}',
+            extra: {"_token" : "{{ csrf_token() }}",
+              "id" : "{{$model->id}}",
+              "file" : "{{$prove}}",
+            },
+          },
+          @endforeach
+          ],
+          @endif
+      preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
+      previewFileIconSettings: { // configure your icon file extensions
+          'doc': '<i class="fa fa-file-word-o text-primary"></i>',
+          'xls': '<i class="fa fa-file-excel-o text-success"></i>',
+          'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+          'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
+          'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
+          'htm': '<i class="fa fa-file-code-o text-info"></i>',
+          'txt': '<i class="fa fa-file-text-o text-info"></i>',
+          'mov': '<i class="fa fa-file-movie-o text-warning"></i>',
+          'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
+          // note for these file types below no extension determination logic 
+          // has been configured (the keys itself will be used as extensions)
+          'jpg': '<i class="fa fa-file-photo-o text-danger"></i>', 
+          'gif': '<i class="fa fa-file-photo-o text-muted"></i>', 
+          'png': '<i class="fa fa-file-photo-o text-primary"></i>'    
+      },
+      previewFileExtSettings: { // configure the logic for determining icon file extensions
+          'doc': function(ext) {
+              return ext.match(/(doc|docx)$/i);
+          },
+          'xls': function(ext) {
+              return ext.match(/(xls|xlsx)$/i);
+          },
+          'ppt': function(ext) {
+              return ext.match(/(ppt|pptx)$/i);
+          },
+          'zip': function(ext) {
+              return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+          },
+          'htm': function(ext) {
+              return ext.match(/(htm|html)$/i);
+          },
+          'txt': function(ext) {
+              return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
+          },
+          'mov': function(ext) {
+              return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+          },
+          'mp3': function(ext) {
+              return ext.match(/(mp3|wav)$/i);
+          }
+      }
+      }).on("filebatchselected", function(event, data, previewId, index) {
+          $("#leave_view_fileupload").fileinput("upload");
+      }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
+
+      }).on('filepredelete ', function(event, data, previewId, index) {
+          // console.log(event);
+      }).on('filedeleted ', function(event, data, previewId, index) {
+
+      });
+  
+      $("#cancel").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>取消</span> 此假單嗎？");
+       
+      });
+
+      $("#disagree").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不允許</span> 此假單嗎？");
+       
+      });
+
+      $("#agree").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>允許</span> 此假單嗎？");
+
+      });
+
+      $("#disagree_agent").on("click", function(){
+
+        $("#leave_status").val(0);
+        $(".modal-body h1").html("確定 <span class='text-red'>不代理</span> 此假單嗎？");
+       
+      });
+
+      $("#agree_agent").on("click", function(){
+
+        $("#leave_status").val(1);
+        $(".modal-body h1").html("確定 <span class='text-red'>代理</span> 此假單嗎？");
+
+      });
+  });
+
+</script>
+@endif
+
+<!-- 員工管理用 -->
+@if(Request::is('user/*'))
+@if(Request::is('user/index'))
+<script>
+function changePageSize(pagesize){
+  $("#frmSearch").submit();
+}
+function changeSort(sort){
+  order_by = '{{$model->order_by}}';
+  order_way = '{{$model->order_way}}';
+  $('#order_by').val(sort);
+  if (order_by == sort && order_way == "DESC") {
+    $('#order_way').val("ASC");
+  } else {
+    $('#order_way').val("DESC");
+  }
+  $("#frmSearch").submit();
+}
+</script>
+@endif
+@if(Request::is('user/edit/*'))
 <script>
 $(function () {
   $('.single-date').daterangepicker({
@@ -303,13 +928,254 @@ $(function () {
         locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('.single-date').each(function(){$(this).val($(this).attr('date'));});
+    $('.single-date').each(function(){
+      $(this).val($(this).attr('date'));
+    });
 
     $("#user_fileupload").fileinput({
+        @if(!empty($model->avatar))
         initialPreview: [
-            './dist/img/users/vic.png'
+            '{{UrlHelper::getUserAvatarUrl($model->avatar)}}'
         ],
+        @endif
         initialPreviewAsData: true,
+        showUpload: false,
+    });
+    
+    $("#clear_leave_date").click(function() {
+      $("#user_leave_date").val("");
     });
 });
 </script>
+@endif
+@endif
+
+<!-- 特休結算+特休報表+報表+離職人員特休結算排序用 -->
+@if(Request::is('annual_leave_calculate/*','report/*','annual_report/*','leaved_user_annual_leave_calculate/*'))
+<script>
+  $(document).on("click", "th", function() {
+  var table = $(this).parents("table").eq(0);
+  var rows = table.find("tbody > tr").toArray().sort(comparer($(this).index()));
+  this.asc = !this.asc;
+  if (!this.asc) {
+    rows = rows.reverse();
+  }
+  table.children("tbody").empty().html(rows);
+  });
+
+  function comparer(index) {
+    return function(a, b) {
+      var valA = getCellValue(a, index),
+        valB = getCellValue(b, index);
+      return $.isNumeric(valA) && $.isNumeric(valB) ?
+        valA - valB : valA.localeCompare(valB);
+    };
+  }
+
+  function getCellValue(row, index) {
+    return $(row).children("td").eq(index).text();
+  }
+</script>
+@endif
+<!-- 我是代理人頁面用 -->
+@if(Request::is('agent/index'))
+<script>
+$(function () {
+  $(".sort").on("click", function(){
+
+    var $sortname = $(this).attr("sortname");
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+      $("#order_way").val("ASC");
+    } else {
+      $("#order_way").val("DESC");
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+});
+</script>
+@endif
+<!-- 團隊假單頁面用-HR -->
+@if(Request::is('leaves_hr/*'))
+  @if(Request::is('leaves_hr/history'))
+  <script>
+  $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_daterange = $('#search_daterange');
+    var time = $search_daterange.val();
+
+    $("#search_daterange").daterangepicker({
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+      maxDate: yyyy + '-' + mm + '-' + dd
+    });
+        
+    $("#search_daterange").val(time);
+    
+    $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+  });
+  function changePageSize(pagesize)
+  {
+    $("#frmOrderby").submit();
+  }
+  </script>
+  @endif
+  @if (Request::is('leaves_hr/prove','leaves_hr/upcoming','leaves_hr/history'))
+  <script>
+  $(function () {
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderby").submit();
+    });
+  });
+  </script>
+  @endif
+@endif
+
+<!-- 團隊假單頁面用 主管-->
+@if(Request::is('leaves_manager/*'))
+@if(Request::is('leaves_manager/prove/*'))
+<script>
+/* 批准假單文字替換*/
+$(function () {
+  $("#disagree").on("click", function(){
+
+    $("#btn_agree").val(0);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>不允許放假</span> 嗎？");
+    
+  });
+
+  $("#agree").on("click", function(){
+
+    $("#btn_agree").val(1);
+    $(".change-body-text h1").html("確定此批假單 <span class='text-red'>允許放假</span> 嗎？");
+
+  });
+});
+</script>
+@endif
+@if(Request::is('leaves_manager/history/*'))
+<script>
+$(function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  var $search_daterange = $('#search_daterange');
+  var time = $search_daterange.val();
+  
+  $("#search_daterange").daterangepicker({
+    showDropdowns: true,
+    locale: {format: 'YYYY-MM-DD'},
+    maxDate: yyyy + '-' + mm + '-' + dd
+  });
+
+  $("#search_daterange").val(time);
+  
+  $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
+
+  $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+  });
+
+});
+function changePageSize(pagesize)
+{
+  $("#frmOrderby").submit();
+}
+</script>
+@endif
+@if (Request::is('leaves_manager/prove/*','leaves_manager/upcoming/*','leaves_manager/history/*'))
+<script>
+$(function () {
+  $(".sort").on("click", function(){
+
+    var $sortname = $(this).attr("sortname");
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+
+      $("#order_way").val("ASC");
+
+    } else {
+
+      $("#order_way").val("DESC");
+
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+});
+</script>
+@endif
+@endif
+<!-- 同意代理嗎? 頁面用 -->
+@if(Request::is('agent_approve/index'))
+<script>
+$(function () {
+  $(".sort").on("click", function(){
+
+    var $sortname = $(this).attr("sortname");
+    var $order_by = "{{ $model->order_by }}";
+    var $order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val($sortname);
+
+    if ($order_by == $sortname && $order_way == "DESC") {
+      $("#order_way").val("ASC");
+    } else {
+      $("#order_way").val("DESC");
+    }
+    
+    $("#frmOrderby").submit();
+
+  });
+  /* 同不同意代理文字替換*/
+  $(".btn-danger").on("click", function(){
+    
+    $("#btn_agree").val(0);
+    $(".modal-body h1").html("確定 <span class='text-red'>不能代理</span> 嗎？");
+    
+  });
+
+  $(".btn-info").on("click", function(){
+    
+    $("#btn_agree").val(1);
+    $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");
+
+  });
+  
+});
+</script>
+@endif
