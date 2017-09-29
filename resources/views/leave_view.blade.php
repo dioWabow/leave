@@ -73,7 +73,7 @@
             @else
               待核准
             @endif
-            
+
             </span>
           </h3>
           <br />
@@ -103,10 +103,10 @@
 							<b>假別</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->fetchType->name}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>開始時間</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->start_time}}</font>
+							<b>開始時間</b> <font style="color: #3C8DBC;" class="pull-right">{{TimeHelper::changeTimeByArriveTime($model->start_time, $model->user_id, '+')}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>結束時間</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->end_time}}</font>
+							<b>結束時間</b> <font style="color: #3C8DBC;" class="pull-right">{{TimeHelper::changeTimeByArriveTime($model->end_time, $model->user_id, '+')}}</font>
 						</li>
 						<li class="list-group-item">
 							<b>代理人</b> <font style="color: #3C8DBC;" class="pull-right">@if (!empty($leave_prove_process['agent'])){{$leave_prove_process['agent']->nickname}}@endif</font>
@@ -115,7 +115,7 @@
 							<b>原因</b> <font style="color: #3C8DBC;" class="pull-right">{{$model->reason}}</font>
 						</li>
 						<li class="list-group-item">
-							<b>額外通知</b> 
+							<b>額外通知</b>
               <font style="color: #3C8DBC;" class="pull-right">
                 @foreach($leave_notice as $notice)
                   @if($loop->last)
@@ -222,7 +222,7 @@
             </div>
           </form>
 				</div>
-        
+
 			<!-- /.box-body -->
 			</div>
 			<!-- /.box -->
@@ -275,14 +275,14 @@
             </li>
             <!-- /.timeline-label -->
             @endforeach
-					
+
 						<li>
 							<i class="fa fa-clock-o bg-gray"></i>
 						</li>
 					</ul>
 				</div>
 				<!-- /.tab-pane -->
-        
+
           <div class="tab-pane" id="settings">
             <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
               {!!csrf_field()!!}
@@ -290,8 +290,7 @@
               <input id="leave_view_fileupload" @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) disabled @endif name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
             </form>
           </div>
-        
-				
+
 				<!-- /.tab-pane -->
 			</div>
 			<!-- /.tab-content -->
