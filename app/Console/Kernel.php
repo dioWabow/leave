@@ -17,8 +17,8 @@ class Kernel extends ConsoleKernel
         Commands\MonthAnnualHours::class,
         Commands\ReportAnnualYears::class,
         Commands\DailyLeave::class,
-	    Commands\LeavedUserAnnualHours::class,
-        Commands\EveryDayAnnualHours::class,
+        Commands\LeavedUserAnnualHours::class,
+        Commands\DailyWaitProve::class,
     ];
 
     /**
