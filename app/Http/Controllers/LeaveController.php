@@ -578,7 +578,7 @@ class LeaveController extends Controller
 
                 } else {
 
-                        $input['tag_id'] = ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) ? '4' : '9';
+                    $input['tag_id'] = ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) ? '4' : '9';
                     $message = '同意該假單的申請';
 
                 }
@@ -613,7 +613,7 @@ class LeaveController extends Controller
             }
 
 
-        } else  {
+        } else {
 
             return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'無審核權限']);
 
