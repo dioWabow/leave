@@ -478,13 +478,6 @@ $(function () {
     window.location = $(this).data('href');
   });
 
-  $('#checkall').on('ifChecked ifUnchecked',function(evant){
-    if(evant.type == 'ifChecked')
-      $('.check').iCheck('check');
-    else
-      $('.check').iCheck('uncheck');
-  });
-
   var $leave_dayrange           = $('#leave_dayrange');
   var $leave_timepicker         = $('#leave_timepicker');
   var $leave_dayrange_allday    = $('#leave_dayrange_allday');
@@ -759,6 +752,11 @@ $(function () {
   $("#leave_fileupload").fileinput({
     initialPreviewAsData: true,
     showUpload: false,
+  });
+
+  $("#rechoose").click(function(){
+    window.location = "{{route('leave_assist/getIndex')}}";
+
   });
 
 });

@@ -130,6 +130,7 @@ class LeaveController extends Controller
         }
 
         $user_id = (!empty($user_id)) ? $user_id : Auth::user()->id;
+        $user = User::find($user_id);
 
         $data = $request->old('leave');
 
@@ -187,7 +188,7 @@ class LeaveController extends Controller
         }
 
         return view('leave_form2',compact(
-            'user_id','model','types','user_agents','teams','team_users','user_no_team'
+            'user','model','types','user_agents','teams','team_users','user_no_team'
         ));
     }
 
