@@ -46,7 +46,7 @@
 										@foreach ($dataProvider as $value)
 											<tr class="clickable-row" data-href="{{ route('agent_approve/leave_detail',[ 'id' => $value->id ]) }}">
 												<td>
-													<input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
+													<input type="checkbox" name="leave[leave_id][]" id="approve_check" class="flat-red check"  value="{{ $value->id }}">
 												</td>
 												<td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
 												<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
@@ -71,8 +71,8 @@
 									</div>
 									<input type="text" id="leave_reason" name="leave[memo]" class="form-control pull-right" placeholder="請填寫原因(可不填）">
 								</div>
-								<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModalConfirm">不同意代理</button>
-								<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalConfirm">同意代理</button>
+								<button type="button" class="btn btn-danger approve_leave" disabled="disabled"  data-toggle="modal" data-target="#myModalConfirm">不同意代理</button>
+								<button type="button" class="btn btn-info approve_leave" disabled="disabled" data-toggle="modal" data-target="#myModalConfirm">同意代理</button>
 							</div>
 						</div>
 					</div>

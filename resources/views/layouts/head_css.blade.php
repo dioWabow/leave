@@ -439,27 +439,16 @@ $(document).ready(function () {
 @if(Request::is('leave_type/*'))
 <script>
   $(function () {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    var $search_daterange = $('#leave_type_available_date');
-    var time = $search_daterange.val();
-
     $("#leave_type_available_date").daterangepicker({
-      showDropdowns: true,
-      locale: {format: 'YYYY-MM-DD'},
-    });
-        
-    $("#leave_type_available_date").val(time);
-    
-    $('input[name="leave_type[available_date]"]').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'},
     });
 
-    $('input[name="leave_type[available_date]"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-    });
+@if($model->start_time != '' || $model->end_time != '' ) 
+    $('#leave_type_available_date').val("{{Carbon\Carbon::parse($model->start_time)->format('Y-m-d')}} - {{Carbon\Carbon::parse($model->end_time)->format('Y-m-d')}}");
+    @else
+    $('#leave_type_available_date').val("");
+    @endif
   });
 </script>
 @endif
@@ -1076,6 +1065,65 @@ $(function () {
     $(".change-body-text h1").html("確定此批假單 <span class='text-red'>允許放假</span> 嗎？");
 
   });
+
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass("ignore")) return;
+
+    var ignore = ["input", "a", "button", "textarea", "label"];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data("href");
+  });
+
+  $("#checkall").on("ifChecked ifUnchecked",function(evant){
+    if(evant.type == "ifChecked")
+      $(".check").iCheck("check");
+    else
+      $(".check").iCheck("uncheck");
+  });
+
+  /*確認check有勾選才可打開核准按鈕*/
+  $("input[name='leave[leave_id][]']").on("ifChanged", function () {
+    if ($('.check:checked').length > 0) {
+      $(".approve_leave").prop("disabled", false);
+    } else {
+      $(".approve_leave").prop("disabled", true);
+    }
+  });
+
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+    
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
 });
 </script>
 @endif
@@ -1104,7 +1152,6 @@ $(function () {
   $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
     $(this).val('');
   });
-
 });
 function changePageSize(pagesize)
 {
@@ -1175,7 +1222,65 @@ $(function () {
     $(".modal-body h1").html("確定 <span class='text-red'>同意代理</span> 嗎？");
 
   });
-  
+
+  $(".clickable-row").click(function(e) {
+    if($(e.target).hasClass("ignore")) return;
+
+    var ignore = ["input", "a", "button", "textarea", "label"];
+    var clicked = e.target.nodeName.toLowerCase();
+    if($.inArray(clicked, ignore) > -1) return;
+    
+    window.location = $(this).data("href");
+  });
+
+  $("#checkall").on("ifChecked ifUnchecked",function(evant){
+    if(evant.type == "ifChecked")
+      $(".check").iCheck("check");
+    else
+      $(".check").iCheck("uncheck");
+  });
+
+  /*確認check有勾選才可打開核准按鈕*/
+  $("input[name='leave[leave_id][]']").on("ifChanged", function () {
+    if ($('.check:checked').length > 0) {
+      $(".approve_leave").prop("disabled", false);
+    } else {
+        $(".approve_leave").prop("disabled", true);
+    }
+  });
+
+  var $input_leave_notic_person = $("input[name='leave\[notic_person\]\[\]']");
+  var $div_leave_notic_person   = $("#div_leave_notic_person");
+    
+  //通知對象
+  $div_leave_notic_person.hide();
+  $('input[type="checkbox"].flat-red').iCheck({
+    checkboxClass: 'icheckbox_flat-blue',
+    radioClass: 'iradio_flat-blue'
+  });
+
+  $input_leave_notic_person.on('ifChanged', function(event){
+    if(event.target.value == 'none') {
+      if(event.target.checked == true)
+        $div_leave_notic_person.hide();
+      else
+        $div_leave_notic_person.show();
+
+      $input_leave_notic_person.each(function(){
+        if($(this).val() != event.target.value) $(this).iCheck('uncheck');
+      });
+    } else if (event.target.value == 'all') {
+      if(event.target.checked == true){
+        $input_leave_notic_person.each(function(){
+          if($(this).val() != 'none') $(this).iCheck('check');
+        });
+      }else{
+        $input_leave_notic_person.each(function(){
+          $(this).iCheck('uncheck');
+        });
+      }
+    }
+  });
 });
 </script>
 @endif

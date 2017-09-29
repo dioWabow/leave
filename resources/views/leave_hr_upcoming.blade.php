@@ -12,10 +12,10 @@
     </form>
     <thead>
       <tr>
-        <th width="5%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
+        <th width="8%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
         <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-        <th width="30%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+        <th width="28%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
         <th width="15%">代理人</a></th>
         <th width="8%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
         <th width="8%"></th>

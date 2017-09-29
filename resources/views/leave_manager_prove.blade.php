@@ -69,8 +69,8 @@
           </div>
           <input type="text" id="leave_reason" name="leave[memo]" class="form-control pull-right" placeholder="請填寫原因(可不填）">
         </div>
-        <button type="button" class="btn btn-danger" id="disagree" data-toggle="modal" data-target="#myModalConfirm">不允許放假</button>
-        <button type="button" class="btn btn-info" id="agree" data-toggle="modal" data-target="#myModalConfirm">允許放假</button>
+        <button type="button" class="btn btn-danger approve_leave" disabled="disabled" id="disagree" data-toggle="modal" data-target="#myModalConfirm">不允許放假</button>
+        <button type="button" class="btn btn-info approve_leave" disabled="disabled" id="agree" data-toggle="modal" data-target="#myModalConfirm">允許放假</button>
       </div>
     </div>
   </div>

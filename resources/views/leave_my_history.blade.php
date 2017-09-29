@@ -33,7 +33,7 @@
                 <option value="paid_sick" @if (count($model->order_by) >0 && $model->exception == "paid_sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
                 <option value="sick" @if (count($model->order_by) >0 && $model->exception == "sick") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
                 <option value="entertain" @if (count($model->order_by) >0 && $model->exception == "entertain") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
-                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == "annual_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annaul_leave') }}</option>
+                <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == "annual_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annual_leave') }}</option>
                 <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == "lone_stay") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
                 <option value="birthday" @if (count($model->order_by) >0 && $model->exception == "birthday") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
               </select>
@@ -66,11 +66,11 @@
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
-              <th width="3%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
+              <th width="8%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
+              <th width="10%"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
-              <th width="13%">代理人</a></th>
+              <th width="30%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th>
+              <th width="20%">代理人</a></th>
               <th width="9%"><a href="javascript:void(0)" class="sort" sortname="hours">時數(HR)</a></th>
             </tr>
           </thead>

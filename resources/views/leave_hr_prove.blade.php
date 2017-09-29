@@ -15,9 +15,9 @@
         <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
-              <th width="4%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
+              <th width="10%"><a href="javascript:void(0)" class="sort" sortname="tag_id">狀態</a></th>
               <th width="6%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假者</a></th>
-              <th><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
+              <th width="9%"><a href="javascript:void(0)" class="sort" sortname="type_id">假別</a></th>
               <th><a href="javascript:void(0)" class="sort" sortname="start_time">時間</a></th>
               <th width="28%"><a href="javascript:void(0)" class="sort" sortname="reason">原因</a></th30>
               <th width="15%">代理人</a></th>
