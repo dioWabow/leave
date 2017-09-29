@@ -32,6 +32,7 @@ class User extends BaseModel
         'order_by',
         'order_way',
         'pagesize',
+        'annual_hours',
     ];
 
     protected $attributes = [
@@ -172,6 +173,14 @@ class User extends BaseModel
     {
         $result = self::whereYear('leave_date',$year)
             ->whereMonth('leave_date',$month)
+            ->get();
+        return $result;
+    }
+
+    public static function getUserByEnterMonthAndDay($month,$day)
+    {
+        $result = self::whereMonth('enter_date',$month)
+            ->whereDay('enter_date',$day)
             ->get();
         return $result;
     }
