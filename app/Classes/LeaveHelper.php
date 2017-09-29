@@ -895,25 +895,44 @@ class LeaveHelper
                 $response = self::checkLeaveEnough($leave['type_id'],$start_time,$date_list,$leave_name);
         }
 
-        //檢查理由是否必填
-        if ($leave_type->reason) {
+        //若為代理人 請假理由必填
+        if ($leave['user_id'] != $leave['create_user_id']) {
 
             if (empty($leave['reason'])) {
 
-                $response = '請填請假理由';
+                $response = '代理人請填請假理由';
                 return $response;
+
+            }
+
+        } else {
+
+            //檢查理由是否必填
+            if ($leave_type->reason) {
+
+                if (empty($leave['reason'])) {
+
+                    $response = '請填請假理由';
+                    return $response;
+
+                }
 
             }
 
         }
 
-        //檢查證明是否需要
-        if ($leave_type->prove) {
+        //若為代理人，請假證明不需判斷
+        if ($leave['user_id'] == $leave['create_user_id']) {
 
-            if (!Input::hasFile('fileupload')) {
+            //檢查證明是否需要
+            if ($leave_type->prove) {
 
-                $response = '請上傳請假證明';
-                return $response;
+                if (!Input::hasFile('fileupload')) {
+
+                    $response = '請上傳請假證明';
+                    return $response;
+
+                }
 
             }
 

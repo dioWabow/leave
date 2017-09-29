@@ -5,25 +5,38 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
+  @if( Auth::getUser()->id == $user->id)
 	<i class="fa fa-plane"></i> 我要放假
 	<small>Taken a lot of time off</small>
+	@else
+	<i class="fa fa-hand-spock-o"></i> 協助申請請假
+	<small>Taken a lot of time off</small>
+	@endif
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	@if( Auth::getUser()->id == $user->id)
 	<li class="active">我要放假</li>
+	@else
+	<li class="active">協助申請請假</li>
+	@endif
   </ol>
 </section>
 
 <!-- Main content -->
 <form action="{{route('leave/insert')}}" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="leave[user_id]" value="{{$user_id}}">
+<input type="hidden" name="leave[user_id]" value="{{$user->id}}">
 <input type="hidden" name="leave[create_user_id]" value="{{Auth::user()->id}}">
 <input type="hidden" name="leave[tag_id]" value="1">
 {!!csrf_field()!!}
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
+				@if( Auth::getUser()->id == $user->id)
 				<h3 class="box-title">放假單</h3>
+				@else
+				<h3 class="box-title"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" width="60px"> {{$user->nickname}} 放假單</h3>
+				@endif
 			</div>
 			<div class="box-body">
 				<div class="form-group"><div class="row">
@@ -126,6 +139,7 @@
 						@endforelse
 					</div>
 				</div></div>
+				@if(Auth::getUser()->id == $user->id)
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>檔案上傳</label>
@@ -134,6 +148,7 @@
 						<input id="leave_fileupload" name="fileupload[]" class="file" type="file" multiple data-max-file-count="5">
 					</div>
 				</div></div>
+				@endif
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>通知對象</label>
@@ -165,7 +180,11 @@
 			</div>
 			<div class="box-footer">
 				<div class="pull-right">
+					@if(Auth::getUser()->id == $user->id)
 					<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
+					@else
+					<button type="button" id="rechoose" class="btn btn-default"><i class="fa fa-undo"></i> 重選對象</button>
+					@endif
 					<button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i> Send</button>
 				</div>
 			</div>

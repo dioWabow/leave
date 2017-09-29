@@ -152,6 +152,9 @@ return [
         'leave.leave_id' => [
             'required' => '至少勾選一項',
         ],
+        'leave.timepicker' => [
+            'required' => '請選擇請假時間',
+        ],
     ],
 
     /*
