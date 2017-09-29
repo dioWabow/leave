@@ -106,146 +106,138 @@ class ReportController extends Controller
         $result = [];
         $resultTotal = [];
 
-        if (count($data_list) < 1) {
-            foreach ($all_user as $user_key => $user_value) {
+        foreach ($all_user as $user_key => $user_value) {
 
-                foreach ($all_type as $type_key => $type_value) {
+            $result[$user_key]['sum'] = 0;
+            $result[$user_key]['deductions'] = 0;
 
-                    if (empty($result[$user_key][$type_key])) {
+            // 有資料的 判斷
+            foreach ($data_list as $data_key => $data_value) {
+                if ($user_key == $data_value['user_id']) {
 
-                        // user 的時數
-                        $result[$user_key][$type_key] = 0;
+                    // resultTotal 計算 有值的欄位加總
+                    $sum += $data_value['hours'];
 
-                        // type 的時數
-                        $resultTotal[$type_key] = 0;
+                    if (empty($resultTotal[$data_value['type_id']])) {
+
+                        $resultTotal[$data_value['type_id']] = $data_value['hours'];
+
+                    } else {
+
+                        $resultTotal[$data_value['type_id']] += $data_value['hours'];
 
                     }
-                }
-                        // 補 總和 跟 扣薪 的值
-                        $result[$user_key]['sum'] = 0;
-                        $result[$user_key]['deductions'] = 0;
 
-                        $resultTotal['sum'] = 0;
-                        $resultTotal['deductions'] = 0;
-            }
-        } else {
-            foreach ($all_user as $user_key => $user_value) {
+                    //把 user_key 的價別資料抓出&加總
 
-                $result[$user_key]['deductions'] = 0;
-                $result[$user_key]['sum'] = 0;
+                    if (empty($result[$user_key][$data_value['type_id']])) {
 
-                foreach ($data_list as $data_key => $data_value) {
-                    if ($user_key == $data_value['user_id']) {
+                        $result[$user_key][$data_value['type_id']] = $data_value['hours'];
 
-                        // resultTotal 計算 有值的欄位加總
-                        $sum += $data_value['hours'];
+                    } else {
 
-                        if (empty($resultTotal[$data_value['type_id']])) {
+                        $result[$user_key][$data_value['type_id']] += $data_value['hours'];
 
-                            $resultTotal[$data_value['type_id']] = $data_value['hours'];
+                    }
 
-                        } else {
+                    // 如果 是空的 價別 補 0
 
-                            $resultTotal[$data_value['type_id']] += $data_value['hours'];
+                    foreach ($all_type as $type_key => $type_value) {
+
+                        // user 的補 0
+                        if (empty($result[$user_key][$type_key])) {
+
+                            $result[$user_key][$type_key] = 0;
 
                         }
 
-                        //把 user_key 的價別資料抓出&加總
+                        // 補上 扣薪
 
-                        if (empty($result[$user_key][$data_value['type_id']])) {
+                        $resultTotal['deductions'] = $deductSum;
 
-                            $result[$user_key][$data_value['type_id']] = $data_value['hours'];
+                        if ($result[$user_key][$data_value['type_id']] == $type_key) {
 
-                        } else {
+                            if ($all_type[$data_value['type_id']]['deductions'] == 1) {
 
-                            $result[$user_key][$data_value['type_id']] += $data_value['hours'];
+                                $result[$user_key]['deductions'] += $data_value['hours'];
 
-                        }
+                                // 補上 total 扣薪
+                                if (empty($resultTotal['deductions'])) {
 
-                        // 如果 是空的 價別 補 0
-
-                        foreach ($all_type as $type_key => $type_value) {
-
-                            // user 的補 0
-                            if (empty($result[$user_key][$type_key])) {
-
-                                $result[$user_key][$type_key] = 0;
-
-                            }
-
-                            // 補上 扣薪
-
-                            if ($result[$user_key][$data_value['type_id']] == $type_key) {
-
-                                if ($all_type[$data_value['type_id']]['deductions'] == 1) {
-
-                                    $result[$user_key]['deductions'] += $data_value['hours'];
-
-                                    // 補上 total 扣薪
-                                    if (empty($resultTotal['deductions'])) {
-
-                                        $deductSum += $data_value['hours'];
-
-                                    }
-
-                                    $resultTotal['deductions'] = $deductSum;
+                                    $deductSum += $data_value['hours'];
 
                                 }
-
-                            } else {
 
                                 $resultTotal['deductions'] = $deductSum;
 
                             }
 
-                            // total 的補 0
-                            if (empty($resultTotal[$type_key])) {
+                        }
 
-                                $resultTotal[$type_key] = 0;
+                        // total 的補 0
+                        if (empty($resultTotal[$type_key])) {
 
-                            }
+                            $resultTotal[$type_key] = 0;
 
                         }
 
-                        // 補上 total
-                        $result[$user_key]['sum'] += $data_value['hours'];
-
-                        // 補上 total sum
-                        $resultTotal['sum'] = $sum;
-                        
-                    } else {
-
-                        // 沒有架別資料的人 都補0
-
-                        foreach ($all_type as $type_key => $type_value) {
-
-                            // user 的
-                            if (empty($result[$user_key][$type_key])) {
-
-                                $result[$user_key][$type_key] = 0;
-
-                            }
-
-                            // total 的
-                            if (empty($resultTotal[$data_value['type_id']])) {
-
-                                $resultTotal[$data_value['type_id']] = 0;
-
-                            }
-                        }
-
-                            // user
-                            if (empty($result[$user_key]['sum'])) {
-                                $result[$user_key]['sum'] = 0;
-                            }
-                            if (empty($result[$user_key]['deductions'])) {
-                                $result[$user_key]['deductions'] = 0;
-                            }
                     }
+
+                    // 補上 total
+                    $result[$user_key]['sum'] += $data_value['hours'];
+
+                    // 補上 total sum
+                    $resultTotal['sum'] = $sum;
+
+                }
+            }
+
+            // 沒資料的 判斷
+            foreach ($all_type as $type_key => $type_value) {
+
+                // user 的
+                if (empty($result[$user_key][$type_key])) {
+
+                    $result[$user_key][$type_key] = 0;
+
+                }
+
+                // total 的
+                if (empty($resultTotal[$type_key])) {
+
+                    $resultTotal[$type_key] = 0;
+
+                }
+
+                // user
+                if (empty($result[$user_key]['sum'])) {
+
+                    $result[$user_key]['sum'] = 0;
+
+                }
+
+                if (empty($result[$user_key]['deductions'])) {
+
+                    $result[$user_key]['deductions'] = 0;
+
+                }
+
+                if (empty($resultTotal['sum'])) {
+
+                    $resultTotal['sum'] = 0;
+
+                }
+
+                if (empty($resultTotal['deductions'])) {
+
+                    $resultTotal['deductions'] = 0;
+
                 }
             }
         }
-        
+
+        // dd($resultTotal);
+
         return [
             'result' => $result, 'resultTotal' => $resultTotal
         ];
