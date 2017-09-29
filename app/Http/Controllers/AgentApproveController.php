@@ -91,16 +91,35 @@ class AgentApproveController extends Controller
                     $input_create['memo'] = $input['memo'];
                     
                      //新增記錄
-                    $leaveRespon = new LeaveResponse;
-                    $leaveRespon->fill($input_create);
-                    $leaveRespon->save();
+                    $leaveResponse = new LeaveResponse;
+                    $leaveResponse->fill($input_create);
+
+                    if (!$leaveResponse->save()) {
+
+                        return Redirect::route('agent_approve/index')->withErrors(['msg' => '新增審核紀錄失敗']);
+
+                    }
+
                     //修改主單記錄
                     $leave = new Leave;
                     $leave = $this->loadModel($leave_id);
                     $input_update['id'] = $leave_id;
                     $input_update['tag_id'] = '2';
                     $leave->fill($input_update);
-                    $leave->save();
+                    if ($leave->save()) {
+
+                        //主單成功修改狀態後做同步審核
+                        if (in_array($leave->tag_id, ['2','3','4'])) {
+
+                            LeaveHelper::syncCheckLeave($leave->id,$input_create);
+
+                        }
+
+                    } else {
+
+                        return Redirect::route('agent_approve/index')->withErrors(['msg' => '修改主單紀錄失敗']);
+
+                    }
 
                 }
 
@@ -110,25 +129,36 @@ class AgentApproveController extends Controller
 
                 foreach ($input['leave_id'] as $leave_id) {
                     
+                    //新增記錄
                     $input_create['tag_id'] = '8';
                     $input_create['user_id'] = Auth::user()->id;
                     $input_create['leave_id'] = $leave_id;
                     $input_create['memo'] = $input['memo'];
-                      //新增記錄
-                    $leaveRespon= new LeaveResponse;
-                    $leaveRespon->fill($input_create);
-                    $leaveRespon->save();
-                     //修改主單記錄
+
+                    $leaveResponse = new LeaveResponse;
+                    $leaveResponse->fill($input_create);
+                    if (!$leaveResponse->save()) {
+
+                        return Redirect::route('agent_approve/index')->withErrors(['msg' => '新增審核紀錄失敗']);
+
+                    }
+                    
+                    //修改主單記錄
                     $leave = new Leave;
                     $leave = $this->loadModel($leave_id);
                     $input_update['tag_id'] = '8';
                     $input_update['id'] = $leave_id;
+
                     $leave->fill($input_update);
-                    $leave->save();
+                    if (!$leave->save()) {
+
+                        return Redirect::route('agent_approve/index')->withErrors(['msg' => '修改主單紀錄失敗']);
+
+                    } 
 
                 }
 
-                 return Redirect::route('agent_approve/index')->with('success', '不准假成功 !');
+                return Redirect::route('agent_approve/index')->with('success', '不准假成功 !');
                  
             }
         }
