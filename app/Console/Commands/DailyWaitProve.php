@@ -40,7 +40,9 @@ class DailyWaitProve extends Command
                 if (!empty( $agent_user_list )) {
                     
                     foreach ($agent_user_list as $key => $agent_user) {
+
                         $leave_wait_prove_user_list[ $agent_user->fetchUser->nickname ]['agent'] = true;
+
                     }
 
                 }

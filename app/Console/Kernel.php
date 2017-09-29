@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('Notice:DailyLeave')->daily('10:00');//每天10點通知今日請假人
 
-        $schedule->command('Notice:CronDailyLeave')->daily('10:30');//每天10點30通知未審核假單
+        $schedule->command('Notice:DailyWaitProve')->daily('10:30');//每天10點30通知未審核假單
 
     }
     
