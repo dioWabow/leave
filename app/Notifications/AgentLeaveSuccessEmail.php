@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserLeaveSuccessEmail extends Notification
+class AgentLeaveSuccessEmail extends Notification
 {
     use Queueable;
 

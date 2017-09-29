@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class UserLeaveSuccessSlack extends Notification
+class UserLeaveReturnSlack extends Notification
 {
     use Queueable;
 

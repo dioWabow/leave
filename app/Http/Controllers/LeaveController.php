@@ -27,6 +27,10 @@ use App\Notifications\AgentLeaveSuccessEmail;
 use App\Notifications\AgentLeaveSuccessSlack;
 use App\Notifications\UserLeaveReturnEmail;
 use App\Notifications\UserLeaveReturnSlack;
+use App\Notifications\AgentLeaveCancelSlack;
+use App\Notifications\UserLeaveCancelSlack;
+use App\Notifications\AgentLeaveCancelEmail;
+use App\Notifications\UserLeaveCancelEmail;
 use SlackHelper;
 use \App\Classes\EmailHelper;
 
@@ -404,10 +408,10 @@ class LeaveController extends Controller
 
                     foreach ( $agent_list as $key => $agent) {
 
-                        SlackHelper::notify(new AgentNoticeSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $agent->fetchUser->nickname )  );
+                        SlackHelper::notify(new AgentNoticeSlack( $model->fetchUser->nickname , $model->start_time , $agent->fetchUser->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $agent->fetchUser->email;
-                        $EmailHelper->notify(new AgentNoticeEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time ) );
+                        $EmailHelper->notify(new AgentNoticeEmail( $model->fetchUser->nickname , $model->start_time ) );
 
                     }
 
@@ -562,20 +566,35 @@ class LeaveController extends Controller
             }
 
         //主管准假
-        } elseif (in_array($model->tag_id,['2','3']) && !empty($leave_prove_process['manager']) && Auth::getUser()->id == $leave_prove_process['manager']->id) {
+        } elseif (!empty($leave_prove_process['manager']) && Auth::getUser()->id == $leave_prove_process['manager']->id) {
 
-            //狀態=0代表不準假
-            if (empty($input['status'])) {
+            if (in_array($model->tag_id,['2','3'])) {
 
-                $input['tag_id'] = '8';
-                $message = '不准該假單的申請';
+                //狀態=0代表不準假
+                if (empty($input['status'])) {
 
-            } else {
+                    $input['tag_id'] = '8';
+                    $message = '不准該假單的申請';
 
-                    $input['tag_id'] = ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) ? '4' : '9';
-                $message = '同意該假單的申請';
+                } else {
+
+                        $input['tag_id'] = ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) ? '4' : '9';
+                    $message = '同意該假單的申請';
+
+                }
+
+            } elseif($model->tag_id == '9') {
+
+                //狀態=0代表取消
+                if (!empty($input['status'])) {
+
+                    $input['tag_id'] = '7';
+                    $message = '已取消';
+
+                }
 
             }
+            
 
         //BOSS准假
         }  elseif (in_array($model->tag_id,['4']) && !empty(Auth::hasAdmin())) {
@@ -594,7 +613,7 @@ class LeaveController extends Controller
             }
 
 
-        } else {
+        } else  {
 
             return Redirect::route('leave/edit',['id' => $input['leave_id']])->withErrors(['msg' => $message.'無審核權限']);
 
@@ -617,9 +636,9 @@ class LeaveController extends Controller
                 if ( in_array($model->tag_id, ['9']) ) {
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
-                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->to = $model->fetchUser->email;
                     $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
 
                     //送通知給職代
@@ -628,10 +647,10 @@ class LeaveController extends Controller
 
                         foreach ( $agent_list as $key => $agent) {
 
-                            SlackHelper::notify(new AgentLeaveSuccessSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            SlackHelper::notify(new AgentLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
-                            $EmailHelper->notify(new AgentLeaveSuccessEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new AgentLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
 
                         }
 
@@ -642,10 +661,35 @@ class LeaveController extends Controller
                 if ( in_array($model->tag_id, ['8']) ) {
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
-                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->to = $model->fetchUser->email;
                     $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
+
+                }
+
+                if ( in_array($model->tag_id, ['7']) && $model->user_id != Auth::user()->id ) {
+
+                    //送通知給請假人
+                    SlackHelper::notify(new UserLeaveCancelSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to =$model->fetchUser->email;
+                    $EmailHelper->notify(new UserLeaveCancelEmail( $model->start_time , $model->end_time ) );
+
+                    //送通知給職代
+                    $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
+                    if ( count( $agent_list ) != 0 ) {
+
+                        foreach ( $agent_list as $key => $agent) {
+
+                            SlackHelper::notify(new AgentLeaveCancelSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            $EmailHelper = new EmailHelper;
+                            $EmailHelper->to = $agent->fetchUser->email;
+                            $EmailHelper->notify(new AgentLeaveCancelEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+
+                        }
+
+                    }
 
                 }
 
