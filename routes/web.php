@@ -28,24 +28,6 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'SiteController@ajaxGetAllAvailableLeaveListByDateRange',
     ]);
 
-    // 我要放假
-    Route::group(['prefix'=>'leave'], function(){
-        Route::get('create', [
-            'as' => 'leave/create',
-            'uses' => 'LeaveController@getCreate',
-        ]);
-
-        Route::post('insert', [
-            'as' => 'leave/insert',
-            'uses' => 'LeaveController@postInsert',
-        ]);
-
-        Route::post('calculate_hours',[
-            'as' => 'leave/calculate_hours',
-            'uses' => 'LeaveController@calculate_hours',
-        ]);
-    });
-
     // 主管協助申請請假
     Route::group(['prefix'=>'leave_assist'], function(){
         Route::get('getIndex', [
@@ -79,6 +61,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('edit/{id}',[
             'as'=>'agent/edit',
             'uses'=> 'LeaveAgentController@getEdit',
+        ]);
+
+        Route::any('leave_detail/{id}', [
+            'as' => 'agent/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
 
@@ -240,6 +227,11 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_hr/edit',
             'uses'=> 'LeavesHrController@getEdit',
         ]);
+
+        Route::any('leave_detail/{id}', [
+            'as' => 'leaves_hr/leave_detail',
+            'uses' => 'LeaveController@getEdit',
+        ]);
     });
 
     // 報表
@@ -252,6 +244,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('vacation',[
             'as' => 'report/vacation',
             'uses' => 'ReportController@getUserData'
+        ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'report/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
 
@@ -266,6 +262,10 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'annual_report/view',
             'uses' => 'AnnualReportController@getView',
         ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'annual_report/leave_detail',
+            'uses' => 'LeaveController@getEdit',
+        ]);
     });
 
     // 特休結算
@@ -274,10 +274,13 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'annual_leave_calculate/index',
             'uses' => 'AnnualHoursController@getIndex',
         ]);
-
         Route::get('view/{id}/{year}', [
             'as' => 'annual_leave_calculate/view',
             'uses' => 'AnnualHoursController@getView',
+        ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'annual_leave_calculate/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
 
@@ -287,7 +290,6 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_my/prove',
             'uses'=> 'LeavesMyController@getProve',
         ]);
-    // 離職人員結算
         Route::any('upcoming',[
             'as'=>'leaves_my/upcoming',
             'uses'=> 'LeavesMyController@getUpcoming',
@@ -302,9 +304,9 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'leaves_my/delete',
             'uses'=> 'LeavesMyController@postDelete',
         ]);
-        Route::get('edit/{id}',[
-            'as'=>'leaves_my/edit',
-            'uses'=> 'LeavesMyController@getEdit',
+        Route::any('leave_detail/{id}', [
+            'as' => 'leaves_my/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
 
@@ -323,6 +325,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('edit/{id}',[
             'as'=>'agent_approve/edit',
             'uses'=> 'AgentApproveController@getEdit',
+        ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'agent_approve/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
     
@@ -348,11 +354,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::any('edit/{id}', [
             'as' => 'leave/edit',
             'uses' => 'LeaveController@getEdit',
-        ]);
-
-        Route::post('update', [
-            'as' => 'leave/update',
-            'uses' => 'LeaveController@postUpdate',
         ]);
 
         Route::post('update', [
@@ -405,6 +406,10 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'leaves_manager/edit',
             'uses' => 'LeavesManagerController@getEdit',
         ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'leaves_manager/leave_detail',
+            'uses' => 'LeaveController@getEdit',
+        ]);
     });
     
     // 離職人員結算
@@ -417,6 +422,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('view/{id}/{year}', [
             'as' => 'leaved_user_annual_leave_calculate/view',
             'uses' => 'LeavedUserAnnualHoursController@getView',
+        ]);
+        Route::any('leave_detail/{id}', [
+            'as' => 'leaved_user_annual_leave_calculate/leave_detail',
+            'uses' => 'LeaveController@getEdit',
         ]);
     });
 

@@ -755,7 +755,7 @@ $(function () {
 @endif
 
 <!-- 假單詳細頁面 -->
-@if(Request::is('leave/edit/*'))
+@if(Request::is('leaves_my/leave_detail/*','report/leave_detail/*','leaves_manager/leave_detail/*','agent_approve/leave_detail/*','leaves_hr/leave_detail/*','annual_report/leave_detail/*','annual_leave_calculate/leave_detail/*','annual_report/leave_detail/*','leaved_user_annual_leave_calculate/leave_detail/*','agent/leave_detail/*'))
 <script>
   $(function () {      
 

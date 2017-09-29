@@ -180,17 +180,6 @@ class LeavesMyController extends Controller
         return Redirect::route('leaves_my/prove', [ 'user_id' => Auth::user()->id  ])->with('success', '假單已取消。');
     }
 
-    /**
-     * 檢視
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getEdit(Request $request, $id)
-    {
-        return  view('leave_view');
-    }
-
-
     private function loadModel($id)
     {
         $model = Leave::find($id);

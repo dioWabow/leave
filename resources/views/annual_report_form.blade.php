@@ -24,7 +24,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <table class="table table-bordered table-striped table-hover">
-                  <form name="vacationlist" id="vacation_list" action="{{ route('annual_leave_calculate/view',['id'=>$id,'year'=>$year])}}" method="POST">
+                  <form name="vacationlist" id="vacation_list" action="{{ route('annual_report/view',['id'=>$id,'year'=>$year])}}" method="POST">
                     <input type="hidden" name="year" value="{{$year}}">
                     <input type="hidden" name="user_id" value="{{$id}}">
                   </form>
@@ -39,7 +39,7 @@
                   </thead>
                   <tbody>
                     @forelse($dataProvider as $data)
-                    <tr class="clickable-row" data-href="{{ route('leave/edit', [ 'id' => $data->id ]) }}">
+                    <tr class="clickable-row" data-href="{{ route('annual_report/leave_detail', [ 'id' => $data->id ]) }}">
                       <td><img src="{{UrlHelper::getUserAvatarUrl($data->fetchUser->avatar)}}" class="img-circle" alt="{{$data->fetchUser->avatar}}" width="50px"></td>
                       <td>{{$data->fetchType->name}}</td>
                       <td>{{ TimeHelper::changeViewTime($data->start_time, $data->end_time, $data->user_id) }}</td>
