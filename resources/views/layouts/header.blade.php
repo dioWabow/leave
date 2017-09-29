@@ -114,7 +114,7 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li @if(Request::is('index/*', 'user/*'))class="active" @endif>
+        <li @if(Request::is('index'))class="active" @endif>
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">PERSONAL</li>
@@ -152,7 +152,7 @@
         </li>
         @if( !empty( Auth::hasMiniManagement() ) )
         <li class="header">MINI-MANAGER</li>
-        <li class="">
+        <li @if(Request::is('leaves_manager/*/minimanager')) class="active" @endif>
           <a href="{{ route('leaves_manager/prove', [ 'role' => 'minimanager' ] ) }}"><i class="fa fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               @if (LeaveHelper::getProveManagerLeavesTabLable('minimanager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('minimanager') }}</small>@endif
@@ -162,7 +162,7 @@
         @endif
         @if( !empty(Auth::hasManagement() ) )
         <li class="header">MANAGER</li>
-        <li class="">
+        <li @if(Request::is('leaves_manager/*/manager')) class="active" @endif>
           <a href="{{ route('leaves_manager/prove', [ 'role' => 'manager' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
                 @if (LeaveHelper::getProveManagerLeavesTabLable('manager')>0)<small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('manager') }}</small>@endif
@@ -172,7 +172,7 @@
         @endif
         @if( Auth::hasAdmin() )
         <li class="header">BOSS</li>
-        <li class="">
+        <li @if(Request::is('leaves_manager/*/admin')) class="active" @endif>
           <a href="{{ route('leaves_manager/prove', [ 'role' => 'admin' ] ) }}"><i class="fa  fa-calendar-check-o"></i> <span>團隊假單</span>
             <span class="pull-right-container">
               @if(LeaveHelper::getProveManagerLeavesTabLable('admin')> 0) <small class="label pull-right bg-red">{{ LeaveHelper::getProveManagerLeavesTabLable('admin') }}</small>@endif
@@ -189,7 +189,7 @@
             </span>
           </a>
         </li>
-        <li class="">
+        <li @if(Request::is('natural/*')) class="active" @endif>
           <a href="{{ route('natural/index') }}"><i class="fa fa-cloud"></i> <span>天災假單調整</span></a>
         </li>
         @endif
@@ -197,14 +197,14 @@
           <a href="paid_sick.html"><i class="fa fa-heartbeat"></i> <span>有新薪病假調整</span></a>
         </li>-->
         @if( Auth::hasHr() )
-        <li class="treeview @if(Request::is('teams/*', 'leave_type/*', 'user/*'))active @endif">
+        <li class="treeview @if(Request::is('teams/*', 'user/*','config/*'))active @endif">
           <a href="#"><i class="fa fa-folder-open-o"></i> <span>基本設定</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class=""><a href="{{ route('config/edit') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
+            <li @if(Request::is('config/*')) class="active" @endif><a href="{{ route('config/edit') }}"><i class="fa fa-circle-o"></i>系統設定</a></li>
             <li @if(Request::is('teams/*'))class="active" @endif class=""><a href="{{ route('teams/index') }}"><i class="fa fa-circle-o"></i>團隊設定</a></li>
             <li @if(Request::is('user/*'))class="active" @endif><a href="{{ route('user/index') }}"><i class="fa fa-circle-o"></i>員工管理</a></li>
           </ul>
