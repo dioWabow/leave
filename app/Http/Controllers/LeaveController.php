@@ -683,10 +683,10 @@ class LeaveController extends Controller
 
                         foreach ( $agent_list as $key => $agent) {
 
-                            SlackHelper::notify(new AgentLeaveCancelSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            SlackHelper::notify(new AgentLeaveCancelSlack( $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
-                            $EmailHelper->notify(new AgentLeaveCancelEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new AgentLeaveCancelEmail( $model->start_time , $model->end_time ) );
 
                         }
 
