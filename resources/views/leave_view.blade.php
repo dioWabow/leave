@@ -128,7 +128,7 @@
                   <a href="#" class="btn btn-info btn-block" id='disagree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>不同意代理</b></a>
                 </div>
               </div></div>
-            @elseif(in_array($model->tag_id,[2,3]) && !empty($leave_prove_process['minimanager']) &&in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id,$leave_prove_process['manager']->id]))
+            @elseif(in_array($model->tag_id,[2]) && !empty($leave_prove_process['minimanager']) &&in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id]))
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">
@@ -162,7 +162,7 @@
                   </div>
                 </div>
               </div>
-            @elseif($model->tag_id == 4 && Auth::getUser()->id == $leave_prove_process['admin']->id)
+            @elseif($model->tag_id == 4 && !empty($leave_prove_process['admin']) && Auth::getUser()->id == $leave_prove_process['admin']->id)
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>
               <div class="col-md-10">

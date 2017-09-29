@@ -29,7 +29,7 @@ class ManagementNoticeSlack extends Notification
 
         $text = "";
         $text .= $name.' 於 '.$start_time." 將請假\n";
-        $text .= "請盡速進行確認是否同意，謝謝。"
+        $text .= "請盡速進行確認是否同意，謝謝。";
         $this->text .= $text;
 
 
@@ -55,7 +55,7 @@ class ManagementNoticeSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("leaves/manager/prove",["role"=>"Manager"]);
+        $url = route("leaves_manager/prove",["role"=>"Manager"]);
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 

@@ -71,8 +71,8 @@
 									</div>
 									<input type="text" id="leave_reason" name="leave[memo]" class="form-control pull-right" placeholder="請填寫原因(可不填）">
 								</div>
-								<button type="button" class="btn btn-danger approve_leave"   data-toggle="modal" data-target="#myModalConfirm">不同意代理</button>
-								<button type="button" class="btn btn-info approve_leave"  data-toggle="modal" data-target="#myModalConfirm">同意代理</button>
+								<button type="button" class="btn btn-danger approve_leave" disabled="disabled"  data-toggle="modal" data-target="#myModalConfirm">不同意代理</button>
+								<button type="button" class="btn btn-info approve_leave" disabled="disabled" data-toggle="modal" data-target="#myModalConfirm">同意代理</button>
 							</div>
 						</div>
 					</div>

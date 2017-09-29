@@ -135,9 +135,10 @@ class WebHelper
             'paid_sick' => '有薪病假',
             'sick' => '無薪病假',
             'entertain' => '善待假',
-            'annaul_leave' => '特休',
+            'annual_leave' => '特休',
             'lone_stay' => '久任假',
             'birthday' => '生日假',
+            'natural_disaster' => '天災假',
         ];
     }
     

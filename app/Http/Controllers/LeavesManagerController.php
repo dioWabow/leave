@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use WebHelper;
 use LeaveHelper;
+use ConfigHelper;
 use App\Team;
 use App\Type;
 use App\Leave;
@@ -12,6 +13,14 @@ use App\UserTeam;
 use App\LeaveDay;
 use App\LeaveResponse;
 use App\Http\Requests\ManagerProveRequest;
+use App\Notifications\UserLeaveSuccessEmail;
+use App\Notifications\UserLeaveSuccessSlack;
+use App\Notifications\AgentLeaveSuccessEmail;
+use App\Notifications\AgentLeaveSuccessSlack;
+use App\Notifications\UserLeaveReturnEmail;
+use App\Notifications\UserLeaveReturnSlack;
+use SlackHelper;
+use \App\Classes\EmailHelper;
 
 use Auth;
 use Route;
@@ -66,7 +75,7 @@ class LeavesManagerController extends Controller
         if ( $this->role == 'admin' && Auth::hasAdmin() == true) {
 
             $search['tag_id'] = ['4'];
-            $search['hours'] = '24';
+            $search['hours'] = ConfigHelper::getConfigValueByKey('boss_days') * 8;
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
         } elseif ($this->role == 'manager' && !empty(Auth::hasManagement())) {
@@ -268,7 +277,7 @@ class LeavesManagerController extends Controller
     
                     } elseif ($this->role == 'manager') {
                         
-                        if ($model->hours > 24) {
+                        if ($model->hours > ConfigHelper::getConfigValueByKey('boss_days')*8 ) {
 
                             $input['tag_id'] = '4';
 
@@ -292,13 +301,55 @@ class LeavesManagerController extends Controller
                     $input_create['memo'] = $input['memo'];
                     $input_create['tag_id'] = $input['tag_id'];
 
+                    $leave_response = new LeaveResponse;
+                    $leave_response->fill($input_create);
+                    if (!$leave_response->save()){
+
+                        return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->withErrors(['msg' => '新增審核紀錄失敗']);
+
+                    }
+
                     $model->fill($input_update);
-                    $model->save();
+                    if ($model->save()) {
 
-                    $leave_respon = new LeaveResponse;
-                    $leave_respon->fill($input_create);
-                    $leave_respon->save();
+                        //主單成功修改狀態後做同步審核
+                        if (in_array($model->tag_id, ['2','3','4'])) {
 
+                            LeaveHelper::syncCheckLeave($model->id,$input_create);
+
+                        }
+
+                    } else {
+
+                        return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->withErrors(['msg' => '修改主單紀錄失敗']);
+
+                    }
+
+
+                    if ( $input['tag_id'] == '9' ) {
+
+                        //送通知給請假人
+                        SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                        $EmailHelper = new EmailHelper;
+                        $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                        $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
+
+                        //送通知給職代
+                        $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
+                        if ( count( $agent_list ) != 0 ) {
+
+                            foreach ( $agent_list as $key => $agent) {
+
+                                SlackHelper::notify(new AgentLeaveSuccessSlack( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                                $EmailHelper = new EmailHelper;
+                                $EmailHelper->to = $agent->fetchUser->email;
+                                $EmailHelper->notify(new AgentLeaveSuccessEmail( User::getUsersById($model->user_id)->first()->nickname , $model->start_time , $model->end_time ) );
+
+                            }
+
+                        }
+
+                    }
                 }
 
                 return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->with('success', '批准成功 !');
@@ -318,15 +369,29 @@ class LeavesManagerController extends Controller
                     $input_create['tag_id'] = '8';
                     $input_create['memo'] = $input['memo'];
                     
-                    
                     $input_update['tag_id'] = '8';
                     $input_update['id'] = $leave_id;
-                    $model->fill($input_update);
-                    $model->save();
 
-                    $leave_respon = new LeaveResponse;
-                    $leave_respon->fill($input_create);
-                    $leave_respon->save();
+                    $leave_response = new LeaveResponse;
+                    $leave_response->fill($input_create);
+                    if (!$leave_response->save()){
+
+                        return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->withErrors(['msg' => '新增審核紀錄失敗']);
+                        
+                    }
+
+                    $model->fill($input_update);
+                    if (!$model->save()) {
+
+                        return Redirect::route('leaves_manager/prove' ,[ 'role' => $getRole ])->withErrors(['msg' => '修改主單紀錄失敗']);
+
+                    }
+
+                    //送通知給請假人
+                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , User::getUsersById($model->user_id)->first()->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = User::getUsersById( $model->user_id )->first()->email;
+                    $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
 
                 }
 

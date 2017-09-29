@@ -15,6 +15,16 @@ use App\LeavedUser;
 
 use App\LeaveAgent;
 use App\LeaveResponse;
+use App\Notifications\AgentNoticeSlack;
+use App\Notifications\AgentNoticeEmail;
+use App\Notifications\MiniManagementNoticeEmail;
+use App\Notifications\MiniManagementNoticeSlack;
+use App\Notifications\ManagementNoticeEmail;
+use App\Notifications\ManagementNoticeSlack;
+use App\Notifications\AdminNoticeEmail;
+use App\Notifications\AdminNoticeSlack;
+use SlackHelper;
+use \App\Classes\EmailHelper;
 
 use Auth;
 use Session;
@@ -1196,30 +1206,34 @@ class LeaveHelper
         }
 
         //請假人team id
-        $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
+        if (count(UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')) > 0) {
 
-        //請假人team裡的主管id
-        if (count(UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')) > 0 ) {
-            $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
+            $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
 
-            //請假人的parent_team id
-            $team_parent_id = Team::find($leave_user_team_id)->parent_id;
+            //請假人team裡的主管id
+            if (count(UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')) > 0 ) {
+                $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
 
-            if (empty($team_parent_id)) {
+                //請假人的parent_team id
+                $team_parent_id = Team::find($leave_user_team_id)->parent_id;
 
-                $leave_prove_process['manager'] = User::find($team_manger_id);
+                if (empty($team_parent_id)) {
 
-            } else {
+                    $leave_prove_process['manager'] = User::find($team_manger_id);
 
-                $leave_prove_process['minimanager'] = User::find($team_manger_id);
+                } else {
 
-                $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+                    $leave_prove_process['minimanager'] = User::find($team_manger_id);
+
+                    $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+
+                }
 
             }
 
         }
 
-        if (Leave::find($id)->hours > 24) {
+        if (Leave::find($id)->hours > 24 && count(User::getUserByRole('admin')) > 0 ) {
 
             $leave_prove_process['admin'] = User::getUserByRole('admin')->first();
 
@@ -1259,6 +1273,11 @@ class LeaveHelper
 
                     } else {
 
+                        SlackHelper::notify(new MiniManagementNoticeSlack( $leave->fetchUser->nickname , $leave->start_time , $leave_prove['minimanager']->nickname )  );
+                        $EmailHelper = new EmailHelper;
+                        $EmailHelper->to = $leave_prove['minimanager']->email;
+                        $EmailHelper->notify(new MiniManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+
                         break;
 
                     }
@@ -1278,6 +1297,11 @@ class LeaveHelper
                         }
 
                     } else {
+
+                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->fetchUser->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                        $EmailHelper = new EmailHelper;
+                        $EmailHelper->to = $leave_prove['manager']->email;
+                        $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
 
                         break;
 
@@ -1301,6 +1325,10 @@ class LeaveHelper
 
                 } else {
 
+                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->fetchUser->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = $leave_prove['manager']->email;
+                    $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
                     break;
 
                 }
@@ -1319,9 +1347,15 @@ class LeaveHelper
 
                     }
 
-                }
+                }else{
 
-                break;
+                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->fetchUser->nickname , $leave->start_time , $leave_prove['admin']->nickname )  );
+                    $EmailHelper = new EmailHelper;
+                    $EmailHelper->to = $leave_prove['admin']->email;
+                    $EmailHelper->notify(new AdminNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+                    break;
+
+                }
 
             } else {
 
