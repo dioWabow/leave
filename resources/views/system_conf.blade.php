@@ -89,7 +89,7 @@
                     <label for="config_smtp_host" class="col-sm-2 control-label">HOST</label>
 
                     <div class="col-sm-7">
-                        <input type="email" class="form-control" id="config_smtp_host" name="config[smtp_host]" placeholder="ex: smtp.gmail.com" value="{{ $config['smtp_host'] }}">
+                        <input type="text" class="form-control" id="config_smtp_host" name="config[smtp_host]" placeholder="ex: smtp.gmail.com" value="{{ $config['smtp_host'] }}">
                     </div>
 
                     <label for="config_smtp_port" class="col-sm-1 control-label">Port</label>
@@ -101,7 +101,7 @@
                     <label for="config_smtp_username" class="col-sm-2 control-label">Username</label>
 
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="config_smtp_username" name="config[smtp_username]" placeholder="ex: test-leave@gmail.com" value="{{ $config['smtp_username'] }}">
+                        <input type="text" class="form-control" id="config_smtp_username" name="config[smtp_username]" placeholder="ex: leave" value="{{ $config['smtp_username'] }}">
                     </div>
 
                     <label for="config_smtp_password" class="col-sm-2 control-label">Password</label>
@@ -115,7 +115,7 @@
                         <label for="config_smtp_auth" class="col-sm-2 control-label">Auth</label>
                         <div class="col-sm-10">
                             <label>
-                                <input type="radio" name="config[smtp_auth]" class="flat-red" value="true" @if ( $config['smtp_auth']  == 'true') checked="checked" @endif >
+                                <input type="radio" name="config[smtp_auth]" class="flat-red" value="true" @if ( $config['smtp_auth']  == 'true') checked="checked" @endif checked="checked" >
                                 是
                             </label>&emsp;
                             <label>
@@ -162,7 +162,7 @@
                             <label for="form_config_google_login" class="col-sm-3 control-label">Google-自動登入</label>
                             <div class="col-sm-9">
                                 <label>
-                                    <input type="radio" name="config[google_status]" class="flat-red" value="true" @if ( $config['google_status'] == 'true' ) checked="checked" @endif>
+                                    <input type="radio" name="config[google_status]" class="flat-red" value="true" @if ( $config['google_status'] == 'true' ) checked="checked" @endif checked="checked">
                                     是
                                 </label>&emsp;
                                 <label>
@@ -213,7 +213,7 @@
                             <label for="form_config_slack_status" class="col-sm-2 control-label">啟用</label>
                             <div class="col-sm-10">
                                 <label>
-                                    <input type="radio" name="config[slack_status]" class="flat-red" value="true" @if ( $config['slack_status'] == 'true') checked="checked" @endif>
+                                    <input type="radio" name="config[slack_status]" class="flat-red" value="true" @if ( $config['slack_status'] == 'true') checked="checked" @endif checked="checked">
                                     是
                                 </label>&emsp;
                                 <label>

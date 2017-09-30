@@ -29,7 +29,7 @@
           <input type="hidden" name="holidies[id]" value="{{$model->id}}">
           <div class="col-md-11">
             <label>
-              <input type="radio" name="holidies[type]" class="flat-red" value="holiday"@if( "{{$model->type}}" == "{{holiday}}")checked="checked"@endif>
+              <input type="radio" name="holidies[type]" class="flat-red" value="holiday"@if( "{{$model->type}}" == "{{holiday}}")checked="checked"@endif checked="checked" >
               國定假日
             </label>&emsp;
             <label>
