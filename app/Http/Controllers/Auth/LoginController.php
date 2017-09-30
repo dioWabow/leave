@@ -62,10 +62,12 @@ class LoginController extends Controller implements AuthenticatableContract
                 $model = User::getUserByEmail($user->email);
                 if ( $model === null) {
 
+                    $nickname = explode( "@" , $user->email)[0];
+
                     $data = [
                         'email' => $user->email,
                         'name' => $user->name,
-                        'nickname' => $user->name,
+                        'nickname' => $nickname,
                         'enter_date' => date( "Y-m-d 00:00:00" ),
                         'status' => 1,
                         'job_seek' => 0,
