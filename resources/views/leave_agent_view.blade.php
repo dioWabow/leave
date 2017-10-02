@@ -1,15 +1,15 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar-check-o"></i> 假單檢視
 	<small>View Leave</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="./leave_agent_prove.html">同意代理嗎？</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('agent_approve/index') }}">同意代理嗎？</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>
@@ -177,18 +177,4 @@
 </section>
 <!-- /.content -->
 
-<!-- Modal -->
-<div class="modal fade" id="myModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h1>確定 <span class="text-red">同意擔任代理人</span> 嗎？</h1>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send</button>
-      </div>
-    </div>
-  </div>
-</div>
 @stop
