@@ -98,7 +98,8 @@ class LeavesManagerController extends Controller
         } elseif ($this->role == 'minimanager' && !empty(Auth::hasMiniManagement())) {
 
             $teams = Auth::hasMiniManagement();
-            $search['user_id'] = UserTeam::getUserByTeams($teams);
+            $get_user_id = UserTeam::getUserByTeams($teams);
+            $search['user_id'][] = LeaveHelper::getExcludeManagerUserId($get_user_id);
             $search ['tag_id'] = ['2'];
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
 
@@ -455,8 +456,8 @@ class LeavesManagerController extends Controller
     private static function getManagerTeamsLeaves()
     {
         $teams = Auth::hasManagement();
-        $search_teams['user_id'] = UserTeam::getUserByTeams($teams);
-        $search_teams['user_id'] = UserTeam::getUserByTeams($teams);
+        $get_user_id = UserTeam::getUserByTeams($teams);
+        $search_teams['user_id'][] = LeaveHelper::getExcludeManagerUserId($get_user_id);
         $search_teams['tag_id'] = ['2'];
         return $search_teams;
     }

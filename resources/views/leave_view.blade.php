@@ -195,9 +195,13 @@
                 <input type="text" id="leave_memo" name="leave_response[memo]" class="form-control pull-right">
               </div>
               </div></div>
-              <div class="form-group"><div class="row">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-12">
                 <a href="#" class="btn btn-danger btn-block" id="cancel" data-toggle="modal" data-target="#myModalConfirm"><b>取消此假單</b></a>
-              </div></div>
+                  </div>
+                </div>
+              </div>
             @elseif($model->tag_id == 4 && !empty($leave_prove_process['admin']) && Auth::getUser()->id == $leave_prove_process['admin']->id)
               <div class="form-group"><div class="row">
               <div class="col-md-2">說點話</div>

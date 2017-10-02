@@ -1118,7 +1118,8 @@ class LeaveHelper
     private static function getManagerTeamsLeavesTotal()
     {
         $teams = Auth::hasManagement();
-        $user_id = UserTeam::getUserByTeams($teams);
+        $get_user_id = UserTeam::getUserByTeams($teams);
+        $user_id[] = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
 
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
@@ -1132,11 +1133,32 @@ class LeaveHelper
     private static function getMiniManagerLeavesTotal()
     {
         $teams = Auth::hasMiniManagement();
-        $user_id = UserTeam::getUserByTeams($teams);
+        $get_user_id = UserTeam::getUserByTeams($teams);
+        $user_id[] = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
 
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
         return $result;
+    }
+
+    /**
+     * 排除主管自己的id
+     * 
+     */
+    public static function getExcludeManagerUserId($user_id)
+    {
+        // 排除主管自己的user_id
+        foreach ($user_id as $team_user_id) {
+
+            if ($team_user_id != Auth::user()->id) {
+                
+                $user_id[] = $team_user_id;
+                
+            }
+
+        }
+        
+        return $user_id;
     }
  
     /**
