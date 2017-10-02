@@ -258,7 +258,7 @@ class NaturalController extends Controller
                     if ($error) {
                         return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
                     }else{
-                        return Redirect::route('natural/index')->withErrors(['msg' => '取消成功']);
+                        return Redirect::route('natural/index')->with(['success' => '取消成功']);
                     }
 
                 //如果沒有天災假,進行新增
@@ -295,7 +295,7 @@ class NaturalController extends Controller
                     if ($error) {
                         return Redirect::route('natural/index')->withErrors(['msg' => '新增異常']);
                     }else{
-                        return Redirect::route('natural/index')->withErrors(['msg' => '新增成功']);
+                        return Redirect::route('natural/index')->with(['success' => '新增成功']);
                     }
                 }
 
