@@ -44,7 +44,7 @@ class Type extends BaseModel
         $query = $this->OrderedBy();
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('types', $key) && !empty($value)) {
+            if (Schema::hasColumn('types', $key) && isset($value)) {
 
                 if ($key == 'name') {
 

@@ -1081,6 +1081,7 @@ class LeaveHelper
         $teams_id = Team::getTeamsByManagerTeam($teams);
         $user_id = UserTeam::getUserByTeams($teams_id);
         $tag_id = ['3'];
+        
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
         return $result;
     }
@@ -1094,6 +1095,7 @@ class LeaveHelper
         $teams = Auth::hasManagement();
         $user_id = UserTeam::getUserByTeams($teams);
         $tag_id = ['2'];
+
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
         return $result;
     }
@@ -1121,7 +1123,7 @@ class LeaveHelper
     public static function getAgentLeavesTotal()
     {
         $id = Auth::user()->id;
-        $today = Carbon::now();
+        $today = Carbon::now()->format('Y-m-d');
         $leave_id = LeaveAgent::getLeaveIdByUserId($id);
         $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
         return $result;
