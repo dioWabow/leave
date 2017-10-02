@@ -25,12 +25,16 @@ use App\Notifications\UserLeaveSuccessEmail;
 use App\Notifications\UserLeaveSuccessSlack;
 use App\Notifications\AgentLeaveSuccessEmail;
 use App\Notifications\AgentLeaveSuccessSlack;
-use App\Notifications\UserLeaveReturnEmail;
+use App\Notifications\OtherLeaveSuccessEmail;
+use App\Notifications\OtherLeaveSuccessSlack;
 use App\Notifications\UserLeaveReturnSlack;
-use App\Notifications\AgentLeaveCancelSlack;
+use App\Notifications\UserLeaveReturnEmail;
 use App\Notifications\UserLeaveCancelSlack;
-use App\Notifications\AgentLeaveCancelEmail;
 use App\Notifications\UserLeaveCancelEmail;
+use App\Notifications\AgentLeaveCancelSlack;
+use App\Notifications\AgentLeaveCancelEmail;
+use App\Notifications\OtherLeaveCancelSlack;
+use App\Notifications\OtherLeaveCancelEmail;
 use SlackHelper;
 use \App\Classes\EmailHelper;
 
@@ -656,6 +660,21 @@ class LeaveController extends Controller
 
                     }
 
+                    //送通知給額外通知
+                    $other_list = LeaveNotice::getNoticeByLeaveId($model->id);
+                    if ( count( $other_list ) != 0 ) {
+
+                        foreach ( $other_list as $key => $other) {
+
+                            SlackHelper::notify(new OtherLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $other->fetchUser->nickname )  );
+                            $EmailHelper = new EmailHelper;
+                            $EmailHelper->to = $other->fetchUser->email;
+                            $EmailHelper->notify(new OtherLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+
+                        }
+
+                    }
+
                 }
 
                 if ( in_array($model->tag_id, ['8']) ) {
@@ -686,6 +705,21 @@ class LeaveController extends Controller
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
                             $EmailHelper->notify(new AgentLeaveCancelEmail( $model->start_time , $model->end_time ) );
+
+                        }
+
+                    }
+
+                    //送通知給額外通知
+                    $other_list = LeaveNotice::getNoticeByLeaveId($model->id);
+                    if ( count( $other_list ) != 0 ) {
+
+                        foreach ( $other_list as $key => $other) {
+
+                            SlackHelper::notify(new OtherLeaveCancelSlack( $model->fetchUser->nickname ,  $model->start_time , $model->end_time , $other->fetchUser->nickname )  );
+                            $EmailHelper = new EmailHelper;
+                            $EmailHelper->to = $other->fetchUser->email;
+                            $EmailHelper->notify(new OtherLeaveCancelEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
 
                         }
 

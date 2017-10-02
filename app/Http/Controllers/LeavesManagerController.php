@@ -11,12 +11,15 @@ use App\Leave;
 use APP\User;
 use App\UserTeam;
 use App\LeaveDay;
+use App\LeaveNotice;
 use App\LeaveResponse;
 use App\Http\Requests\ManagerProveRequest;
 use App\Notifications\UserLeaveSuccessEmail;
 use App\Notifications\UserLeaveSuccessSlack;
 use App\Notifications\AgentLeaveSuccessEmail;
 use App\Notifications\AgentLeaveSuccessSlack;
+use App\Notifications\OtherLeaveSuccessEmail;
+use App\Notifications\OtherLeaveSuccessSlack;
 use App\Notifications\UserLeaveReturnEmail;
 use App\Notifications\UserLeaveReturnSlack;
 use SlackHelper;
@@ -344,6 +347,21 @@ class LeavesManagerController extends Controller
                                 $EmailHelper = new EmailHelper;
                                 $EmailHelper->to = $agent->fetchUser->email;
                                 $EmailHelper->notify(new AgentLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+
+                            }
+
+                        }
+
+                        //送通知給額外通知
+                        $other_list = LeaveNotice::getNoticeByLeaveId($model->id);
+                        if ( count( $other_list ) != 0 ) {
+
+                            foreach ( $other_list as $key => $other) {
+
+                                SlackHelper::notify(new OtherLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $other->fetchUser->nickname )  );
+                                $EmailHelper = new EmailHelper;
+                                $EmailHelper->to = $other->fetchUser->email;
+                                $EmailHelper->notify(new OtherLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
 
                             }
 
