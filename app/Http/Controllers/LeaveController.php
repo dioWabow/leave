@@ -412,10 +412,10 @@ class LeaveController extends Controller
 
                     foreach ( $agent_list as $key => $agent) {
 
-                        SlackHelper::notify(new AgentNoticeSlack( $model->fetchUser->nickname , $model->start_time , $agent->fetchUser->nickname )  );
+                        SlackHelper::notify(new AgentNoticeSlack( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , $agent->fetchUser->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $agent->fetchUser->email;
-                        $EmailHelper->notify(new AgentNoticeEmail( $model->fetchUser->nickname , $model->start_time ) );
+                        $EmailHelper->notify(new AgentNoticeEmail( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') ) );
 
                     }
 
@@ -640,10 +640,10 @@ class LeaveController extends Controller
                 if ( in_array($model->tag_id, ['9']) ) {
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveSuccessSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
+                    SlackHelper::notify(new UserLeaveSuccessSlack( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $model->fetchUser->email;
-                    $EmailHelper->notify(new UserLeaveSuccessEmail( $model->start_time , $model->end_time ) );
+                    $EmailHelper->notify(new UserLeaveSuccessEmail( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                     //送通知給職代
                     $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
@@ -651,10 +651,10 @@ class LeaveController extends Controller
 
                         foreach ( $agent_list as $key => $agent) {
 
-                            SlackHelper::notify(new AgentLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            SlackHelper::notify(new AgentLeaveSuccessSlack( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $agent->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
-                            $EmailHelper->notify(new AgentLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new AgentLeaveSuccessEmail( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                         }
 
@@ -666,10 +666,10 @@ class LeaveController extends Controller
 
                         foreach ( $other_list as $key => $other) {
 
-                            SlackHelper::notify(new OtherLeaveSuccessSlack( $model->fetchUser->nickname , $model->start_time , $model->end_time , $other->fetchUser->nickname )  );
+                            SlackHelper::notify(new OtherLeaveSuccessSlack( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $other->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $other->fetchUser->email;
-                            $EmailHelper->notify(new OtherLeaveSuccessEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new OtherLeaveSuccessEmail( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                         }
 
@@ -680,20 +680,20 @@ class LeaveController extends Controller
                 if ( in_array($model->tag_id, ['8']) ) {
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveReturnSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
+                    SlackHelper::notify(new UserLeaveReturnSlack( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $model->fetchUser->email;
-                    $EmailHelper->notify(new UserLeaveReturnEmail( $model->start_time , $model->end_time ) );
+                    $EmailHelper->notify(new UserLeaveReturnEmail( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                 }
 
                 if ( in_array($model->tag_id, ['7']) && $model->user_id != Auth::user()->id ) {
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveCancelSlack( $model->start_time , $model->end_time , $model->fetchUser->nickname )  );
+                    SlackHelper::notify(new UserLeaveCancelSlack( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $model->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to =$model->fetchUser->email;
-                    $EmailHelper->notify(new UserLeaveCancelEmail( $model->start_time , $model->end_time ) );
+                    $EmailHelper->notify(new UserLeaveCancelEmail( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                     //送通知給職代
                     $agent_list = LeaveAgent::getAgentByLeaveId($model->id);
@@ -701,10 +701,10 @@ class LeaveController extends Controller
 
                         foreach ( $agent_list as $key => $agent) {
 
-                            SlackHelper::notify(new AgentLeaveCancelSlack( $model->start_time , $model->end_time , $agent->fetchUser->nickname )  );
+                            SlackHelper::notify(new AgentLeaveCancelSlack( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $agent->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
-                            $EmailHelper->notify(new AgentLeaveCancelEmail( $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new AgentLeaveCancelEmail( TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                         }
 
@@ -716,10 +716,10 @@ class LeaveController extends Controller
 
                         foreach ( $other_list as $key => $other) {
 
-                            SlackHelper::notify(new OtherLeaveCancelSlack( $model->fetchUser->nickname ,  $model->start_time , $model->end_time , $other->fetchUser->nickname )  );
+                            SlackHelper::notify(new OtherLeaveCancelSlack( $model->fetchUser->nickname ,  TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') , $other->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $other->fetchUser->email;
-                            $EmailHelper->notify(new OtherLeaveCancelEmail( $model->fetchUser->nickname , $model->start_time , $model->end_time ) );
+                            $EmailHelper->notify(new OtherLeaveCancelEmail( $model->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($model->start_time,$model->user_id,'+') , TimeHelper::changeTimeByArriveTime($model->end_time,$model->user_id,'+') ) );
 
                         }
 

@@ -1365,10 +1365,10 @@ class LeaveHelper
 
                     } else {
 
-                        SlackHelper::notify(new MiniManagementNoticeSlack( $leave->fetchUser->nickname , $leave->start_time , $leave_prove['minimanager']->nickname )  );
+                        SlackHelper::notify(new MiniManagementNoticeSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['minimanager']->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $leave_prove['minimanager']->email;
-                        $EmailHelper->notify(new MiniManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+                        $EmailHelper->notify(new MiniManagementNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
 
                         break;
 
@@ -1390,10 +1390,10 @@ class LeaveHelper
 
                     } else {
 
-                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $leave_prove['manager']->email;
-                        $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+                        $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
 
                         break;
 
@@ -1417,10 +1417,10 @@ class LeaveHelper
 
                 } else {
 
-                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['manager']->email;
-                    $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+                    $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
                     break;
 
                 }
@@ -1441,10 +1441,10 @@ class LeaveHelper
 
                 }else{
 
-                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->nickname , $leave->start_time , $leave_prove['admin']->nickname )  );
+                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['admin']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['admin']->email;
-                    $EmailHelper->notify(new AdminNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
+                    $EmailHelper->notify(new AdminNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
                     break;
 
                 }
