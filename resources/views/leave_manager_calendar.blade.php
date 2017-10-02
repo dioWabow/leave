@@ -9,6 +9,9 @@
         center: 'title',
         right: ''
       },
+      displayEventEnd: {
+        month: true
+      },
       //Random default events
       events: function(start, end, timezone, callback) {
         $.ajax({
