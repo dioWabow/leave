@@ -115,7 +115,7 @@
 					</div>
 					<div class="box-body" id="member_set">
 					@foreach($team_result as $team_data)
-						<div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}"><div class="row">
+						<div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}" team_name="{{$team_data->name}}"><div class="row">
 							<div class="col-md-2">
 								@if (empty($team_data->parent_id))
 									<label>{{$team_data->name}}</label>

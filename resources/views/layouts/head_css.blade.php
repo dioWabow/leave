@@ -268,7 +268,7 @@ $(document).ready(function () {
       return false;
     }
 
-    if($team_color == ''){
+    if($team_color == '') {
       alert('請選擇組別顏色');
       return false;
     }
@@ -393,38 +393,44 @@ $(document).ready(function () {
     // 跑所有team
     $('.member_list').each(function(){
 
-      $team = $(this).attr('team_id');
+      $team_id = $(this).attr('team_id');
+      $team_name = $(this).attr('team_name');
 
       // 跑團隊人員 與 主管人員
-      $team_member = $('#member_'+$team).select2('val');
-      $team_manager = $('#manager_'+$team).select2('val');
+      $team_member = $('#member_'+$team_id).select2('val');
+      $team_manager = $('#manager_'+$team_id).select2('val');
 
-      // select2 抓出來型態不是string
-      if(!$team_member == "") {
-        $team_member = $team_member.toString();
+      // 一定要有主管
+      if($team_manager == "") {
+        event.preventDefault();
+        alert('請設定 ' + $team_name + ' 的主管!!');
       }
 
       // 當有選主管才要判斷
-      if($team_manager != ""){
+      if($team_manager != "") {
 
-        $team_manager.toString();
+        if($team_member === null) {
 
-        if($team_member === null){
           event.preventDefault();
-          alert('有主管的情況至少要有一名組員!!');
+          alert($team_name + ' 有主管的情況至少要有一名組員!!');
+
         } else {
 
-          if($team_member == $team_manager){
-            event.preventDefault();
-            alert('人員不能同時為主管!!');
+          for(var key in $team_member) {
 
-          } else if($team_member.match($team_manager)) {
-            event.preventDefault();
-            alert('人員不能同時為主管!!');
+            if($team_manager == $team_member[key]) {
 
-          }
-        }
-      }
+              event.preventDefault();
+              alert($team_name + ' 人員不能同時為主管!!');
+
+            }//endif
+
+          }//endfor
+
+        }//endelse
+
+      }//endif
+
     });
 
 });
