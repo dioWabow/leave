@@ -78,7 +78,7 @@ class LeaveHelper
         $service_day = intval($start_date_day - $enter_date_day);
     
         //當不足1年時，年資-1
-        if (($start_date_month - $enter_date_month) <0 ) { //月份不足年資減1
+        if (($start_date_month - $enter_date_month) < 0 ) { //月份不足年資減1
 
             $service_year --;
 
@@ -99,17 +99,18 @@ class LeaveHelper
 
                     $service_month += 12;
 
-                    if ($service_month > 6) { //大於六個月發3天
+                }
 
-                        $annual_date = 3;
+                if ($service_month > 6) { //大於六個月發3天
 
-                    } elseif ($service_month == 6 && $service_day >= 0) { //等於六個月先判斷是否足月，才發三天
+                    $annual_date = 3;
 
-                        $annual_date = 3;
+                } elseif ($service_month == 6 && $service_day >= 0) { //等於六個月先判斷是否足月，才發三天
 
-                    }
+                    $annual_date = 3;
 
                 }
+
                 break;
             case 1:
                 $annual_date = 7;
