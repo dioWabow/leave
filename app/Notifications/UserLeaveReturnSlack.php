@@ -54,7 +54,7 @@ class UserLeaveReturnSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("leaves/my/history");
+        $url = route("leaves_my/history");
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 
