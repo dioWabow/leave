@@ -115,7 +115,6 @@ class LeaveTypeController extends Controller
         //儲存資料
         $model = new Type;
         $model->fill($input);
-
         if ($model->save()) {
 
             return Redirect::route('leave_type')->with('success', '新增成功 !');
@@ -141,7 +140,7 @@ class LeaveTypeController extends Controller
         $model = new Type;
         $model = $this->loadModel($input['id']);
         $model->fill($input);
-
+        
         if ($model->save()) {
 
             return Redirect::route('leave_type')->with('success', '更新成功 !');
@@ -218,9 +217,17 @@ class LeaveTypeController extends Controller
         
         // 日期區間用-分別存入
         if (!empty($input['available_date'])) {
+            
             $available_date = explode(" - ", $input['available_date']);
-            $input['start_time'] = isset($available_date[0]) ? $available_date[0]:'';
-            $input['end_time'] = isset($available_date[1]) ? $available_date[1]:'';
+            $input['start_time'] = $available_date[0];
+            $input['end_time'] =  $available_date[1];
+
+        } else {
+            
+            $available_date = explode(" - ", $input['available_date']);
+            $input['start_time'] = null;
+            $input['end_time'] = null;
+
         }
         // reason prove available 判斷 0 或 1 後存入 
         
