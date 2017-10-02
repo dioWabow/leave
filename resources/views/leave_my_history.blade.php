@@ -36,6 +36,7 @@
                 <option value="annual_leave" @if (count($model->order_by) >0 && $model->exception == "annual_leave") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annual_leave') }}</option>
                 <option value="lone_stay" @if (count($model->order_by) >0 && $model->exception == "lone_stay") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
                 <option value="birthday" @if (count($model->order_by) >0 && $model->exception == "birthday") selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
+                <option value="natural_disaster" @if (count($model->order_by) >0 && $model->exception == 'natural_disaster') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('natural_disaster') }}</option>
               </select>
               &nbsp;
               區間：

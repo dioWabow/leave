@@ -23,6 +23,7 @@ class Leave extends BaseModel
         'notice_person',
         'timepicker',
         'dayrange',
+        'exception',
     ];
 
     protected $attributes = [
