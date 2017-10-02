@@ -633,16 +633,21 @@ class LeaveHelper
         // 請假區間是否已幫人代理
         $agent_leaves =  LeaveAgent::getLeaveByUserId($leave['user_id']);
 
-        foreach ($agent_leaves as $agent_leave) {
+        if (count($agent_leaves) > 0) {
 
-            if (LeaveDay::getLeaveByUserIdDateRangeType($agent_leave->fetchLeave->user_id,$start_time,$end_time,'') > 0) {
+            foreach ($agent_leaves as $agent_leave) {
 
-                $response = '該時段已幫人代理';
-                return $response;
+                if (LeaveDay::getLeaveByUserIdDateRangeType($agent_leave->fetchLeave->user_id,$start_time,$end_time,'') > 0) {
+
+                    $response = '該時段已幫人代理';
+                    return $response;
+
+                }
 
             }
 
         }
+        
 
         //假是否有設定使用區間
         if (!empty($leave_type->start_time) && !empty($leave_type->end_time)) {
