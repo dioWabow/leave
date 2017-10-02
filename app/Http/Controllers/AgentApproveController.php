@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use LeaveHelper;
 use App\Leave;
 use App\LeaveAgent;
 use App\LeaveResponse;
@@ -44,7 +45,7 @@ class AgentApproveController extends Controller
         }
 
         // 先取得該登入者所代理的假單
-        $search['id'] = LeaveAgent::getLeaveIdByUserId(Auth::user()->id);
+        $search['id'] = LeaveAgent::getLeaveByUserId(Auth::user()->id)->pluck('leave_id');
         //取得假單在送出的狀態(代理人待核)
         $search['tag_id'] = ['1'];
         $model = new Leave;
