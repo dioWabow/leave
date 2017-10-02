@@ -61,14 +61,15 @@
 												類型：
 												<select id="search_kind" name="search[exception]" class="form-control">
 													<option value="" selected="selected">全部</option>
-													<option value="normal" @if (count($search)>0 && $search['exception'] == 'normal') selected="selected" @endif>一般</option>
-													<option value="job_seek" @if (count($search)>0 && $search['exception'] == 'job_seek') selected="selected" @endif>謀職假</option>
-													<option value="sick" @if (count($search)>0 && $search['exception'] == 'sick') selected="selected" @endif>無薪病假</option>
-													<option value="entertain" @if (count($search)>0 && $search['exception'] == 'entertain') selected="selected" @endif>善待假</option>
-													<option value="annaul_leave" @if (count($search)>0 && $search['exception'] == 'annaul_leave') selected="selected" @endif>特休</option>
-													<option value="lone_stay" @if (count($search)>0 && $search['exception'] == 'lone_stay') selected="selected" @endif>久任假</option>
-													<option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>生日假</option>
-													<option value="natural_disaster" @if (count($search)>0 && $search['exception'] == 'natural_disaster') selected="selected" @endif>天災假</option>
+													<option value="normal" @if (count($search)>0 && $search['exception'] == 'normal') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('normal') }}</option>
+													<option value="job_seek" @if (count($search)>0 && $search['exception'] == 'job_seek') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('job_seek') }}</option>
+													<option value="paid_sick" @if (count($search)>0 && $search['exception'] == 'paid_sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('paid_sick') }}</option>
+													<option value="sick" @if (count($search)>0 && $search['exception'] == 'sick') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('sick') }}</option>
+													<option value="entertain" @if (count($search)>0 && $search['exception'] == 'entertain') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('entertain') }}</option>
+													<option value="annual_leave" @if (count($search)>0 && $search['exception'] == 'annual_leave') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('annual_leave') }}</option>
+													<option value="lone_stay" @if (count($search)>0 && $search['exception'] == 'lone_stay') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('lone_stay') }}</option>
+													<option value="birthday" @if (count($search)>0 && $search['exception'] == 'birthday') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('birthday') }}</option>
+													<option value="natural_disaster" @if (count($search)>0 && $search['exception'] == 'natural_disaster') selected="selected" @endif>{{ WebHelper::getTypesExceptionLabel('natural_disaster') }}</option>
 												</select>
 											</label>
 											&nbsp;
