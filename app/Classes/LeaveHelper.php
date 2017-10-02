@@ -1390,7 +1390,7 @@ class LeaveHelper
 
                     } else {
 
-                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->fetchUser->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $leave_prove['manager']->email;
                         $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
@@ -1417,7 +1417,7 @@ class LeaveHelper
 
                 } else {
 
-                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->fetchUser->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
+                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , $leave->start_time , $leave_prove['manager']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['manager']->email;
                     $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
@@ -1441,7 +1441,7 @@ class LeaveHelper
 
                 }else{
 
-                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->fetchUser->nickname , $leave->start_time , $leave_prove['admin']->nickname )  );
+                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->nickname , $leave->start_time , $leave_prove['admin']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['admin']->email;
                     $EmailHelper->notify(new AdminNoticeEmail( $leave->fetchUser->nickname , $leave->start_time ) );
