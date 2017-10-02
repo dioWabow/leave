@@ -630,6 +630,20 @@ class LeaveHelper
 
         }
 
+        // 請假區間是否已幫人代理
+        $agent_leaves =  LeaveAgent::getLeaveByUserId($leave['user_id']);
+
+        foreach ($agent_leaves as $agent_leave) {
+
+            if (LeaveDay::getLeaveByUserIdDateRangeType($agent_leave->fetchLeave->user_id,$start_time,$end_time,'') > 0) {
+
+                $response = '該時段已幫人代理';
+                return $response;
+
+            }
+
+        }
+
         //假是否有設定使用區間
         if (!empty($leave_type->start_time) && !empty($leave_type->end_time)) {
 
@@ -1122,7 +1136,7 @@ class LeaveHelper
     {
         $id = Auth::user()->id;
         $today = Carbon::now();
-        $leave_id = LeaveAgent::getLeaveIdByUserId($id);
+        $leave_id = LeaveAgent::getLeaveByUserId($id)->pluck('leave_id');
         $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
         return $result;
     }
@@ -1241,7 +1255,7 @@ class LeaveHelper
         $id = Auth::user()->id;
         $tag_id = '1';
         
-        $leave_id = LeaveAgent::getLeaveIdByUserId($id);
+        $leave_id = LeaveAgent::getLeaveByUserId($id)->pluck('leave_id');
         $result = Leave::whereIn('id', $leave_id)->where('tag_id', $tag_id)->count();
         return $result;
     }

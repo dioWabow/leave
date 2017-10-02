@@ -43,7 +43,7 @@ class LeaveAgentController extends Controller
         
         $model = new Leave;
         // 先取得該登入者所代理的假單
-        $search['id'] = LeaveAgent::getLeaveIdByUserId(Auth::user()->id);
+        $search['id'] = LeaveAgent::getLeaveByUserId(Auth::user()->id)->pluck('leave_id');
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         $dataProvider = $model->fill($order_by)->searchForLeaveAgent($search);
         
