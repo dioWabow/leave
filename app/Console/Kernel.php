@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('Notice:DailyLeave')->dailyAt('10:00');//每天10點通知今日請假人
 
-        $schedule->command('Report:AnnualHoursEveryDay')->dailyAt('17:52'); //每天早上00:05算當日特休
+        $schedule->command('Report:AnnualHoursEveryDay')->dailyAt('00:05'); //每天早上00:05算當日特休
     }
     
     /**

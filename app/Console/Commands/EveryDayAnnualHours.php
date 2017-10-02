@@ -46,7 +46,7 @@ class EveryDayAnnualHours extends Command
      */
     public function handle()
     {
-        $users = User::getUserByEnterMonthAndDay(Carbon::now()->format('m'),Carbon::now()->format('d'));
+        $users = User::getUserByEnterMonthAndDayOrAnnualHoursNull(Carbon::now()->format('m'),Carbon::now()->format('d'));
 
         foreach($users as $user) {
 
