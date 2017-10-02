@@ -1,16 +1,16 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar"></i> 假單檢視
 	<small>View Agent Leave</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li>基本設定</li>
-	<li><a href="./leave_agent.html">我是代理人</a></li>
+	<li><a href="{{ route('agent/index') }}">我是代理人</a></li>
 	<li class="active">假單檢視</li>
   </ol>
 </section>
@@ -212,6 +212,7 @@
 		<!-- /.col -->
 	</div>
 	<!-- /.row -->
+
 </section>
 <!-- /.content -->
 @stop
