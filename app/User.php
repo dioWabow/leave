@@ -125,7 +125,6 @@ class User extends BaseModel
      */
     public static function getUserByEmail($email='')
     {
-
         $query = self::where('email', $email);
 
         $result = $query->first();
@@ -186,4 +185,10 @@ class User extends BaseModel
         return $result;
     }
 
+    public static function getUserByAnnualHoursZero()
+    {
+        $result = self::where('annual_hours','0')
+            ->get();
+        return $result;
+    }
 }

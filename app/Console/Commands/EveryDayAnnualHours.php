@@ -61,5 +61,22 @@ class EveryDayAnnualHours extends Command
             }
             
         }
+
+        $no_annual_hours_user = User::getUserByAnnualHoursZero();
+
+        foreach($no_annual_hours_user as $user) {
+            
+            if (!empty($user->status) && TimeHelper::changeDateValue($user->enter_date,['+,6,month'],'Y-m-d') == Carbon::now()->format('Y-m-d')) {
+
+                $model = User::find($user->id);
+
+                $annual_hours = LeaveHelper::calculateAnnualDate(Carbon::now()->format('Y-m-d'),$user->id);
+
+                $model->fill(['annual_hours' => $annual_hours]);
+                $model->save();
+
+            }
+
+        }
     }
 }
