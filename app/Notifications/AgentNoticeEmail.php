@@ -48,7 +48,7 @@ class AgentNoticeEmail extends Notification
     {
         return (new MailMessage)
             ->from(Config::getConfigValueByKey("smtp_from") , Config::getConfigValueByKey("smtp_display"))
-            ->subject("假單申請通知". Config::getConfigValueByKey("smtp_display"))
+            ->subject("假單申請通知 - ". Config::getConfigValueByKey("smtp_display"))
             ->line($this->name.' 於 '.$this->start_time." 將請假並指定您為代理人")
             ->line('請盡速進行確認是否同意，謝謝。')
             ->action('點我進入', route("agent/index"));

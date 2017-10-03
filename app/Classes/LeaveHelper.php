@@ -1133,7 +1133,7 @@ class LeaveHelper
         $get_user_id = UserTeam::getUserByTeams($teams);
         $user_id[] = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
-
+    
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
         return $result;
     }
@@ -1148,7 +1148,7 @@ class LeaveHelper
         $get_user_id = UserTeam::getUserByTeams($teams);
         $user_id[] = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
-
+        
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
         return $result;
     }
@@ -1161,16 +1161,16 @@ class LeaveHelper
     {
         // 排除主管自己的user_id
         foreach ($user_id as $team_user_id) {
-
+            
             if ($team_user_id != Auth::user()->id) {
                 
-                $user_id[] = $team_user_id;
+                $result[] = $team_user_id;
                 
             }
-
+            
         }
         
-        return $user_id;
+        return $result;
     }
  
     /**
@@ -1253,8 +1253,8 @@ class LeaveHelper
      */
     public static function getUpComingManagerLeavesTotal()
     {
-        $tag_id = ['9'];
-        $search['id'] = LeaveResponse::getLeavesIdByUserIdAndTagId(Auth::user()->id, $tag_id);
+        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
+        $search['tag_id'] = ['9'];
         $search['start_time'] = Carbon::now()->format('Y-m-d');
 
         $model = new Leave;
