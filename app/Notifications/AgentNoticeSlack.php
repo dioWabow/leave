@@ -55,7 +55,7 @@ class AgentNoticeSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("agent/index");
+        $url = route("agent_approve/index");
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 

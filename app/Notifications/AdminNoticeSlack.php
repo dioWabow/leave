@@ -54,7 +54,7 @@ class AdminNoticeSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("agent_approve/index");
+        $url = route("leaves_manager/prove",["role"=>"admin"]);
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 
