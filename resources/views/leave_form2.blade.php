@@ -167,9 +167,9 @@
 
               @if(count($user_no_team)>0)
                 <optgroup label="NOGROUP">
-                  @foreach($user_no_team as $user)
-                  	@if($user->status!=0)
-                    	<option value="{{$user->id}}" @if((count($model->notice_person)>0)&&in_array($user->id,$model->notice_person)) selected="selected" @endif >{{$user->nickname}}</option>
+                  @foreach($user_no_team as $user_no)
+                  	@if($user_no->status!=0)
+                    	<option value="{{$user_no->id}}" @if((count($model->notice_person)>0)&&in_array($user_no->id,$model->notice_person)) selected="selected" @endif >{{$user_no->nickname}}</option>
                     @endif
                   @endforeach
                 </optgroup>
