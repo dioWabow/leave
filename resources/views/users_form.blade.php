@@ -153,7 +153,7 @@
               @if(count($user_no_team)>0)
                 <optgroup label="NOGROUP">
                   @foreach($user_no_team as $user)
-                    <option value="{{$user->id}}" @if(in_array($user->id,$user_agents))selected="selected"@endif>{{$user->name}}</option>
+                    <option value="{{$user->id}}" @if(in_array($user->id,$user_agents))selected="selected"@endif>{{$user->nickname}}</option>
                   @endforeach
                 </optgroup>
               @endif

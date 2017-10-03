@@ -67,7 +67,7 @@ class ReportAnnualYears extends Command
             AnnualYear::deleteAnnualYearByUserId($user->id, $now_year);
 
             $start_this_year = TimeHelper::changeDateFormat($now_year, 'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
-            $start_next_year = TimeHelper::changeDateValue($now_year,['+, 1, year'], 'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
+            $start_next_year = TimeHelper::changeDateValue($now_year,['+,1,year'], 'Y') . TimeHelper::changeDateFormat($user->enter_date,'-m-d');
             
             $annual_this_years = LeaveHelper::calculateAnnualDate($start_this_year, $user->id);
             $annual_next_years = LeaveHelper::calculateAnnualDate($start_next_year, $user->id);

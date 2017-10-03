@@ -21,7 +21,7 @@ class TimeHelper
 
             $val1 = explode(",", $val);
 
-            switch (strtolower($val1['2'])) {
+            switch (trim(strtolower($val1['2']))) {
                 case 'year':
                     
                     if ($val1['0'] == '+') {
