@@ -491,12 +491,12 @@ class LeavesManagerController extends Controller
         //取得該主管審核過的「不准假」 假單
         $search_not_leave_id['tag_id'] = ['8'];
         $search_not_leave_id['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_not_leaves_id = $model->searchForUpComingInManager($search_not_leave_id)->pluck('id');
+        $get_not_leaves_id = $model->searchForHistoryInManager($search_not_leave_id)->pluck('id');
        
         //取得該主管審核過的「已准假」 假單
         $search_upcoming['tag_id'] = ['9'];
         $search_upcoming['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_upcoming_leaves_id = $model->searchForUpComingInManager($search_upcoming)->pluck('id');
+        $get_upcoming_leaves_id = $model->searchForHistoryInManager($search_upcoming)->pluck('id');
 
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
         $today = Carbon::now()->format('Y-m-d');
@@ -511,7 +511,7 @@ class LeavesManagerController extends Controller
         //取得該主管審核過的「已準假、不准假」 假單
         $search['tag_id'] = ['8', '9'];
         $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_leaves_id_today = $model->searchForUpComingInManager($serach);
+        $get_leaves_id_today = $model->searchForHistoryInManager($serach);
 
         // 取得搜尋的區間為該主管不准假、已準的子單記錄 
         $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
