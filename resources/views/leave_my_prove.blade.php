@@ -32,11 +32,12 @@
                 <td>
                   <button type="button"
                     @if($value->tag_id == 1) class="btn bg-yellow"
-                    @elseif($value->tag_id == 2) class="btn bg-green"
-                    @elseif($value->tag_id == 3) class="btn bg-red"
-                    @elseif($value->tag_id == 4) class="btn bg-blue"
-                    @endif>
-                    {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
+                  @elseif($value->tag_id == 2 && !empty(LeaveHelper::getLeaveProveProcess($value->id)['minimanager'])) class="btn bg-green"
+                  @elseif($value->tag_id == 2 && !empty(LeaveHelper::getLeaveProveProcess($value->id)['manager'])) class="btn bg-red"
+                  @elseif($value->tag_id == 3) class="btn bg-red"
+                  @elseif($value->tag_id == 4) class="btn bg-blue"
+                  @endif>
+                   {{ WebHelper::getLeaveTagsLabeProveByTagIdAndLeaveId($value->tag_id, $value->id) }}
                   </button>
                   @if (in_array($value->tag_id, ['1','2']))
                     <a href="{{ route('leaves_my/update', [ 'id' => $value->id ]) }}">

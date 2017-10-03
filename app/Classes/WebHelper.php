@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use Session;
+use LeaveHelper;
 
 class WebHelper
 {
@@ -348,4 +349,38 @@ class WebHelper
             '4' => '大BOSS待核',
         ];
     }
+
+    /**
+     * 取得 leave 中 tag 的名稱 (等待審核頁面)
+     * 判斷該假單是否有主管或小主管來取得tag名稱
+     *
+     * @return []
+     */
+     public static function getLeaveTagsLabeProveByTagIdAndLeaveId($data, $leave_id)
+     {
+        $result = !empty($data) ? '' : null;
+        if (!empty($data) && $data == '1') {
+
+            $result = '代理人待核';
+
+        } elseif (!empty($data) && $data == '2' && !empty(LeaveHelper::getLeaveProveProcess($leave_id)['minimanager'])) {
+        
+            $result = '小主管待核';
+
+        } elseif (!empty($data) && $data == '2' && !empty(LeaveHelper::getLeaveProveProcess($leave_id)['manager'])) {
+
+            $result = '主管待核';
+
+        } elseif (!empty($data) && $data == '3') {
+
+            $result = '主管待核';
+
+        } elseif (!empty($data) && $data == '4') {
+
+            $result = '大BOSS待核';
+
+        } 
+
+        return $result;
+     }
 }
