@@ -1131,7 +1131,7 @@ class LeaveHelper
     {
         $teams = Auth::hasManagement();
         $get_user_id = UserTeam::getUserByTeams($teams);
-        $user_id[] = self::getExcludeManagerUserId($get_user_id);
+        $user_id = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
 
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
@@ -1146,7 +1146,7 @@ class LeaveHelper
     {
         $teams = Auth::hasMiniManagement();
         $get_user_id = UserTeam::getUserByTeams($teams);
-        $user_id[] = self::getExcludeManagerUserId($get_user_id);
+        $user_id = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
 
         $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
