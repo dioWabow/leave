@@ -31,11 +31,12 @@
               <td>
                 <button type="button"
                   @if($value->tag_id == 1) class="btn bg-yellow"
-                  @elseif($value->tag_id == 2) class="btn bg-green"
+                  @elseif($value->tag_id == 2 && !empty(LeaveHelper::getLeaveProveProcess($value->id)['minimanager'])) class="btn bg-green"
+                  @elseif($value->tag_id == 2 && !empty(LeaveHelper::getLeaveProveProcess($value->id)['manager'])) class="btn bg-red"
                   @elseif($value->tag_id == 3) class="btn bg-red"
                   @elseif($value->tag_id == 4) class="btn bg-blue"
                   @endif>
-                  {{ WebHelper::getLeaveTagsLabelForProve($value->tag_id) }}
+                  {{ WebHelper::getLeaveTagsLabeProveByTagIdAndLeaveId($value->tag_id, $value->id) }}
                 </button>
               </td>
               <td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
