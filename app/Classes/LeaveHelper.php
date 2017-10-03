@@ -1470,7 +1470,7 @@ class LeaveHelper
 
                     } else {
 
-                        SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
+                        SlackHelper::notify(new ManagementNoticeSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
                         $EmailHelper = new EmailHelper;
                         $EmailHelper->to = $leave_prove['manager']->email;
                         $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
@@ -1497,7 +1497,7 @@ class LeaveHelper
 
                 } else {
 
-                    SlackHelper::notify(new ManagementNoticeSlack( $leave_prove['manager']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
+                    SlackHelper::notify(new ManagementNoticeSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['manager']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['manager']->email;
                     $EmailHelper->notify(new ManagementNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
@@ -1557,7 +1557,7 @@ class LeaveHelper
 
                 }else{
 
-                    SlackHelper::notify(new AdminNoticeSlack( $leave_prove['admin']->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['admin']->nickname )  );
+                    SlackHelper::notify(new AdminNoticeSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , $leave_prove['admin']->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave_prove['admin']->email;
                     $EmailHelper->notify(new AdminNoticeEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') ) );
