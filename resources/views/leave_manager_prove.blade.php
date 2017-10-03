@@ -47,7 +47,7 @@
                   @endforeach
                 </td>
                 <td>{{ $value->hours }}</td>
-                <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
+                <td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 5)class="text-red" @else class="text-black" @endif>
                   @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
                 </td>
               </tr>
