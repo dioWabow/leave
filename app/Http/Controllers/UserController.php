@@ -197,7 +197,7 @@ class UserController extends Controller
 
         } else {
 
-            return Redirect::back()->withInput();
+            return Redirect::back()->withInput()->withErrors(['msg' => '修改失敗']);
 
         }
     }
