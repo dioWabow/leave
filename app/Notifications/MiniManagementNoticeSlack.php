@@ -55,7 +55,7 @@ class MiniManagementNoticeSlack extends Notification
     */
     public function toSlack($notifiable)
     {
-        $url = route("leaves_manager/prove",["role"=>"Mini_Manager"]);
+        $url = route("leaves_manager/prove",["role"=>"minimanager"]);
         $title = $this->title;
         $text = $this->text;
         return (new SlackMessage) 
