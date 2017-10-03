@@ -800,6 +800,7 @@ $(function () {
           maxFileCount: 5,
           overwriteInitial: false,
           showUpload: false,
+          showRemove: false,
           initialPreviewAsData: true,
           uploadExtraData : {
             "_token": "{{ csrf_token() }}",
