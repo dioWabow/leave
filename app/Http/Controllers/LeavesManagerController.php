@@ -121,10 +121,10 @@ class LeavesManagerController extends Controller
 
             $teams = Auth::hasMiniManagement();
             $get_user_id = UserTeam::getUserByTeams($teams);
-            $search['user_id'][] = LeaveHelper::getExcludeManagerUserId($get_user_id);
+            $search['user_id'] = LeaveHelper::getExcludeManagerUserId($get_user_id);
             $search ['tag_id'] = ['2'];
             $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
-
+            
         } else {
 
             return Redirect::route('index')->withErrors(['msg' => '你無權限']);
