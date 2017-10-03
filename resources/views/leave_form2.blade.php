@@ -25,7 +25,7 @@
 
 <!-- Main content -->
 <form action="{{route('leave/insert')}}" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="leave[user_id]" value="{{$user->id}}">
+<input type="hidden" name="leave[user_id]" id='leave_user_id' value="{{$user->id}}">
 <input type="hidden" name="leave[create_user_id]" value="{{Auth::user()->id}}">
 <input type="hidden" name="leave[tag_id]" value="1">
 {!!csrf_field()!!}

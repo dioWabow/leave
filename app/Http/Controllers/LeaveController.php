@@ -850,8 +850,10 @@ class LeaveController extends Controller
     {
         $hours = 0;
         $date_range = $request->input('date_range');
-        $start_time = explode(' - ', $date_range)['0'];
-        $end_time = explode(' - ', $date_range)['1'];
+        $user_id = $request->input('user_id');
+
+        $start_time = TimeHelper::changeTimeByArriveTime(explode(' - ', $date_range)['0'],$user_id,'-');
+        $end_time = TimeHelper::changeTimeByArriveTime(explode(' - ', $date_range)['1'],$user_id,'-');
 
         $date_list = LeaveHelper::calculateWorkingDate($start_time,$end_time);
         $hours = LeaveHelper::calculateRangeDateHours($date_list);
