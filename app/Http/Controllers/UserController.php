@@ -175,17 +175,20 @@ class UserController extends Controller
             }
 
             //修改團隊
+            $user_original_teams =  UserTeam::getManagerTeamByUserId($model->id)->toArray();
             UserTeam::deleteUserTeamByUserId($model->id);
             if (!empty($input['team'])) {
 
                 $user_teams = $input['team'];
                 foreach($user_teams as $team_id){
+                    
+                    $role = (in_array($team_id, $user_original_teams)) ? 'manager' : 'user';
 
                     $team = new UserTeam;
                     $team->fill([
                         'user_id' => $model->id,
                         'team_id' => $team_id,
-                        'role' => 'user',
+                        'role' => $role,
                     ]);
                     $team->save();
 
