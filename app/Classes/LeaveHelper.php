@@ -210,7 +210,7 @@ class LeaveHelper
     }
 
     //將一個區間的時間排除國定假日及放入補班之後輸出成陣列
-    public function calculateWorkingDate($start_time,$end_time)
+    public function calculateWorkingDate($start_time,$end_time,$user_id = '')
     {
         $date_list = [];
 
@@ -627,6 +627,18 @@ class LeaveHelper
             }
 
         }
+
+        if ($this->arrive_time == '0900' && TimeHelper::changeDateFormat($end_time,'H:i') > '18:00') {
+
+            $response = '下班時間為18:00，請確認結束時間';
+            return $response;
+
+        } elseif($this->arrive_time == '0930' && TimeHelper::changeDateFormat($start_time,'H:i') < '09:00') {
+
+            $response = '上班時間為09:30，請確認開始時間';
+            return $response;
+
+        }  
 
         //當天是否請過假
         if (LeaveDay::getLeaveByUserIdDateRangeType($this->user_id,$start_time,$end_time,'') > 0) {

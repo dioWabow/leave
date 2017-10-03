@@ -739,7 +739,7 @@ $(function () {
       $.ajax({
         url: '{{route("leave/calculate_hours")}}',
         type: 'POST',
-        data: {"_token": "{{ csrf_token() }}", date_range:$("#leave_timepicker").val()},
+        data: {"_token": "{{ csrf_token() }}", date_range:$("#leave_timepicker").val(),user_id:$('#leave_user_id').val()},
         dataType: 'JSON',
         success: function (data) { 
           $.each(data, function(index, element) {
