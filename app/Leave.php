@@ -51,24 +51,17 @@ class Leave extends BaseModel
 
             if (Schema::hasColumn('leaves', $key) && !empty($value)) {
 
-                if ($key == 'tag_id') {
+                if ($key == 'user_id') {
                     
-
-                    if (!is_array($value)){
-                        //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
-                        $value = explode(',',$value);
-
-                    }
-
-                    $query->whereIn('tag_id', $value);
+                    $query->whereIn('user_id', $value);
 
                 } elseif ($key == 'id') {
 
                     $query->whereIn('id', $value);
 
-                } elseif ($key == 'user_id') {
+                } elseif ($key == 'tag_id') {
 
-                    $query->whereIn('user_id', $value);
+                    $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'hours') {
 
@@ -121,6 +114,7 @@ class Leave extends BaseModel
                }
            }
        }
+       
        $result = $query->paginate($this->pagesize);
        return $result;
    }
@@ -153,7 +147,7 @@ class Leave extends BaseModel
 
                 } elseif ($key == 'start_time') {
 
-                    $query->where('start_time','<' ,$value);
+                    $query->where('start_time', '<' ,$value);
 
                 } elseif ($key == 'tag_id') {
                         
