@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\DailyLeave::class,
         Commands\LeavedUserAnnualHours::class,
         Commands\DailyWaitProve::class,
+        Commands\EveryDayAnnualHours::class,
     ];
 
     /**
