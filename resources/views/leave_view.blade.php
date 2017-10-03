@@ -148,10 +148,10 @@
               </div></div>
               <div class="form-group"><div class="row">
                 <div class="col-md-6">
-                  <a href="#" class="btn btn-danger btn-block" id='agree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>同意代理</b></a>
+                  <a href="#" class="btn btn-danger btn-block" id='disagree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>不同意代理</b></a>
                 </div>
                 <div class="col-md-6">
-                  <a href="#" class="btn btn-info btn-block" id='disagree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>不同意代理</b></a>
+                  <a href="#" class="btn btn-info btn-block" id='agree_agent' data-toggle="modal" data-target="#myModalConfirm"><b>同意代理</b></a>
                 </div>
               </div></div>
             @elseif(in_array($model->tag_id,[2]) && !empty($leave_prove_process['minimanager']) &&in_array(Auth::getUser()->id,[$leave_prove_process['minimanager']->id]))
