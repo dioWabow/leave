@@ -679,13 +679,26 @@ $(function () {
         options.startDate = time.split(" - ")['0'];
         options.endDate = time.split(" - ")['1'];
       } else {
-        options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
-        options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+        @if($user->arrive_time == '0900')
+          options.startDate = yyyy+"-"+mm+"-"+dd+" 09:00";
+          options.endDate = yyyy+"-"+mm+"-"+dd+" 18:00";
+        @else
+          options.startDate = yyyy+"-"+mm+"-"+dd+" 09:30";
+          options.endDate = yyyy+"-"+mm+"-"+dd+" 18:30";
+        @endif
+        
       }
 
       options.timePicker = true;
       options.timePickerIncrement = 30;
       options.timePicker24Hour = true;
+      options.leave_compute = true;
+      options.minute_select = true;
+      @if($user->arrive_time == '0900')
+        options.minute_option = 00;
+      @else
+        options.minute_option = 30;
+      @endif
       options.minDate = yyyy + '-' + mm + '-' + dd;
       options.locale = {format: 'YYYY-MM-DD HH:mm'};
     }
