@@ -20,6 +20,19 @@ class ImageHelper
         $this->upload_path = storage_path() . '/app/public/';
     }
 
+    public function deleteFile($file_name, $folder = 'tmp')
+    {
+        if (Storage::delete('/public/' . $folder . '/' . $file_name)) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
     public function uploadImages($input_name, $folder = 'tmp',$file_name = "")
     {
         $this->_save_folder = $folder . '/';
