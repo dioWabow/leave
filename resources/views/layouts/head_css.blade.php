@@ -466,7 +466,59 @@ $(document).ready(function () {
     $('input[name="leave_type[available_date]"]').on("cancel.daterangepicker", function(ev, picker) {
       $(this).val('');
     });
+
+    $("input[name^=leave_type]").on("change", function(){
+      var id = $(this).val();
+      var deductions = ($(".leave_type_deductions" + id).prop("checked")) ? '1' : '0';
+      var reason = ($(".leave_type_reason" + id).prop("checked")) ? '1' : '0';
+      var prove = ($(".leave_type_prove" + id).prop("checked")) ? '1' : '0';
+      var available = ($(".leave_type_available" +id).prop("checked")) ? '1' : '0';
+
+      $.ajax({
+        type: "POST",
+        url: "{{ route('leave_type/update_ajax') }}",
+        dataType: "json",
+        data: {
+          "_token": "{{ csrf_token() }}",
+          id: id,
+          deductions: deductions,
+          prove: prove,
+          reason: reason,
+          available: available,
+        },
+        success: function(data) {
+          if (data.result) {
+            alert('修改成功');
+          }
+        },
+        error: function(jqXHR) {
+          alert("發生錯誤: " + jqXHR.status);
+        }
+      });
+    });
   });
+
+  function changePageSize(pagesize)
+  {
+      $("#frmSearch").submit();
+  }
+
+  function changeSort(sort)
+  {
+    order_by = "{{ $model->order_by }}";
+    order_way = "{{ $model->order_way }}";
+
+    $("#order_by").val(sort);
+
+    if (order_by == sort && order_way == "DESC") {
+        $("#order_way").val("ASC");
+    } else {
+        $("#order_way").val("DESC");
+    }
+
+    $("#frmSearch").submit();
+  }
+
 </script>
 @endif
 
