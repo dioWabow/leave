@@ -50,8 +50,8 @@
 											<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
 											<td>{{ $value->reason }}</td>
 											<td>{{ $value->hours }}</td>
-											<td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 1)class="text-red" @else class="text-black" @endif>
-                          @if ($value->start_time > Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
+											<td @if ( LeaveHelper::getDiffDaysLabel($value->start_time) <= 5)class="text-red" @else class="text-black" @endif>
+												@if ($value->start_time >= Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
                       </td>
 										</tr>
 									@endforeach

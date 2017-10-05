@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use WebHelper;
 use LeaveHelper;
+use TimeHelper;
 use ConfigHelper;
 use App\Team;
 use App\Type;
@@ -511,7 +512,7 @@ class LeavesManagerController extends Controller
         //取得該主管審核過的「已準假、不准假」 假單
         $search['tag_id'] = ['8', '9'];
         $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_leaves_id_today = $model->searchForHistoryInManager($serach);
+        $get_leaves_id_today = $model->searchForHistoryInManager($search);
 
         // 取得搜尋的區間為該主管不准假、已準的子單記錄 
         $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
