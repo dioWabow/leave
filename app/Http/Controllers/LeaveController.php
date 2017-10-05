@@ -745,7 +745,7 @@ class LeaveController extends Controller
 
     public function postUpload(Request $request)
     {
-        $leave = [];
+        $leave = $response = [];
         $leave['id'] = $request->all()['id'];
         $leave['prove'] = $this->loadModel($leave['id'])->prove;
 
@@ -769,24 +769,29 @@ class LeaveController extends Controller
                 $model->fill($leave);
                 
                 if ($model->save()) {
+                    $initialPreview = [];
+                    $initialPreviewConfig = [];
+                    foreach ($file_name as $value) {
 
-                    $response['initialPreview'] = [UrlHelper::getLeaveProveUrl(implode(',' , $file_name))];
-                    $response['initialPreviewConfig'] = [[
-                        'caption' => implode(',' , $file_name),
-                        'url' => route("leave/delete"),
-                        'extra' => ["_token" => csrf_token(),
-                          "id" => $model->id,
-                          "file" => implode(',' , $file_name),
-                        ]
-                    ]];
+                        $initialPreview[] = UrlHelper::getLeaveProveUrl($value);
+                        $initialPreviewConfig[] = [
+                            'caption' => $value,
+                            'url' => route("leave/delete"),
+                            'extra' => ["_token" => csrf_token(),
+                            "id" => $model->id,
+                            "file" => $value,
+                            ],
+                        ];
+
+                    }
+
+                    $response['initialPreview'] = $initialPreview;
+                    $response['initialPreviewConfig'] = $initialPreviewConfig;
 
                     return response()->json($response); 
-
                 } else {
 
-                    $response = array(
-                      'message' => '更新資料庫失敗',
-                    );
+                    $response = ['message' => '更新資料庫失敗'];
                     return response()->json($response); 
 
                 }

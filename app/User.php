@@ -19,15 +19,12 @@ class User extends BaseModel
         'role',
         'status',
         'job_seek',
-        'employee_no',
         'nickname',
         'sex',
         'birthday',
         'avatar',
         'enter_date',
         'leave_date',
-        'status',
-        'job_seek',
         'arrive_time',
         'order_by',
         'order_way',
@@ -187,7 +184,14 @@ class User extends BaseModel
 
     public static function getUserByAnnualHoursZero()
     {
-        $result = self::where('annual_hours','0')
+        $result = self::where('annual_hours','0')->get();
+        return $result;
+    }
+
+    public static function checkEmployeeNo($employee_no,$id)
+    {
+        $result = self::where('employee_no',$employee_no)
+            ->where('id' ,'!=' , $id)
             ->get();
         return $result;
     }
