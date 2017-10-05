@@ -71,7 +71,7 @@ class SystemConfController extends Controller
 
             if ( in_array( $key , ["company_website" , "company_rules"] ) ) {
 
-                if (!preg_match('/^(http:\/\/)/', $input[$key])) {
+                if ( !preg_match('/^(http:\/\/)/', $input[$key] ) && !preg_match('/^(https:\/\/)/', $input[$key] ) ) {
 
                     $input[$key] = 'http://' . $input[$key];
 

@@ -328,11 +328,6 @@
     $option.initialPreviewAsData = true;
     @endif
 
-    $(".fileinput-remove-button").bind("click",function(){
-        console.log(1);
-        $("remove_file").val("true");
-    });
-
     $("#config_company_logo").fileinput($option);
 </script>
 @stop
