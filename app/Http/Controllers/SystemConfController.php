@@ -39,11 +39,45 @@ class SystemConfController extends Controller
      public function postUpdate(Request $request)
      {
         $input = $request->input('config');
+        $remove_image = $request->input('remove_file');
+
+        $company_logo_before = ConfigHelper::getConfigValueByKey("company_logo");
 
         $image_url = ImageHelper::uploadImages("company_logo",$this->image_path,"company_logo");
         if (!empty($image_url)) {
 
+            if ( $company_logo_before != $image_url ) {
+
+                ImageHelper::deleteFile($company_logo_before , $this->image_path);
+
+            }
+
             $input["company_logo"] = $image_url;
+
+        }elseif ( $remove_image == "true") {
+
+            if ( $company_logo_before != $image_url ) {
+
+                ImageHelper::deleteFile($company_logo_before , $this->image_path);
+
+            }
+
+            $input["company_logo"] = "";
+
+        }
+
+
+        foreach ($input as $key => $value) {
+
+            if ( in_array( $key , ["company_website" , "company_rules"] ) ) {
+
+                if ( !preg_match('/^(http:\/\/)/', $input[$key] ) && !preg_match('/^(https:\/\/)/', $input[$key] ) ) {
+
+                    $input[$key] = 'http://' . $input[$key];
+
+                }
+
+            }
 
         }
 
@@ -54,6 +88,15 @@ class SystemConfController extends Controller
             if (!empty($value)) {
 
                 if (!$model->updateConfigValueByKey($key,$value)) {
+
+                    $error = true;
+
+                }
+
+            }else{
+
+
+                if (!$model->updateConfigValueByKey($key,"")) {
 
                     $error = true;
 
@@ -90,15 +133,6 @@ class SystemConfController extends Controller
 
         }
         return view('system_conf', compact('config'));
-    }
-   
-    public function testEmail(Request $request)
-    {
-        // $EmailHelper = new EmailHelper();
-        // $EmailHelper->to = 'eno@wabow.com';
-        // $EmailHelper->notify(new AgentNoticeEmail("eno","2017-08-18 09:00"));
-        LeaveDay::getTodayLeave();
-
     }
    
 }

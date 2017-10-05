@@ -264,13 +264,13 @@
                             <input type="number" class="form-control" id="config_boss_days" name="config[boss_days]" placeholder="需要大BOSS審核的天數" value="{{ $config['boss_days'] }}">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!--div class="form-group">
                         <label for="config_google_json" class="col-sm-3 control-label">董事天數</label>
 
                             <div class="col-sm-9">
                             <input type="number" class="form-control" id="config_boss_days" name="config[director_days]" placeholder="需要董事審核的天數" value="{{ $config['director_days'] }}">
                             </div>
-                        </div>
+                        </div-->
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
