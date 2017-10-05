@@ -470,20 +470,27 @@ $(document).ready(function () {
 </script>
 @endif
 
-<!-- 我要請假用 -->
-@if(Request::is('leave/*','leave_assist/*'))
+<!-- 協助請假 -->
+@if(Request::is('leave_assist/getIndex'))
+  <script>
+  $(function () {
+    $(".clickable-row").click(function(e) {
+      if($(e.target).hasClass('ignore')) return;
+
+      var ignore = ['input', 'a', 'button', 'textarea', 'label'];
+      var clicked = e.target.nodeName.toLowerCase();
+      if($.inArray(clicked, ignore) > -1) return;
+      
+      window.location = $(this).data('href');
+    });
+  });
+  </script>
+@endif
+<!-- 我要請假用、協助請假 -->
+@if(Request::is('leave/*','leave_assist/create/*'))
 <script>
 $(function () {
-  $(".clickable-row").click(function(e) {
-    if($(e.target).hasClass('ignore')) return;
-
-    var ignore = ['input', 'a', 'button', 'textarea', 'label'];
-    var clicked = e.target.nodeName.toLowerCase();
-    if($.inArray(clicked, ignore) > -1) return;
-    
-    window.location = $(this).data('href');
-  });
-
+  
   var $leave_dayrange           = $('#leave_dayrange');
   var $leave_timepicker         = $('#leave_timepicker');
   var $leave_dayrange_allday    = $('#leave_dayrange_allday');
