@@ -24,7 +24,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'user.employee_no' => 'required|numeric|max:7',
+            'user.employee_no' => 'required|numeric|digits_between:1,7',
             'user.birthday' => 'required|Date',
             'user.enter_date' => 'required|Date',
             'user.leave_date' => 'Date|Nullable',

@@ -134,7 +134,7 @@ return [
         'user.employee_no' => [
             'required' => '請輸入員工編號',
             'numeric' => '員工編號僅限數字',
-            'max' => '員工編號最多7碼',
+            'digits_between' => '員工編號最多7碼',
         ],
         'user.birthday' => [
             'required' => '請輸入生日',
