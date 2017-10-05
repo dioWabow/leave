@@ -300,10 +300,16 @@ $(document).ready(function () {
   $(document).on('click', '.button-edit', prepareEdit);
 
   // 修改點下去 抓出id 丟給 editButton
+  // 顏色丟給 edit_color
   $(document).on('click', '.button-edit', function(event){
+
     $this = $(this);
+
     $id = $this.attr("data-owner-id");
     $('#editButton').val($id);
+
+    $team_color = $this.attr("data-color");
+    $('#edit_color').css('backgroundColor', $team_color);
 
   });
 
