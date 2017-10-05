@@ -791,16 +791,18 @@ class LeaveController extends Controller
                     return response()->json($response); 
                 } else {
 
-                    $response = ['message' => '更新資料庫失敗'];
+                    $response = [
+                        'message' => '更新資料庫失敗',
+                    ];
                     return response()->json($response); 
 
                 }
 
             } else {
 
-                $response = array(
-                  'message' => '上傳證明失敗',
-                );
+                $response = [
+                    'message' => '上傳證明失敗',
+                ];
                 return response()->json($response); 
 
             }
@@ -827,25 +829,25 @@ class LeaveController extends Controller
             
             if ($model->save()) {
 
-                $response = array(
-                  'message' => '刪除成功',
-                );
+                $response = [
+                    'message' => '刪除成功'
+                ,];
                 return response()->json($response); 
 
             } else {
 
-                $response = array(
-                  'message' => '更新資料庫失敗',
-                );
+                $response = [
+                    'message' => '更新資料庫失敗',
+                ];
                 return response()->json($response); 
 
             }
 
         } else {
 
-            $response = array(
+            $response = [
               'message' => '刪除檔案失敗',
-            );
+            ];
             return response()->json($response); 
 
         }
@@ -863,9 +865,9 @@ class LeaveController extends Controller
         $date_list = LeaveHelper::calculateWorkingDate($start_time,$end_time);
         $hours = LeaveHelper::calculateRangeDateHours($date_list);
 
-        $response = array(
+        $response = [
           'hours' => $hours,
-        );
+        ];
         return response()->json($response);
     }
 
