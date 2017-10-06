@@ -616,7 +616,7 @@
                 allowedPreviewTypes: ['image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object'],
                 previewTemplates: {},
                 previewSettings: {
-                    image: {width: "100%", height: "160px"},
+                    image: {width: "auto", height: "160px"},
                     html: {width: "213px", height: "160px"},
                     text: {width: "213px", height: "160px"},
                     video: {width: "auto", height: "100%", 'max-width': "100%"},

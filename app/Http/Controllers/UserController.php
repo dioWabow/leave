@@ -134,6 +134,8 @@ class UserController extends Controller
      {
         $input = $request->input('user');
         $input['job_seek'] = 0;
+        $remove_image = $request->input('remove_file');
+
         if ($input['status'] == 2) {
 
             $input['job_seek'] = 1;
@@ -167,10 +169,27 @@ class UserController extends Controller
 
         //上傳圖片 注意：須於 public 下建立連結 - php artisan storage:link 
         $filename = ImageHelper::uploadImages("avatar",$this->image_path,$input['nickname']);
- 
+        $avatar_before = $model->avatar;
+
         if (!empty($filename)) {
 
+            if ( $avatar_before != $filename && !empty($avatar_before)) {
+
+                ImageHelper::deleteFile($avatar_before , $this->image_path);
+
+            }
+
             $input["avatar"] = $filename;
+
+        } elseif ( $remove_image == "true") {
+
+            if ( $avatar_before != $filename ) {
+
+                ImageHelper::deleteFile($avatar_before , $this->image_path);
+
+            }
+            
+            $input["avatar"] = NULL;
 
         }
 
