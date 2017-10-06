@@ -459,7 +459,7 @@ class LeaveController extends Controller
 
         $leave_response_reverse = [];
         foreach($leave_response as $response) {
-            $key = TimeHelper::changeDateValue($response->created_at,['+,8,hour'],'Y-m-d');
+            $key = TimeHelper::changeDateFormat($response->created_at,'Y-m-d');
 
             $leave_response_reverse[$key][] = $response;
 
@@ -587,7 +587,7 @@ class LeaveController extends Controller
 
                 }
 
-            } elseif($model->tag_id == '9') {
+            } elseif(in_array($model->tag_id,['4','9'])) {
 
                 //狀態=0代表取消
                 if (!empty($input['status'])) {

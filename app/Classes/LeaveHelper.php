@@ -1159,6 +1159,7 @@ class LeaveHelper
      */
     public static function getExcludeManagerUserId($user_id)
     {
+        $result = [];
         // 排除主管自己的user_id
         foreach ($user_id as $team_user_id) {
             
