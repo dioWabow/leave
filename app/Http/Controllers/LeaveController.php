@@ -830,8 +830,8 @@ class LeaveController extends Controller
             if ($model->save()) {
 
                 $response = [
-                    'message' => '刪除成功'
-                ,];
+                    'message' => '刪除成功',
+                ];
                 return response()->json($response); 
 
             } else {
