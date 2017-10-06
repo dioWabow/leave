@@ -75,7 +75,6 @@ var editMenuItem = function() {
 
     target.data("color", newColor);
     target.find("> .button-edit").attr('data-color', newColor);
-    console.log(target.attr('data-color', newColor));
 
     $("#menu-editor").fadeOut();
 };
