@@ -491,7 +491,7 @@
                 '    <div class="kv-fileinput-error"></div>\n' +
                 '    </div>\n' +
                 '</div>';
-            tClose = '<div class="close fileinput-remove">&times;</div>\n';
+            tClose = '<input type="hidden" id="remove_file" name="remove_file" value="false">';
             tFileIcon = '<i class="glyphicon glyphicon-file kv-caption-icon"></i>';
             tCaption = '<div tabindex="500" class="form-control file-caption {class}">\n' +
                 '   <div class="file-caption-name"></div>\n' +
@@ -616,7 +616,7 @@
                 allowedPreviewTypes: ['image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object'],
                 previewTemplates: {},
                 previewSettings: {
-                    image: {width: "auto", height: "160px"},
+                    image: {width: "100%", height: "160px"},
                     html: {width: "213px", height: "160px"},
                     text: {width: "213px", height: "160px"},
                     video: {width: "auto", height: "100%", 'max-width': "100%"},
@@ -3530,6 +3530,7 @@
                 self.$caption.attr('title', '');
                 $h.addCss(self.$container, 'file-input-new');
                 self._validateDefaultPreview();
+                $("#remove_file").val("true");
             }
             if (self.$container.find($h.FRAMES).length === 0) {
                 if (!self._initCaption()) {
