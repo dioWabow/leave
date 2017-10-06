@@ -427,7 +427,7 @@ class LeaveDay extends BaseModel
 
     public function search($year, $month)
     {
-    	$query = $this->select('leaves.user_id', 'leaves.type_id', 'leaves.tag_id', 'leaves_days.hours', 'leaves_days.start_time')
+    	$query = $this->select('leaves.user_id', 'leaves.tag_id', 'leaves_days.type_id', 'leaves_days.hours', 'leaves_days.start_time')
 		    ->leftJoin('leaves', 'leaves_days.leave_id', '=', 'leaves.id')
             ->where('leaves.tag_id', '9')
             ->whereYear('leaves_days.start_time', $year);
