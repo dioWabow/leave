@@ -55,7 +55,7 @@
 									<div class="input-group my-colorpicker2">
 										<input type="text" class="form-control" id="editInputColor" placeholder="團隊顏色" >
 										<div class="input-group-addon">
-											<i></i>
+											<i id="edit_color"></i>
 										</div>
 									</div>
 									<!-- /.input group -->
@@ -73,7 +73,7 @@
 										<span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
 											<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 										</span>
-										<span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$team_data->id}}">
+										<span class="button-edit btn btn-default btn-xs pull-right" data-color="{{$team_data->color}}" data-owner-id="{{$team_data->id}}">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</span>
                                             @if ($team_data->has_children)
@@ -85,7 +85,7 @@
                                                     <span class="button-delete btn btn-default btn-xs pull-right" data-owner-id="{{$team_data_children->id}}">
                                                         <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                                                     </span>
-                                                    <span class="button-edit btn btn-default btn-xs pull-right" data-owner-id="{{$team_data_children->id}}">
+                                                    <span class="button-edit btn btn-default btn-xs pull-right" data-color="{{$team_data_children->color}}" data-owner-id="{{$team_data_children->id}}">
                                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                                     </li>
                                                 @endif

@@ -68,9 +68,13 @@ var editMenuItem = function() {
     var target = $('[data-id="' + targetId + '"]');
 
     var newName = $("#editInputName").val();
+    var newColor = $("#editInputColor").val();
 
     target.data("name", newName);
     target.find("> .dd-handle").html(newName);
+
+    target.data("color", newColor);
+    target.find("> .button-edit").attr('data-color', newColor);
 
     $("#menu-editor").fadeOut();
 };

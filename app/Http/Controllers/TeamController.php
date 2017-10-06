@@ -78,7 +78,7 @@ class TeamController extends Controller
                 "<span class='button-delete btn btn-default btn-xs pull-right' data-owner-id='".$id."'>".
                 "<i class='fa fa-times-circle-o' aria-hidden='true'></i>".
                 "</span>".
-                "<span class='button-edit btn btn-default btn-xs pull-right' data-owner-id='".$id."'>".
+                "<span class='button-edit btn btn-default btn-xs pull-right' data-color='".$color."' data-owner-id='".$id."'>".
                 "<i class='fa fa-pencil' aria-hidden='true'></i>".
                 "</span>".
                 "</li>";
