@@ -231,6 +231,8 @@ $(function () {
 <script>
 $(document).ready(function () {
 
+  var judge_Drop = 0;
+
   var nestableChange = function (e) {
     var list = e.length ? e : $(e.target), output = list.data('output');
 
@@ -239,8 +241,20 @@ $(document).ready(function () {
         url: "{{route('teams/update_drop')}}",
         data: {
           "_token": "{{ csrf_token() }}", 
-          "team_json": window.JSON.stringify(list.nestable('serialize'))
-        }
+          "team_json": window.JSON.stringify(list.nestable('serialize')),
+        },
+        success: function(data){
+          if (judge_Drop == 0) {
+            judge_Drop = 1;
+          } else {
+            if(data == "true") {
+              alert('更新成功');
+            } else {
+              alert('沒有提供排序服務,請見諒');
+            }
+          }
+          console.log(data);
+        },
     }).fail(function(jqXHR, textStatus, errorThrown){
         alert("更新失敗!");
     });

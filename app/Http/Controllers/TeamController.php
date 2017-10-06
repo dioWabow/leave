@@ -142,20 +142,43 @@ class TeamController extends Controller
     {
         $team = json_decode($request["team_json"]);
 
+        $result = false;
+
+        $get_old_team = Team::getAllTeam()->toArray();
+        $old_team = [];
+
+        foreach ($get_old_team as $key => $value) {
+            $old_team[$value['id']] = $value;
+        }
+
         foreach ($team as $key => $value) {
 
             if ( !empty($value->children) ) {
+
                 foreach ( $value->children as $key_children => $value_children) {
+
+                    if ($old_team[$value_children->id]['parent_id'] != $value->id) {
+
+                        $result = true;
+
+                    }
 
                     Team::UpdateTeamParentId($value_children->id,$value->id);
 
                 }
             }
 
+            if ($old_team[$value->id]['parent_id'] != 0) {
+
+                $result = true;
+
+            }
+
             Team::UpdateTeamParentId($value->id,0);
 
         }
         //return $team;
+        return json_encode($result);
     }
 
     public function ajaxDeleteData(Request $request)
