@@ -745,7 +745,7 @@ class LeaveController extends Controller
 
     public function postUpload(Request $request)
     {
-        $leave = [];
+        $leave = $response = [];
         $leave['id'] = $request->all()['id'];
         $leave['prove'] = $this->loadModel($leave['id'])->prove;
 
@@ -769,33 +769,40 @@ class LeaveController extends Controller
                 $model->fill($leave);
                 
                 if ($model->save()) {
+                    $initialPreview = [];
+                    $initialPreviewConfig = [];
+                    foreach ($file_name as $value) {
 
-                    $response['initialPreview'] = [UrlHelper::getLeaveProveUrl(implode(',' , $file_name))];
-                    $response['initialPreviewConfig'] = [[
-                        'caption' => implode(',' , $file_name),
-                        'url' => route("leave/delete"),
-                        'extra' => ["_token" => csrf_token(),
-                          "id" => $model->id,
-                          "file" => implode(',' , $file_name),
-                        ]
-                    ]];
+                        $initialPreview[] = UrlHelper::getLeaveProveUrl($value);
+                        $initialPreviewConfig[] = [
+                            'caption' => $value,
+                            'url' => route("leave/delete"),
+                            'extra' => ["_token" => csrf_token(),
+                            "id" => $model->id,
+                            "file" => $value,
+                            ],
+                        ];
+
+                    }
+
+                    $response['initialPreview'] = $initialPreview;
+                    $response['initialPreviewConfig'] = $initialPreviewConfig;
 
                     return response()->json($response); 
-
                 } else {
 
-                    $response = array(
-                      'message' => '更新資料庫失敗',
-                    );
+                    $response = [
+                        'message' => '更新資料庫失敗',
+                    ];
                     return response()->json($response); 
 
                 }
 
             } else {
 
-                $response = array(
-                  'message' => '上傳證明失敗',
-                );
+                $response = [
+                    'message' => '上傳證明失敗',
+                ];
                 return response()->json($response); 
 
             }
@@ -822,25 +829,25 @@ class LeaveController extends Controller
             
             if ($model->save()) {
 
-                $response = array(
-                  'message' => '刪除成功',
-                );
+                $response = [
+                    'message' => '刪除成功',
+                ];
                 return response()->json($response); 
 
             } else {
 
-                $response = array(
-                  'message' => '更新資料庫失敗',
-                );
+                $response = [
+                    'message' => '更新資料庫失敗',
+                ];
                 return response()->json($response); 
 
             }
 
         } else {
 
-            $response = array(
+            $response = [
               'message' => '刪除檔案失敗',
-            );
+            ];
             return response()->json($response); 
 
         }
@@ -858,9 +865,9 @@ class LeaveController extends Controller
         $date_list = LeaveHelper::calculateWorkingDate($start_time,$end_time);
         $hours = LeaveHelper::calculateRangeDateHours($date_list);
 
-        $response = array(
+        $response = [
           'hours' => $hours,
-        );
+        ];
         return response()->json($response);
     }
 

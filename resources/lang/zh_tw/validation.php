@@ -131,10 +131,29 @@ return [
         'leave_type.end_time' => [
             'Date' => '結束時間請填入日期',
         ],
+        'user.role' => [
+            'required' => '請選擇員工權限',
+            'in' => '員工權限錯誤',
+        ],
+        'user.status' => [
+            'required' => '請選擇員工狀態',
+            'numeric' => '員工狀態僅限數字',
+            'in' => '員工狀態錯誤',
+        ],
         'user.employee_no' => [
             'required' => '請輸入員工編號',
             'numeric' => '員工編號僅限數字',
             'digits_between' => '員工編號最多7碼',
+        ],
+        'user.name' => [
+            'required' => '請輸入姓名',
+            'string' => '姓名請填入字串',
+            'max' => '姓名最大20字元',
+        ],
+        'user.nickname' => [
+            'required' => '請輸入稱呼',
+            'string' => '稱呼請填入字串',
+            'max' => '稱呼最大20字元',
         ],
         'user.birthday' => [
             'required' => '請輸入生日',
@@ -149,6 +168,10 @@ return [
         ],
         'user.avatar' => [
             'image' => '大頭貼請選擇圖片',
+        ],
+        'user.arrive_time' => [
+            'required' => '請選擇上班時間',
+            'in' => '上班時間錯誤',
         ],
         'leave.leave_id' => [
             'required' => '至少勾選一項',

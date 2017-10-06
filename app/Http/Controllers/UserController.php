@@ -141,12 +141,33 @@ class UserController extends Controller
 
         }
 
+        //員工編號不得重複
+        if (count(User::checkEmployeeNo($input['employee_no'],$input['id'])) > 0) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '員工編號不得重複']);
+
+        }
+
+        //代理人必填
+        if (empty($input['agent'])) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '代理人必選']);
+
+        }
+
+        //團隊必填
+        if (empty($input['team'])) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '團隊必選']);
+
+        }
+
         //user資料儲存
         $model = $this->loadModel($input['id']);
 
         //上傳圖片 注意：須於 public 下建立連結 - php artisan storage:link 
         $filename = ImageHelper::uploadImages("avatar",$this->image_path,$input['nickname']);
-
+ 
         if (!empty($filename)) {
 
             $input["avatar"] = $filename;

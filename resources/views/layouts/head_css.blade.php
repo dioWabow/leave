@@ -800,11 +800,12 @@ $(function () {
       });
 
       $('#search_daterange').val('');
-
+      
       $("#leave_view_fileupload").fileinput({
           uploadUrl: "{{route('leave/upload')}}",
           uploadAsync: false,
           maxFileCount: 5,
+          validateInitialCount: true,
           overwriteInitial: false,
           showUpload: false,
           showRemove: false,
