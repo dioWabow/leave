@@ -2,6 +2,8 @@
 
 namespace Illuminate\Auth;
 
+use App\UserTeam;
+
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
 /**
@@ -82,5 +84,75 @@ trait GuardHelpers
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * 取得是否有小主管權限
+     *
+     * @return array(TeamObj)/false
+     */
+     public function hasMiniManagement()
+     {
+         $Teams = false;
+         if (!empty($this->user()->getAuthIdentifier())) {
+             
+             $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
+ 
+         }
+ 
+         return $Teams;
+     }
+ 
+    /**
+    * 取得是否有主管權限
+    *
+    * @return array(TeamObj)/false
+    */
+    public function hasManagement()
+    {
+        $Teams = false;
+        if (!empty($this->user()->getAuthIdentifier())) {
+
+            $Teams = UserTeam::getTeamIdByUserIdInManagement($this->user()->getAuthIdentifier());
+
+        }
+
+        return $Teams;
+    }
+
+    /**
+    * 取得是否有HR權限
+    *
+    * @return true/false
+    */
+    public function hasHr()
+    {
+        if ( $this->user()->role == "hr" || $this->user()->role == "admin" ) {
+
+            return true;
+
+        }else{
+
+            return false;
+
+        }
+    }
+
+    /**
+    * 取得是否有BOSS權限
+    *
+    * @return true/false
+    */
+    public function hasAdmin()
+    {
+        if ( $this->user()->role == "admin" ) {
+
+            return true;
+
+        }else{
+
+            return false;
+
+        }
     }
 }
