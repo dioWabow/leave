@@ -775,10 +775,12 @@ $(function () {
       options.minute_select = true;
       @if($user->arrive_time == '0900')
         options.minute_option = 00;
+        options.minDate = yyyy + '-' + mm + '-' + dd + ' 09:00';
       @else
         options.minute_option = 30;
+        options.minDate = yyyy + '-' + mm + '-' + dd + ' 09:30';
       @endif
-      options.minDate = yyyy + '-' + mm + '-' + dd;
+      
       options.locale = {format: 'YYYY-MM-DD HH:mm'};
     }
 

@@ -1382,6 +1382,9 @@ class LeaveHelper
         $leave_prove = self::getLeaveProveProcess($leave_id);
         $agent_user_id = Auth::getUser()->id;
 
+        // 同步審核不需要memo
+        unset($input['memo']);
+
         while(true){
 
             $leave = Leave::find($leave_id);

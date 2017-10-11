@@ -569,6 +569,22 @@ class LeaveController extends Controller
 
             }
 
+        //BOSS准假
+        }  elseif (in_array($model->tag_id,['4']) && !empty(Auth::hasAdmin())) {
+
+            //狀態=0代表不準假
+            if (empty($input['status'])) {
+
+                $input['tag_id'] = '8';
+                $message = '不允許該假單的申請';
+
+            } else {
+
+                $input['tag_id'] = '9';
+                $message = '允許該假單的申請';
+
+            }
+
         //主管准假
         } elseif (!empty($leave_prove_process['manager']) && Auth::getUser()->id == $leave_prove_process['manager']->id) {
 
@@ -598,24 +614,6 @@ class LeaveController extends Controller
                 }
 
             }
-            
-
-        //BOSS准假
-        }  elseif (in_array($model->tag_id,['4']) && !empty(Auth::hasAdmin())) {
-
-            //狀態=0代表不準假
-            if (empty($input['status'])) {
-
-                $input['tag_id'] = '8';
-                $message = '不允許該假單的申請';
-
-            } else {
-
-                $input['tag_id'] = '9';
-                $message = '允許該假單的申請';
-
-            }
-
 
         } else {
 

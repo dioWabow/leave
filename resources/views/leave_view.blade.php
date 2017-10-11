@@ -73,7 +73,6 @@
             @else
               待核准
             @endif
-
             </span>
           </h3>
           <br />
@@ -82,7 +81,7 @@
               @php ($index = 1)
               @foreach($leave_prove_process as $key => $leave_prove)
                 <li>
-                  <a href="javascript: void(0)" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="disabled"  @endif>
+                  <a @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="disabled" @else class="on" @endif>
                     <span class="step_no">
                       <img src="{{UrlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
                     </span>

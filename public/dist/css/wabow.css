@@ -70,6 +70,17 @@ body {
     color: #666;
 }
 
+.wizard_horizontal ul.wizard_steps li a.on:before {
+    content: "";
+    position: absolute;
+    height: 4px;
+    background: #3C8DBC;
+    top: 30px;
+    width: 100%;
+    z-index: 4;
+    left: -35%;
+}
+
 .wizard_horizontal ul.wizard_steps li a:before {
     content: "";
     position: absolute;
@@ -78,7 +89,7 @@ body {
     top: 30px;
     width: 100%;
     z-index: 4;
-    left: 0;
+    left: -35%;
 }
 
 .wizard_horizontal ul.wizard_steps li a.disabled .step_no {
@@ -111,15 +122,8 @@ body {
 }
 
 .wizard_horizontal ul.wizard_steps li:first-child a:before {
-    left: 50%;
+    display: none;
 }
-
-.wizard_horizontal ul.wizard_steps li:last-child a:before {
-    right: 50%;
-    width: 50%;
-    left: auto;
-}
-
 
 /**-------**/
 

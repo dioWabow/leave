@@ -499,8 +499,12 @@
             if (this.timePicker && this.timePickerIncrement)
                 this.endDate.minute(Math.round(this.endDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
 
-            if (this.endDate.isBefore(this.startDate))
+            if (this.endDate.isBefore(this.startDate)) {
+
                 this.endDate = this.startDate.clone();
+                this.container.find('.right .hourselect').val(this.container.find('.left .hourselect').val());
+            
+            }
 
             if (this.maxDate && this.endDate.isAfter(this.maxDate))
                 this.endDate = this.maxDate;
