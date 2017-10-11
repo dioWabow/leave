@@ -78,7 +78,7 @@ body {
     top: 30px;
     width: 100%;
     z-index: 4;
-    left: -35%;
+    left: -40%;
 }
 
 .wizard_horizontal ul.wizard_steps li a:before {
