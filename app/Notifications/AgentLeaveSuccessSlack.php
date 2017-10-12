@@ -23,12 +23,12 @@ class AgentLeaveSuccessSlack extends Notification
      *
      * @return void
      */
-    public function __construct($name,$start_time,$end_time,$to)
+    public function __construct($name,$time,$to)
     {
         $this->title .= "假單職代通知：";
 
         $text = "";
-        $text .= "您於 ".$start_time." 至 ".$end_time." 期間為 ".$name." 的職務代理人。\n";
+        $text .= "您於 ".$time." 期間為 ".$name." 的職務代理人。\n";
         $text .= "注意, 任職職務代理人期間無法請假(病假除外)";
         $this->text .= $text;
 

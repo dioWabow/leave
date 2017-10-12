@@ -13,18 +13,16 @@ class UserLeaveSuccessEmail extends Notification
 {
     use Queueable;
 
-    public $start_time = "";//請假時間
-    public $end_time = "";//請假時間
+    public $time = "";//請假時間
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($start_time,$end_time)
+    public function __construct($time)
     {
-        $this->start_time = $start_time;
-        $this->end_time = $end_time;
+        $this->time = $time;
     }
 
     /**
@@ -49,7 +47,7 @@ class UserLeaveSuccessEmail extends Notification
         return (new MailMessage)
             ->from(Config::getConfigValueByKey("smtp_from") , Config::getConfigValueByKey("smtp_display"))
             ->subject("假單通過通知 - ". Config::getConfigValueByKey("smtp_display"))
-            ->line('您於 '.$this->start_time." 至 ".$this->end_time."期間")
+            ->line('您於 '. $this->time ."期間")
             ->line('的請假已通過審核')
             ->line('')
             ->line('祝您假期愉快');

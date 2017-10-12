@@ -1432,10 +1432,10 @@ class LeaveHelper
                         if ( $input['tag_id'] == '9' ) {
 
                             //送通知給請假人
-                            SlackHelper::notify(new UserLeaveSuccessSlack( TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $leave->fetchUser->nickname )  );
+                            SlackHelper::notify(new UserLeaveSuccessSlack( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) , $leave->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $leave->fetchUser->email;
-                            $EmailHelper->notify(new UserLeaveSuccessEmail( TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                            $EmailHelper->notify(new UserLeaveSuccessEmail( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) ) );
 
                             //送通知給職代
                             $agent_list = LeaveAgent::getAgentByLeaveId($leave->id);
@@ -1443,10 +1443,10 @@ class LeaveHelper
 
                                 foreach ( $agent_list as $key => $agent) {
 
-                                    SlackHelper::notify(new AgentLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $agent->fetchUser->nickname )  );
+                                    SlackHelper::notify(new AgentLeaveSuccessSlack( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
                                     $EmailHelper = new EmailHelper;
                                     $EmailHelper->to = $agent->fetchUser->email;
-                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
 
                                 }
 
@@ -1458,10 +1458,10 @@ class LeaveHelper
 
                                 foreach ( $other_list as $key => $other) {
 
-                                    SlackHelper::notify(new OtherLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $other->fetchUser->nickname )  );
+                                    SlackHelper::notify(new OtherLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) , $other->fetchUser->nickname )  );
                                     $EmailHelper = new EmailHelper;
                                     $EmailHelper->to = $other->fetchUser->email;
-                                    $EmailHelper->notify(new OtherLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                                    $EmailHelper->notify(new OtherLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) ) );
 
                                 }
 
@@ -1521,10 +1521,10 @@ class LeaveHelper
                     }
 
                     //送通知給請假人
-                    SlackHelper::notify(new UserLeaveSuccessSlack( TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $leave->fetchUser->nickname )  );
+                    SlackHelper::notify(new UserLeaveSuccessSlack( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) , $leave->fetchUser->nickname )  );
                     $EmailHelper = new EmailHelper;
                     $EmailHelper->to = $leave->fetchUser->email;
-                    $EmailHelper->notify(new UserLeaveSuccessEmail( TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                    $EmailHelper->notify(new UserLeaveSuccessEmail( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) ) );
 
                     //送通知給職代
                     $agent_list = LeaveAgent::getAgentByLeaveId($leave->id);
@@ -1532,10 +1532,10 @@ class LeaveHelper
 
                         foreach ( $agent_list as $key => $agent) {
 
-                            SlackHelper::notify(new AgentLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $agent->fetchUser->nickname )  );
+                            SlackHelper::notify(new AgentLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $agent->fetchUser->email;
-                            $EmailHelper->notify(new AgentLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                            $EmailHelper->notify(new AgentLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
 
                         }
 
@@ -1547,10 +1547,10 @@ class LeaveHelper
 
                         foreach ( $other_list as $key => $other) {
 
-                            SlackHelper::notify(new OtherLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') , $other->fetchUser->nickname )  );
+                            SlackHelper::notify(new OtherLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) , $other->fetchUser->nickname )  );
                             $EmailHelper = new EmailHelper;
                             $EmailHelper->to = $other->fetchUser->email;
-                            $EmailHelper->notify(new OtherLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeTimeByArriveTime($leave->start_time,$leave->user_id,'+') , TimeHelper::changeTimeByArriveTime($leave->end_time,$leave->user_id,'+') ) );
+                            $EmailHelper->notify(new OtherLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $leave->user_id ) ) );
 
                         }
 

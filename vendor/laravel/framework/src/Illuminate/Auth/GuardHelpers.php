@@ -155,4 +155,15 @@ trait GuardHelpers
 
         }
     }
+
+    /**
+    * 取得是否存在有主管的Team
+    *
+    * @return true/false
+    */
+    public function hasTeamAndManager()
+    {
+        $result = UserTeam::hasTeamAndManager( $this->user()->id );
+        return $result;
+    }
 }

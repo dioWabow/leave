@@ -229,5 +229,33 @@ class UserTeam extends BaseModel
         $result = self::where("role", 'manager')->get();
         return $result;
     }
+
+    public static function hasTeamAndManager( $user_id )
+    {
+        $has_team_manager = false;
+        $team = self::where("user_id", $user_id )
+            ->where( "role" , "user" )
+            ->get();
+
+        if ( !empty($team) ) {
+
+            foreach ($team as $key => $value) {
+
+                $team_manager = self::where("team_id", $value->team_id )
+                    ->where( "role" , "manager" )
+                    ->get();
+
+                if ( !empty( $team_manager ) ) {
+
+                    $has_team_manager = true;
+
+                }
+
+            }
+
+        }
+
+        return $has_team_manager;
+    }
     
 }
