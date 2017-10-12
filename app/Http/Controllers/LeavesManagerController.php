@@ -42,6 +42,7 @@ class LeavesManagerController extends Controller
         //先取得從側邊欄進入的權限
         $this->role = $request->role;
     }
+    
    /**
      * 列表-等待核准 Prvoe
      * 主管 =>該team下 小主管審核過的單 3
@@ -187,6 +188,7 @@ class LeavesManagerController extends Controller
             'search' ,'getRole', 'model', 'dataProvider'
         ));
     }
+
     /**
      * 列表-歷史紀錄 History
      * 抓出該主管審核過的單 tag在已準假、不准假 8,9
@@ -280,11 +282,11 @@ class LeavesManagerController extends Controller
     }
     
     /**
-    * 新增 & 修改 => leaveResponses & Leave
-    *
-    * @param Request $request
-    * @return Redirect
-    */
+     * 新增 & 修改 => leaveResponses & Leave
+     *
+     * @param Request $request
+     * @return Redirect
+     */
     public function postInsert(ManagerProveRequest $request)
     {
         $getRole = $this->role;

@@ -1175,17 +1175,18 @@ class LeaveHelper
     }
  
     /**
-    * 傳入該代理人的agent_id(Auth::user()->id)
-    * 
-    * 取得該代理人所代理的的假單數量
-    * 
-    */
+     * 
+     * 取得該代理人所代理的的假單數量
+     * 狀態在已準假(9)且 >= 今天日期
+     * 
+     */
     public static function getAgentLeavesTotal()
     {
         $id = Auth::user()->id;
         $today = Carbon::now()->format('Y-m-d');
         $leave_id = LeaveAgent::getLeaveByUserId($id)->pluck('leave_id');
-        $result = Leave::whereIn('id', $leave_id)->where('start_time', '>=' ,$today)->count();
+        $tag_id = '9';
+        $result = Leave::whereIn('id', $leave_id)->where('tag_id', $tag_id)->where('start_time', '>=' , $today)->count();
         return $result;
     }
     
