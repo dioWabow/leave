@@ -212,4 +212,12 @@ class TimeHelper
         return $date_new;
     }
 
+    /* 轉換日期加上時間 */
+    public function changeDateTimeFormat($start_time, $end_time)
+    {
+        $start_time = Carbon::createFromFormat('Y-m-d H', $start_time . '09')->toDateTimeString();
+        $end_time = Carbon::createFromFormat('Y-m-d H', $end_time . '18')->toDateTimeString();
+        return [$start_time, $end_time];
+    }
+
 }

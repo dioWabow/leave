@@ -266,7 +266,7 @@ class LeaveDay extends BaseModel
         return $result;
     }
 
-    public static function getLeavesIdByDateRangeAndLeavesId($start_time,$end_time, $leave_id)
+    public static function getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $leave_id)
     {
         $result = self::whereIn('leave_id', $leave_id)
             ->whereBetween('start_time' , [$start_time, $end_time])

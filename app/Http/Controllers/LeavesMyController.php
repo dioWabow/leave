@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use WebHelper;
+use TimeHelper;
 use LeaveHelper;
 use App\Type;
 use App\Leave;
@@ -252,8 +253,12 @@ class LeavesMyController extends Controller
         $search['user_id'] = Auth::user()->id;
         //取得user「不准假、已取消、已準假」 假單
         $get_leaves_id = $model->searchForHistoryInMy($search)->pluck('id');
+
+        //先將日期轉換成正確的搜尋條件，09:00 ~ 18:00
+        $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);
+
         // 取得搜尋的區間為該user的子單記錄 
-        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
+        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($reange[0], $reange[1], $get_leaves_id);
         return $result;
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use WebHelper;
+use TimeHelper;
 use App\Leave;
 use App\Type;
 use App\LeaveDay;
@@ -169,6 +170,7 @@ class LeavesHrController extends Controller
             $search['type_id'] = [];
 
         }
+        
         $model = new Leave;
         $dataProvider = $model->fill($order_by)->searchForHistoryInHr($search);
         
@@ -224,8 +226,12 @@ class LeavesHrController extends Controller
         $search['tag_id'] = ['8', '9'];
         //取得所有「不准假、已准假」的 假單id
         $get_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+        
+        //先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
+        $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);
+
         // 取得搜尋區間的子單記錄 
-        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($start_time, $end_time, $get_leaves_id);
+        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($reange[0], $reange[1], $get_leaves_id);
         return $result;
     }
 }
