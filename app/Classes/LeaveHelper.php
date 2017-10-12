@@ -858,22 +858,26 @@ class LeaveHelper
 
                 }
 
-                //特休不可連著請
-                $leave_type_arr = [];
-                foreach (Type::getTypeByException(['annual_leave']) as $type) {
+                //特休不可連著請排除當天臨時有事+遲到的狀況
+                if (TimeHelper::changeDateFormat($start_time,'Y-m-d') != Carbon::now()->format('Y-m-d')) {
 
-                    $leave_type_arr[] = $type->id;
+                    $leave_type_arr = [];
+                    foreach (Type::getTypeByException(['annual_leave']) as $type) {
 
-                }
+                        $leave_type_arr[] = $type->id;
 
-                $front_date = self::getFrontDateOrBackDate($start_time,'front');
-                $back_date = self::getFrontDateOrBackDate($end_time,'back');
+                    }
 
-                if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
+                    $front_date = self::getFrontDateOrBackDate($start_time,'front');
+                    $back_date = self::getFrontDateOrBackDate($end_time,'back');
 
-                    $response = $leave_name . '不可連續請';
-                    return $response;
-                    break;
+                    if (self::checkLeaveByType($this->user_id,$front_date,$back_date,$leave_type_arr)) {
+
+                        $response = $leave_name . '不可連續請';
+                        return $response;
+                        break;
+
+                    }
 
                 }
 
