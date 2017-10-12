@@ -300,7 +300,7 @@
             <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
               {!!csrf_field()!!}
               <input type="hidden" name="leave_view[id]" value="{{$model->id}}">
-              <input id="leave_view_fileupload" @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) disabled @endif name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
+              <input id="leave_view_fileupload" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
             </form>
           </div>
 
