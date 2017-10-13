@@ -65,7 +65,7 @@ class Leave extends BaseModel
 
                 } elseif ($key == 'hours') {
 
-                    $query->where('hours', '>', $value);
+                    $query->where('hours', '>=', $value);
                     
                 } else {
 
