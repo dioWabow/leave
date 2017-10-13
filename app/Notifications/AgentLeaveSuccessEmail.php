@@ -14,19 +14,17 @@ class AgentLeaveSuccessEmail extends Notification
     use Queueable;
 
     public $name = "";//請假人
-    public $start_time = "";//請假時間
-    public $end_time = "";//請假時間
+    public $time = "";//請假時間
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($name,$start_time,$end_time)
+    public function __construct($name,$time)
     {
         $this->name = $name;
-        $this->start_time = $start_time;
-        $this->end_time = $end_time;
+        $this->time = $time;
     }
 
     /**
@@ -51,7 +49,7 @@ class AgentLeaveSuccessEmail extends Notification
         return (new MailMessage)
             ->from(Config::getConfigValueByKey("smtp_from") , Config::getConfigValueByKey("smtp_display"))
             ->subject("假單職代通知 - ". Config::getConfigValueByKey("smtp_display"))
-            ->line('您於 '.$this->start_time." 至 ".$this->end_time."期間為 ".$this->name." 職務代理人")
+            ->line('您於 '. $this->time ."期間為 ".$this->name." 職務代理人")
             ->line('注意,任職職務代理人期間無法請假(病假除外)');
     }
 

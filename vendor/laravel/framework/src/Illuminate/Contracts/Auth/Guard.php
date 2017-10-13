@@ -75,4 +75,10 @@ interface Guard
     * @return true/false
     */
     public function hasAdmin();
+    /**
+    * 取得是否存在有主管的Team
+    *
+    * @return true/false
+    */
+    public function hasTeamAndManager();
 }

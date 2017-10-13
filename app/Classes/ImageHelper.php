@@ -22,14 +22,22 @@ class ImageHelper
 
     public function deleteFile($file_name, $folder = 'tmp')
     {
-        if (Storage::delete('/public/' . $folder . '/' . $file_name)) {
+        if ( !empty($file_name) ) {
+
+            if (Storage::delete('/public/' . $folder . '/' . $file_name)) {
+
+                return true;
+
+            } else {
+
+                return false;
+
+            }
+
+        }else{
 
             return true;
-
-        } else {
-
-            return false;
-
+            
         }
     }
 

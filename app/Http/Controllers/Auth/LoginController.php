@@ -60,6 +60,8 @@ class LoginController extends Controller implements AuthenticatableContract
             if ( !empty($user->user["domain"]) && $user->user["domain"] == "wabow.com" ) {
 
                 $model = User::getUserByEmail($user->email);
+
+                $new_login = true;
                 if ( $model === null) {
 
                     $nickname = explode( "@" , $user->email)[0];
@@ -78,24 +80,36 @@ class LoginController extends Controller implements AuthenticatableContract
                     $model->save();
 
                 }else{
-                    //已存在資料庫，不做任何事情。
+
+                    //已存在資料庫，不做任何事
+
                 }
 
                 if ( !empty($model->id) && Auth::loginUsingId($model->id) ) {
 
-                    return Redirect::route('index');
+                    if ( !Auth::hasTeamAndManager() ) {
+
+                        return Redirect::route('root_path')->withErrors(['msg' => '登入/註冊成功，請通知hr設定團隊主管']);
+
+                    }else{
+
+                        return Redirect::route('index');
+
+                    }
 
                 }else{
 
                     return Redirect::route('root_path')->withErrors(['msg' => '登入失敗，請再試一次。']);
                     
                 }
+
             }else{
 
                 //待系統設定更新完成改為公司名稱
                 return Redirect::route('root_path')->withErrors(['msg' => '非允許的 Email，請再次確認登入的 Email。']);
 
             }
+
         }else{
 
             return Redirect::route('root_path')->withErrors(['msg' => 'Google 登入驗證失敗。']);

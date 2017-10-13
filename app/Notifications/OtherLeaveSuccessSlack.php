@@ -23,12 +23,12 @@ class OtherLeaveSuccessSlack extends Notification
      *
      * @return void
      */
-    public function __construct($name , $start_time,$end_time,$to)
+    public function __construct($name , $time,$to)
     {
         $this->title .= "假單通過額外通知：";
 
         $text = "";
-        $text .= $name.'於 '.$start_time.' 至 '.$end_time.' 期間的請假已通過審核。';
+        $text .= $name.'於 '.$time.' 期間的請假已通過審核。';
         $this->text .= $text;
 
         $this->to .= $to;

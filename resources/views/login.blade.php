@@ -26,7 +26,6 @@
               { src: 'dist/img/wabow-team2.jpg' },
               { src: 'dist/img/wabow-team3.jpg' },
               { src: 'dist/img/wabow-team4.jpg' },
-              { src: 'dist/img/wabow-team5.jpg' },
               { src: 'dist/img/wabow-team6.jpg' },
               { src: 'dist/img/wabow-team7.jpg' },
               { src: 'dist/img/wabow-team8.jpg' },

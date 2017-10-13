@@ -23,12 +23,12 @@ class UserLeaveReturnSlack extends Notification
      *
      * @return void
      */
-    public function __construct($start_time,$end_time,$to)
+    public function __construct($time,$to)
     {
         $this->title .= "假單取消通知：";
 
         $text = "";
-        $text .= "您於 ".$start_time." 至 ".$end_time."期間的假單已被退回\n";
+        $text .= "您於 ". $time ."期間的假單已被退回\n";
         $text .= "請至 我的假單-歷史紀錄 檢視原因";
         $this->text .= $text;
 

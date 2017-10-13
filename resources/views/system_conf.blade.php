@@ -287,35 +287,41 @@
 <!-- /.content -->
 
 <script>
-    $("#form_config_company").change(function() {
-      $("#form_config_smtp :input").prop("disabled", true);
-      $("#form_config_google :input").prop("disabled", true);
-      $("#form_config_slack :input").prop("disabled", true);
-      $("#form_config_other :input").prop("disabled", true);
+    $(document).on('change', '#form_config_company', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
     });
-    $("#form_config_smtp").change(function() {
-      $("#form_config_company :input").prop("disabled", true);
-      $("#form_config_google :input").prop("disabled", true);
-      $("#form_config_slack :input").prop("disabled", true);
-      $("#form_config_other :input").prop("disabled", true);
+    $(document).on('click', '.file-input', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
     });
-    $("#form_config_google").change(function() {
-      $("#form_config_company :input").prop("disabled", true);
-      $("#form_config_smtp :input").prop("disabled", true);
-      $("#form_config_slack :input").prop("disabled", true);
-      $("#form_config_other :input").prop("disabled", true);
+    $(document).on('change', '#form_config_smtp', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
     });
-    $("#form_config_slack").change(function() {
-      $("#form_config_company :input").prop("disabled", true);
-      $("#form_config_smtp :input").prop("disabled", true);
-      $("#form_config_google :input").prop("disabled", true);
-      $("#form_config_other :input").prop("disabled", true);
+    $(document).on('change', '#form_config_google', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
     });
-    $("#form_config_other").change(function() {
-      $("#form_config_company :input").prop("disabled", true);
-      $("#form_config_smtp :input").prop("disabled", true);
-      $("#form_config_google :input").prop("disabled", true);
-      $("#form_config_slack :input").prop("disabled", true);
+    $(document).on('change', '#form_config_slack', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_other', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
     });
     $(".reset").click(function() {
       $(":input").prop("disabled", false);

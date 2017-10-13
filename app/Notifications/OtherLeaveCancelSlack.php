@@ -23,12 +23,12 @@ class OtherLeaveCancelSlack extends Notification
      *
      * @return void
      */
-    public function __construct($name , $start_time,$end_time,$to)
+    public function __construct($name , $time ,$to)
     {
         $this->title .= "假單取消額外通知：";
 
         $text = "";
-        $text .= $name."於 ".$start_time." 至 ".$end_time."期間的假單已被取消";
+        $text .= $name."於 ".$time."期間的假單已被取消";
         $this->text .= $text;
 
         $this->to .= $to;

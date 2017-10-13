@@ -23,12 +23,12 @@ class AgentLeaveCancelSlack extends Notification
      *
      * @return void
      */
-    public function __construct($start_time,$end_time,$to)
+    public function __construct($time,$to)
     {
         $this->title .= "假單取消通知：";
 
         $text = "";
-        $text .= "您於 ".$start_time." 至 ".$end_time."期間擔任職務代理人的假單已被取消";
+        $text .= "您於 ". $time ."期間擔任職務代理人的假單已被取消";
         $this->text .= $text;
 
         $this->to .= $to;
