@@ -13,8 +13,8 @@
   <![endif]-->
 
 
-  <link rel="stylesheet" href="plugins/vegas/vegas.min.css">
-  <script src="plugins/vegas/vegas.js"></script>
+  <link rel="stylesheet" href="{{ route('root_path') }}/plugins/vegas/vegas.min.css">
+  <script src="{{ route('root_path') }}/plugins/vegas/vegas.js"></script>
   <script>
   $(function() {
       $('#login').click(function(){
@@ -23,16 +23,16 @@
       
       $('body').vegas({
           slides: [
-              { src: 'dist/img/wabow-team2.jpg' },
-              { src: 'dist/img/wabow-team3.jpg' },
-              { src: 'dist/img/wabow-team4.jpg' },
-              { src: 'dist/img/wabow-team6.jpg' },
-              { src: 'dist/img/wabow-team7.jpg' },
-              { src: 'dist/img/wabow-team8.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team2.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team3.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team4.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team6.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team7.jpg' },
+              { src: '{{ route('root_path') }}/dist/img/wabow-team8.jpg' },
           ],
           //transition: 'zoomOut',
           animation: 'random',
-          overlay: 'plugins/vegas/overlays/07.png',
+          overlay: '{{ route('root_path') }}/plugins/vegas/overlays/07.png',
           shuffle: true,
           loop: true,
       });
