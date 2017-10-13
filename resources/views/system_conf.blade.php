@@ -294,7 +294,6 @@
         $("#form_config_other :input").prop("disabled", true);
     });
     $(document).on('click', '.file-input', function(event){
-        console.log(1);
         $("#form_config_smtp :input").prop("disabled", true);
         $("#form_config_google :input").prop("disabled", true);
         $("#form_config_slack :input").prop("disabled", true);
