@@ -883,6 +883,10 @@ $(function () {
           overwriteInitial: false,
           showUpload: false,
           showRemove: false,
+          @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) 
+          showBrowse: false,
+          initialPreviewShowDelete: false,
+          @endif
           initialPreviewAsData: true,
           uploadExtraData : {
             "_token": "{{ csrf_token() }}",
