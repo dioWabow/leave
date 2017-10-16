@@ -448,6 +448,23 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 工作日誌
+    Route::group(['prefix'=>'sheet'], function(){
+        Route::group(['prefix'=>'search'], function(){
+            Route::get('index',[
+                'as'=>'sheet/search/index',
+                'uses'=> 'SheetSearchController@getIndex',
+            ]);
+        });
+
+        Route::group(['prefix'=>'auth'], function(){
+            Route::get('index',[
+                'as'=>'sheet/auth/index',
+                'uses'=> 'SheetAuthController@getIndex',
+            ]);
+        });
+    });
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[
