@@ -1405,89 +1405,42 @@ $(function () {
 @if(Request::is('config/edit'))
 <script>
 $(function () {  
-  $("#leave_view_fileupload").fileinput({
-      uploadUrl: "{{route('leave/upload')}}",
+  $("#config_fileupload").fileinput({
+      uploadUrl: "{{route('config/upload')}}",
       uploadAsync: false,
       maxFileCount: 5,
       validateInitialCount: true,
       overwriteInitial: false,
+      allowedFileTypes: ['image'],
       showUpload: false,
       showRemove: false,
       initialPreviewAsData: true,
       uploadExtraData : {
         "_token": "{{ csrf_token() }}",
       },
-      @if(false)
-      @if($model->prove)
+      @if(ConfigHelper::getConfigValueByKey('login_pictures'))
       initialPreview: [
-        @foreach(explode(',',$model->prove) as $prove)
-        "{{UrlHelper::getLeaveProveUrl($prove)}}",
+        @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
+          "{{UrlHelper::getLoginPictureUrl($picture)}}",
         @endforeach
       ],
       initialPreviewConfig: [
-      @foreach(explode(',',$model->prove) as $prove)
+      @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
       {
-        caption : "{{$prove}}",
-        url: '{{route("leave/delete")}}',
+        caption : "{{$picture}}",
+        url: '{{route("config/delete")}}',
         extra: {"_token" : "{{ csrf_token() }}",
-          "file" : "{{$prove}}",
+          "file" : "{{$picture}}",
         },
       },
       @endforeach
       ],
       @endif
-      @endif
-  preferIconicPreview: true, // this will force thumbnails to display icons for following file extensions
-  previewFileIconSettings: { // configure your icon file extensions
-      'doc': '<i class="fa fa-file-word-o text-primary"></i>',
-      'xls': '<i class="fa fa-file-excel-o text-success"></i>',
-      'ppt': '<i class="fa fa-file-powerpoint-o text-danger"></i>',
-      'pdf': '<i class="fa fa-file-pdf-o text-danger"></i>',
-      'zip': '<i class="fa fa-file-archive-o text-muted"></i>',
-      'htm': '<i class="fa fa-file-code-o text-info"></i>',
-      'txt': '<i class="fa fa-file-text-o text-info"></i>',
-      'mov': '<i class="fa fa-file-movie-o text-warning"></i>',
-      'mp3': '<i class="fa fa-file-audio-o text-warning"></i>',
-      // note for these file types below no extension determination logic 
-      // has been configured (the keys itself will be used as extensions)
-      'jpg': '<i class="fa fa-file-photo-o text-danger"></i>', 
-      'gif': '<i class="fa fa-file-photo-o text-muted"></i>', 
-      'png': '<i class="fa fa-file-photo-o text-primary"></i>'    
-  },
-  previewFileExtSettings: { // configure the logic for determining icon file extensions
-      'doc': function(ext) {
-          return ext.match(/(doc|docx)$/i);
-      },
-      'xls': function(ext) {
-          return ext.match(/(xls|xlsx)$/i);
-      },
-      'ppt': function(ext) {
-          return ext.match(/(ppt|pptx)$/i);
-      },
-      'zip': function(ext) {
-          return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
-      },
-      'htm': function(ext) {
-          return ext.match(/(htm|html)$/i);
-      },
-      'txt': function(ext) {
-          return ext.match(/(txt|ini|csv|java|php|js|css)$/i);
-      },
-      'mov': function(ext) {
-          return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
-      },
-      'mp3': function(ext) {
-          return ext.match(/(mp3|wav)$/i);
-      }
-  }
-  }).on("filebatchselected", function(event, data, previewId, index) {
-      $("#leave_view_fileupload").fileinput("upload");
+  }).on("fileloaded", function(event, data, previewId, index) {
+      $("#config_fileupload").fileinput("upload");
   }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
-
   }).on('filepredelete ', function(event, data, previewId, index) {
-      // console.log(event);
   }).on('filedeleted ', function(event, data, previewId, index) {
-
   });
 });
 </script>

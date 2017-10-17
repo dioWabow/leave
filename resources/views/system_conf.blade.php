@@ -271,9 +271,9 @@
                             </div>
                         </div-->
                         <div class="form-group">
-                            <label for="config_company_logo" class="col-sm-2 control-label">LOGO</label>
+                            <label for="config_company_logo" class="col-sm-2 control-label">登入輪播圖</label>
                             <div class="col-sm-10">
-                              <input id="leave_view_fileupload" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
+                              <input id="config_fileupload" accept="image/*" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
                             </div>
                         </div>
                     </div>

@@ -76,10 +76,19 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'SystemConfController@getIndex',
         ]);
 
-
         Route::post('update',[
             'as'=>'config/update',
             'uses'=> 'SystemConfController@postUpdate',
+        ]);
+
+        Route::post('upload', [
+            'as' => 'config/upload',
+            'uses' => 'SystemConfController@postUpload',
+        ]);
+
+        Route::post('delete', [
+            'as' => 'config/delete',
+            'uses' => 'SystemConfController@postDelete',
         ]);
     });
 
