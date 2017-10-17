@@ -42,7 +42,7 @@
       header: {
         left: 'prev, next, today',
         center: 'title',
-        right: ''
+        right: 'month,agendaDay'
       },
       displayEventEnd: {
         month: true

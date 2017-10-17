@@ -130,7 +130,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-sort"></i> <span>排行榜</span>
+          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
         <li>
