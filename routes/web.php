@@ -448,10 +448,15 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-    Route::get('calendar', [
-        'as' => 'timesheet/calendar',
-        'uses' => 'Timesheet\TimesheetController@getCalendar',
-    ]);
+    // 月報表
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::get('calendar', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Timesheet\TimesheetController@getCalendar',
+        ]);
+
+    });
 
 });
 
