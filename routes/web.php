@@ -450,6 +450,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::get('calendar', [
+    'as' => 'timesheet/calendar',
+    'uses' => 'TimesheetController@getCalendar',
+]);
+
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
     'uses'=> 'DemoControllor@getImage',

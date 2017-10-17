@@ -122,7 +122,7 @@
           <a href="{{ route('leave/create') }}"><i class="glyphicon glyphicon-pencil"></i> <span>日報表</span></a>
         </li>
         <li>
-          <a href="{{ route('leaves_my/prove') }}"><i class="fa fa-calendar"></i> <span>月報表</span>
+          <a href="{{ route('timesheet/calendar') }}"><i class="fa fa-calendar"></i> <span>月報表</span>
           </a>
         </li>
         <li>
