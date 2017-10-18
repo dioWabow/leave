@@ -6,11 +6,7 @@
 	<i class="fa fa-line-chart"></i> 特休報表
 	<small>Annual Leave Report</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>報表</li>
-	<li class="active">特休報表</li>
-  </ol>
+  {{ Breadcrumbs::render('annual_report') }}
 </section>
 
 <!-- Main content -->

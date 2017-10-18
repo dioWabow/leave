@@ -7,11 +7,7 @@
 	<i class="fa fa-anchor"></i> 國定假日/補班
 	<small>Holiday Setting</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>假期設定</li>
-	<li class="active">國定假日/補班</li>
-  </ol>
+  {{ Breadcrumbs::render('holidies') }}
 </section>
 
 <!-- Main content -->

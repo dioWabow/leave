@@ -6,10 +6,7 @@
     <i class="fa fa-github-alt"></i> 我是代理人
     <small>Agent Leave List</small>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li class="active">我是代理人</li>
-  </ol>
+  {{ Breadcrumbs::render('agent') }}
 </section>
 
 <!-- Main content -->

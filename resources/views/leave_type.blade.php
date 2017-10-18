@@ -8,11 +8,7 @@
 	<i class="fa fa-anchor"></i> 假別管理
 	<small>Vacation Category Management</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href=" {{ route('index') }}" ><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>假期設定</li>
-	<li class="active">假別管理</li>
-  </ol>
+  {{ Breadcrumbs::render('leave_type') }}
 </section>
 <!-- Main content -->
 <section class="content">

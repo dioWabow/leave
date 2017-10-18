@@ -50,6 +50,13 @@
   </li>
 	<li class="active">假單檢視</li>
   </ol>
+<!--   @if(in_array($http_referer,['leaves_manager','report']))
+    {{ Breadcrumbs::render('leave/view',$http_referer,$pre_url) }}
+  @elseif(!empty($http_referer))
+    {{ Breadcrumbs::render('leave/view',$http_referer) }}
+  @else
+    {{ Breadcrumbs::render('leave/view','') }}
+  @endif -->
 </section>
 
 <!-- Main content -->

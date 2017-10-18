@@ -13,14 +13,13 @@
 	<small>Taken a lot of time off</small>
 	@endif
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+
 	@if( Auth::getUser()->id == $user->id)
-	<li class="active">我要放假</li>
+		{{ Breadcrumbs::render('leave/create') }}
 	@else
-	<li class="active">協助申請請假</li>
+		{{ Breadcrumbs::render('leave_assist/create', $user->nickname) }}
 	@endif
-  </ol>
+
 </section>
 
 <!-- Main content -->

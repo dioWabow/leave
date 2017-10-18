@@ -6,12 +6,12 @@
   <i class="fa fa-anchor"></i> 國定假日/補班資料{{ $model->id > 0 ? '修改' : '新增' }}
   <small>Vacation Category Management</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li>假期設定</li>
-  <li><a href="{{ route('holidies') }}">國定假日/補班</a></li>
-  <li class="active">資料{{ $model->id > 0 ? '修改' : '新增' }}</li>
-  </ol>
+  @if($model->id > 0)
+  {{ Breadcrumbs::render('holidies/edit','修改') }}
+  @else
+  {{ Breadcrumbs::render('holidies/edit','新增') }}
+  @endif
+  <!-- {{ Breadcrumbs::render('leave/create') }} -->
 </section>
 
 <!-- Main content -->

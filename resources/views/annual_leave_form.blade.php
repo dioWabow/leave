@@ -7,11 +7,7 @@
   <i class="fa fa-github-alt"></i> 特休假單列表
   <small>Annual Leave List</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li><a href="{{ route('annual_leave_calculate/index') }}">特休結算</a></li>
-  <li class="active">特休假單列表</li>
-  </ol>
+  {{ Breadcrumbs::render('annual_leave_calculate/view') }}
 </section>
 
 <!-- Main content -->
