@@ -36,13 +36,13 @@ Breadcrumbs::register('agent', function ($breadcrumbs) {
 });
 
 // 團隊假單- manager
-Breadcrumbs::register('leaves_manager', function ($breadcrumbs,$url = '') {
-    $breadcrumbs->push('團隊假單',$url);
+Breadcrumbs::register('leaves_manager', function ($breadcrumbs) {
+    $breadcrumbs->push('團隊假單','javascript:window.history.go(-1);');
 });
 
 // 團隊假單- hr
 Breadcrumbs::register('leaves_hr', function ($breadcrumbs) {
-    $breadcrumbs->push('團隊假單');
+    $breadcrumbs->push('團隊假單','javascript:window.history.go(-1);');
 });
 
 // 天災假調整
@@ -120,9 +120,9 @@ Breadcrumbs::register('report', function ($breadcrumbs) {
 });
 
 // 報表列表
-Breadcrumbs::register('report/view', function ($breadcrumbs,$leave_type,$pre_url = '') {
+Breadcrumbs::register('report/view', function ($breadcrumbs,$leave_type) {
     $breadcrumbs->parent('report');
-    $breadcrumbs->push($leave_type.'列表',$pre_url);
+    $breadcrumbs->push($leave_type.'列表','javascript:window.history.go(-1);');
 });
 
 // 特休報表
@@ -134,7 +134,7 @@ Breadcrumbs::register('annual_report', function ($breadcrumbs) {
 // 特休假單列表
 Breadcrumbs::register('annual_report/view', function ($breadcrumbs) {
     $breadcrumbs->parent('annual_report');
-    $breadcrumbs->push('特休假單列表');
+    $breadcrumbs->push('特休假單列表','javascript:window.history.go(-1);');
 });
 
 // 特休結算
@@ -146,7 +146,7 @@ Breadcrumbs::register('annual_leave_calculate', function ($breadcrumbs) {
 // 特休假單列表(結算用)
 Breadcrumbs::register('annual_leave_calculate/view', function ($breadcrumbs) {
     $breadcrumbs->parent('annual_leave_calculate');
-    $breadcrumbs->push('特休假單列表');
+    $breadcrumbs->push('特休假單列表','javascript:window.history.go(-1);');
 });
 
 // 特休結算(離職)
@@ -158,11 +158,11 @@ Breadcrumbs::register('leaved_user_annual_leave_calculate', function ($breadcrum
 // 特休假單列表(離職)
 Breadcrumbs::register('leaved_user_annual_leave_calculate/view', function ($breadcrumbs) {
     $breadcrumbs->parent('leaved_user_annual_leave_calculate');
-    $breadcrumbs->push('特休假單列表(離職)');
+    $breadcrumbs->push('特休假單列表(離職)','javascript:window.history.go(-1);');
 });
 
 // 假單詳細頁
-Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$pre_url = '') {
+Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$leave_name = '') {
 
     if ($bread == 'leaves_my') { //我的假單
 
@@ -178,11 +178,11 @@ Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$pre_url = '')
 
     } elseif ($bread == 'leaves_manager') { //manager 團隊假單
 
-      $breadcrumbs->parent('leaves_manager',$pre_url);
+      $breadcrumbs->parent('leaves_manager');
 
     } elseif ($bread == 'report') { //報表
 
-      $breadcrumbs->parent('report/view',$pre_url);
+      $breadcrumbs->parent('report/view',$leave_name);
 
     } elseif ($bread == 'annual_report') { //特休假單列表
 
