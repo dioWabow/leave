@@ -448,6 +448,27 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::group(['prefix'=>'daily'], function(){
+
+            Route::get('index',[
+                'as'=>'sheet/daily/index',
+                'uses'=> 'sheet\DailyController@getIndex',
+            ]);
+
+            Route::any('edit',[
+                'as'=>'sheet/daily/edit',
+                'uses'=> 'sheet\DailyController@getEdit',
+            ]);
+
+            Route::post('update',[
+                'as'=>'sheet/daily/update',
+                'uses'=> 'sheet\DailyController@postUpdate',
+            ]);
+        });
+    });
 });
 
 Route::match(['get', 'post'], '/demo/image',[
