@@ -93,6 +93,7 @@
 										</tr>
 									</tfoot>
 								</table>
+								<button class="label bg-blue" style="font-size:20px">匯出報表</button>
 							</div>
 						</div>
 					</div>

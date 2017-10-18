@@ -206,6 +206,10 @@ return [
         App\Providers\UserHelperServiceProvider::class,
         App\Providers\SlackHelperServiceProvider::class,
         App\Providers\EmailHelperServiceProvider::class,
+        /*
+         * 匯出Excel
+         */
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -271,6 +275,11 @@ return [
         'UserHelper' => App\Facades\UserHelper::class,
         'SlackHelper' => App\Facades\SlackHelper::class,
         'EmailHelper' => App\Facades\EmailHelper::class,
+
+        /*
+         * 匯出Excel
+         */
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
