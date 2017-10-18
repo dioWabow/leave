@@ -450,6 +450,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::get('export_excel', 'ExportController@ExportReport')->name('export_excel');;
+
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
     'uses'=> 'DemoControllor@getImage',

@@ -93,7 +93,7 @@
 										</tr>
 									</tfoot>
 								</table>
-								<button class="label bg-blue" style="font-size:20px">匯出報表</button>
+								<a href="{{ route('export_excel') }}"><button class="label bg-blue" style="font-size:20px">匯出報表</button></a>
 							</div>
 						</div>
 					</div>
