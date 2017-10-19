@@ -4,10 +4,9 @@ namespace App;
 
 use App\UserTeam;
 
-
 use Schema;
 
-class User extends basemodel 
+class User extends BaseModel 
 {
 
     //可以傳入數值的欄位
