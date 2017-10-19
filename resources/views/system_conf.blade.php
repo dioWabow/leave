@@ -255,22 +255,27 @@
                 <form id="form_config_other" action="{{ route('config/update') }}" class="form-horizontal" method="POST" enctype="multipart/form-data" _lpchecked="1">
                     <div class="box-body">
                         <div class="form-group">
-                        <label for="form_config_google_login" class="col-sm-3 control-label">大BOSS天數</label>
-                            <div class="col-sm-9">
+                        <label for="form_config_google_login" class="col-sm-2 control-label">大BOSS天數</label>
+                            <div class="col-sm-10">
                             <input type="number" class="form-control" id="config_boss_days" name="config[boss_days]" placeholder="需要大BOSS審核的天數" value="{{ $config['boss_days'] }}">
                             </div>
                         </div>
                         <!--div class="form-group">
-                        <label for="config_google_json" class="col-sm-3 control-label">董事天數</label>
-
-                            <div class="col-sm-9">
+                        <label for="config_google_json" class="col-sm-2 control-label">董事天數</label>
+                            <div class="col-sm-10">
                             <input type="number" class="form-control" id="config_boss_days" name="config[director_days]" placeholder="需要董事審核的天數" value="{{ $config['director_days'] }}">
                             </div>
                         </div-->
+                        <div class="form-group">
+                            <label for="config_company_logo" class="col-sm-2 control-label">登入輪播圖</label>
+                            <div class="col-sm-10">
+                              <input id="config_fileupload" accept="image/*" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="reset" class="btn btn-default reset">重置</button>
                         <button type="submit" class="btn btn-default pull-right">送出</button>
                     </div>
                     <!-- /.box-footer -->
@@ -282,54 +287,4 @@
 </section>
 <!-- /.content -->
 
-<script>
-    $(document).on('change', '#form_config_company', function(event){
-        $("#form_config_smtp :input").prop("disabled", true);
-        $("#form_config_google :input").prop("disabled", true);
-        $("#form_config_slack :input").prop("disabled", true);
-        $("#form_config_other :input").prop("disabled", true);
-    });
-    $(document).on('click', '.file-input', function(event){
-        $("#form_config_smtp :input").prop("disabled", true);
-        $("#form_config_google :input").prop("disabled", true);
-        $("#form_config_slack :input").prop("disabled", true);
-        $("#form_config_other :input").prop("disabled", true);
-    });
-    $(document).on('change', '#form_config_smtp', function(event){
-        $("#form_config_company :input").prop("disabled", true);
-        $("#form_config_google :input").prop("disabled", true);
-        $("#form_config_slack :input").prop("disabled", true);
-        $("#form_config_other :input").prop("disabled", true);
-    });
-    $(document).on('change', '#form_config_google', function(event){
-        $("#form_config_company :input").prop("disabled", true);
-        $("#form_config_smtp :input").prop("disabled", true);
-        $("#form_config_slack :input").prop("disabled", true);
-        $("#form_config_other :input").prop("disabled", true);
-    });
-    $(document).on('change', '#form_config_slack', function(event){
-        $("#form_config_company :input").prop("disabled", true);
-        $("#form_config_smtp :input").prop("disabled", true);
-        $("#form_config_google :input").prop("disabled", true);
-        $("#form_config_other :input").prop("disabled", true);
-    });
-    $(document).on('change', '#form_config_other', function(event){
-        $("#form_config_company :input").prop("disabled", true);
-        $("#form_config_smtp :input").prop("disabled", true);
-        $("#form_config_google :input").prop("disabled", true);
-        $("#form_config_slack :input").prop("disabled", true);
-    });
-    $(".reset").click(function() {
-      $(":input").prop("disabled", false);
-    });
-
-    var $option = {'showUpload': false};
-
-    @if( $config['company_logo'] != '')
-    $option.initialPreview = ['{{ UrlHelper::getCompanyLogoUrl($config['company_logo']) }}'];
-    $option.initialPreviewAsData = true;
-    @endif
-
-    $("#config_company_logo").fileinput($option);
-</script>
 @stop

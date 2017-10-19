@@ -9,6 +9,7 @@ use ImageHelper;
 use ConfigHelper;
 use UrlHelper;
 use EmailHelper;
+use AttachHelper;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
@@ -133,6 +134,114 @@ class SystemConfController extends Controller
 
         }
         return view('system_conf', compact('config'));
+    }
+
+    public function postUpload(Request $request)
+    {
+        $login_pictures = '';
+        $response = [];
+        $login_pictures = ConfigHelper::getConfigValueByKey('login_pictures');
+
+        if (Input::hasFile('fileupload')) {
+
+            do {
+
+                $filename = 'wabow-team' . rand(10,99);
+
+            } while (is_file(substr_replace(Storage::url('login_pictures/' . $filename. '.' . Input::file('fileupload')['0']->getClientOriginalExtension()), '', 0, 1)));
+
+            $file_name = AttachHelper::uploadFiles('fileupload','login_pictures',$filename);
+
+            if (!empty($file_name)) {
+
+                if (!empty($login_pictures)) {
+
+                    $login_pictures .= ',' . implode(',' , $file_name);
+
+                } else {
+
+                    $login_pictures = implode(',' , $file_name);
+
+                }
+
+                $model = new Config;
+
+                if ($model->updateConfigValueByKey('login_pictures',$login_pictures)) {
+                    $initialPreview = [];
+                    $initialPreviewConfig = [];
+                    foreach ($file_name as $value) {
+
+                        $initialPreview[] = UrlHelper::getLoginPictureUrl($value);
+                        $initialPreviewConfig[] = [
+                            'caption' => $value,
+                            'url' => route("config/delete"),
+                            'extra' => ["_token" => csrf_token(),
+                            "file" => $value,
+                            ],
+                        ];
+
+                    }
+
+                    $response['initialPreview'] = $initialPreview;
+                    $response['initialPreviewConfig'] = $initialPreviewConfig;
+
+                    return response()->json($response); 
+                } else {
+
+                    $response = [
+                        'message' => '更新資料庫失敗',
+                    ];
+                    return response()->json($response); 
+
+                }
+
+            } else {
+
+                $response = [
+                    'message' => '上傳證明失敗',
+                ];
+                return response()->json($response); 
+
+            }
+        }
+    }
+
+    public function postDelete(Request $request)
+    {
+        $login_pictures = explode(',', ConfigHelper::getConfigValueByKey('login_pictures'));
+
+        $filename = $request->all()['file'];
+
+        if (in_array($filename, $login_pictures)) unset($login_pictures[array_search($filename, $login_pictures)]);
+
+        if (AttachHelper::deleteFile($filename,'login_pictures')) {
+
+            $model = new Config;
+
+            if ($model->updateConfigValueByKey('login_pictures',implode(',' , $login_pictures))) {
+
+                $response = [
+                    'message' => '刪除成功',
+                ];
+                return response()->json($response); 
+
+            } else {
+
+                $response = [
+                    'message' => '更新資料庫失敗',
+                ];
+                return response()->json($response); 
+
+            }
+
+        } else {
+
+            $response = [
+              'message' => '刪除檔案失敗',
+            ];
+            return response()->json($response); 
+
+        }
     }
    
 }

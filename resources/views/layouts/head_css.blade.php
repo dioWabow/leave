@@ -1399,3 +1399,99 @@ $(function () {
 });
 </script>
 @endif
+
+
+<!--系統設定-->
+@if(Request::is('config/edit'))
+<script>
+$(function () {  
+  $("#config_fileupload").fileinput({
+      uploadUrl: "{{route('config/upload')}}",
+      uploadAsync: false,
+      maxFileCount: 5,
+      validateInitialCount: true,
+      overwriteInitial: false,
+      allowedFileTypes: ['image'],
+      showUpload: false,
+      showRemove: false,
+      initialPreviewAsData: true,
+      uploadExtraData : {
+        "_token": "{{ csrf_token() }}",
+      },
+      @if(ConfigHelper::getConfigValueByKey('login_pictures'))
+      initialPreview: [
+        @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
+          "{{UrlHelper::getLoginPictureUrl($picture)}}",
+        @endforeach
+      ],
+      initialPreviewConfig: [
+      @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
+      {
+        caption : "{{$picture}}",
+        url: '{{route("config/delete")}}',
+        extra: {"_token" : "{{ csrf_token() }}",
+          "file" : "{{$picture}}",
+        },
+      },
+      @endforeach
+      ],
+      @endif
+  }).on("fileloaded", function(event, data, previewId, index) {
+      $("#config_fileupload").fileinput("upload");
+  }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
+  }).on('filepredelete ', function(event, data, previewId, index) {
+  }).on('filedeleted ', function(event, data, previewId, index) {
+  });
+
+  $(document).on('change', '#form_config_company', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('click', '#form_config_company .file-input', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_smtp', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_google', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_slack', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_other', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+    });
+    $(".reset").click(function() {
+      $(":input").prop("disabled", false);
+    });
+
+    var $option = {'showUpload': false};
+
+    @if( $config['company_logo'] != '')
+    $option.initialPreview = ['{{ UrlHelper::getCompanyLogoUrl($config['company_logo']) }}'];
+    $option.initialPreviewAsData = true;
+    @endif
+
+    $("#config_company_logo").fileinput($option);
+});
+</script>
+
+@endif
