@@ -7,10 +7,10 @@
   <h1>
   @if( 1 == 1 )
 	<i class="fa fa-plane"></i> 新增工作項目
-	<small>Taken a lot of time off</small>
+	<small>New Work</small>
 	@else
 	<i class="fa fa-hand-spock-o"></i> 修改工作項目
-	<small>Taken a lot of time off</small>
+	<small>Edit Work</small>
 	@endif
   </h1>
   <ol class="breadcrumb">

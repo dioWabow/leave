@@ -30,7 +30,7 @@ class DailyController extends Controller
         $this->image_root_path = storage_path() . '/app/public/' . $this->image_path;
     }
 
-    public function getIndex(Request $request)
+    public function getEdit(Request $request)
     {
         return view('sheet_insert_form');
         //return view('sheet_insert_form',compact(
@@ -42,23 +42,11 @@ class DailyController extends Controller
     * 上傳圖片 demo
     * 注意：須於 public 下建立連結 - php artisan storage:link
     */
-    public function getImageOld (Request $request)
+    public function getIndex (Request $request)
     {
-        $image_url = '';
-        if($request->hasFile('demo') && $request->file('demo')['image']->isValid()) {
-            $input_file = Input::file('demo');
-            $file_extension = $input_file['image']->getClientOriginalExtension();
-
-            $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
-            $image = $this->image_root_path . $filename;
-
-            Image::make($input_file['image'])->save($image);
-
-            $image_url = Storage::url($this->image_path . $filename);
-        }
-
-        return view('demo_image', compact(
-            'image_url'
-        ));
+        return view('daily_list');
+        // return  view('daily_list', compact(
+        //     'search'
+        // ));
     }
 }

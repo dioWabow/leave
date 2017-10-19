@@ -458,8 +458,8 @@ Route::group(['middleware' => 'auth'], function () {
                 'uses'=> 'sheet\DailyController@getIndex',
             ]);
 
-            Route::any('edit',[
-                'as'=>'sheet/daily/edit',
+            Route::get('creat',[
+                'as'=>'sheet/daily/creat',
                 'uses'=> 'sheet\DailyController@getEdit',
             ]);
 

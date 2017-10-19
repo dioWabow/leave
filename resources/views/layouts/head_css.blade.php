@@ -226,6 +226,19 @@ $(function () {
 </script>
 @endif
 
+<!--工作日至調整用-->
+@if(Request::is('sheet/daily/index'))
+<script>
+$(function () {
+    $('.single-date').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'}
+    });
+});
+</script>
+@endif
+
 <!-- 團隊設定用 -->
 @if(Request::is('teams/*'))
 <script>
