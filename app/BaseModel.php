@@ -4,9 +4,15 @@ namespace App;
 
 use Schema;
 use Illuminate\Database\Eloquent\Model;
+use Auth;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Contracts\UserResolver;
 
-class BaseModel extends Model
+class BaseModel extends Model implements AuditableContract, UserResolver
 {
+    use Auditable;
+    
     public static function boot()
     {
         static::creating(function ($model) {
@@ -29,5 +35,13 @@ class BaseModel extends Model
         });
         
         parent::boot();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function resolveId()
+    {
+        return Auth::check() ? Auth::user()->getAuthIdentifier() : null;
     }
 }

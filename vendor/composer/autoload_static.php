@@ -67,6 +67,10 @@ class ComposerStaticInit3e8bd44ca6087b44b060718eb7732879
             'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
         ),
+        'O' => 
+        array (
+            'OwenIt\\Auditing\\' => 16,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
@@ -218,6 +222,10 @@ class ComposerStaticInit3e8bd44ca6087b44b060718eb7732879
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'OwenIt\\Auditing\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/owen-it/laravel-auditing/src',
         ),
         'Monolog\\' => 
         array (
@@ -506,6 +514,7 @@ class ComposerStaticInit3e8bd44ca6087b44b060718eb7732879
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
+        'CreateAuditsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_19_135010_create_audits_table.php',
         'Cron\\AbstractField' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/AbstractField.php',
         'Cron\\CronExpression' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/CronExpression.php',
         'Cron\\DayOfMonthField' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/DayOfMonthField.php',
@@ -2369,6 +2378,24 @@ class ComposerStaticInit3e8bd44ca6087b44b060718eb7732879
         'Monolog\\Processor\\UidProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/UidProcessor.php',
         'Monolog\\Processor\\WebProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Processor/WebProcessor.php',
         'Monolog\\Registry' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Registry.php',
+        'OwenIt\\Auditing\\Audit' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Audit.php',
+        'OwenIt\\Auditing\\Auditable' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Auditable.php',
+        'OwenIt\\Auditing\\AuditableObserver' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/AuditableObserver.php',
+        'OwenIt\\Auditing\\AuditingServiceProvider' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/AuditingServiceProvider.php',
+        'OwenIt\\Auditing\\Auditor' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Auditor.php',
+        'OwenIt\\Auditing\\Console\\AuditDriverMakeCommand' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Console/AuditDriverMakeCommand.php',
+        'OwenIt\\Auditing\\Console\\AuditTableCommand' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Console/AuditTableCommand.php',
+        'OwenIt\\Auditing\\Console\\InstallCommand' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Console/InstallCommand.php',
+        'OwenIt\\Auditing\\Contracts\\Audit' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Contracts/Audit.php',
+        'OwenIt\\Auditing\\Contracts\\AuditDriver' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Contracts/AuditDriver.php',
+        'OwenIt\\Auditing\\Contracts\\Auditable' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Contracts/Auditable.php',
+        'OwenIt\\Auditing\\Contracts\\Auditor' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Contracts/Auditor.php',
+        'OwenIt\\Auditing\\Contracts\\UserResolver' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Contracts/UserResolver.php',
+        'OwenIt\\Auditing\\Drivers\\Database' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Drivers/Database.php',
+        'OwenIt\\Auditing\\Events\\Audited' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Events/Audited.php',
+        'OwenIt\\Auditing\\Events\\Auditing' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Events/Auditing.php',
+        'OwenIt\\Auditing\\Facades\\Auditor' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Facades/Auditor.php',
+        'OwenIt\\Auditing\\Models\\Audit' => __DIR__ . '/..' . '/owen-it/laravel-auditing/src/Models/Audit.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert.php',
         'PHPUnit\\Framework\\AssertionFailedError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/AssertionFailedError.php',
@@ -2494,7 +2521,7 @@ class ComposerStaticInit3e8bd44ca6087b44b060718eb7732879
         'PHPUnit\\Util\\TestDox\\XmlResultPrinter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TestDox/XmlResultPrinter.php',
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
-        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
+        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_BadMethodCallException' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Exception/BadMethodCallException.php',
         'PHPUnit_Framework_MockObject_Builder_Identity' => __DIR__ . '/..' . '/phpunit/phpunit-mock-objects/src/Builder/Identity.php',

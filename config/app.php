@@ -206,6 +206,7 @@ return [
         App\Providers\UserHelperServiceProvider::class,
         App\Providers\SlackHelperServiceProvider::class,
         App\Providers\EmailHelperServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
     ],
 
     /*

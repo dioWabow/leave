@@ -4,10 +4,12 @@ namespace App;
 
 use App\UserTeam;
 
+
 use Schema;
 
-class User extends BaseModel
+class User extends basemodel 
 {
+
     //可以傳入數值的欄位
     protected $fillable = [
         'employee_no',
@@ -37,6 +39,9 @@ class User extends BaseModel
         'order_way' => 'DESC',
         'pagesize' => '25',
     ];
+
+
+
     /**
      * 搜尋table多個資料
      * 若有多個傳回第一個
