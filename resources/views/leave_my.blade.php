@@ -7,10 +7,8 @@
 		<i class="fa fa-calendar"></i> 我的請假單
 		<small>My Leave List</small>
   </h1>
-  <ol class="breadcrumb">
-		<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-		<li class="active">我的請假單</li>
-  </ol>
+		
+	{{ Breadcrumbs::render('leaves_my') }}
 </section>
 <!-- Main content -->
 <section class="content">

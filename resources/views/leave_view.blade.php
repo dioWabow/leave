@@ -7,49 +7,14 @@
 	<i class="fa fa-calendar"></i> 假單檢視
 	<small>View My Leave</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{route('index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>
-  @if(!empty($http_referer))
-    <a href="{{$pre_url}}">
-
-    @if($http_referer == 'leaves_my')
-      我的假單
-
-    @elseif($http_referer == 'agent_approve')
-      同意代理嗎?
-
-    @elseif($http_referer == 'leaves_hr')
-      團隊假單
-
-    @elseif($http_referer == 'leaves_manager')
-      團隊假單
-
-    @elseif($http_referer == 'report')
-      報表
-
-    @elseif($http_referer == 'annual_report')
-      特休假單列表
-
-    @elseif($http_referer == 'annual_leave_calculate')
-      特休假單列表
-
-    @elseif($http_referer == 'leaved_user_annual_leave_calculate')
-      特休假單列表(離職)
-
-    @elseif($http_referer == 'agent')
-      我是代理人
-
-    @endif
-    </a>
+  
+  @if($http_referer == 'report')
+    {{ Breadcrumbs::render('leave/view',$http_referer,$model->fetchType->name) }}
+  @elseif(!empty($http_referer))
+    {{ Breadcrumbs::render('leave/view',$http_referer) }}
   @else
-    <a href="{{route('leaves_my/prove')}}">
-    我的假單
-    </a>
+    {{ Breadcrumbs::render('leave/view','') }}
   @endif
-  </li>
-	<li class="active">假單檢視</li>
-  </ol>
 </section>
 
 <!-- Main content -->

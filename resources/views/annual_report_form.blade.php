@@ -7,11 +7,7 @@
   <i class="fa fa-github-alt"></i> 特休假單列表
   <small>Report Vacation List</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li><a href="{{ route('annual_report/index') }}">特休報表</a></li>
-  <li class="active">特休假單列表</li>
-  </ol>
+  {{ Breadcrumbs::render('annual_report/view') }}
 </section>
 
 <!-- Main content -->

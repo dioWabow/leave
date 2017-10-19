@@ -7,11 +7,7 @@
     <i class="fa fa-briefcase"></i> 系統設定
     <small>System Preferences</small>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li>基本設定</li>
-    <li class="active">系統設定</li>
-  </ol>
+  {{ Breadcrumbs::render('config') }}
 </section>
 
 <!-- Main content -->

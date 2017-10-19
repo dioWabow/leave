@@ -559,7 +559,7 @@ $(document).ready(function () {
   </script>
 @endif
 <!-- 我要請假用、協助請假 -->
-@if(Request::is('leave/*','leave_assist/create/*'))
+@if(Request::is('leave/create','leave_assist/create/*'))
 <script>
 $(function () {
   

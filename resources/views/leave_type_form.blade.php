@@ -7,12 +7,11 @@
     <i class="fa fa-anchor"></i>假別資料@if($model->id > 0)修改@else新增@endif
     <small>Vacation Category Management</small>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li>假期設定</li>
-    <li><a href="{{ route('leave_type') }}">假別管理</a></li>
-    <li class="active">資料修改</li>
-  </ol>
+  @if($model->id > 0)
+  {{ Breadcrumbs::render('leave_type/edit','修改') }}
+  @else
+  {{ Breadcrumbs::render('leave_type/edit','新增') }}
+  @endif
 </section>
 
 <!-- Main content -->

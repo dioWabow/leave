@@ -6,10 +6,8 @@
 		<i class="fa fa-user-secret"></i> 同意代理嗎？
 		<small>Are you sure ?</small>
   </h1>
-	<ol class="breadcrumb">
-		<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-		<li class="active">同意代理嗎？</li>
-  </ol>
+  
+	{{ Breadcrumbs::render('agent_approve') }}
 </section>
 
 <!-- Main content -->

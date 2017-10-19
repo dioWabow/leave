@@ -7,11 +7,7 @@
   <i class="fa fa-users"></i> 員工管理
   <small>Staff Management</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li>基本設定</li>
-  <li class="active">員工管理</li>
-  </ol>
+  {{ Breadcrumbs::render('user') }}
 </section>
 
 <!-- Main content -->

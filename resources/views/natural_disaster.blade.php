@@ -31,10 +31,7 @@ $(function () {
 	<i class="fa fa-cloud"></i> 天災假單調整
 	<small>Natural Disaster Modify</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">天災假單調整</li>
-  </ol>
+  {{ Breadcrumbs::render('natural') }}
 </section>
 
 <!-- Main content -->

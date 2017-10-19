@@ -11,11 +11,7 @@
 	<i class="fa fa-github-alt"></i> {{$all_type[$type_id]->name}}列表
 	<small>Report Vacation List</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="{{ route('report/index') }}">報表</a></li>
-	<li class="active">{{$all_type[$type_id]->name}}列表</li>
-  </ol>
+  {{ Breadcrumbs::render('report/view',$all_type[$type_id]->name) }}
 </section>
 
 <!-- Main content -->

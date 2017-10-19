@@ -7,10 +7,7 @@
 	Dashboard
 	<small>Control paneln</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">Dashboard</li>
-  </ol>
+  {{ Breadcrumbs::render('index/ajax') }}
 </section>
 
 <!-- Main content -->
