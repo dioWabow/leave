@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Taipei',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'zh_tw',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'zh_tw',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,9 +164,16 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * 圖片套件
+         */
+        Intervention\Image\ImageServiceProvider::class,
+         
+
+        /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -176,11 +183,30 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        /*
-         * 圖片套件
-         */
-        Intervention\Image\ImageServiceProvider::class,
 
+        /*
+         * Custom Service Providers...
+         */
+        App\Providers\ImageHelperServiceProvider::class,
+        /*
+         * 假別計算
+         */
+        App\Providers\LeaveHelperServiceProvider::class,
+        /*
+         * 時間套件
+         */
+        App\Providers\TimeHelperServiceProvider::class,
+        /*
+         * 上傳檔案
+         */
+        App\Providers\AttachHelperServiceProvider::class,
+        App\Providers\WebHelperServiceProvider::class,
+        App\Providers\UrlHelperServiceProvider::class,
+        App\Providers\ConfigHelperServiceProvider::class,
+        App\Providers\UserHelperServiceProvider::class,
+        App\Providers\SlackHelperServiceProvider::class,
+        App\Providers\EmailHelperServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
     ],
 
     /*
@@ -229,8 +255,23 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,                
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image' => Intervention\Image\Facades\Image::class,
+
+        /**
+         * HELPER
+         */
+        'LeaveHelper' => App\Facades\LeaveHelper::class,
+        'TimeHelper' => App\Facades\TimeHelper::class,
+        'AttachHelper' => App\Facades\AttachHelper::class,
+        'ImageHelper' => App\Facades\ImageHelper::class,
+        'WebHelper' => App\Facades\WebHelper::class,
+        'UrlHelper' => App\Facades\UrlHelper::class,
+        'ConfigHelper' => App\Facades\ConfigHelper::class,
+        'UserHelper' => App\Facades\UserHelper::class,
+        'SlackHelper' => App\Facades\SlackHelper::class,
+        'EmailHelper' => App\Facades\EmailHelper::class,
     ],
 
 ];
