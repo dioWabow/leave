@@ -1442,6 +1442,56 @@ $(function () {
   }).on('filepredelete ', function(event, data, previewId, index) {
   }).on('filedeleted ', function(event, data, previewId, index) {
   });
+
+  $(document).on('change', '#form_config_company', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('click', '#form_config_company .file-input', function(event){
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_smtp', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_google', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_slack', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_other :input").prop("disabled", true);
+    });
+    $(document).on('change', '#form_config_other', function(event){
+        $("#form_config_company :input").prop("disabled", true);
+        $("#form_config_smtp :input").prop("disabled", true);
+        $("#form_config_google :input").prop("disabled", true);
+        $("#form_config_slack :input").prop("disabled", true);
+    });
+    $(".reset").click(function() {
+      $(":input").prop("disabled", false);
+    });
+
+    var $option = {'showUpload': false};
+
+    @if( $config['company_logo'] != '')
+    $option.initialPreview = ['{{ UrlHelper::getCompanyLogoUrl($config['company_logo']) }}'];
+    $option.initialPreviewAsData = true;
+    @endif
+
+    $("#config_company_logo").fileinput($option);
 });
 </script>
+
 @endif
