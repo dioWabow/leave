@@ -1,14 +1,14 @@
 @extends('default')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-hand-spock-o"></i> 協助申請請假
 	<small>Taken a lot of time off</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">協助申請請假</li>
   </ol>
 </section>
@@ -22,76 +22,19 @@
 			</div>
 			<div class="box-body">
 				<ul class="mailbox-attachments clearfix">
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/neo.png" class="img-circle" alt="Neo"></span>
+          @forelse($user_arr as $user)
+            @if($user->id!=Auth::user()->id)
+    					<li class='clickable-row' data-href="{{ route('leave_assist/create', ['id'=>$user->id]) }}">
+    						<span class="mailbox-attachment-icon has-img"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" alt="{{$user->nickname}}"></span>
 
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Neo</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/default.png" class="img-circle" alt="毛毛"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> 毛毛</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/suzy.png" class="img-circle" alt="Suzy"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Suzy</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/rita.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Rita</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/sheng.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Sheng</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/henry.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Henry</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/default.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Stephanie</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/wei.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Wei</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/rock.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Rock</a>
-						</div>
-					</li>
-					<li class='clickable-row' data-href='leave_form3.html'>
-						<span class="mailbox-attachment-icon has-img"><img src="dist/img/users/jerry.png" class="img-circle"></span>
-
-						<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i> Jerry</a>
-						</div>
-					</li>
+    						<div class="mailbox-attachment-info">
+    							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i>{{$user->nickname}}</a>
+    						</div>
+    					</li>
+            @endif
+          @empty
+            無資料
+          @endforelse
 				</ul>
 			</div>
 		</div>
