@@ -61,6 +61,9 @@
 <!-- colorpicker -->
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.js"></script>
+<link src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
+
 <!-- 全部共用 -->
 <script>
 $(function () {
