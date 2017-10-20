@@ -4,12 +4,12 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="glyphicon glyphicon-sort"></i> 缺填次數報表
+	<i class="glyphicon glyphicon-sort"></i> 缺填報表
 	<small>Missing Sheet Report</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">缺填次數報表</li>
+	<li class="active">缺填報表</li>
   </ol>
 </section>
 

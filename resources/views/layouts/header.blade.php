@@ -130,7 +130,7 @@
           </a>
         </li>
         <li class="active">
-          <a href="{{ route('rank_report/index') }}"><i class="glyphicon glyphicon-sort"></i> <span>排行榜</span>
+          <a href="{{ route('rank_report/index') }}"><i class="glyphicon glyphicon-sort"></i> <span>缺填報表</span>
           </a>
         </li>
         <li>
