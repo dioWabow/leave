@@ -21,12 +21,6 @@
       <form action="{{ route('teams/memberSet')}}" method="POST" name="member_form">
         <div class="box box-info">
           <div class="box-body" id="member_set">
-            <div class="col-md-12" align="right">
-              團隊：
-              <select>
-                <option>Washop</option>
-              </select>
-            </div>
 
           @if(1!=1)
           @foreach($team_result as $team_data)
@@ -59,9 +53,12 @@
           @else
           <div class="form-group member_list" id="member_match_manager"><div class="row">
               <div class="col-md-2">
+                <label>Washop</label>
+              </div>
+              <div class="col-md-2">
                 <label>Tony</label>
               </div>
-              <div class="col-md-10">
+              <div class="col-md-8">
                 <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Dio</option>
@@ -74,16 +71,51 @@
             </div></div>
             <div class="form-group member_list" id="member_match_manager"><div class="row">
               <div class="col-md-2">
-                <label>Eno</label>
+                <label></label>
               </div>
-              <div class="col-md-10">
+              <div class="col-md-2">
+                <label>Carrie</label>
+              </div>
+              <div class="col-md-8">
                 <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Dio</option>
-                  <option>Tony</option>
-                  <option selected>Carrie</option>
+                  <option>Eno</option>
+                  <option selected>Tony</option>
                   <option>Michael</option>
                   <option>Evan</option>
+                </select>
+              </div>
+            </div></div>
+            <div class="form-group member_list" id="member_match_manager"><div class="row">
+              <div class="col-md-2">
+                <label>Waca</label>
+              </div>
+              <div class="col-md-2">
+                <label>Vic</label>
+              </div>
+              <div class="col-md-8">
+                <label>人員</label>
+                <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
+                  <option selected>Suzy</option>
+                  <option>Henry</option>
+                  <option>Rita</option>
+                </select>
+              </div>
+            </div></div>
+            <div class="form-group member_list" id="member_match_manager"><div class="row">
+              <div class="col-md-2">
+                <label>Waca Sales</label>
+              </div>
+              <div class="col-md-2">
+                <label>Jerry</label>
+              </div>
+              <div class="col-md-8">
+                <label>人員</label>
+                <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
+                  <option selected>Judy</option>
+                  <option selected>Rock</option>
+                  <option>Luby</option>
                 </select>
               </div>
             </div></div>
