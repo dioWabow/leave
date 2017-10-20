@@ -5,12 +5,12 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="glyphicon glyphicon-paperclip"></i> 專案項目管理
+	<i class="glyphicon glyphicon-file"></i> 專案項目
 	<small>Project Form Management</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">專案項目管理</li>
+	<li class="active">專案項目</li>
   </ol>
 </section>
 

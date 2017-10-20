@@ -138,7 +138,7 @@
           </a>
         </li>
         <li class="active">
-          <a href="{{ route('sheet_project/index') }}"><i class="glyphicon glyphicon-paperclip"></i> <span>專案項目管理</span>
+          <a href="{{ route('sheet_project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
 
