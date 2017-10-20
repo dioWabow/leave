@@ -4,21 +4,30 @@
 <style type="text/css">
 
   .fonts {
-
     display: block;
     text-align: center;
+    font-weight:bold;
+    font-size: 16px;
+  }
 
-}
+  .popover {
+    z-index: 1010; /* A value higher than 1010 that solves the problem */
+  }
+
+  .fc-title{
+    font-size: 14px;
+  }
+
 </style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	月報表
-	<small>timesheet calendar</small>
+  月報表
+  <small>timesheet calendar</small>
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">月報表</li>
+  <li class="active">月報表</li>
   </ol>
 </section>
 
@@ -26,10 +35,10 @@
 <section class="content">
   <!-- /.row calendar -->
   <div class="row">
-	<!-- /.col -->
-	<div class="col-md-12">
-	  <div class="box box-primary">
-		<div class="box-body no-padding">
+  <!-- /.col -->
+  <div class="col-md-12">
+    <div class="box box-primary">
+    <div class="box-body no-padding">
       <ul class="nav nav-tabs">
         <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/dio.png" width="50px"><br><span class="fonts">dio</span></a></li>
         <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/michael.png" width="50px"><br><span class="fonts">michael</span></a></li>
@@ -37,14 +46,14 @@
         <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/storage/avatar/carrie.png" width="50px"><br><span class="fonts">carrie</span></a></li>
         <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/eno.png" width="50px"><br><span class="fonts">eno</span></a></li>
       </ul>
-		  <!-- THE CALENDAR -->
-		  <div id="calendar"></div>
-		</div>
-		<!-- /.box-body -->
-	  </div>
-	  <!-- /. box -->
-	</div>
-	<!-- /.col -->
+      <!-- THE CALENDAR -->
+      <div id="calendar"></div>
+    </div>
+    <!-- /.box-body -->
+    </div>
+    <!-- /. box -->
+  </div>
+  <!-- /.col -->
   </div>
   <!-- /.row calendar -->
 
@@ -56,13 +65,17 @@
   $(document).ready(function() {
 
     $('#calendar').fullCalendar({
+      height: 800,
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,agendaDay'
+        right: 'month,listMonth'
+      },
+      buttonText: {
+        listMonth: 'List Month',
       },
       defaultDate: '2017-10-12',
-      navLinks: true, // can click day/week names to navigate views
+      navLinks: false, // can click day/week names to navigate views
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [
@@ -113,7 +126,7 @@
           start: '2017-10-12'
         },
         {
-          title: 'Birthday Party',
+          title: 'Birthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday Party',
           start: '2017-10-13'
         },
         {
@@ -122,9 +135,9 @@
           start: '2017-10-28'
         }
       ],
-      eventClick: function(calEvent, jsEvent, view) {
-        alert('我是連結');
-      },
+      eventRender: function(event, element) {
+        element.prop("title", event.title);
+      }
     });
   });
 
