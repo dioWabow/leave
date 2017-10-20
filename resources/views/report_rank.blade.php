@@ -4,12 +4,12 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="glyphicon glyphicon-sort"></i> 缺填報表
+	<i class="glyphicon glyphicon-thumbs-down"></i> 缺填日誌
 	<small>Missing Sheet Report</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">缺填報表</li>
+	<li class="active">缺填日誌</li>
   </ol>
 </section>
 
@@ -24,6 +24,7 @@
 							<div class="row">
 								<div class="col-sm-5">
 									<div class="label bg-blue" style="font-size:20px">2017年</div>
+									<div class="label bg-blue" style="font-size:20px">10月</div>
 								</div>
 								<div class="col-sm-7">
 									<div class="pull-right">
@@ -55,28 +56,28 @@
 									<thead>
 										<tr>
 											<th width="3%"></th>
-											<th><a href="#sort_name">姓名</a></th>
-											<th><a href="#sort_total">缺填次數</a></th>
+											<th width="20%"><a href="#sort_name">姓名</a></th>
+											<th width="20%"><a href="#sort_total">缺填次數</a></th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<td>
-												<img src="dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
+												<img src="./dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
 											</td>
 											<td>毛毛</td>
 											<td class="text-red">5</td>
 										</tr>
 										<tr  >
 											<td>
-												<img src="dist/img/users/dio.png" class="img-circle" alt="Dio" width="50px">
+												<img src="./dist/img/users/wabow_logo.png" class="img-circle" alt="Dio" width="50px">
 											</td>
 											<td>Dio</td>
 											<td class="text-red">8</td>
 										</tr>
 										<tr>
 											<td>
-												<img src="dist/img/users/wei.png" class="img-circle" alt="Wei" width="50px">
+												<img src="./dist/img/users/wabow_logo.png" class="img-circle" alt="Wei" width="50px">
 											</td>
 											<td>Wei</td>
 											<td class="text-red">10</td>
@@ -85,9 +86,9 @@
 									<tfotter>
                 </tr>
 				            <tr class="clickable-row" data-href="#">
-                      <td colspan="3" align="center">
-                        無資料
-                      </td>
+                      <tr class="">
+												<td colspan="3" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+											</tr>
                     </tr>
 									</tfotter>
 								</table>
