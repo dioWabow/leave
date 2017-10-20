@@ -15,6 +15,7 @@
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+	<li><a href="{{ route('index') }}">工作日誌</a></li>
 	@if( 1 == 1 )
 	<li class="active">新增工作項目</li>
 	@else
@@ -36,6 +37,21 @@
 				@endif
 			</div>
 			<div class="box-body">
+				<div class="form-group" id="group_timepicker">
+					<div class="row">
+						<div class="col-md-1">
+							<label>工作日期 *</label>
+						</div>
+						<div class="col-md-11">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-clock-o"></i>
+								</div>
+								<input type="text" id="leave_timepicker" name="leave[timepicker]" value="" class="form-control pull-right" date="">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="form-group">
 					<div class="row">
 						<div class="col-md-1">
@@ -49,18 +65,13 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group" id="group_timepicker">
+				<div class="form-group">
 					<div class="row">
 						<div class="col-md-1">
-							<label>工作日期 *</label>
+							<label>標籤</label>
 						</div>
 						<div class="col-md-11">
-							<div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-clock-o"></i>
-								</div>
-								<input type="text" id="leave_timepicker" name="leave[timepicker]" value="" class="form-control pull-right" date="">
-							</div>
+							<input class="form-control">
 						</div>
 					</div>
 				</div>
@@ -87,8 +98,11 @@
 						<div class="col-md-1">
 							<label>工作時數 *</label>
 						</div>
-						<div class="col-md-11">
+						<div class="col-md-5">
 							<input type="number" class="form-control" value="0">
+						</div>
+						<div class="col-md-6">
+							(單位小時 0.1,0.5,1,2 依此類推)
 						</div>
 					</div>
 				</div>
@@ -96,16 +110,6 @@
 					<div class="row">
 						<div class="col-md-1">
 							<label>連結</label>
-						</div>
-						<div class="col-md-11">
-							<input class="form-control">
-						</div>
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="row">
-						<div class="col-md-1">
-							<label>TAG</label>
 						</div>
 						<div class="col-md-11">
 							<input class="form-control">
@@ -124,6 +128,9 @@
 				</div>
 			</div>
 			<div class="box-footer">
+				<div class="pull-left">
+					<button type="submit" class="btn btn-danger">刪除</button>
+				</div>
 				<div class="pull-right">
 					<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
 					<button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i> Send</button>
