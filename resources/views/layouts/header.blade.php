@@ -119,14 +119,18 @@
         </li>
         <li class="header">TIMESHEET</li>
         <li>
-          <a href="{{ route('leave/create') }}"><i class="glyphicon glyphicon-pencil"></i> <span>日報表</span></a>
+          <a href="{{ route('leave/create') }}"><i class="glyphicon glyphicon-pencil"></i> <span>日誌</span></a>
         </li>
         <li>
-          <a href="{{ route('sheet/calendar') }}"><i class="fa fa-calendar"></i> <span>月報表</span>
+          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>
           </a>
         </li>
         <li>
           <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填報表</span>
           </a>
         </li>
         <li>

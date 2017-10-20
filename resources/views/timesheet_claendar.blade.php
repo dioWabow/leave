@@ -18,10 +18,15 @@
     font-size: 14px;
   }
 
+  .fc-list-item-time{
+    display : none;
+  }
+
 </style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
+  <i class="glyphicon glyphicon-list-alt"></i>
   月報表
   <small>timesheet calendar</small>
   </h1>
@@ -64,6 +69,8 @@
 
   $(document).ready(function() {
 
+    var initialLocaleCode = 'zh-tw';
+
     $('#calendar').fullCalendar({
       height: 800,
       header: {
@@ -72,9 +79,10 @@
         right: 'month,listMonth'
       },
       buttonText: {
-        listMonth: 'List Month',
+        listMonth: '月列表',
       },
       defaultDate: '2017-10-12',
+      locale: initialLocaleCode,
       navLinks: false, // can click day/week names to navigate views
       editable: true,
       eventLimit: true, // allow "more" link when too many events
