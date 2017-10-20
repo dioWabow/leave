@@ -18,7 +18,6 @@
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li><a href="{{ route('index') }}">日報表</a></li>
 	<li class="active">月報表</li>
   </ol>
 </section>
@@ -32,11 +31,11 @@
 	  <div class="box box-primary">
 		<div class="box-body no-padding">
       <ul class="nav nav-tabs">
-        <li class="active fonts"><a href=""><img src="https://goo.gl/wHhTwc" width="50px"><br><span class="fonts">dio</span></a></li>
-        <li class="active fonts"><a href=""><img src="https://goo.gl/wHhTwc" width="50px"><br><span class="fonts">michael</span></a></li>
-        <li class="active fonts"><a href=""><img src="https://goo.gl/wHhTwc" width="50px"><br><span class="fonts">tony</span></a></li>
-        <li class="active fonts"><a href=""><img src="https://goo.gl/wHhTwc" width="50px"><br><span class="fonts">carrie</span></a></li>
-        <li class="active fonts"><a href=""><img src="https://goo.gl/wHhTwc" width="50px"><br><span class="fonts">eno</span></a></li>
+        <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/dio.png" width="50px"><br><span class="fonts">dio</span></a></li>
+        <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/michael.png" width="50px"><br><span class="fonts">michael</span></a></li>
+        <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/tony.png" width="50px"><br><span class="fonts">tony</span></a></li>
+        <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/storage/avatar/carrie.png" width="50px"><br><span class="fonts">carrie</span></a></li>
+        <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/eno.png" width="50px"><br><span class="fonts">eno</span></a></li>
       </ul>
 		  <!-- THE CALENDAR -->
 		  <div id="calendar"></div>
@@ -60,15 +59,15 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: ''
+        right: 'month,agendaDay'
       },
       defaultDate: '2017-10-12',
-      navLinks: true,
+      navLinks: true, // can click day/week names to navigate views
       editable: true,
-      eventLimit: true,
+      eventLimit: true, // allow "more" link when too many events
       events: [
         {
-          title: 'All Day Event',
+          title: 'All Day Event / 5小時',
           start: '2017-10-01',
           description: 'long description',
         },
@@ -80,12 +79,12 @@
         {
           id: 999,
           title: 'Repeating Event',
-          start: '2017-10-09T16:00:00'
+          start: '2017-10-09'
         },
         {
           id: 999,
           title: 'Repeating Event',
-          start: '2017-10-16T16:00:00'
+          start: '2017-10-16'
         },
         {
           title: 'Conference',
@@ -94,28 +93,28 @@
         },
         {
           title: 'Meeting',
-          start: '2017-10-12T10:30:00',
-          end: '2017-10-12T12:30:00'
+          start: '2017-10-12',
+          end: '2017-10-12'
         },
         {
           title: 'Lunch',
-          start: '2017-10-12T12:00:00'
+          start: '2017-10-12'
         },
         {
           title: 'Meeting',
-          start: '2017-10-12T14:30:00'
+          start: '2017-10-12'
         },
         {
           title: 'Happy Hour',
-          start: '2017-10-12T17:30:00'
+          start: '2017-10-12'
         },
         {
           title: 'Dinner',
-          start: '2017-10-12T20:00:00'
+          start: '2017-10-12'
         },
         {
           title: 'Birthday Party',
-          start: '2017-10-13T07:00:00'
+          start: '2017-10-13'
         },
         {
           title: 'Click for Google',
@@ -123,9 +122,9 @@
           start: '2017-10-28'
         }
       ],
-      eventRender: function(event, element) {
-            element.find('.fc-title').append("<br/>" + event.description);
-      }
+      eventClick: function(calEvent, jsEvent, view) {
+        alert('我是連結');
+      },
     });
   });
 
