@@ -1399,3 +1399,33 @@ $(function () {
 });
 </script>
 @endif
+@if(Request::is('sheet_project/*'))
+<script>
+$(function () {
+  $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+  });
+
+  $("#panel").hide();
+  $("#team_check").on("ifChanged", function () {
+    $("#panel").fadeToggle();
+  });
+
+  $("#panel2").hide();
+  $("#team_check2").on("ifChanged", function () {
+    $("#panel2").fadeToggle();
+  });
+
+  $("#panel3").hide();
+  $("#team_check3").on("ifChanged", function () {
+    $("#panel3").fadeToggle();
+  });
+
+  $("#panel4").hide();
+  $("#team_check4").on("ifChanged", function () {
+    $("#panel4").fadeToggle();
+  });
+});
+</script>
+@endif

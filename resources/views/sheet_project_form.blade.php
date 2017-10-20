@@ -30,43 +30,87 @@
 						<input type="text" id="sheet_project_title" name="sheet_project[title]" class="form-control pull-right" value="EFSHOP衣芙日系">
 					</div>
 				</div></div>
-				<div class="row">
-            		<div id="tree"></div>
-				</div>
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>團隊</label>
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="radio" name="sheet_project[team]" class="flat-red" value="waca" checked="checked"> 
+							<input type="checkbox" id="team_check" name="sheet_project[team]" class="flat-red" value="waca">
 							WACA
 						</label>&emsp; 
-						<label>
-							<input type="radio" name="sheet_project[team]" class="flat-red" value="washop"> 
-							WASHOP
-						</label>&emsp; 
-						<label>
-							<input type="radio" name="sheet_project[team]" class="flat-red" value="hr"> 
-							HR
-						</label>&emsp; 
-						<label>
-							<input type="radio" id="sheet_project_team" name="sheet_project[team]" class="flat-red" value="pm"> 
-							PM
-						</label>&emsp; 
-						<label>
-							<input type="radio" id="sheet_project_team" name="sheet_project[team]" class="flat-red" value="pm"> 
-							共用
+						<label id="panel">
+							<button type="button" class="btn btn-danger btn-xs">waca code</button>
+              <button type="button" class="btn btn-danger btn-xs">waca 999</button>
 						</label>&emsp; 
 					</div>
 				</div></div>
-				
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label></label>
+					</div>
+					<div class="col-md-11">
+						<label>
+							<input type="checkbox" id="team_check2" name="sheet_project[team]" class="flat-red" value="washop" >
+							WASHOP
+						</label>&emsp; 
+            <label id="panel2">
+							<button type="button" class="btn btn-warning btn-xs">washop fight</button>
+							<button type="button" class="btn btn-warning btn-xs">washop fly</button>
+						</label>&emsp; 
+					</div>
+				</div></div>
+
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label></label>
+					</div>
+					<div class="col-md-11">
+						<label>
+							<input type="checkbox" id="team_check3" name="sheet_project[team]" class="flat-red" value="washop" >
+							Hr
+						</label>&emsp; 
+            <label id="panel3">
+							<button type="button" class="btn btn-success btn-xs">Hr YO</button>
+						</label>&emsp; 
+					</div>
+				</div></div>
+
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label></label>
+					</div>
+					<div class="col-md-11">
+						<label>
+							<input type="checkbox" id="team_check4" name="sheet_project[team]" class="flat-red" value="washop" >
+              PM
+						</label>&emsp; 
+            <label id="panel4">
+							<button type="button" class="btn btn-primary btn-xs">PM QQ</button>
+						</label>&emsp; 
+					</div>
+				</div></div>
+
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label></label>
+					</div>
+					<div class="col-md-11">
+						<label>
+							<input type="checkbox" id="team_check4" name="sheet_project[team]" class="flat-red" value="washop" >
+              共用
+						</label>&emsp; 
+					</div>
+				</div></div>
+
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>狀態</label>
 					</div>
 					<div class="col-md-11">
-						<input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
+						<label>
+							<input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
+						</label>
 					</div>
 				</div></div>
 			</div>
