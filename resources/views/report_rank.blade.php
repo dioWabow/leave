@@ -4,12 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-line-chart"></i> 缺填次數報表
-	<small>Rank Sheet Report</small>
+	<i class="glyphicon glyphicon-sort"></i> 缺填次數報表
+	<small>Missing Sheet Report</small>
   </h1>
   <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>報表</li>
+	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
 	<li class="active">缺填次數報表</li>
   </ol>
 </section>
@@ -29,11 +28,19 @@
 								<div class="col-sm-7">
 									<div class="pull-right">
 										<label>
-											年份：
+											時間：
 											<select id="setting_year" name="setting[year]" class="form-control">
 												<option value="2017" selected="selected">2017 年</option>
 												<option value="2016">2016 年</option>
 												<option value="2016">2015 年</option>
+											</select>
+										</label>
+										<label>
+											<select id="setting_month" name="setting[month]" class="form-control">
+												<option value="year">整年</option>
+                        <option value="1" selected="selected">1月</option>
+												<option value="2">2月</option>
+												<option value="3">3月</option>
 											</select>
 										</label>
 										<label><button type="button" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
@@ -53,49 +60,31 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr class="clickable-row" data-href="{{ route('rank_report/view') }}">
+										<tr>
 											<td>
 												<img src="dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
 											</td>
 											<td>毛毛</td>
 											<td class="text-red">5</td>
 										</tr>
-										<tr class='clickable-row' data-href="{{ route('rank_report/view') }}">
+										<tr  >
 											<td>
 												<img src="dist/img/users/dio.png" class="img-circle" alt="Dio" width="50px">
 											</td>
 											<td>Dio</td>
 											<td class="text-red">8</td>
 										</tr>
-										<tr class='clickable-row' data-href="{{ route('rank_report/view') }}">
+										<tr>
 											<td>
 												<img src="dist/img/users/wei.png" class="img-circle" alt="Wei" width="50px">
 											</td>
 											<td>Wei</td>
 											<td class="text-red">10</td>
 										</tr>
-										<tr class='clickable-row' data-href="{{ route('rank_report/view') }}">
-											<td>
-												<img src="dist/img/users/eno.png" class="img-circle" alt="Eno" width="50px">
-											</td>
-											<td>Eno</td>
-											<td>0</td>
-										</tr>
-										<tr class='clickable-row' data-href="{{ route('rank_report/view') }}">
-											<td>
-												<img src="dist/img/users/lube.png" class="img-circle" alt="Lube" width="50px">
-											</td>
-											<td>Lube</td>
-											<td>0</td>
-										</tr>
 									</tbody>
 									<tfotter>
-										<tr class="text-red">
-											<th></th>
-											<th class="pull-right">總計(次數)</th>
-											<td>23</td>
-										</tr>
-										<tr class="clickable-row" data-href="#">
+                </tr>
+				            <tr class="clickable-row" data-href="#">
                       <td colspan="3" align="center">
                         無資料
                       </td>
