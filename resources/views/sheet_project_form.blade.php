@@ -4,14 +4,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    <i class="fa fa-anchor"></i> 專案項目修改
-    <small>Vacation Category Management</small>
+    <i class="glyphicon glyphicon-paperclip"></i> 專案項目修改
+    <small>Project Form Management</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li>專案設定</li>
-    <li><a href="./users.html">專案項目管理</a></li>
-    <li class="active">專案修改</li>
+    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ route('sheet_project/index') }}">專案項目管理</a></li>
+    <li class="active">專案項目修改</li>
   </ol>
 </section>
 
@@ -31,7 +30,9 @@
 						<input type="text" id="sheet_project_title" name="sheet_project[title]" class="form-control pull-right" value="EFSHOP衣芙日系">
 					</div>
 				</div></div>
-
+				<div class="row">
+            		<div id="tree"></div>
+				</div>
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label>團隊</label>
@@ -52,6 +53,10 @@
 						<label>
 							<input type="radio" id="sheet_project_team" name="sheet_project[team]" class="flat-red" value="pm"> 
 							PM
+						</label>&emsp; 
+						<label>
+							<input type="radio" id="sheet_project_team" name="sheet_project[team]" class="flat-red" value="pm"> 
+							共用
 						</label>&emsp; 
 					</div>
 				</div></div>

@@ -449,43 +449,42 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     # 工作日誌 - 專案項目設定
-    Route::group(['prefix'=>'sheet'], function(){
+    Route::group(['prefix'=>'sheet_project'], function(){
         Route::match(['get', 'post'], 'index',[
             'as' => 'sheet_project/index',
-            'uses' => 'SheetProjectController@getIndex',
+            'uses' => 'Sheet\SheetProjectController@getIndex',
         ]);
 
         Route::get('create',[
             'as' =>'sheet_project/create',
-            'uses' => 'SheetProjectController@getCreate',
+            'uses' => 'Sheet\SheetProjectController@getCreate',
         ]);
 
         Route::get('edit',[
             'as' => 'sheet_project/edit',
-            'uses' => 'SheetProjectController@getEdit',
+            'uses' => 'Sheet\SheetProjectController@getEdit',
         ]);
 
         Route::get('delete',[
             'as' => 'sheet_project/delete',
-            'uses' => 'SheetProjectController@postDelete',
+            'uses' => 'Sheet\SheetProjectController@postDelete',
         ]);
 
         Route::post('insert',[
             'as' => 'sheet_project/insert',
-            'uses' => 'SheetProjectController@postInsert',
+            'uses' => 'Sheet\SheetProjectController@postInsert',
         ]);
 
         Route::post('update',[
             'as' => 'sheet_project/update',
-            'uses' => 'SheetProjectController@postUpdate',
+            'uses' => 'Sheet\SheetProjectController@postUpdate',
         ]);
 
         Route::post('update_ajax',[
             'as' => 'sheet_project/update_ajax',
-            'uses' => 'SheetProjectController@ajaxUpdateData',
+            'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
         ]);
     });
-
 });
 
 Route::match(['get', 'post'], '/demo/image',[

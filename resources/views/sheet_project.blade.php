@@ -5,12 +5,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-anchor"></i> 專案項目管理
-	<small>Vacation Category Management</small>
+	<i class="glyphicon glyphicon-paperclip"></i> 專案項目管理
+	<small>Project Form Management</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>專案設定</li>
 	<li class="active">專案項目管理</li>
   </ol>
 </section>
@@ -40,7 +39,7 @@
                 <form name="frmSearch" action="" method="POST">
                   <div class="pull-right">
                     <label>
-                      團隊名稱：
+                      團隊：
                       <select id="search_team" name="search[team]" class="form-control">
                         <option value="">全部</option>
                         <option value="waca">WACA</option>
@@ -61,7 +60,7 @@
                     &nbsp;
                     <label>
                       關鍵字：
-                      <input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[keywords]" style="width:270px">
+                      <input type="search" class="form-control" placeholder="請輸入專案進行查詢" name="search[keywords]" style="width:270px">
                       <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                       <button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button>
                     </label>
@@ -74,10 +73,9 @@
                 <table class="table table-bordered table-striped table-hover">
                   <thead>
                     <tr>
-                      <th width="20%"><a href="#sort_name">專案名稱</a></th>
-                      <th width="20%"><a href="#sort_kind">團隊</a></th>
-                      <th width="10%"><a href="#sort_status">狀態</a></th>
-                      <th width="5%"></th>
+                      <th width="20%">專案</a></th>
+                      <th width="20%">團隊</a></th>
+                      <th width="10%">狀態</a></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -87,18 +85,12 @@
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
-                      <td>
-                        <button type="submit" class="btn btn-danger" disabled="disabled"><i class="fa fa-trash-o"></i></button>
-                      </td>
                     </tr>
                     <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
                       <td>EDOLLARS衣大樂是</td>
                       <td>WASHOP</td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
-                      </td>
-                      <td>
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                       </td>
                     </tr>
 
@@ -107,9 +99,6 @@
                       <td>WASHOP</td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
-                      </td>
-                      <td>
-                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                       </td>
                     </tr>
                   </tbody>
