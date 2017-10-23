@@ -76,10 +76,19 @@ Route::group(['middleware' => 'auth'], function () {
             'uses'=> 'SystemConfController@getIndex',
         ]);
 
-
         Route::post('update',[
             'as'=>'config/update',
             'uses'=> 'SystemConfController@postUpdate',
+        ]);
+
+        Route::post('upload', [
+            'as' => 'config/upload',
+            'uses' => 'SystemConfController@postUpload',
+        ]);
+
+        Route::post('delete', [
+            'as' => 'config/delete',
+            'uses' => 'SystemConfController@postDelete',
         ]);
     });
 
@@ -469,6 +478,17 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
     });
+
+    // 月報表
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::get('calendar', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Timesheet\TimesheetController@getCalendar',
+        ]);
+
+    });
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[

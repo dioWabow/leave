@@ -7,10 +7,7 @@
 	<i class="fa fa-calendar-check-o"></i> 團隊假單
 	<small>Teams Leave List</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">團隊假單</li>
-  </ol>
+  {{ Breadcrumbs::render('leaves_manager') }}
 </section>
 
 <!-- Main content -->

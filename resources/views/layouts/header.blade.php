@@ -117,6 +117,30 @@
         <li @if(Request::is('index'))class="active" @endif>
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
+        <li class="header">TIMESHEET</li>
+        <li>
+          <a href="{{ route('leave/create') }}"><i class="glyphicon glyphicon-pencil"></i> <span>日誌</span></a>
+        </li>
+        <li>
+          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填報表</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
+          </a>
+        </li>
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
         <li @if(Request::is('leave/*'))class="active" @endif>

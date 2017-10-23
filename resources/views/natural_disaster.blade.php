@@ -1,40 +1,13 @@
-
-
 @extends('default')
 
 @section('content')
-  <!-- Page script -->
-<script>
-$(function () {
-    $('#natural_search').on('click', function(){
-        $("#natural_search_frm").submit();
-    });
-
-    var default_pre_date = "{{$input["date"]}}";
-    var default_date = new Date(default_pre_date);
-    $('.single-date').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'},
-        startDate: default_date
-    }).each(function(){
-        $(this).val($(this).attr('date'));
-    }).on('change', function(){ 
-        $('#' + $(this).attr('id') + '_type option:eq(1)').prop('selected', true);
-    });
-    $("#natural_date").val(default_pre_date);
-});
-</script>
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
 	<i class="fa fa-cloud"></i> 天災假單調整
 	<small>Natural Disaster Modify</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">天災假單調整</li>
-  </ol>
+  {{ Breadcrumbs::render('natural') }}
 </section>
 
 <!-- Main content -->

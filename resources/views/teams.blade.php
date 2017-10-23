@@ -7,11 +7,7 @@
 	<i class="fa fa-sitemap"></i> 團隊設定
 	<small>Teams Setting</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>基本設定</li>
-	<li class="active">團隊設定</li>
-  </ol>
+  {{ Breadcrumbs::render('team') }}
 </section>
 
 <!-- Main content -->

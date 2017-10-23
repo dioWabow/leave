@@ -23,12 +23,9 @@
       
       $('body').vegas({
           slides: [
-              { src: '{{ route('root_path') }}/dist/img/wabow-team2.jpg' },
-              { src: '{{ route('root_path') }}/dist/img/wabow-team3.jpg' },
-              { src: '{{ route('root_path') }}/dist/img/wabow-team4.jpg' },
-              { src: '{{ route('root_path') }}/dist/img/wabow-team6.jpg' },
-              { src: '{{ route('root_path') }}/dist/img/wabow-team7.jpg' },
-              { src: '{{ route('root_path') }}/dist/img/wabow-team8.jpg' },
+              @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
+                { src: '{{UrlHelper::getLoginPictureUrl($picture)}}' },
+              @endforeach
           ],
           //transition: 'zoomOut',
           animation: 'random',

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserAgent extends Model
+class UserAgent extends BaseModel
 {
     /**
      * 與Model關聯的table

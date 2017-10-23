@@ -17,7 +17,7 @@ class AttachHelper
         $this->upload_path = '/public/';
     }
 
-    public function uploadFiles($name, $folder = 'tmp')
+    public function uploadFiles($name, $folder = 'tmp', $fixedname = '')
     {
         $this->_save_folder = $folder . '/';
         $this->_file_path = $this->upload_path . $this->_save_folder;
@@ -30,7 +30,16 @@ class AttachHelper
             $result = array();
             foreach($input as $key=>$file) {
 
-                $filename = $this->saveFile($file);
+                if (!empty($fixedname)) {
+
+                    $filename = $this->saveFile($file,$fixedname);
+
+                } else {
+
+                    $filename = $this->saveFile($file);
+
+                }
+                
                 if($filename !== null) $result[] = $filename;
 
             }
@@ -45,9 +54,17 @@ class AttachHelper
 
             }
 
-        }else{
+        } else {
 
-            return $this->saveFile($input);
+            if (!empty($fixedname)) {
+
+                return $this->saveFile($input,$fixedname);
+
+            } else {
+
+                return $this->saveFile($input);
+
+            }
 
         }
     }
@@ -89,11 +106,20 @@ class AttachHelper
         return null;
     }
 
-    private function saveFile($file)
+    private function saveFile($file,$filename = '')
     {
         $file_extension = $file->getClientOriginalExtension();
         
-        $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
+        if (empty($filename)) {
+
+            $filename = strval(time()) . str_random(5) . '.' . $file_extension; //重新命名，若傳中文會炸掉，故要改名
+
+        } else {
+
+            $filename .= '.' . $file_extension;
+
+        }
+        
         $save = Storage::putFileAs($this->_file_path , $file, $filename);
 
         if ($save) {

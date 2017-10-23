@@ -7,11 +7,7 @@
 	<i class="fa fa-line-chart"></i> 特休結算
 	<small>Annual Leave Calculate</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{route('index')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>月/年報表</li>
-	<li class="active">特休結算</li>
-  </ol>
+  {{ Breadcrumbs::render('annual_leave_calculate') }}
 </section>
 
 <!-- Main content -->

@@ -749,7 +749,7 @@ class LeaveController extends Controller
         $leave['id'] = $request->all()['id'];
         $leave['prove'] = $this->loadModel($leave['id'])->prove;
 
-        if(Input::hasFile('fileupload')) {
+        if (Input::hasFile('fileupload')) {
             $file_name = AttachHelper::uploadFiles('fileupload','prove');
 
             if (!empty($file_name)) {
