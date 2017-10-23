@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-calendar-check-o"></i> 2017-10-18
+	<i class="fa fa-calendar-plus-o"></i> 2017-10-18
 	<small>Work sheet</small>
   </h1>
   <ol class="breadcrumb">
@@ -14,16 +14,15 @@
 </section>
 
 <!-- Main content -->
-<section class="content">
+<section class="content" id="calendar_content">
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-
-					<li class=""><a href="#">dio</a></li>
-					<li class=""><a href="#">tony</a></li>
-					<li class="active"><a href="#">eno</a></li>
-					<li class=""><a href="#">carrie</a></li>
+					<li class="fonts"><a href=""><img src="{{UrlHelper::getUserAvatarUrl('dio')}}" width="50px"><br><span class="fonts">dio</span></a></li>
+					<li class=""><a href=""><img src="{{UrlHelper::getUserAvatarUrl('tony')}}" width="50px"><br><span class="fonts">tony</span></a></li>
+					<li class="active"><a href=""><img src="{{UrlHelper::getUserAvatarUrl('eno')}}" width="50px"><br><span class="fonts">eno</span></a></li>
+					<li class=""><a href=""><img src="{{UrlHelper::getUserAvatarUrl('carrie')}}" width="50px"><br><span class="fonts">carrie</span></a></li>
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane active" id="list">
@@ -33,6 +32,9 @@
 									<div class="col-sm-6">
 										<!--div id="datepicker"></div-->
 										<div class="input-group input-group-sm">
+											<span class="input-group-addon">
+												前往
+											</span>
 											<input type="text" class="form-control single-date">
 											<span class="input-group-btn">
 											<button type="button" class="btn btn-primary btn-flat">Go!</button>
@@ -41,7 +43,12 @@
 										<button type="submit" class="btn btn-primary">今日</button>
 									</div>
 									<div class="col-sm-6">
+										<div class="pull-right">
+											<!-- 新增按鈕 -->
+											<a href="{{ route('sheet/daily/creat') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
+										</div>
 									</div>
+								</div>
 								</div>
 							</form>
 							<div class="row">
@@ -57,9 +64,6 @@
 												</th>
 												<th>
 													標題
-												</th>
-												<th data-breakpoints="xs sm">
-													內容
 												</th>
 												<th>
 													<a href="#sort_datetime">時數</a>
@@ -83,9 +87,6 @@
 												<td  data-th="標題">
 													請假系統轉換 - 轉換說明
 												</td>
-												<td data-breakpoints="xs sm" data-th="內容">
-													僅HTML
-												</td>
 												<td  data-th="時數">
 													0.8 H
 												</td>
@@ -101,8 +102,18 @@
 										</tbody>
 									</table>
 									<div class="row">
-									<div class="col-md-12">
-										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalConfirm">複製到今日</button>
+									<div class="col-md-3">
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon">
+												複製到
+											</span>
+											<input type="text" class="form-control single-date">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModalConfirm">Go!</button>
+											</span>
+										</div>
+									</div>
+									<div class="col-md-9">
 									</div>
 								</div>
 							</div>

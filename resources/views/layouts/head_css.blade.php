@@ -65,11 +65,6 @@
 
 <script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.js"></script>
-<link src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
-
-
-
 <!-- 全部共用 -->
 <script>
 $(function () {
@@ -246,11 +241,6 @@ $(function () {
         locale: {format: 'YYYY-MM-DD'}
     });
 });
-  $( function() {
-    $( "#datepicker" ).datepicker({
-      numberOfMonths: 3
-    });
-  } );
 </script>
 <style>
   .rwd-table {
