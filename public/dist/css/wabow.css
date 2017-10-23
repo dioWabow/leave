@@ -284,3 +284,18 @@ body {
     filter: grayscale(100%);
     filter: gray;
 }
+
+#calendar_content .fonts {
+    display: block;
+    text-align: center;
+    font-weight:bold;
+    font-size: 16px;
+}
+
+#calendar_content .fc-title{
+    font-size: 14px;
+}
+
+#calendar_content .fc-list-item-time{
+    display : none;
+}

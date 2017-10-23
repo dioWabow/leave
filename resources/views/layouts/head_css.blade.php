@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
-<!-- fullCalendar 2.2.5-->
+<!-- fullCalendar 3.6.1-->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/fullcalendar/fullcalendar.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/fullcalendar/fullcalendar.print.css" media="print">
 
@@ -60,6 +60,13 @@
 
 <!-- colorpicker -->
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+
+<script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.js"></script>
+<link src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
+
+
 
 <!-- 全部共用 -->
 <script>

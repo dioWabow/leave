@@ -457,6 +457,16 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 月報表
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::get('calendar', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Timesheet\TimesheetController@getCalendar',
+        ]);
+
+    });
+
 });
 
 Route::match(['get', 'post'], '/demo/image',[
