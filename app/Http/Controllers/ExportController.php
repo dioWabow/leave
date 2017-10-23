@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Leave;
 use App\LeaveDay;
+use App\LeavedUser;
 use App\Type;
 use App\User;
 use App\AnnualYear;
@@ -264,4 +265,32 @@ class ExportController extends Controller
     }
 
     // 匯出特休結算(離職)
+    public function ExportLeavedHoursReport($year)
+    {
+        $GLOBALS['year'] = $year;
+
+        Excel::create('Leaved_Hour', function($excel){
+
+            $excel->sheet('Leaved_Hour', function($sheet){
+
+                $search['year'] = $GLOBALS['year'];
+
+                $dataAll = ['annual_hours' => 0 , 'used_annual_hours' => 0  , 'remain_annual_hours' => 0 ];
+
+                $model = New LeavedUser;
+                $dataProvider = $model->search($search);
+
+                foreach ( $dataProvider as $data) {
+
+                    $dataAll['annual_hours'] += $data->annual_hours;
+                    $dataAll['used_annual_hours'] += $data->used_annual_hours;
+                    $dataAll['remain_annual_hours'] += $data->remain_annual_hours;
+
+                }
+
+                $sheet->loadView('report_leaved_hour', array('search' => $search, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
+            });
+
+        })->export('xlsx');
+    }
 }

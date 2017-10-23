@@ -465,6 +465,11 @@ Route::get('export_annual_hour_excel/{year}',[
     'uses' => 'ExportController@ExportAnnualHoursReport',
 ]);
 
+Route::get('export_leaved_hour_excel/{year}',[
+    'as' => 'export_leaved_hour_excel',
+    'uses' => 'ExportController@ExportLeavedHoursReport',
+]);
+
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
     'uses'=> 'DemoControllor@getImage',
