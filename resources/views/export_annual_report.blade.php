@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>report_annual_export</title>
+	<title>report_annual_export 特休報表</title>
 </head>
 <body>
 	<table class="table table-bordered table-striped table-hover">
 		<thead>
 			<tr>
-				<th width="3%"></th>
 				<th width="10%">姓名</th>
 				<th width="13%">到職日</th>
 				<th>{{ $search['year'] }}年額度</th>
@@ -19,7 +18,6 @@
 		<tbody>
 			@forelse ($dataProvider as $value)
 	            <tr>
-					<td></td>
 					<td>{{ $value->fetchUser->name }}</td>
 					<td>{{ TimeHelper::changeDateFormat($value->fetchUser->enter_date,'Y-m-d') }}</td>
 					<td>{{ $value->annual_this_years }}</td>
@@ -29,7 +27,7 @@
 				</tr>
             @empty
                 <tr class="clickable-row">
-                  <td colspan="7" align="center">
+                  <td colspan="6" align="center">
                     無資料
                   </td>
                 </tr>
@@ -38,7 +36,6 @@
             @if(count($dataProvider)>0)
 				<tfoot>
 					<tr class="text-red">
-						<th></th>
 						<th></th>
 						<th class="pull-right">總計(Hr)</th>
 						<td><span style="color: #FF0000;">{{ $dataAll['annual_this_years'] }}</span></td>

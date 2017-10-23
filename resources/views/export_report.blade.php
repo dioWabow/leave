@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>report_export</title>
+	<title>report_export 報表</title>
 	<meta charset="utf-8">
 </head>
 <body>
 	<table class="table table-bordered table-striped table-hover">
 		<thead>
 			<tr>
-				<th width="3%"></th>
 				<th><a>名稱</a></th>
 				@foreach($all_type as $type_data)
 				<th><a>{{$type_data->name}}</a></th>
@@ -20,7 +19,6 @@
 		<tbody>
 			@foreach($all_user as $user_data)
 				<tr class="clickable-row">
-					<td></td>
 					<td>{{$user_data->nickname}}</td>
 					@foreach($all_type as $type_data)
 					<td>
@@ -34,7 +32,6 @@
 		</tbody>
 		<tfoot>
 			<tr class="text-red">
-				<th></th>
 				<th class="pull-right">總計(Hr)</th>
 					@foreach($all_type as $key => $type_data)
 					<td class="text-red">{{$report_total[$key]}}</td>

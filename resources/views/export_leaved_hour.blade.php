@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>report_leaved_hour</title>
+	<title>report_leaved_hour 特休結算(離職)</title>
 </head>
 <body>
 	<table class="table table-bordered table-striped table-hover">
 		<thead>
 			<tr>
-				<th width="3%"></th>
 				<th>姓名</th>
 				<th>到職日</th>
 				<th>總額度</th>
@@ -19,7 +18,6 @@
             @forelse($dataProvider as $annual_hour)
             	@if($annual_hour->annual_hours>0)
 					<tr>
-						<td></td>
   						<td>{{$annual_hour->fetchUser->nickname}}</td>
   						<td>{{TimeHelper::changeDateFormat($annual_hour->fetchUser->enter_date,'Y-m-d')}}</td>
 						<td>{{$annual_hour->annual_hours}}</td>
@@ -29,7 +27,7 @@
             	@endif
             @empty
             <tr>
-              <td colspan="6" align="center">
+              <td colspan="5" align="center">
                 <span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span>
               </td>
             </tr>
@@ -39,7 +37,6 @@
 			<tfoot>
 				<tr class="text-red">
 					<td></td>
-						<td></td>
 					<th class="pull-right">總計(Hr)</th>
 					<td>{{$dataAll['annual_hours']}}</td>
 					<td>{{$dataAll['used_annual_hours']}}</td>

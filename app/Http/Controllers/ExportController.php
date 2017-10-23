@@ -22,9 +22,9 @@ class ExportController extends Controller
     	$GLOBALS['year'] = $year;
     	$GLOBALS['month'] = $month;
 
-    	Excel::create('export_report', function($excel){
+    	Excel::create('報表', function($excel){
 
-    		$excel->sheet('export_report', function($sheet){
+    		$excel->sheet('報表', function($sheet){
 
     			$year = $GLOBALS['year'];
     			$month = $GLOBALS['month'];
@@ -53,7 +53,7 @@ class ExportController extends Controller
         		$report_data = $report_list['result'];
         		$report_total = $report_list['resultTotal'];
 
-    			$sheet->loadView('report_export', array('year' => $year, 'month' => $month, 'all_type' => $all_type, 'all_user' => $all_user, 'data_list' => $data_list, 'report_data' => $report_data, 'report_total' => $report_total));
+    			$sheet->loadView('export_report', array('year' => $year, 'month' => $month, 'all_type' => $all_type, 'all_user' => $all_user, 'data_list' => $data_list, 'report_data' => $report_data, 'report_total' => $report_total));
     		});
 
     	})->export('xlsx');
@@ -208,9 +208,9 @@ class ExportController extends Controller
     {
     	$GLOBALS['year'] = $year;
 
-    	Excel::create('export_report', function($excel){
+    	Excel::create('特休報表', function($excel){
 
-    		$excel->sheet('export_report', function($sheet){
+    		$excel->sheet('特休報表', function($sheet){
 
     			$search['year'] = $GLOBALS['year'];
 
@@ -228,7 +228,7 @@ class ExportController extends Controller
 
 		        }
 
-    			$sheet->loadView('report_annual_export', array('search' => $search, 'model' => $model, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
+    			$sheet->loadView('export_annual_report', array('search' => $search, 'model' => $model, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
     		});
 
     	})->export('xlsx');
@@ -239,9 +239,9 @@ class ExportController extends Controller
     {
     	$GLOBALS['year'] = $year;
 
-    	Excel::create('export_report', function($excel){
+    	Excel::create('特休結算', function($excel){
 
-    		$excel->sheet('export_report', function($sheet){
+    		$excel->sheet('特休結算', function($sheet){
 
     			$search['year'] = $GLOBALS['year'];
 
@@ -258,7 +258,7 @@ class ExportController extends Controller
 
 		        }
 
-    			$sheet->loadView('report_annual_hours', array('search' => $search, 'model' => $model, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
+    			$sheet->loadView('export_annual_hours', array('search' => $search, 'model' => $model, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
     		});
 
     	})->export('xlsx');
@@ -269,9 +269,9 @@ class ExportController extends Controller
     {
         $GLOBALS['year'] = $year;
 
-        Excel::create('Leaved_Hour', function($excel){
+        Excel::create('特休結算(離職)', function($excel){
 
-            $excel->sheet('Leaved_Hour', function($sheet){
+            $excel->sheet('特休結算(離職)', function($sheet){
 
                 $search['year'] = $GLOBALS['year'];
 
@@ -288,7 +288,7 @@ class ExportController extends Controller
 
                 }
 
-                $sheet->loadView('report_leaved_hour', array('search' => $search, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
+                $sheet->loadView('export_leaved_hour', array('search' => $search, 'dataProvider' => $dataProvider, 'dataAll' => $dataAll));
             });
 
         })->export('xlsx');
