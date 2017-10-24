@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="{{route('root_path')}}/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/jQueryUI/jquery-ui.min.css">
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/jQueryUI/jquery-ui.theme.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
@@ -62,11 +64,6 @@
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.js"></script>
-<link src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
-
-
 
 <!-- 全部共用 -->
 <script>
@@ -231,6 +228,76 @@ $(function () {
     $("#natural_date").val(default_pre_date);
 });
 </script>
+@endif
+
+<!--工作日至調整用-->
+@if(Request::is('sheet/daily/index'))
+<script>
+$(function () {
+    $('.single-date').daterangepicker({
+        alwaysShowCalendars: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        locale: {format: 'YYYY-MM-DD'}
+    });
+});
+</script>
+<style>
+  .rwd-table {
+　background: #fff;
+　overflow: hidden;
+}
+.rwd-table tr:nth-of-type(2n){
+　background: #eee;
+}
+.rwd-table th, 
+.rwd-table td {
+　margin: 0.5em 1em;
+}
+.rwd-table {
+　min-width: 100%;
+}
+.rwd-table th {
+　display: none;
+}
+.rwd-table td {
+　display: block;
+}
+.rwd-table td:before {
+　content: attr(data-th) " : ";
+　font-weight: bold;
+　width: 6.5em;
+　display: inline-block;
+}
+.rwd-table th, .rwd-table td {
+　text-align: left;
+}
+.rwd-table th, .rwd-table td:before {
+　color: #D20B2A;
+　font-weight: bold;
+}
+@media (min-width: 480px) {
+.rwd-table td:before {
+　display: none;
+}
+.rwd-table th, .rwd-table td {
+　display: table-cell;
+　padding: 0.25em 0.5em;
+}
+.rwd-table th:first-child, 
+.rwd-table td:first-child {
+　padding-left: 0;
+}
+.rwd-table th:last-child, 
+.rwd-table td:last-child {
+　padding-right: 0;
+}
+.rwd-table th, 
+.rwd-table td {
+　padding: 1em !important;
+}
+}
+</style>
 @endif
 
 <!-- 團隊設定用 -->

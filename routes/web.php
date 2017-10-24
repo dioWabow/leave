@@ -457,6 +457,28 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+    // 
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::group(['prefix'=>'daily'], function(){
+
+            Route::get('index',[
+                'as'=>'sheet/daily/index',
+                'uses'=> 'sheet\DailyController@getIndex',
+            ]);
+
+            Route::get('creat',[
+                'as'=>'sheet/daily/creat',
+                'uses'=> 'sheet\DailyController@getEdit',
+            ]);
+
+            Route::post('update',[
+                'as'=>'sheet/daily/update',
+                'uses'=> 'sheet\DailyController@postUpdate',
+            ]);
+        });
+    });
+
     // 月報表
     Route::group(['prefix'=>'sheet'], function(){
 

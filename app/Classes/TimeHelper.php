@@ -220,4 +220,10 @@ class TimeHelper
         return [$start_time, $end_time];
     }
 
+    public function getNowDate($type = "Y-m-d")
+    {
+        $result = date($type);
+        return $result;
+    }
+
 }

@@ -118,8 +118,8 @@
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">TIMESHEET</li>
-        <li>
-          <a href="{{ route('leave/create') }}"><i class="glyphicon glyphicon-pencil"></i> <span>日誌</span></a>
+        <li @if(Request::is('sheet/daily/index'))class="active" @endif>
+          <a href="{{ route('sheet/daily/index') }}"><i class="fa fa-calendar-plus-o"></i> <span>日誌</span></a>
         </li>
         <li>
           <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>

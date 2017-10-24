@@ -1,5 +1,9 @@
+--2017-10-18 eno 加大請假理由
+ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
+
 --2017-10-17 tony config登入輪播圖片
 INSERT INTO `configs` (`id`, `config_key`, `config_value`, `comment`, `created_at`, `updated_at`) VALUES (NULL, 'login_pictures', '', '登入頁輪播圖片', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 --2017-10-06 michael 團隊顏色 欄位加大
 ALTER TABLE `teams` CHANGE `color` `color` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文字顏色';
 
