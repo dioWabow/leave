@@ -174,10 +174,4 @@
 	</section>
 </form>
 <!-- /.content -->
-<script>
-//使用區間清空值
-$(".btn-danger").click(function() {
-    $("#leave_type_available_date").val("");
-});
-</script>
 @stop
