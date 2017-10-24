@@ -130,7 +130,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填報表</span>
+          <a href="{{ route('rank_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
           </a>
         </li>
        	<li>
