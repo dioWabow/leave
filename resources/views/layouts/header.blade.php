@@ -133,11 +133,11 @@
           <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填報表</span>
           </a>
         </li>
-        <li>
-          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
+       	<li>
+          <a href="{{ route('sheet_project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
-        <li>
+	<li>
           <a href="{{ route('sheet/auth/index') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
           </a>
         </li>

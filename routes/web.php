@@ -482,6 +482,44 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
     });
+
+    # 工作日誌 - 專案項目設定
+    Route::group(['prefix'=>'sheet_project'], function(){
+        Route::match(['get', 'post'], 'index',[
+            'as' => 'sheet_project/index',
+            'uses' => 'Sheet\SheetProjectController@getIndex',
+        ]);
+
+        Route::get('create',[
+            'as' =>'sheet_project/create',
+            'uses' => 'Sheet\SheetProjectController@getCreate',
+        ]);
+
+        Route::get('edit',[
+            'as' => 'sheet_project/edit',
+            'uses' => 'Sheet\SheetProjectController@getEdit',
+        ]);
+
+        Route::get('delete',[
+            'as' => 'sheet_project/delete',
+            'uses' => 'Sheet\SheetProjectController@postDelete',
+        ]);
+
+        Route::post('insert',[
+            'as' => 'sheet_project/insert',
+            'uses' => 'Sheet\SheetProjectController@postInsert',
+        ]);
+
+        Route::post('update',[
+            'as' => 'sheet_project/update',
+            'uses' => 'Sheet\SheetProjectController@postUpdate',
+        ]);
+
+        Route::post('update_ajax',[
+            'as' => 'sheet_project/update_ajax',
+            'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
+        ]);
+    });
 });
 
 Route::match(['get', 'post'], '/demo/image',[

@@ -1528,3 +1528,37 @@ $(function () {
     });
   </script>
 @endif
+<!-- 專案項目設定 -->
+@if(Request::is('sheet_project/*'))
+<script>
+$(function () {
+  $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+  });
+
+  
+  /*主團隊 勾選checkbox時顯示子團隊*/
+  $("#team").hide();
+  $("#team_check").on("ifChanged", function () {
+     $("#team").fadeToggle();
+  });
+
+  
+  $("#team2").hide();
+  $("#team_check2").on("ifChanged", function () {
+    $("#team2").fadeToggle();
+  });
+
+  $("#team3").hide();
+  $("#team_check3").on("ifChanged", function () {
+    $("#team3").fadeToggle();
+  });
+
+  $("#team4").hide();
+  $("#team_check4").on("ifChanged", function () {
+    $("#team4").fadeToggle();
+  });
+});
+</script>
+@endif
