@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <title>請假系統 DEMO</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        @include('layouts.head_css')
+        @include('layouts.head_include')
+        @include('layouts.head_js')
 
     </head>
     <body class="hold-transition skin-blue-light sidebar-mini">

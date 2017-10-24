@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>請假系統</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-@include('layouts.head_css')
+  @include('layouts.head_include')
 
 
   <!--[if lt IE 9]>
@@ -47,9 +47,9 @@
           <p>
             你似乎因為一連串美麗的錯誤<br>
             來到了這個奇怪的頁面<br>
-            想回到登入頁面請點回到登入
+            想回到首頁頁面請點回到首頁
           </p>
-          <button type="button" name="login" id="login" class="btn btn-block btn-warning btn-lg"><i class="fa fa-sign-in"></i> 回到登入</button>
+          <button type="button" name="login" id="login" class="btn btn-block btn-warning btn-lg"><i class="fa fa-sign-in"></i> 回到首頁</button>
             <!-- /.input-group -->
           </form>
         </div>
