@@ -20,7 +20,7 @@
 			<div class="box box-info">
 				<div class="box-body">
 					<div class="dataTables_wrapper form-inline dt-bootstrap">
-						<form name="frmSetting" action="" method="POST">
+						<form name="frmSetting" action="{{ route('absense_report/index') }}" method="POST">
 							<div class="row">
 								<div class="col-sm-5">
 									<div class="label bg-blue" style="font-size:20px">2017-10</div>
@@ -30,21 +30,20 @@
 										<label>
 											時間：
 											<select id="setting_year" name="setting[year]" class="form-control">
-												<option value="2017" selected="selected">2017 年</option>
-												<option value="2016">2016 年</option>
-												<option value="2016">2015 年</option>
+												@for($i=2015; $i <= date('Y'); $i++)
+												<option value="{{$i}}" @if("$year" == "$i")selected="selected"@endif>{{$i}} 年</option>
+												@endfor
 											</select>
-										</label>
-										<label>
 											<select id="setting_month" name="setting[month]" class="form-control">
-												<option value="year">整年</option>
-                        						<option value="1" selected="selected">1月</option>
-												<option value="2">2月</option>
-												<option value="3">3月</option>
+												<option value="year" @if("$month" == "year")selected="selected"@endif>整年</option>
+												@for($j=1; $j < 13; $j++)
+												<option @if($j < 10)value=0{{$j}}@else value={{$j}} @endif @if("$month" == "$j")selected="selected"@endif>{{$j}}月</option>
+												@endfor
 											</select>
 										</label>
-										<label><button type="button" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
+										<label><button type="submit" id="settingSearch" class="btn btn-default"><i class="fa fa-search"></i></button></label>
 										&nbsp;
+										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									</div>
 								</div>
 							</div>
