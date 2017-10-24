@@ -52,26 +52,26 @@
 							WACA
 						</label>&emsp; 
             <label id="team">
-							<button type="button" class="btn btn-danger btn-xs">waca code</button>
-              <button type="button" class="btn btn-danger btn-xs">waca 999</button>
-						</label>&emsp;
-            <div id="sub_team">
-              <div class="col-md-11">
-                <label>
-                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="waca code" >
-                  waca code
-                </label>&emsp; 
-              </div>  
+							<button type="button" class="btn btn-success btn-xs">waca 9999</button>
+							<button type="button" class="btn btn-success btn-xs">waca 888</button>
+						</label>&emsp; 
+            <div>
               <div class="col-md-11">
                 <label>
                   <input type="checkbox" name="sheet_project[team]" class="flat-red" value="waca 999" >
                   waca 999
                 </label>&emsp; 
+              </div>  
+							<div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="waca 888" >
+                  waca 888
+                </label>&emsp; 
               </div>
             </div>  
 					</div>
 				</div></div>
-
+				
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label></label>
@@ -85,7 +85,7 @@
 							<button type="button" class="btn btn-warning btn-xs">washop fight</button>
 							<button type="button" class="btn btn-warning btn-xs">washop fly</button>
 						</label>&emsp; 
-            <div id="sub_team2">
+            <div>
               <div class="col-md-11">
                 <label>
                   <input type="checkbox" name="sheet_project[team]" class="flat-red" value="washop fight" >
@@ -114,7 +114,7 @@
             <label id="team3">
 							<button type="button" class="btn btn-success btn-xs">Hr YO</button>
 						</label>&emsp; 
-            <div id="sub_team3">
+            <div>
               <div class="col-md-11">
                 <label>
                   <input type="checkbox" name="sheet_project[team]" class="flat-red" value="Hr YO" >
@@ -137,7 +137,7 @@
             <label id="team4">
 							<button type="button" class="btn btn-primary btn-xs">PM QQ</button>
 						</label>&emsp; 
-            <div id="sub_team4">
+            <div>
               <div class="col-md-11">
                 <label>
                   <input type="checkbox" name="sheet_project[team]" class="flat-red" value="PM QQ" >
