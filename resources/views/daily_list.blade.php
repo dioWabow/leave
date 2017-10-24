@@ -5,7 +5,7 @@
 <section class="content-header">
   <h1>
 	<i class="fa fa-calendar-plus-o"></i> 2017-10-18
-	<small>Work sheet</small>
+	<small>Work Sheet</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -65,14 +65,14 @@
 												<th>
 													標題
 												</th>
+												<th data-breakpoints="xs sm">
+													內文
+												</th>
 												<th>
 													<a href="#sort_datetime">時數</a>
 												</th>
 												<th>
 													標籤
-												</th>
-												<th data-breakpoints="xs sm">
-													備註
 												</th>
 											</tr>
 										</thead>
@@ -87,16 +87,16 @@
 												<td  data-th="標題">
 													請假系統轉換 - 轉換說明
 												</td>
+												<td data-th="內文">
+													還沒完成
+												</td>
 												<td  data-th="時數">
 													0.8 H
 												</td>
-												<td  data-th="標籤">
+												<td data-breakpoints="xs sm"   data-th="標籤">
 													<small class="label" style="background-color:#000000;">wahop</small>
 													<small class="label" style="background-color:#000000;">測試</small>
 													<small class="label" style="background-color:#000000;">未完成</small>
-												</td>
-												<td data-breakpoints="xs sm"  data-th="備注">
-													還沒完成
 												</td>
 											</tr>
 										</tbody>
