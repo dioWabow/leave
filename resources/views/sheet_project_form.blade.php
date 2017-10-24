@@ -5,7 +5,7 @@
 <section class="content-header">
   <h1>
     <i class="glyphicon glyphicon-file"></i> 專案項目修改
-    <small>Project Form Management</small>
+    <small>Project Management</small>
   </h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -24,7 +24,7 @@
 			<div class="box-body">
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
-						<label>專案名稱</label>
+						<label>專案</label>
 					</div>
 					<div class="col-md-11">
 						<input type="text" id="sheet_project_title" name="sheet_project[title]" class="form-control pull-right" value="EFSHOP衣芙日系">
@@ -36,15 +36,42 @@
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="checkbox" id="team_check" name="sheet_project[team]" class="flat-red" value="waca">
-							WACA
-						</label>&emsp; 
-						<label id="panel">
-							<button type="button" class="btn btn-danger btn-xs">waca code</button>
-              <button type="button" class="btn btn-danger btn-xs">waca 999</button>
+							<input type="checkbox" name="sheet_project[team]" class="flat-red" value="all">
+							共用
 						</label>&emsp; 
 					</div>
 				</div></div>
+
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label></label>
+					</div>
+					<div class="col-md-11">
+						<label>
+							<input type="checkbox" id="team_check" name="sheet_project[team]" class="flat-red" value="waca" >
+							WACA
+						</label>&emsp; 
+            <label id="team">
+							<button type="button" class="btn btn-danger btn-xs">waca code</button>
+              <button type="button" class="btn btn-danger btn-xs">waca 999</button>
+						</label>&emsp;
+            <div id="sub_team">
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="waca code" >
+                  waca code
+                </label>&emsp; 
+              </div>  
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="waca 999" >
+                  waca 999
+                </label>&emsp; 
+              </div>
+            </div>  
+					</div>
+				</div></div>
+
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
 						<label></label>
@@ -54,10 +81,24 @@
 							<input type="checkbox" id="team_check2" name="sheet_project[team]" class="flat-red" value="washop" >
 							WASHOP
 						</label>&emsp; 
-            <label id="panel2">
+            <label id="team2">
 							<button type="button" class="btn btn-warning btn-xs">washop fight</button>
 							<button type="button" class="btn btn-warning btn-xs">washop fly</button>
 						</label>&emsp; 
+            <div id="sub_team2">
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="washop fight" >
+                  washop fight
+                </label>&emsp; 
+              </div>  
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="washop fly" >
+                  washop fly
+                </label>&emsp; 
+              </div>
+            </div>  
 					</div>
 				</div></div>
 
@@ -70,9 +111,17 @@
 							<input type="checkbox" id="team_check3" name="sheet_project[team]" class="flat-red" value="washop" >
 							Hr
 						</label>&emsp; 
-            <label id="panel3">
+            <label id="team3">
 							<button type="button" class="btn btn-success btn-xs">Hr YO</button>
 						</label>&emsp; 
+            <div id="sub_team3">
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="Hr YO" >
+                  Hr YO
+                </label>&emsp; 
+              </div>  
+            </div>  
 					</div>
 				</div></div>
 
@@ -85,21 +134,17 @@
 							<input type="checkbox" id="team_check4" name="sheet_project[team]" class="flat-red" value="washop" >
               PM
 						</label>&emsp; 
-            <label id="panel4">
+            <label id="team4">
 							<button type="button" class="btn btn-primary btn-xs">PM QQ</button>
 						</label>&emsp; 
-					</div>
-				</div></div>
-
-				<div class="form-group"><div class="row">
-					<div class="col-md-1">
-						<label></label>
-					</div>
-					<div class="col-md-11">
-						<label>
-							<input type="checkbox" id="team_check4" name="sheet_project[team]" class="flat-red" value="washop" >
-              共用
-						</label>&emsp; 
+            <div id="sub_team4">
+              <div class="col-md-11">
+                <label>
+                  <input type="checkbox" name="sheet_project[team]" class="flat-red" value="PM QQ" >
+                  PM QQ
+                </label>&emsp; 
+              </div>  
+            </div>  
 					</div>
 				</div></div>
 

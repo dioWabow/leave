@@ -6,7 +6,7 @@
 <section class="content-header">
   <h1>
 	<i class="glyphicon glyphicon-file"></i> 專案項目
-	<small>Project Form Management</small>
+	<small>Project Management</small>
   </h1>
   <ol class="breadcrumb">
 	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -75,20 +75,20 @@
                     <tr>
                       <th width="20%">專案</a></th>
                       <th width="20%">團隊</a></th>
-                      <th width="10%">狀態</a></th>
+                      <th width="4%">狀態</a></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
                       <td>EFSHOP衣芙日系</td>
-                      <td>WASHOP</td>
+                      <td><small class="label" style="background-color:#FF88C2;">waca</small><small class="label" style="background-color:#7700FF;">waca 999</small></td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
                     </tr>
                     <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
                       <td>EDOLLARS衣大樂是</td>
-                      <td>WASHOP</td>
+                      <td><small class="label" style="background-color:#319920;">washop</small></td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
@@ -96,7 +96,7 @@
 
                     <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
                       <td>TWOEC蔥媽媽</td>
-                      <td>WASHOP</td>
+                      <td><small class="label" style="background-color:#319920;">washop</small></td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>

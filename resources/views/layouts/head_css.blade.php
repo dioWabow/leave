@@ -1407,24 +1407,27 @@ $(function () {
       radioClass: 'iradio_flat-blue'
   });
 
-  $("#panel").hide();
+  
+  /*主團隊 勾選checkbox時顯示子團隊*/
+  $("#team,#sub_team").hide();
   $("#team_check").on("ifChanged", function () {
-    $("#panel").fadeToggle();
+     $("#team,#sub_team").fadeToggle();
   });
 
-  $("#panel2").hide();
+  
+  $("#team2,#sub_team2").hide();
   $("#team_check2").on("ifChanged", function () {
-    $("#panel2").fadeToggle();
+    $("#team2,#sub_team2").fadeToggle();
   });
 
-  $("#panel3").hide();
+  $("#team3,#sub_team3").hide();
   $("#team_check3").on("ifChanged", function () {
-    $("#panel3").fadeToggle();
+    $("#team3,#sub_team3").fadeToggle();
   });
 
-  $("#panel4").hide();
+  $("#team4,#sub_team4").hide();
   $("#team_check4").on("ifChanged", function () {
-    $("#panel4").fadeToggle();
+    $("#team4,#sub_team4").fadeToggle();
   });
 });
 </script>
