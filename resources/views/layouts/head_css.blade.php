@@ -1407,7 +1407,6 @@ $(function () {
 </script>
 @endif
 
-
 <!--系統設定-->
 @if(Request::is('config/edit'))
 <script>
@@ -1501,4 +1500,31 @@ $(function () {
 });
 </script>
 
+@endif
+@if(Request::is('sheet/search/index'))
+  <script>
+    $(function () {
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      var $search_daterange = $('#search_daterange');
+      var time = $search_daterange.val();
+      $("#search_daterange").daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+          maxDate: yyyy + '-' + mm + '-' + dd
+      });
+      
+      $("#search_daterange").val(time);
+      
+      $('input[name="search[daterange]"]').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+      });
+
+      $('input[name="search[daterange]"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+      });
+    });
+  </script>
 @endif

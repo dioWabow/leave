@@ -126,7 +126,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
+          <a href="{{ route('sheet/search/index') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
           </a>
         </li>
         <li>
@@ -138,7 +138,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('leaves_my/prove') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
+          <a href="{{ route('sheet/auth/index') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
           </a>
         </li>
         <li class="header">PERSONAL</li>
