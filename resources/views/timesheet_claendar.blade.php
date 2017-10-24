@@ -6,7 +6,7 @@
   <h1>
   <i class="glyphicon glyphicon-list-alt"></i>
   月日誌
-  <small>timesheet calendar</small>
+  <small>Timesheet Calendar</small>
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
