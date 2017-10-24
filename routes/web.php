@@ -523,12 +523,12 @@ Route::group(['middleware' => 'auth'], function () {
 });
 # 缺填次數報表
     Route::group(['prefix'=>'sheet'], function(){
-        
-        Route::any('rank_report/index',[
-            'as'=>'rank_report/index',
-            'uses'=> 'Sheet\RankReportController@getIndex',
+
+        Route::any('absense_report/index',[
+            'as'=>'absense_report/index',
+            'uses'=> 'Sheet\AbsenceController@getIndex',
         ]);
-    }); 
+    });
 
 
 Route::match(['get', 'post'], '/demo/image',[

@@ -23,8 +23,7 @@
 						<form name="frmSetting" action="" method="POST">
 							<div class="row">
 								<div class="col-sm-5">
-									<div class="label bg-blue" style="font-size:20px">2017年</div>
-									<div class="label bg-blue" style="font-size:20px">10月</div>
+									<div class="label bg-blue" style="font-size:20px">2017-10</div>
 								</div>
 								<div class="col-sm-7">
 									<div class="pull-right">
@@ -39,7 +38,7 @@
 										<label>
 											<select id="setting_month" name="setting[month]" class="form-control">
 												<option value="year">整年</option>
-                        <option value="1" selected="selected">1月</option>
+                        						<option value="1" selected="selected">1月</option>
 												<option value="2">2月</option>
 												<option value="3">3月</option>
 											</select>
@@ -61,36 +60,23 @@
 										</tr>
 									</thead>
 									<tbody>
+										@forelse($dataProvider as $leave)
 										<tr>
 											<td>
-												<img src="./dist/img/wabow_logo.png" class="img-circle" alt="毛毛" width="50px">
+												<img src="{{UrlHelper::getUserAvatarUrl($leave->fetchUser->avatar)}}" class="img-circle" alt="{{$leave->fetchUser->avatar}}" width="50px">
 											</td>
-											<td>毛毛</td>
-											<td class="text-red">5</td>
+											<td>{{$leave->fetchUser->nickname}}</td>
+											<td>{{$dataAll[$leave->user_id]}}</td>
 										</tr>
-										<tr  >
-											<td>
-												<img src="./dist/img/users/wabow_logo.png" class="img-circle" alt="Dio" width="50px">
-											</td>
-											<td>Dio</td>
-											<td class="text-red">8</td>
-										</tr>
-										<tr>
-											<td>
-												<img src="./dist/img/users/wabow_logo.png" class="img-circle" alt="Wei" width="50px">
-											</td>
-											<td>Wei</td>
-											<td class="text-red">10</td>
-										</tr>
-									</tbody>
-									<tfotter>
-                </tr>
-				            <tr class="clickable-row" data-href="#">
-                      <tr class="">
-												<td colspan="3" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
-											</tr>
-                    </tr>
-									</tfotter>
+										@empty
+										<tfotter>
+								            <tr class="clickable-row" data-href="#">
+				                      			<tr class="">
+													<td colspan="3" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+												</tr>
+				                    		</tr>
+										</tfotter>
+										@endforelse
 								</table>
 							</div>
 						</div>
