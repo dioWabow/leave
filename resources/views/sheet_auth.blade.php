@@ -4,8 +4,8 @@
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-  <i class="fa fa-sitemap"></i> 權限設定
-  <small>Auth Setting</small>
+  <i class="glyphicon glyphicon-eye-open"></i> 權限設定
+  <small>Sheet Authority</small>
   </h1>
   <ol class="breadcrumb">
   <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -33,7 +33,6 @@
                 @endif
               </div>
               <div class="col-md-10">
-                <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員" id="member_{{$team_data->id}}" member_id="{{$team_data->id}}">
                 @foreach($user_result as $user_data)
                   @if(array_key_exists("$team_data->id", $team_user_list))
@@ -52,6 +51,17 @@
           @endforeach
           @else
           <div class="form-group member_list" id="member_match_manager"><div class="row">
+            <div class="col-md-2">
+              <label>團隊</label>
+            </div>
+            <div class="col-md-2">
+              <label>姓名</label>
+            </div>
+            <div class="col-md-8">
+                <label>可觀看名單</label>
+            </div>
+          </div></div>
+          <div class="form-group member_list" id="member_match_manager"><div class="row">
               <div class="col-md-2">
                 <label>Washop</label>
               </div>
@@ -59,7 +69,6 @@
                 <label>Tony</label>
               </div>
               <div class="col-md-8">
-                <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Dio</option>
                   <option>Eno</option>
@@ -77,7 +86,6 @@
                 <label>Carrie</label>
               </div>
               <div class="col-md-8">
-                <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Dio</option>
                   <option>Eno</option>
@@ -95,7 +103,6 @@
                 <label>Vic</label>
               </div>
               <div class="col-md-8">
-                <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Suzy</option>
                   <option>Henry</option>
@@ -111,7 +118,6 @@
                 <label>Jerry</label>
               </div>
               <div class="col-md-8">
-                <label>人員</label>
                 <select class="form-control select2  team_member" name="teams[]" multiple="multiple">
                   <option selected>Judy</option>
                   <option selected>Rock</option>
@@ -123,7 +129,6 @@
           </div>
           <div class="box-footer">
             <div class="pull-right">
-              <button type="reset" class="btn btn-default" onclick="history.go();"><i class="fa fa-undo"></i> 取消</button>
               <button type="submit" class="btn btn-primary" id="data_post"><i class="fa fa-send-o"></i> Send</button>
             </div>
           </div>

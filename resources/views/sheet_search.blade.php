@@ -100,32 +100,32 @@
                     <thead>
                       <tr >
                         <th width="3%" align="center"><a href="javascript:void(0)" onclick="changeSort('employee_no');">填寫人</a></th>
+                        <th width="5%"><a href="javascript:void(0)" onclick="changeSort('leave_date');"> 日期</a></th>
                         <th  width="5%"><a href="javascript:void(0)" onclick="changeSort('nickname');">專案</a></th>
                         <th width="15%"><a href="javascript:void(0)" onclick="changeSort('name');">標題</a></th>
                         <th  width="15%"><a href="javascript:void(0)" onclick="changeSort('name');">標籤</a></th>
-                        <th width="25%"><a href="javascript:void(0)" onclick="changeSort('birthday');">內容</a></th>
+                        <th width="30%"><a href="javascript:void(0)" onclick="changeSort('birthday');">內容</a></th>
                         <th width="4%"><a href="javascript:void(0)" onclick="changeSort('enter_date');">時數</a></th>
-                        <th width="10%"><a href="javascript:void(0)" onclick="changeSort('leave_date');"> 備註</a></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr class='clickable-row' data-href="">
-                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl('Tony.jpg')}}" class="img-circle" alt="Tony" width="50px"></td>
+                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl('Tony.jpg')}}" class="img-circle" alt="Tony" width="50px">tony</td>
+                        <td>2017-10-23</td>
                         <td>Washop</td>
                         <td>Eip請假系統</td>
                         <td><small class="label" style="background-color:#3C8DBC;">麵包屑</small>&nbsp;<small class="label" style="background-color:#3C8DBC;">class</small></td>
                         <td>修正麵包屑套件merge回develop之後會發生抓不到class的問題，原因為class被快取了，所以要清掉快取讓他重抓就好，已修正</td>
                         <td>3</td>
-                        <td>不知道打什麼QQ</td>
                       </tr>
                       <tr class='clickable-row' data-href="">
-                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl('Tony.jpg')}}" class="img-circle" alt="Tony" width="50px"></td>
+                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl('Tony.jpg')}}" class="img-circle" alt="Tony" width="50px">tony</td>
+                        <td>2017-10-23</td>
                         <td>Washop</td>
                         <td>Eip工作日誌</td>
                         <td><small class="label" style="background-color:#3C8DBC;">權限皮</small>&nbsp;<small class="label" style="background-color:#3C8DBC;">搜尋皮</small></td>
                         <td>做搜尋跟權限頁面的皮，昨天討論之後的修改</td>
                         <td>3</td>
-                        <td>備註...嗯...</td>
                       </tr>
                       @if(1!=1)
                       @forelse($test as $test1)
@@ -151,6 +151,7 @@
             </div>
           </div>
       </div>
+    {{ $fake_pagination->render() }}
     </div>
   </div>
 </section>
