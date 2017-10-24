@@ -101,6 +101,9 @@
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
                     </tr>
+                    <tr class="">
+                      <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
