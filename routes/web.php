@@ -11,9 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-})->name('root_path');
+Route::get('/', [
+    'as' => 'root_path',
+    'uses' => 'Auth\LoginController@getIndex',
+]);
 
 Route::get('login/google', 'Auth\LoginController@redirectToGoogle')->name('login_google');
 Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback');

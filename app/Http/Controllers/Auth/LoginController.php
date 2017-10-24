@@ -29,6 +29,19 @@ class LoginController extends Controller implements AuthenticatableContract
     */
 
     use AuthenticatesUsers, Authenticatable, CanResetPassword;
+
+    public function getIndex()
+    {
+        if ( Auth::check() ){
+
+            return Redirect::route('index');
+
+        }else{
+
+            return view("login");
+
+        }
+    }
         
     public function logout()
     {
