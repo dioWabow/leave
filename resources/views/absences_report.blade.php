@@ -23,7 +23,7 @@
 						<form name="frmSetting" action="{{ route('absense_report/index') }}" method="POST">
 							<div class="row">
 								<div class="col-sm-5">
-									<div class="label bg-blue" style="font-size:20px">2017-10</div>
+									<div class="label bg-blue" style="font-size:20px">{{$year}}-{{$month}}</div>
 								</div>
 								<div class="col-sm-7">
 									<div class="pull-right">
