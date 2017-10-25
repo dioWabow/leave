@@ -1534,7 +1534,7 @@ $(function () {
   </script>
 @endif
 <!-- 專案項目設定 -->
-@if(Request::is('sheet_project/*'))
+@if(Request::is('sheet/project/*'))
 <script>
 $(function () {
   $('input[type="checkbox"].flat-red').iCheck({

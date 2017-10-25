@@ -5,7 +5,7 @@ Breadcrumbs::register('index/ajax', function ($breadcrumbs) {
 });
 
 // 專案項目
-Breadcrumbs::register('sheet_project/index', function ($breadcrumbs) {
+Breadcrumbs::register('sheet/project/index', function ($breadcrumbs) {
     $breadcrumbs->push('專案項目');
 });
 

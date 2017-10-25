@@ -1,3 +1,15 @@
+--2017-10-23 michael 新增專案項目關聯資表
+ALTER TABLE `project_teams`
+  ADD PRIMARY KEY (`id`);
+
+CREATE TABLE `project_teams` (
+  `id` int(7) NOT NULL COMMENT 'id',
+  `team_id` int(7) NOT NULL COMMENT '團隊id',
+  `project_id` int(7) NOT NULL COMMENT '專案id',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新時間'
+--2017-10-23 michael 刪除team_id 欄位
+ALTER TABLE `projects` DROP `team_id`;
 --2017-10-23 michael 變更資料表名稱
 RENAME TABLE `leave`.`project` TO `leave`.`projects`;
 --2017-10-23 michael 專案項目增加 是否開啟欄位

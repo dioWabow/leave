@@ -508,40 +508,44 @@ Route::group(['middleware' => 'auth'], function () {
 
     # 工作日誌 - 專案項目設定
     Route::group(['prefix'=>'sheet'], function(){
-        Route::match(['get', 'post'], 'index',[
-            'as' => 'sheet/project/index',
-            'uses' => 'Sheet\SheetProjectController@getIndex',
-        ]);
 
-        Route::get('create',[
-            'as' =>'sheet/project/create',
-            'uses' => 'Sheet\SheetProjectController@getCreate',
-        ]);
+        Route::group(['prefix'=>'project'], function(){
 
-        Route::get('edit',[
-            'as' => 'sheet/project/edit',
-            'uses' => 'Sheet\SheetProjectController@getEdit',
-        ]);
+            Route::match(['get', 'post'], 'index',[
+                'as' => 'sheet/project/index',
+                'uses' => 'Sheet\SheetProjectController@getIndex',
+            ]);
 
-        Route::get('delete',[
-            'as' => 'sheet/project/delete',
-            'uses' => 'Sheet\SheetProjectController@postDelete',
-        ]);
+            Route::get('create',[
+                'as' =>'sheet/project/create',
+                'uses' => 'Sheet\SheetProjectController@getCreate',
+            ]);
 
-        Route::post('insert',[
-            'as' => 'sheet/project/insert',
-            'uses' => 'Sheet\SheetProjectController@postInsert',
-        ]);
+            Route::get('edit',[
+                'as' => 'sheet/project/edit',
+                'uses' => 'Sheet\SheetProjectController@getEdit',
+            ]);
 
-        Route::post('update',[
-            'as' => 'sheet/project/update',
-            'uses' => 'Sheet\SheetProjectController@postUpdate',
-        ]);
+            Route::get('delete',[
+                'as' => 'sheet/project/delete',
+                'uses' => 'Sheet\SheetProjectController@postDelete',
+            ]);
 
-        Route::post('update_ajax',[
-            'as' => 'sheet/project/update_ajax',
-            'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
-        ]);
+            Route::post('insert',[
+                'as' => 'sheet/project/insert',
+                'uses' => 'Sheet\SheetProjectController@postInsert',
+            ]);
+
+            Route::post('update',[
+                'as' => 'sheet/project/update',
+                'uses' => 'Sheet\SheetProjectController@postUpdate',
+            ]);
+
+            Route::post('update_ajax',[
+                'as' => 'sheet/project/update_ajax',
+                'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
+            ]);
+        });
     });
 });
 # 缺填次數報表

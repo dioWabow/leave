@@ -8,7 +8,7 @@
 	<i class="glyphicon glyphicon-file"></i> 專案項目
 	<small>Project Management</small>
   </h1>
-  {{ Breadcrumbs::render('sheet_project/index') }}
+  {{ Breadcrumbs::render('sheet/project/index') }}
 </section>
 
 <!-- Main content -->
@@ -59,7 +59,7 @@
                       關鍵字：
                       <input type="search" class="form-control" placeholder="請輸入專案進行查詢" name="search[keywords]" style="width:270px">
                       <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                      <button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+                      <a href="{{ route('sheet/project/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
                     </label>
                   </div>
                 </form>
@@ -76,14 +76,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
+                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
                       <td>EFSHOP衣芙日系</td>
                       <td><small class="label" style="background-color:#FF88C2;">waca</small><small class="label" style="background-color:#7700FF;">waca 999</small></td>
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
                     </tr>
-                    <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
+                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
                       <td>EDOLLARS衣大樂是</td>
                       <td><small class="label" style="background-color:#319920;">washop</small></td>
                       <td>
@@ -91,7 +91,7 @@
                       </td>
                     </tr>
 
-                    <tr class="clickable-row" data-href="{{ route('sheet_project/edit') }}">
+                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
                       <td>TWOEC蔥媽媽</td>
                       <td><small class="label" style="background-color:#319920;">washop</small></td>
                       <td>
