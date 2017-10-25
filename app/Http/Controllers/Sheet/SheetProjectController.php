@@ -21,10 +21,10 @@ class SheetProjectController extends Controller
     {
         $model = new Project;
 
-        $project_member = $model->getAllProject();
+        $project = $model->getAllProject();
 
         return  view('sheet_project', compact(
-            'project_member'
+            'project'
         ));
     }
 

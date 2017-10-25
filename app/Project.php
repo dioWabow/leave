@@ -13,7 +13,7 @@ class Project extends Model
 
     public function getAllProject()
     {
-    	$result = $this->get()->groupBy('name');
+    	$result = $this->get();
     	return $result;
     }
 }

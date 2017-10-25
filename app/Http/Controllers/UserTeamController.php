@@ -16,10 +16,8 @@ class UserTeamController extends Controller
     {
         $teams = $request->teams;
 
-        // dd($teams);
         $managers = $request->managers;
 
-        // dd($teams);
         $type = false;
 
         // 每次送出post 都會清空userTeam 的db 用新的資料蓋過

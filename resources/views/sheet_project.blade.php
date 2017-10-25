@@ -76,6 +76,21 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @forelse($project as $project_data)
+                      <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
+                        <td>{{$project_data->name}}</td>
+                        <td></td>
+                        <td>
+                          <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
+                        </td>
+                      </tr>
+                    @empty
+                    <tr>
+                      <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+                    </tr>
+                    @endforelse
+                  </tbody>
+                  <tbody>
                     <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
                       <td>EFSHOP衣芙日系</td>
                       <td><small class="label" style="background-color:#FF88C2;">waca</small><small class="label" style="background-color:#7700FF;">waca 999</small></td>
@@ -97,9 +112,6 @@
                       <td>
                         <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
                       </td>
-                    </tr>
-                    <tr class="">
-                      <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
                     </tr>
                   </tbody>
                 </table>
