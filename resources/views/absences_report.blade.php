@@ -7,10 +7,7 @@
 	<i class="glyphicon glyphicon-thumbs-down"></i> 缺填日誌
 	<small>Missing Sheet Report</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">缺填日誌</li>
-  </ol>
+  {{ Breadcrumbs::render('absense_report/index') }}
 </section>
 
 <!-- Main content -->
@@ -70,7 +67,7 @@
 										@empty
 										<tfotter>
 								            <tr class="clickable-row" data-href="#">
-				                      			<tr class="">
+				                      			<tr>
 													<td colspan="3" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
 												</tr>
 				                    		</tr>
