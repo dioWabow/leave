@@ -21,9 +21,10 @@ class CalendarController extends Controller
             return Redirect::route('index');
         }
         $user_eloquent = new User();
-        $users = $user_eloquent->all();
+        $users = $user_eloquent->getAllUsersExcludeUserId(Auth::user()->id);
     	return view('timesheet_claendar',[
             'timesheets' => $timesheets,
+            'this_page_user_id' => $user_id,
             'users' => $users,
         ]);
     }
