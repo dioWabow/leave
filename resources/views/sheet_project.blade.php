@@ -8,10 +8,7 @@
 	<i class="glyphicon glyphicon-file"></i> 專案項目
 	<small>Project Management</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">專案項目</li>
-  </ol>
+  {{ Breadcrumbs::render('sheet_project/index') }}
 </section>
 
 <!-- Main content -->

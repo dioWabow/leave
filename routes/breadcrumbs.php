@@ -4,6 +4,11 @@ Breadcrumbs::register('index/ajax', function ($breadcrumbs) {
     $breadcrumbs->push('Dashboard');
 });
 
+// 專案項目
+Breadcrumbs::register('sheet_project/index', function ($breadcrumbs) {
+    $breadcrumbs->push('專案項目');
+});
+
 // 我要放假
 Breadcrumbs::register('leave/create', function ($breadcrumbs) {
     $breadcrumbs->push('我要放假');

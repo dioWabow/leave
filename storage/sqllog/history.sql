@@ -1,3 +1,7 @@
+--2017-10-23 michael 變更資料表名稱
+RENAME TABLE `leave`.`project` TO `leave`.`projects`;
+--2017-10-23 michael 專案項目增加 是否開啟欄位
+ALTER TABLE `project` ADD `available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否開啟' AFTER `name`;
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb

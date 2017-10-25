@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sheet;
 
+use App\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,8 +15,13 @@ class SheetProjectController extends Controller
      */
     public function getIndex(Request $request)
     {
+        $model = new Project;
 
-        return  view('sheet_project');
+        $project_member = $model->getAllProject();
+
+        return  view('sheet_project', compact(
+            'project_member'
+        ));
     }
 
     /**

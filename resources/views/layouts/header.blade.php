@@ -134,7 +134,7 @@
           </a>
         </li>
        	<li>
-          <a href="{{ route('sheet_project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
+          <a href="{{ route('sheet/project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
 	<li>
