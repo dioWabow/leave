@@ -25,18 +25,21 @@
       <div class="col-xs-12">
       <div class="nav-tabs-custom" style="margin-top: 5px;">
         <ul class="nav nav-tabs">
-          <li class="{{$this_page_user_id==Auth::user()->id ? 'active' : ''}} fonts">
-              <a href="{{route('sheet/calendar')}}"><img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->name}}</span></a>
+          <li class="{{$chosed_user_id==Auth::user()->id ? 'active' : ''}} fonts">
+              <a href="{{route('sheet/calendar')}}">
+              <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->name}}</span></a>
           </li>
-          @foreach($users as $user)
-          <li class="fonts {{$this_page_user_id==$user->id ? 'active' : ''}}">
-              <a href="{{route('sheet/calendar' ,['user_id' => $user->id])}}">
-                <img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" width="50px" alt="{{$user->name}}"><br>
-                <span class="fonts">
-                    {{$user->name}}
-                </span>
-              </a>
-          </li>
+          @foreach($timesheetpermissions as $timesheetpermission)
+          @if($timesheetpermission->fetchUser->status)
+            <li class="fonts {{$chosed_user_id==$timesheetpermission->fetchUser->id ? 'active' : ''}}">
+                <a href="{{route('sheet/calendar' ,['user_id' => $timesheetpermission->fetchUser->id])}}">
+                  <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" width="50px" alt="{{$timesheetpermission->fetchUser->name}}"><br>
+                  <span class="fonts">
+                      {{$timesheetpermission->fetchUser->name}}
+                  </span>
+                </a>
+            </li>
+          @endif
           @endforeach
         </ul>
       <!-- /.nav-tabs-custom -->

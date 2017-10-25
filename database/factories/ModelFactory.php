@@ -14,7 +14,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Timesheet::class, function (Faker\Generator $faker) {
     $project_id = [1,2];
-    $user_id = [1,2,3,5,6,10];
+    $user_id = [5,6,8,9];
     return [
         'project_id' => array_random($project_id),
         'tag' => $faker->word,
