@@ -58,41 +58,5 @@
 </section>
 <!-- /.content -->
 <!-- Index頁面 -->
-<script>
 
-  $(document).ready(function() {
-
-    var initialLocaleCode = 'zh-tw';
-
-    $('#calendar').fullCalendar({
-      height: 800,
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,listMonth'
-      },
-      buttonText: {
-        listMonth: '月列表',
-      },
-      defaultDate: '2017-10-12',
-      locale: initialLocaleCode,
-      navLinks: false, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [
-        @foreach($timesheets as $timesheet)
-        {
-            title: '{{$timesheet->items}} / {{$timesheet->hour}}小時',
-            start: '{{$timesheet->working_day}}',
-            description: '{{$timesheet->description}}',
-        },
-        @endforeach
-      ],
-      eventRender: function(event, element) {
-        element.prop("title", event.title);
-      }
-    });
-  });
-
-</script>
 @stop
