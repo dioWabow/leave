@@ -17,7 +17,7 @@ class CalendarController extends Controller
         $user_id = $user_id ?: Auth::user()->id;
         $timesheet_eloquent = new Timesheet();
         $timesheets = $timesheet_eloquent->fetchByUserIdAndPeriod($user_id);
-        if ( $timesheets->isEmpty()) {
+        if ( $timesheets->isEmpty() && $user_id != Auth::user()->id) {
             return Redirect::route('index');
         }
         $user_eloquent = new User();

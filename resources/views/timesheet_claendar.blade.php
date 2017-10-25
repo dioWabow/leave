@@ -26,7 +26,7 @@
       <div class="nav-tabs-custom" style="margin-top: 5px;">
         <ul class="nav nav-tabs">
           <li class="active fonts">
-              <a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/dio.png" width="50px"><br><span class="fonts">dio</span></a>
+              <a href=""><img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->name}}</span></a>
           </li>
           @foreach($users as $user)
           <li class="fonts">
@@ -77,61 +77,13 @@
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [
+        @foreach($timesheets as $timesheet)
         {
-          title: 'All Day Event / 5小時',
-          start: '2017-10-01',
-          description: 'long description',
+            title: '{{$timesheet->items}} / {{$timesheet->hour}}小時',
+            start: '{{$timesheet->working_day}}',
+            description: '{{$timesheet->description}}',
         },
-        {
-          title: 'Long Event',
-          start: '2017-10-07',
-          end: '2017-10-10'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2017-10-09'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2017-10-16'
-        },
-        {
-          title: 'Conference',
-          start: '2017-10-11',
-          end: '2017-10-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2017-10-12',
-          end: '2017-10-12'
-        },
-        {
-          title: 'Lunch',
-          start: '2017-10-12'
-        },
-        {
-          title: 'Meeting',
-          start: '2017-10-12'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2017-10-12'
-        },
-        {
-          title: 'Dinner',
-          start: '2017-09-12'
-        },
-        {
-          title: 'Birthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday Party',
-          start: '2017-10-13'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2017-10-28'
-        }
+        @endforeach
       ],
       eventRender: function(event, element) {
         element.prop("title", event.title);
