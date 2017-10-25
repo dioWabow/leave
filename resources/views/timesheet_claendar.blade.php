@@ -25,11 +25,19 @@
       <div class="col-xs-12">
       <div class="nav-tabs-custom" style="margin-top: 5px;">
         <ul class="nav nav-tabs">
-          <li class="active fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/dio.png" width="50px"><br><span class="fonts">dio</span></a></li>
-          <li class="fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/michael.png" width="50px"><br><span class="fonts">michael</span></a></li>
-          <li class="fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/tony.png" width="50px"><br><span class="fonts">tony</span></a></li>
-          <li class="fonts"><a href=""><img src="http://leave.ptt.wabow.com/storage/avatar/carrie.png" width="50px"><br><span class="fonts">carrie</span></a></li>
-          <li class="fonts"><a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/eno.png" width="50px"><br><span class="fonts">eno</span></a></li>
+          <li class="active fonts">
+              <a href=""><img src="http://leave.ptt.wabow.com/dist/img/users/dio.png" width="50px"><br><span class="fonts">dio</span></a>
+          </li>
+          @foreach($users as $user)
+          <li class="fonts">
+              <a href="">
+                <img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" width="50px" alt="{{$user->name}}"><br>
+                <span class="fonts">
+                    {{$user->name}}
+                </span>
+              </a>
+          </li>
+          @endforeach
         </ul>
       <!-- /.nav-tabs-custom -->
     </div>
@@ -113,7 +121,7 @@
         },
         {
           title: 'Dinner',
-          start: '2017-10-12'
+          start: '2017-09-12'
         },
         {
           title: 'Birthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday PartyBirthday Party',

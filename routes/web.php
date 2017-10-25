@@ -459,10 +459,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     // 月報表
     Route::group(['prefix'=>'sheet'], function(){
-
-        Route::get('calendar', [
+        
+        Route::get('calendar/{user_id?}', [
             'as' => 'sheet/calendar',
-            'uses' => 'Timesheet\TimesheetController@getCalendar',
+            'uses' => 'Sheet\CalendarController@getCalendar',
         ]);
     });
 
