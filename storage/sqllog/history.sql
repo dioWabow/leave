@@ -4,7 +4,7 @@ ALTER TABLE `project_teams`
 
 --2017-10-23 michael 新增專案項目AUTO_INCREMENT
 ALTER TABLE `project_teams`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id';COMMIT;
 
 --2017-10-23 michael 新增專案項目關聯資表
 CREATE TABLE `project_teams` (
@@ -30,7 +30,7 @@ ALTER TABLE `timesheet`
 
 --2017-10-18 michael 日報表AUTO_INCREMENT
 ALTER TABLE `timesheet`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id';COMMIT;
 
 --2017-10-18 michael 日報表SQL
 CREATE TABLE `timesheet` (
@@ -54,7 +54,7 @@ ALTER TABLE `project`
 
 --2017-10-18 michael 專案項目AUTO_INCREMENT
 ALTER TABLE `project`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id';COMMIT;
 
 --2017-10-18 michael 專案項目SQL
 CREATE TABLE `project` (
@@ -71,7 +71,7 @@ ALTER TABLE `timesheet_permission`
 
 --2017-10-18 michael 權限頁AUTO_INCREMENT
 ALTER TABLE `timesheet_permission`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id';COMMIT;
 
 --2017-10-18 michael 權限頁SQL
 CREATE TABLE `timesheet_permission` (
@@ -88,7 +88,7 @@ ALTER TABLE `absence`
 
 --2017-10-18 michael 缺填報表AUTO_INCREMENT
 ALTER TABLE `absence`
-  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id';COMMIT;
 
 --2017-10-18 michael 缺填報表SQL
 CREATE TABLE `absence` (
