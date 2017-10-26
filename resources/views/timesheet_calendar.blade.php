@@ -8,10 +8,7 @@
   月日誌
   <small>timesheet calendar</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li class="active">月日誌</li>
-  </ol>
+  {{ Breadcrumbs::render('sheet/calendar') }}
 </section>
 
 <!-- Main content -->
@@ -27,15 +24,15 @@
         <ul class="nav nav-tabs">
           <li class="{{$chosed_user_id==Auth::user()->id ? 'active' : ''}} fonts">
               <a href="{{route('sheet/calendar')}}">
-              <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->name}}</span></a>
+              <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->nickname}}</span></a>
           </li>
           @foreach($timesheetpermissions as $timesheetpermission)
           @if($timesheetpermission->fetchUser->status)
             <li class="fonts {{$chosed_user_id==$timesheetpermission->fetchUser->id ? 'active' : ''}}">
                 <a href="{{route('sheet/calendar' ,['user_id' => $timesheetpermission->fetchUser->id])}}">
-                  <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" width="50px" alt="{{$timesheetpermission->fetchUser->name}}"><br>
+                  <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" width="50px" alt="{{$timesheetpermission->fetchUser->nickname}}"><br>
                   <span class="fonts">
-                      {{$timesheetpermission->fetchUser->name}}
+                      {{$timesheetpermission->fetchUser->nickname}}
                   </span>
                 </a>
             </li>

@@ -44,7 +44,7 @@
 <!-- date-range-picker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script src="{{route('root_path')}}/plugins/daterangepicker/daterangepicker.js"></script>
-<!-- fullCalendar 2.2.5 -->
+<!-- fullCalendar 3.6.2 -->
 <script src="{{route('root_path')}}/plugins/fullcalendar/fullcalendar.min.js"></script>
 <!-- bootstrap time picker -->
 <script src="{{route('root_path')}}/plugins/timepicker/bootstrap-timepicker.min.js"></script>
@@ -1546,7 +1546,7 @@ $(function () {
         buttonText: {
           listMonth: '月列表',
         },
-        defaultDate: '2017-10-12',
+        defaultDate: '{{Carbon\Carbon::now()->format("Y-m-d")}}}',
         locale: initialLocaleCode,
         navLinks: false, // can click day/week names to navigate views
         editable: true,
