@@ -21,26 +21,26 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="dataTables_length">
+                  <form name="frmSearch" action="{{ route('sheet/project/index') }}?page=1" method="POST">
 									<label>
 										每頁 
-										<select name="search_page" class="form-control input-sm">
+										<select name="search[pagesize]" class="form-control input-sm">
 											<option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
                       <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
                       <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
-										</select> 
+										</select>
                     筆
 									</label>
                 </div>
               </div>
               <div class="col-sm-9">
-                <form name="frmSearch" action="" method="POST">
                   <div class="pull-right">
                     <label>
                       團隊：
                       <select id="search_team" name="search[team]" class="form-control">
-                        <option value="all">全部</option>
-                        @foreach($project as $data)
-                          <option value="{{$data->id}}">{{$data->name}}</option>
+                        <option value="all" @if($model->team == 'all') selected="selected" @endif>全部</option>
+                        @foreach($all_team as $team_data)
+                          <option value="{{$team_data->id}}" @if($model->team == $team_data->id) selected="selected" @endif>{{$team_data->name}}</option>
                         @endforeach
                       </select>
                     </label>
@@ -48,19 +48,20 @@
                     <label>
                       狀態：
                       <select name="search[status]" class="form-control">
-                        <option value="all">全部</option>
-                        <option value="1" selected="selected">開啟</option>
-                        <option value="0">關閉</option>
+                        <option value="all" @if($model->status == 'all') selected="selected" @endif>全部</option>
+                        <option value="1" @if($model->status == '1') selected="selected" @endif>開啟</option>
+                        <option value="0" @if($model->status == '0') selected="selected" @endif>關閉</option>
                       </select>
                     </label>
                     &nbsp;
                     <label>
                       關鍵字：
-                      <input type="search" class="form-control" placeholder="請輸入專案進行查詢" name="search[keywords]" style="width:270px">
+                      <input type="search" class="form-control" placeholder="請輸入專案進行查詢" name="search[keywords]" style="width:270px" value="{{$model->keywords}}">
                       <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                       <a href="{{ route('sheet/project/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
                     </label>
                   </div>
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </form>
               </div>
             </div>
@@ -98,7 +99,7 @@
                 </table>
               </div>
             </div>
-            {{ $project->links() }}
+            {!! $project->render() !!}
           </div>
         </div>
 			</div>

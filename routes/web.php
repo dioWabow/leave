@@ -184,10 +184,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     # 國定假日/補班
     Route::group(['prefix'=>'holidies'], function(){
-        Route::match(['get', 'post'], 'index', [
+        Route::any( 'index', [
             'as' => 'holidies',
             'uses' => 'HolidayController@getIndex',
         ]);
+
 
         Route::get('create', [
             'as' => 'holidies/create',
@@ -544,6 +545,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update_ajax',[
                 'as' => 'sheet/project/update_ajax',
                 'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
+            ]);
+
+            Route::post('search',[
+                'as' => 'sheet/project/search',
+                'uses' => 'Sheet\SheetProjectController@search',
             ]);
         });
     });

@@ -19,12 +19,37 @@ class SheetProjectController extends Controller
      */
     public function getIndex(Request $request)
     {
+        $search = (!empty($request->input('search'))) ? $request->input('search') : [];
+
+        if(!empty($search)) {
+
+            $request->session()->forget('project');
+            $request->session()->push('project.search', $search);
+
+        } else {
+
+            if ( !empty($request->input('page')) && !empty($request->session()->get('project')) ) {
+
+                $search = $request->session()->get('project.search.0');
+
+            } else {
+
+                $request->session()->forget('project');
+
+            }
+        }
+
         $model = new Project;
 
-        $project = $model->getAllProject();
+        $model->fill($search);
+
+        $project = $model->search();
+
+        $teamModel = new Team;
+        $all_team = $teamModel->getAllTeam();
 
         return  view('sheet_project', compact(
-            'model', 'project'
+            'model', 'project', 'all_team'
         ));
     }
 
