@@ -24,9 +24,9 @@
 									<label>
 										每頁 
 										<select name="search_page" class="form-control input-sm">
-											<option value="25">25</option>
-											<option value="50">50</option>
-											<option value="100">100</option>
+											<option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
+                      <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
+                      <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
 										</select> 
                     筆
 									</label>
@@ -38,20 +38,19 @@
                     <label>
                       團隊：
                       <select id="search_team" name="search[team]" class="form-control">
-                        <option value="">全部</option>
-                        <option value="waca">WACA</option>
-                        <option value="washop">WASHOP</option>
-                        <option value="washop">HR</option>
-                        <option value="washop">PM</option>
+                        <option value="all">全部</option>
+                        @foreach($project as $data)
+                          <option value="{{$data->id}}">{{$data->name}}</option>
+                        @endforeach
                       </select>
                     </label>
                     &nbsp;
                     <label>
                       狀態：
                       <select name="search[status]" class="form-control">
-                        <option value="">全部</option>
-                        <option value="available" selected="selected">開啟</option>
-                        <option value="disable">關閉</option>
+                        <option value="all">全部</option>
+                        <option value="1" selected="selected">開啟</option>
+                        <option value="0">關閉</option>
                       </select>
                     </label>
                     &nbsp;

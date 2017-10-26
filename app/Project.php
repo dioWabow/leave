@@ -11,11 +11,18 @@ class Project extends Model
 		'id',
         'name',
         'available',
+        'pagesize',
+        'team',
+        'status'
+    ];
+
+    protected $attributes = [
+        'pagesize' => '25',
     ];
 
     public function getAllProject()
     {
-    	$result = $this->paginate(25);
+    	$result = $this->paginate($this->pagesize);
     	return $result;
     }
 

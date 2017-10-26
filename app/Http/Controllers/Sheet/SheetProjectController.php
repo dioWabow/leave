@@ -24,7 +24,7 @@ class SheetProjectController extends Controller
         $project = $model->getAllProject();
 
         return  view('sheet_project', compact(
-            'project'
+            'model', 'project'
         ));
     }
 
@@ -73,8 +73,6 @@ class SheetProjectController extends Controller
 
         $projectTeamModel = new ProjectTeam;
         $project_team = $projectTeamModel->getProjectTeamByProjectId($id)->pluck('team_id')->toArray();
-
-        // dd($project_data);
 
         return  view('sheet_project_form', compact(
             'all_team', 'projectModel', 'project_team'
