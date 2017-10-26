@@ -8,6 +8,7 @@ CREATE TABLE `project_teams` (
   `project_id` int(7) NOT NULL COMMENT '專案id',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --2017-10-23 michael 刪除team_id 欄位
 ALTER TABLE `projects` DROP `team_id`;
 --2017-10-23 michael 變更資料表名稱
