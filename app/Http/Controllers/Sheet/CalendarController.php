@@ -27,7 +27,7 @@ class CalendarController extends Controller
 
         }
 
-    	return view('timesheet_claendar',compact(
+    	return view('timesheet_calendar',compact(
             'timesheets','chosed_user_id','timesheetpermissions'
         ));
     }

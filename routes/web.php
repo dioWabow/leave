@@ -457,17 +457,9 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
-    // 月報表
-    Route::group(['prefix'=>'sheet'], function(){
-        
-        Route::get('calendar/{user_id?}', [
-            'as' => 'sheet/calendar',
-            'uses' => 'Sheet\CalendarController@getCalendar',
-        ]);
-    });
-
     // 工作日誌
     Route::group(['prefix'=>'sheet'], function(){
+        //搜尋
         Route::group(['prefix'=>'search'], function(){
             Route::get('index',[
                 'as'=>'sheet/search/index',
@@ -475,12 +467,19 @@ Route::group(['middleware' => 'auth'], function () {
             ]);
         });
 
+        //權限
         Route::group(['prefix'=>'auth'], function(){
             Route::get('index',[
                 'as'=>'sheet/auth/index',
                 'uses'=> 'SheetAuthController@getIndex',
             ]);
         });
+
+        // 月報表
+        Route::get('calendar/{user_id?}', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Sheet\CalendarController@getCalendar',
+        ]);
     });
 });
 
