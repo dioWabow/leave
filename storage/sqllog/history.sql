@@ -1,7 +1,12 @@
---2017-10-23 michael 新增專案項目關聯資表
+--2017-10-23 michael 新增專案項目PRIMARY
 ALTER TABLE `project_teams`
   ADD PRIMARY KEY (`id`);
 
+--2017-10-23 michael 新增專案項目AUTO_INCREMENT
+ALTER TABLE `project_teams`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+
+--2017-10-23 michael 新增專案項目關聯資表
 CREATE TABLE `project_teams` (
   `id` int(7) NOT NULL COMMENT 'id',
   `team_id` int(7) NOT NULL COMMENT '團隊id',
@@ -9,12 +14,91 @@ CREATE TABLE `project_teams` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新時間'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --2017-10-23 michael 刪除team_id 欄位
 ALTER TABLE `projects` DROP `team_id`;
+
 --2017-10-23 michael 變更資料表名稱
 RENAME TABLE `leave`.`project` TO `leave`.`projects`;
+
 --2017-10-23 michael 專案項目增加 是否開啟欄位
 ALTER TABLE `project` ADD `available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否開啟' AFTER `name`;
+
+--2017-10-18 michael 日報表PRIMARY
+ALTER TABLE `timesheet`
+  ADD PRIMARY KEY (`id`);
+
+--2017-10-18 michael 日報表AUTO_INCREMENT
+ALTER TABLE `timesheet`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+
+--2017-10-18 michael 日報表SQL
+CREATE TABLE `timesheet` (
+  `id` int(7) NOT NULL COMMENT 'id',
+  `project_id` int(7) NOT NULL COMMENT '專案項目',
+  `tag` varchar(200) NOT NULL COMMENT '標籤',
+  `user_id` int(7) NOT NULL COMMENT '使用者',
+  `items` varchar(255) NOT NULL COMMENT '標題',
+  `description` text NOT NULL COMMENT '內容',
+  `hour` float NOT NULL COMMENT '小時',
+  `working_day` date NOT NULL COMMENT '工作日',
+  `url` text NOT NULL COMMENT '連結',
+  `remark` text NOT NULL COMMENT '備註',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 專案項目PRIMARY
+ALTER TABLE `project`
+  ADD PRIMARY KEY (`id`);
+
+--2017-10-18 michael 專案項目AUTO_INCREMENT
+ALTER TABLE `project`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+
+--2017-10-18 michael 專案項目SQL
+CREATE TABLE `project` (
+  `id` int(7) NOT NULL COMMENT 'id',
+  `team_id` int(7) NOT NULL COMMENT '團隊id',
+  `name` varchar(50) NOT NULL COMMENT '專案名稱',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 權限頁PRIMARY
+ALTER TABLE `timesheet_permission`
+  ADD PRIMARY KEY (`id`);
+
+--2017-10-18 michael 權限頁AUTO_INCREMENT
+ALTER TABLE `timesheet_permission`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+
+--2017-10-18 michael 權限頁SQL
+CREATE TABLE `timesheet_permission` (
+  `id` int(7) NOT NULL COMMENT 'id',
+  `user_id` int(7) NOT NULL COMMENT '使用者',
+  `allow_user_id` int(7) NOT NULL COMMENT '允許觀看用戶',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 缺填報表PRIMARY
+ALTER TABLE `absence`
+  ADD PRIMARY KEY (`id`);
+
+--2017-10-18 michael 缺填報表AUTO_INCREMENT
+ALTER TABLE `absence`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id', AUTO_INCREMENT=8;COMMIT;
+
+--2017-10-18 michael 缺填報表SQL
+CREATE TABLE `absence` (
+  `id` int(7) NOT NULL COMMENT 'id',
+  `user_id` int(7) NOT NULL COMMENT '缺填人',
+  `notfill_at` date NOT NULL COMMENT '哪天沒填',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb
