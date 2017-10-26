@@ -521,7 +521,7 @@ Route::group(['middleware' => 'auth'], function () {
                 'uses' => 'Sheet\SheetProjectController@getCreate',
             ]);
 
-            Route::get('edit',[
+            Route::get('edit/{id}',[
                 'as' => 'sheet/project/edit',
                 'uses' => 'Sheet\SheetProjectController@getEdit',
             ]);

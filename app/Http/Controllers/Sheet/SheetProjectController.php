@@ -38,8 +38,12 @@ class SheetProjectController extends Controller
         $model = new Team;
         $all_team = $model->getAllTeam();
 
+        $projectModel = new Project;
+
+        $project_team = [];
+
         return  view('sheet_project_form', compact(
-            'all_team'
+            'all_team', 'projectModel', 'project_team'
         ));
     }
 
@@ -48,13 +52,32 @@ class SheetProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getEdit(Request $request)
+    public function getEdit(Request $request, $id)
     {
-        $model = new Team;
-        $all_team = $model->getAllTeam();
+        // 專案名稱 團隊 狀態
+        $team = new Team;
+        $all_team = $team->getAllTeam();
+
+        $projectModel = new Project;
+        $project_data = $projectModel->whichProject($id);
+
+        $input = [];
+
+        foreach ($project_data as $key => $value) {
+            $input['id'] = $value['id'];
+            $input['name'] = $value['name'];
+            $input['available'] = $value['available'];
+        }
+
+        $projectModel->fill($input);
+
+        $projectTeamModel = new ProjectTeam;
+        $project_team = $projectTeamModel->getProjectTeamByProjectId($id)->pluck('team_id')->toArray();
+
+        // dd($project_data);
 
         return  view('sheet_project_form', compact(
-            'all_team'
+            'all_team', 'projectModel', 'project_team'
         ));
     }
 
@@ -95,12 +118,8 @@ class SheetProjectController extends Controller
 
         }
 
-        //狀態 空 則為 off
-        if (empty($input['status'])) {
-
-            $input['status'] = 'off';
-
-        }
+        //狀態 空 則為 0
+        $input['status'] = (empty($input['ststus'])) ? "0" : "1";
 
         // 加入project table
         $model = new Project;
@@ -118,13 +137,13 @@ class SheetProjectController extends Controller
 
         foreach($project_member as $key => $data){
 
-            $projectTeam = new ProjectTeam;
-            $projectTeam->fill([
+            $projectTeamModel = new ProjectTeam;
+            $projectTeamModel->fill([
                 'team_id' => $data,
                 'project_id' => $model->id,
             ]);
 
-            if ($projectTeam->save()) {
+            if ($projectTeamModel->save()) {
                 $projectTeam_judge = true;
             }
 
@@ -149,6 +168,84 @@ class SheetProjectController extends Controller
      */
     public function postUpdate(Request $request)
     {
+        $input = $request->input('sheet_project');
 
+        $project_judge = false;
+        $projectTeam_judge = false;
+
+        //專案項目必填
+        if (empty($input['title'])) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '專案項目必填']);
+
+        }
+
+        //團隊必填
+        if (empty($input['team'])) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '團隊必選']);
+
+        }
+
+        //狀態 空 則為 0
+        $input['status'] = (empty($input['status'])) ? "0" : "1";
+
+        // update project id name available
+        // 加入project table
+        $model = self::loadModel($input['id']);
+        $model->fill([
+            'name' => $input['title'],
+            'available' => $input['status'],
+        ]);
+
+        if ($model->save()) {
+            $project_judge = true;
+        }
+
+        // update projectTeam delete old data add new team_id project_id
+        $project_member = $input['team'];
+        ProjectTeam::deleteProjectTeamByProjectId($input['id']);
+
+        foreach($project_member as $key => $data){
+
+            $projectTeamModel = new ProjectTeam;
+            $projectTeamModel->fill([
+                'team_id' => $data,
+                'project_id' => $model->id,
+            ]);
+
+            if ($projectTeamModel->save()) {
+                $projectTeam_judge = true;
+            }
+
+        }
+
+        if ($project_judge && $projectTeam_judge) {
+
+            return Redirect::route('sheet/project/index')->with('success', '新增成功 !');
+
+        } else {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+
+        }
+
+    }
+
+    /**
+     * 找id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    private static function loadModel($id)
+    {
+        $model = Project::find($id);
+
+        if ($model===false) {
+
+            throw new CHttpException(404,'資料不存在');
+
+        }
+        return $model;
     }
 }

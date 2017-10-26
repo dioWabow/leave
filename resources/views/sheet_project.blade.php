@@ -77,11 +77,17 @@
                   </thead>
                   <tbody>
                     @forelse($project as $project_data)
-                      <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
+                      <tr class="clickable-row" data-href="{{ route('sheet/project/edit', ['id' => $project_data->id]) }}">
                         <td>{{$project_data->name}}</td>
-                        <td></td>
                         <td>
-                          <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
+                          @foreach (App\ProjectTeam::getProjectTeamByProjectId($project_data->id) as $team)
+                            @if(!empty($team->fetchTeam))
+                              <small class="label" style="background-color:{{$team->fetchTeam->color}};">{{$team->fetchTeam->name}}</small>
+                            @endif
+                          @endforeach
+                        </td>
+                        <td>
+                          <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($project_data->available == '1') checked="checked" @endif>
                         </td>
                       </tr>
                     @empty
@@ -90,51 +96,10 @@
                     </tr>
                     @endforelse
                   </tbody>
-                  <tbody>
-                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
-                      <td>EFSHOP衣芙日系</td>
-                      <td><small class="label" style="background-color:#FF88C2;">waca</small><small class="label" style="background-color:#7700FF;">waca 999</small></td>
-                      <td>
-                        <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
-                      </td>
-                    </tr>
-                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
-                      <td>EDOLLARS衣大樂是</td>
-                      <td><small class="label" style="background-color:#319920;">washop</small></td>
-                      <td>
-                        <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
-                      </td>
-                    </tr>
-
-                    <tr class="clickable-row" data-href="{{ route('sheet/project/edit') }}">
-                      <td>TWOEC蔥媽媽</td>
-                      <td><small class="label" style="background-color:#319920;">washop</small></td>
-                      <td>
-                        <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" checked="checked">
-                      </td>
-                    </tr>
-                  </tbody>
                 </table>
               </div>
             </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <ul class="pagination">
-                  <li class="paginate_button previous disabled">
-                    <a href="#">上一頁</a>
-                  </li>
-                  <li class="paginate_button active"><a href="#">1</a></li>
-                  <li class="paginate_button"><a href="#">2</a></li>
-                  <li class="paginate_button"><a href="#">3</a></li>
-                  <li class="paginate_button"><a href="#">4</a></li>
-                  <li class="paginate_button"><a href="#">5</a></li>
-                  <li class="paginate_button"><a href="#">6</a></li>
-                  <li class="paginate_button next">
-                    <a href="#">下一頁</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            {{ $project->links() }}
           </div>
         </div>
 			</div>
