@@ -21,7 +21,18 @@ class Team extends BaseModel
         return $result;
     }
 
-    
+    public static function getMainTeam()
+    {
+        $result = self::where('parent_id', '0')->get();
+        return $result;
+    }
+
+    public static function getSubTeam()
+    {
+        $result = self::where('parent_id', '!=', '0')->get();
+        return $result;
+    }
+
     public static function getColorByKey($key = '')
     {
         $result = self::where('id', $key)->pluck('color')->first();

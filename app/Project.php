@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 
-class Project extends Model
+class Project extends BaseModel
 {
 	protected $fillable = [
 		'id',
@@ -13,14 +13,13 @@ class Project extends Model
         'available',
         'pagesize',
         'team',
-        'status',
         'keywords'
     ];
 
     protected $attributes = [
         'pagesize' => '25',
         'team' => 'all',
-        'status' => 'all',
+        'available' => 'all',
         'keywords' => '',
     ];
 
@@ -32,22 +31,29 @@ class Project extends Model
 
     public function search()
     {
-        $query = $this->select('projects.id', 'projects.name', 'projects.available', 'project_teams.team_id', 'project_teams.project_id')
-            ->leftJoin('project_teams', 'projects.id', '=', 'project_teams.project_id');
-
-            if($this->status != 'all') {
-                $query->where('projects.available', $this->status);
-            }
+        $query = $this->OrderedBy();
 
             if($this->team != 'all') {
-                $query->where('project_teams.team_id', $this->team);
+                $query->select('projects.id', 'projects.name', 'projects.available', 'project_teams.team_id', 'project_teams.project_id')
+                    ->leftJoin('project_teams', 'projects.id', '=', 'project_teams.project_id')
+                    ->where('project_teams.team_id', $this->team);
+            }
+
+            if($this->available != 'all') {
+                $query->where('available', $this->available);
             }
 
             if(!empty($this->keywords)) {
-                $query->where('projects.name', 'LIKE', '%'.$this->keywords.'%');
+                $query->where('name', 'LIKE', '%'.$this->keywords.'%');
             }
 
         $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
+    public function scopeOrderedBy($query)
+    {
+        $result = $query->orderBy('id');
         return $result;
     }
 

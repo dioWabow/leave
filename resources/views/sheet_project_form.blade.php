@@ -41,13 +41,30 @@
 								<input type="checkbox" name="sheet_project[team][0]" class="flat-red" value="0"@if(in_array(0, $project_team)) checked="checked" @endif> 共用
 							</label>
 						</div>
-						@foreach($all_team as $data)
+						@foreach($main_team as $main_data)
 						<div class="col-md-1"></div>
 						<div class="col-md-11">
 							<label>
-								<input type="checkbox" name="sheet_project[team][]" class="flat-red" value="{{$data->id}}" @if(in_array($data->id, $project_team)) checked="checked" @endif> {{$data->name}}
-							</label>
+								<input type="checkbox" name="sheet_project[team][]" class="flat-red main_team" value="{{$main_data->id}}" @if(in_array($main_data->id, $project_team)) checked="checked" @endif> {{$main_data->name}}
+							</label>&emsp;
+							@foreach($sub_team as $sub_data)
+								@if($main_data->id == $sub_data->parent_id)
+									<label class="sub_team show_team_{{$main_data->id}}" value="{{$main_data->id}}">
+										<small class="label" style="background-color:{{$sub_data->color}};">{{$sub_data->name}}</small>
+									</label>
+								@endif
+							@endforeach
 						</div>
+							@foreach($sub_team as $sub_data)
+								@if($main_data->id == $sub_data->parent_id)
+								<div class="col-md-1"></div>
+									<div class="col-md-11">
+										<label>
+											　<input type="checkbox" name="sheet_project[team][]" class="flat-red" value="{{$sub_data->id}}" @if(in_array($sub_data->id, $project_team)) checked="checked" @endif> {{$sub_data->name}}
+										</label>
+									</div>
+								@endif
+							@endforeach
 						@endforeach
 					</div>
 				</div>
@@ -59,7 +76,7 @@
 						</div>
 						<div class="col-md-11">
 							<label>
-								<input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($projectModel->available == "1") checked="checked" @endif>
+								<input type="checkbox" name="sheet_project[available]" class="sheet_project_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($projectModel->available == "1") checked="checked" @endif>
 							</label>
 						</div>
 					</div>

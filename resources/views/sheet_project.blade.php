@@ -47,10 +47,10 @@
                     &nbsp;
                     <label>
                       狀態：
-                      <select name="search[status]" class="form-control">
-                        <option value="all" @if($model->status == 'all') selected="selected" @endif>全部</option>
-                        <option value="1" @if($model->status == '1') selected="selected" @endif>開啟</option>
-                        <option value="0" @if($model->status == '0') selected="selected" @endif>關閉</option>
+                      <select name="search[available]" class="form-control">
+                        <option value="all" @if($model->available == 'all') selected="selected" @endif>全部</option>
+                        <option value="1" @if($model->available == '1') selected="selected" @endif>開啟</option>
+                        <option value="0" @if($model->available == '0') selected="selected" @endif>關閉</option>
                       </select>
                     </label>
                     &nbsp;
@@ -81,13 +81,15 @@
                         <td>{{$project_data->name}}</td>
                         <td>
                           @foreach (App\ProjectTeam::getProjectTeamByProjectId($project_data->id) as $team)
-                            @if(!empty($team->fetchTeam))
+                            @if($team->team_id == '0')
+                              <small class="label" style="background-color:black;">共用</small>
+                            @elseif(!empty($team->fetchTeam))
                               <small class="label" style="background-color:{{$team->fetchTeam->color}};">{{$team->fetchTeam->name}}</small>
                             @endif
                           @endforeach
                         </td>
                         <td>
-                          <input type="checkbox" name="sheet_project[status]" class="sheet_project_status" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($project_data->available == '1') checked="checked" @endif>
+                          <input type="checkbox" name="sheet_project[available]" value="{{$project_data->id}}" class="sheet_project_available{{$project_data->available}}" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($project_data->available == '1') checked="checked" @endif>
                         </td>
                       </tr>
                     @empty

@@ -45,6 +45,8 @@ class SheetProjectController extends Controller
 
         $project = $model->search();
 
+        // dd($project);
+
         $teamModel = new Team;
         $all_team = $teamModel->getAllTeam();
 
@@ -61,14 +63,15 @@ class SheetProjectController extends Controller
     public function getCreate()
     {
         $model = new Team;
-        $all_team = $model->getAllTeam();
+        $main_team = $model->getMainTeam();
+        $sub_team = $model->getSubTeam();
 
         $projectModel = new Project;
 
         $project_team = [];
 
         return  view('sheet_project_form', compact(
-            'all_team', 'projectModel', 'project_team'
+            'main_team', 'sub_team', 'projectModel', 'project_team'
         ));
     }
 
@@ -81,7 +84,8 @@ class SheetProjectController extends Controller
     {
         // 專案名稱 團隊 狀態
         $team = new Team;
-        $all_team = $team->getAllTeam();
+        $main_team = $team->getMainTeam();
+        $sub_team = $team->getSubTeam();
 
         $projectModel = new Project;
         $project_data = $projectModel->whichProject($id);
@@ -100,7 +104,7 @@ class SheetProjectController extends Controller
         $project_team = $projectTeamModel->getProjectTeamByProjectId($id)->pluck('team_id')->toArray();
 
         return  view('sheet_project_form', compact(
-            'all_team', 'projectModel', 'project_team'
+            'main_team', 'sub_team','projectModel', 'project_team'
         ));
     }
 
@@ -142,13 +146,13 @@ class SheetProjectController extends Controller
         }
 
         //狀態 空 則為 0
-        $input['status'] = (empty($input['ststus'])) ? "0" : "1";
+        $input['available'] = (empty($input['available'])) ? "0" : "1";
 
         // 加入project table
         $model = new Project;
         $model->fill([
             'name' => $input['title'],
-            'available' => $input['status'],
+            'available' => $input['available'],
         ]);
 
         if ($model->save()) {
@@ -211,14 +215,14 @@ class SheetProjectController extends Controller
         }
 
         //狀態 空 則為 0
-        $input['status'] = (empty($input['status'])) ? "0" : "1";
+        $input['available'] = (empty($input['available'])) ? "0" : "1";
 
         // update project id name available
         // 加入project table
         $model = self::loadModel($input['id']);
         $model->fill([
             'name' => $input['title'],
-            'available' => $input['status'],
+            'available' => $input['available'],
         ]);
 
         if ($model->save()) {
@@ -253,6 +257,48 @@ class SheetProjectController extends Controller
 
         }
 
+    }
+
+    /**
+     * ajax更新
+     *
+     * @param Request $request
+     * @return Redirect
+     */
+    public function ajaxUpdateData(Request $request)
+    {
+        // id available
+        $id = $request['id'];
+        $available = $request['available'];
+        $input = ['available' => $available];
+
+        $model = new Project;
+
+        $model = $this->loadModel($id);
+
+        $model->fill($input);
+
+        if ($model->save()) {
+
+            $result = true;
+
+            return json_encode(
+                array(
+                    'result' => $result,
+                    'id' => $id
+                )
+            );
+
+        } else {
+
+            $result = false;
+            return json_encode(
+                array(
+                    'result' => $result
+                )
+            );
+
+        }
     }
 
     /**

@@ -1542,28 +1542,59 @@ $(function () {
       radioClass: 'iradio_flat-blue'
   });
 
-  
   /*主團隊 勾選checkbox時顯示子團隊*/
-  $("#team").hide();
-  $("#team_check").on("ifChanged", function () {
-     $("#team").fadeToggle();
+  $(".sub_team").hide();
+
+  // 如果一開始就被選 就要顯示
+  $(".main_team").each(function() {
+
+    if($(this).prop("checked")){
+
+      $(".show_team_"+$(this).val()).fadeToggle();
+
+    }
+
   });
 
-  
-  $("#team2").hide();
-  $("#team_check2").on("ifChanged", function () {
-    $("#team2").fadeToggle();
-  });
+  // 一開始沒被選 被選要顯示
+  $('.main_team').on("ifChanged", function() {
 
-  $("#team3").hide();
-  $("#team_check3").on("ifChanged", function () {
-    $("#team3").fadeToggle();
-  });
+    var id = $(this).val();
 
-  $("#team4").hide();
-  $("#team_check4").on("ifChanged", function () {
-    $("#team4").fadeToggle();
+    $(".show_team_"+id).fadeToggle();
+
   });
 });
+
+</script>
+@endif
+
+@if(Request::is('sheet/project/index'))
+<script>
+  // 切換狀態
+  $("input[name^=sheet_project]").on("change", function(){
+
+    var id = $(this).val();
+    var available = ($(".sheet_project_available" +id).prop("checked")) ? '1' : '0';
+
+    $.ajax({
+      type: "POST",
+      url: "{{ route('sheet/project/update_ajax') }}",
+      dataType: "json",
+      data: {
+        "_token": "{{ csrf_token() }}",
+        id: id,
+        available: available,
+      },
+      success: function(data) {
+        if (data.result) {
+          alert('修改成功');
+        }
+      },
+      error: function(jqXHR) {
+        alert("發生錯誤: " + jqXHR.status);
+      }
+    });
+  });
 </script>
 @endif
