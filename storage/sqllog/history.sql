@@ -1,3 +1,9 @@
+--2017-10-27 carrie 日誌 備註、標籤、內容 可以選填
+ALTER TABLE `timesheets` CHANGE `tag` `tag` VARCHAR(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '標籤', CHANGE `description` `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '內容', CHANGE `remark` `remark` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '備註';
+--2017-10-25 carrie 日誌 id 自動新增
+ALTER TABLE `timesheets` CHANGE `id` `id` INT(7) NOT NULL AUTO_INCREMENT COMMENT 'id';
+--2017-10-25 carrie 日誌 url 可以選填
+ALTER TABLE `timesheets` CHANGE `url` `url` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '連結';
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb

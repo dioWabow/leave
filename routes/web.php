@@ -463,20 +463,41 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix'=>'daily'], function(){
 
-            Route::get('index',[
+            Route::any('index/{current_user?}',[
                 'as'=>'sheet/daily/index',
                 'uses'=> 'sheet\DailyController@getIndex',
             ]);
 
             Route::get('creat',[
                 'as'=>'sheet/daily/creat',
+                'uses'=> 'sheet\DailyController@getCreate',
+            ]);
+
+            Route::post('insert',[
+                'as' => 'sheet/daily/insert',
+                'uses' => 'sheet\DailyController@postInsert',
+            ]);
+
+            Route::post('copy',[
+                'as' => 'sheet/daily/copy',
+                'uses' => 'sheet\DailyController@postCopy',
+            ]);
+
+            Route::get('edit/{id}',[
+                'as'=>'sheet/daily/edit',
                 'uses'=> 'sheet\DailyController@getEdit',
             ]);
 
             Route::post('update',[
-                'as'=>'sheet/daily/update',
-                'uses'=> 'sheet\DailyController@postUpdate',
+                'as' => 'sheet/daily/update',
+                'uses' => 'sheet\DailyController@postUpdate',
             ]);
+
+            Route::get('delete/{id}',[
+                'as' => 'sheet/daily/delete',
+                'uses' => 'sheet\DailyController@postDelete',
+            ]);
+
         });
     });
 

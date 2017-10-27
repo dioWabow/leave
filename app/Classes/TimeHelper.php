@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\User;
+use App\Holiday;
 
 use Carbon\Carbon;
 
@@ -222,8 +223,46 @@ class TimeHelper
 
     public function getNowDate($type = "Y-m-d")
     {
-        $result = date($type);
+        $result = Carbon::now()->format($type);
         return $result;
+    }
+
+    /** 
+     * 取得日期
+     * 判斷該日期是否可以新增或修改日誌
+     * 新增/複製/修改 日誌 需再 七天以內 ~ 明天
+     * 
+     *  @return true/false
+     */
+    public function checkEditSheetDate($data)
+    {
+        $working_day = Carbon::parse($data);
+        $past = Carbon::parse('-7 day');
+        $future = Carbon::parse('+1 day');
+        $confirm_date = ($working_day->lte($future) && $working_day->gte($past))? true : false ;
+        return $confirm_date;
+    }
+
+    /** 
+     * 取得日期
+     * 判斷該日期是否為補班日
+     * 
+     *  @return true/false
+     */
+    public function checkHolidayDate($data)
+    {
+        $holiday = new Holiday;
+        $get_date = $holiday->getWorkDayByType()->toArray();
+        $confirm_holiday_date = false;
+
+        if (in_array($data, $get_date)){
+
+            $confirm_holiday_date = true;
+
+        }
+
+        return $confirm_holiday_date;
+
     }
 
 }

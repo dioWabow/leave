@@ -164,16 +164,91 @@ $(function () {
 @endif
 
 <!--工作日至調整用-->
-@if(Request::is('sheet/daily/index'))
+@if(Request::is('sheet/daily/*'))
 <script>
-$(function () {
-    $('.single-date').daterangepicker({
-        alwaysShowCalendars: true,
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'}
+  $(function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var minDate = yyyy + '-' + mm + '-' + (dd-7);
+    var maxDate = yyyy + '-' + mm + '-' + (dd+1);
+    var $search_work_day = $("#search_work_day");
+    var time = $search_work_day.val();
+
+    $(".search-today").on("click", function(){
+      $("#search_work_day").val(yyyy + '-' + mm + '-' + dd)
     });
-});
+
+    $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    $(".clickable-row").click(function(e) {
+      if($(e.target).hasClass("ignore")) return;
+
+      var ignore = ["input", "a", "button", "textarea", "label"];
+      var clicked = e.target.nodeName.toLowerCase();
+      if($.inArray(clicked, ignore) > -1) return;
+      
+      window.location = $(this).data("href");
+    });
+
+    $("#checkall").on("ifChecked ifUnchecked",function(evant){
+      if(evant.type == "ifChecked")
+        $(".check").iCheck("check");
+      else
+        $(".check").iCheck("uncheck");
+    });
+
+    /*確認check有勾選才可打開核准按鈕*/
+    $("input[name='time_sheet[id][]']").on("ifChanged", function () {
+      if ($('.check:checked').length > 0) {
+        $("#time_sheet_copy_date,#time_sheet_copy_to").prop("disabled", false);
+      } else {
+          $("#time_sheet_copy_date,#time_sheet_copy_to").prop("disabled", true);
+      }
+    });
+
+    $(".sort").on("click", function(){
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      $("#frmOrderBy").submit();
+    });
+
+
+    $("#time_sheet_copy_date,#daily_working_day").daterangepicker({
+      alwaysShowCalendars: true,
+      singleDatePicker: true,
+      showDropdowns: true,
+      minDate: minDate,
+      maxDate: maxDate,
+      locale: {format: 'YYYY-MM-DD'},
+    });
+
+    $("#search_work_day").daterangepicker({
+      alwaysShowCalendars: true,
+      singleDatePicker: true,
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+    });
+
+    if (time.empty()) 
+      $("#search_work_day").val(yyyy + '-' + mm + '-' + dd);
+    else 
+      $("#search_work_day").val(time);
+
+  });
 </script>
 <style>
   .rwd-table {

@@ -179,6 +179,24 @@ return [
         'leave.timepicker' => [
             'required' => '請選擇請假時間',
         ],
+
+        'daily.items' => [
+            'required' => '請填寫標題',
+        ],
+        'daily.working_day' => [
+            'required' => '請填工作日期',
+            'date' => '請填正確日期',
+        ],
+        'daily.project_id' => [
+            'required' => '請填專案名稱',
+        ],
+        'daily.hour' => [
+            'required' => '請填工作時數',
+            'Integer' => '工作時數必須為數字',
+        ],
+        'daily.url' => [
+            'url' => '請填正確連結',
+        ],
     ],
 
     /*
