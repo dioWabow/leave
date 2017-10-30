@@ -212,6 +212,38 @@ class Leave extends BaseModel
         return $result;
     }
 
+    public static function getMyLeavesTotalByUserId($user_id,$tag_id)
+    {
+        $query = self::OrderedBy();
+
+        if (!is_array($tag_id)){
+            //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+            $tag_id = explode(',', $tag_id);
+
+        } 
+
+        $query->whereIn('tag_id', $tag_id);
+
+        if (!is_array($user_id)){
+            //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+            $user_id = explode(',', $user_id);
+
+        } 
+        $query->whereIn('user_id', $user_id);
+
+        $result = $query->remember(0.2)->get();
+        return $result;
+    }
+
+    public static function getLeavesByTagAndId($leave_id,$tag_id)
+    {
+        $query = self::OrderedBy()
+            ->where('tag_id', $tag_id)
+            ->whereIn('id', $leave_id);
+        $result = $query->remember(0.2)->get();
+        return $result;
+    }
+
     /**
      * 搜尋table多個資料 (我的假單歷史紀錄)
      * 若有多個傳回第一個

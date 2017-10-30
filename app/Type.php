@@ -86,7 +86,7 @@ class Type extends BaseModel
 
     public static function getTypeByException($exception)
     {
-        $result = self::whereIn('exception', $exception)->get();
+        $result = self::whereIn('exception', $exception)->remember(0.2)->get();
         return $result;
     }
 

@@ -1142,7 +1142,7 @@ class LeaveHelper
         $user_id = UserTeam::getUserByTeams($teams_id);
         $tag_id = ['3'];
         
-        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+        $result = Leave::getMyLeavesTotalByUserId($user_id,$tag_id)->count();
         return $result;
     }
 
@@ -1156,8 +1156,8 @@ class LeaveHelper
         $get_user_id = UserTeam::getUserByTeams($teams);
         $user_id = self::getExcludeManagerUserId($get_user_id);
         $tag_id = ['2'];
-    
-        $result = Leave::where('tag_id', $tag_id)->whereIn('user_id', $user_id)->count();
+
+        $result = Leave::getMyLeavesTotalByUserId($user_id,$tag_id)->count();
         return $result;
     }
 
@@ -1223,9 +1223,9 @@ class LeaveHelper
     public static function getProveMyLeavesTotalByUserId()
     {
         $model = new Leave;
-        $search['user_id'] = Auth::user()->id;
-        $search['tag_id'] = ['1','2','3','4'];
-        $result = $model->searchForProveAndUpComInMy($search)->count();
+        $user_id = Auth::user()->id;
+        $tag_id = ['1','2','3','4'];
+        $result = $model->getMyLeavesTotalByUserId($user_id,$tag_id)->count();
         return $result;
     }
 
@@ -1328,7 +1328,7 @@ class LeaveHelper
         $tag_id = '1';
         
         $leave_id = LeaveAgent::getLeaveByUserId($id)->pluck('leave_id');
-        $result = Leave::whereIn('id', $leave_id)->where('tag_id', $tag_id)->count();
+        $result = Leave::getLeavesByTagAndId($leave_id,$tag_id)->count();
         return $result;
     }
     
@@ -1467,10 +1467,10 @@ class LeaveHelper
 
                                 foreach ( $agent_list as $key => $agent) {
 
-                                    SlackHelper::notify(new AgentLeaveSuccessSlack( $leave->fetchUser->nickname, TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
+                                    SlackHelper::notify(new AgentLeaveSuccessSlack( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
                                     $EmailHelper = new EmailHelper;
                                     $EmailHelper->to = $agent->fetchUser->email;
-                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( $leave->fetchUser->nickname, TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
+                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
 
                                 }
 

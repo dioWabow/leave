@@ -90,6 +90,7 @@ class UserTeam extends BaseModel
 
         $teams = self::where('user_id', $id)
             ->where('role', 'manager')
+            ->remember(0.2)
             ->get();
 
         foreach ($teams as $key => $team) {
@@ -107,7 +108,7 @@ class UserTeam extends BaseModel
 
             return false;
 
-        }else{
+        } else {
 
             return $result;
 
@@ -121,6 +122,7 @@ class UserTeam extends BaseModel
 
         $teams = self::where('user_id', $id)
             ->where('role', 'manager')
+            ->remember(0.2)
             ->get();
 
         foreach ($teams as $key => $team) {
@@ -152,8 +154,7 @@ class UserTeam extends BaseModel
 
         foreach ($teams as $team) {
 
-            $team_user_role = self::where('team_id', $team->id)
-                ->get();
+            $team_user_role = self::where('team_id', $team->id)->remember(0.2)->get();
 
             foreach ($team_user_role as $user) {
                

@@ -3,15 +3,17 @@
 namespace App;
 
 use Schema;
-use Illuminate\Database\Eloquent\Model;
 use Auth;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use OwenIt\Auditing\Contracts\UserResolver;
+use Watson\Rememberable\Rememberable;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class BaseModel extends Model implements AuditableContract, UserResolver
+class BaseModel extends Eloquent implements AuditableContract, UserResolver
 {
     use Auditable;
+    use Rememberable;
     
     public static function boot()
     {

@@ -36,7 +36,7 @@ class User extends BaseModel
     protected $attributes = [
         'order_by' => 'id',
         'order_way' => 'DESC',
-        'pagesize' => '25',
+        'pagesize' => '2',
     ];
 
 
