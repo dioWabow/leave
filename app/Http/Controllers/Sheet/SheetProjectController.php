@@ -45,8 +45,6 @@ class SheetProjectController extends Controller
 
         $project = $model->search();
 
-        // dd($project);
-
         $teamModel = new Team;
         $all_team = $teamModel->getAllTeam();
 
@@ -60,8 +58,10 @@ class SheetProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getCreate()
+    public function getCreate(Request $request)
     {
+        $data = $request->old('project');
+
         $model = new Team;
         $main_team = $model->getMainTeam();
         $sub_team = $model->getSubTeam();
@@ -69,6 +69,19 @@ class SheetProjectController extends Controller
         $projectModel = new Project;
 
         $project_team = [];
+
+
+        if (!empty($data)) {
+
+            $input['name'] = (empty($data['title'])) ? " " : $data['title'];
+            $input['available'] = (empty($data['available'])) ? "0" : "1";
+
+            $project_team = (empty($data['team'])) ? [] : $data['team'];
+
+
+            $projectModel->fill($input);
+
+        }
 
         return  view('sheet_project_form', compact(
             'main_team', 'sub_team', 'projectModel', 'project_team'
@@ -82,6 +95,8 @@ class SheetProjectController extends Controller
      */
     public function getEdit(Request $request, $id)
     {
+        $data = $request->old('project');
+
         // 專案名稱 團隊 狀態
         $team = new Team;
         $main_team = $team->getMainTeam();
@@ -92,10 +107,22 @@ class SheetProjectController extends Controller
 
         $input = [];
 
+        // 正常情況要跑的
         foreach ($project_data as $key => $value) {
+
             $input['id'] = $value['id'];
             $input['name'] = $value['name'];
             $input['available'] = $value['available'];
+
+        }
+
+        // 輸入有問題要跑的
+        if (!empty($data)) {
+
+            $input['id'] = (empty($data['id'])) ? " " : $data['id'];
+            $input['name'] = (empty($data['title'])) ? " " : $data['title'];
+            $input['available'] = (empty($data['available'])) ? "0" : "1";
+
         }
 
         $projectModel->fill($input);
@@ -109,16 +136,6 @@ class SheetProjectController extends Controller
     }
 
     /**
-     * 刪除
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function postDelete(Request $request, $id)
-    {
-
-    }
-
-    /**
      * 新增
      *
      * @param Request $request
@@ -126,7 +143,7 @@ class SheetProjectController extends Controller
      */
     public function postInsert(Request $request)
     {
-        $input = $request->input('sheet_project');
+        $input = $request->input('project');
 
         $project_judge = false;
         $projectTeam_judge = false;
@@ -195,7 +212,7 @@ class SheetProjectController extends Controller
      */
     public function postUpdate(Request $request)
     {
-        $input = $request->input('sheet_project');
+        $input = $request->input('project');
 
         $project_judge = false;
         $projectTeam_judge = false;
@@ -249,11 +266,11 @@ class SheetProjectController extends Controller
 
         if ($project_judge && $projectTeam_judge) {
 
-            return Redirect::route('sheet/project/index')->with('success', '新增成功 !');
+            return Redirect::route('sheet/project/index')->with('success', '修改成功 !');
 
         } else {
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+            return Redirect::back()->withInput()->withErrors(['msg' => '修改失敗']);
 
         }
 

@@ -1564,6 +1564,7 @@ $(function () {
     $(".show_team_"+id).fadeToggle();
 
   });
+
 });
 
 </script>
@@ -1572,28 +1573,32 @@ $(function () {
 @if(Request::is('sheet/project/index'))
 <script>
   // 切換狀態
-  $("input[name^=sheet_project]").on("change", function(){
+  $(function () {
+    $("input[name^=sheet_project]").on("change", function(){
 
-    var id = $(this).val();
-    var available = ($(".sheet_project_available" +id).prop("checked")) ? '1' : '0';
+      var id = $(this).val();
+      var available = ($(".sheet_project_available" +id).prop("checked")) ? '1' : '0';
 
-    $.ajax({
-      type: "POST",
-      url: "{{ route('sheet/project/update_ajax') }}",
-      dataType: "json",
-      data: {
-        "_token": "{{ csrf_token() }}",
-        id: id,
-        available: available,
-      },
-      success: function(data) {
-        if (data.result) {
-          alert('修改成功');
+      alert(available);
+
+      $.ajax({
+        type: "POST",
+        url: "{{ route('sheet/project/update_ajax') }}",
+        dataType: "json",
+        data: {
+          "_token": "{{ csrf_token() }}",
+          id: id,
+          available: available,
+        },
+        success: function(data) {
+          if (data.result) {
+            alert('修改成功');
+          }
+        },
+        error: function(jqXHR) {
+          alert("發生錯誤: " + jqXHR.status);
         }
-      },
-      error: function(jqXHR) {
-        alert("發生錯誤: " + jqXHR.status);
-      }
+      });
     });
   });
 </script>

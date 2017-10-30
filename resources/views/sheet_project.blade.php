@@ -1,36 +1,35 @@
-
 @extends('default')
 
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="glyphicon glyphicon-file"></i> 專案項目
-	<small>Project Management</small>
+  <i class="glyphicon glyphicon-file"></i> 專案項目
+  <small>Project Management</small>
   </h1>
   {{ Breadcrumbs::render('sheet/project/index') }}
 </section>
 
 <!-- Main content -->
 <section class="content">
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="box box-info">
-				<div class="box-body">
-					<div class="dataTables_wrapper form-inline dt-bootstrap">
-						<div class="row">
-							<div class="col-sm-3">
-								<div class="dataTables_length">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-info">
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="dataTables_length">
                   <form name="frmSearch" action="{{ route('sheet/project/index') }}?page=1" method="POST">
-									<label>
-										每頁 
-										<select name="search[pagesize]" class="form-control input-sm">
-											<option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
+                  <label>
+                    每頁 
+                    <select name="search[pagesize]" class="form-control input-sm">
+                      <option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
                       <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
                       <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
-										</select>
+                    </select>
                     筆
-									</label>
+                  </label>
                 </div>
               </div>
               <div class="col-sm-9">
@@ -39,6 +38,7 @@
                       團隊：
                       <select id="search_team" name="search[team]" class="form-control">
                         <option value="all" @if($model->team == 'all') selected="selected" @endif>全部</option>
+                        <option value="0" @if($model->team == '0') selected="selected" @endif>共用</option>
                         @foreach($all_team as $team_data)
                           <option value="{{$team_data->id}}" @if($model->team == $team_data->id) selected="selected" @endif>{{$team_data->name}}</option>
                         @endforeach
@@ -89,7 +89,7 @@
                           @endforeach
                         </td>
                         <td>
-                          <input type="checkbox" name="sheet_project[available]" value="{{$project_data->id}}" class="sheet_project_available{{$project_data->available}}" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($project_data->available == '1') checked="checked" @endif>
+                          <input type="checkbox" name="sheet_project[available]" value="{{$project_data->id}}" class="sheet_project_available{{$project_data->id}}" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($project_data->available == '1') checked="checked" @endif>
                         </td>
                       </tr>
                     @empty
@@ -104,8 +104,8 @@
             {!! $project->render() !!}
           </div>
         </div>
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </section>
 @stop
