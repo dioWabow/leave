@@ -76,4 +76,10 @@ class Holiday extends BaseModel
         $result = $query->where('type' , $type)->count();
         return $result;
     }
+
+    public static function getWorkDayByType($type='')
+    {
+        $result = self::where('type' , $type)->get()->pluck('date');
+        return $result;
+    }
 }

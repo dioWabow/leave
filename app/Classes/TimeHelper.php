@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\User;
+use App\Holiday;
 
 use Carbon\Carbon;
 
@@ -223,6 +224,41 @@ class TimeHelper
     public function getNowDate($type = "Y-m-d")
     {
         $result = date($type);
+        return $result;
+    }
+
+    /** 
+     * 取得日期
+     * 判斷該日期是否為補班日
+     * 
+     *  @return true/false
+     */
+    public function checkHolidayDate($data, $type='')
+    {
+        $holiday = new Holiday;
+        $get_date_by_type = $holiday->getWorkDayByType($type)->toArray();
+        $confirm_holiday_date = false;
+
+        if (in_array($data, $get_date_by_type)){
+
+            $confirm_holiday_date = true;
+
+        }
+
+        return $confirm_holiday_date;
+    }
+
+    /** 
+     * 取得日期
+     * 判斷該日期是否為假日
+     * 
+     *  @return true/false
+     */
+
+    public function checkWeekendDate()
+    {
+        $today = Carbon::now();
+        $result = $today->isWeekend();
         return $result;
     }
 
