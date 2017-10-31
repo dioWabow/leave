@@ -1579,8 +1579,6 @@ $(function () {
       var id = $(this).val();
       var available = ($(".sheet_project_available" +id).prop("checked")) ? '1' : '0';
 
-      alert(available);
-
       $.ajax({
         type: "POST",
         url: "{{ route('sheet/project/update_ajax') }}",

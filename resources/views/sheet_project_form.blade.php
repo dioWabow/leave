@@ -7,11 +7,11 @@
     <i class="glyphicon glyphicon-file"></i> 專案項目{{ $projectModel->id > 0 ? '修改' : '新增' }}
     <small>Project Management</small>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ route('sheet/project/index') }}">專案項目</a></li>
-    <li class="active">專案項目{{ $projectModel->id > 0 ? '修改' : '新增' }}</li>
-  </ol>
+  @if($projectModel->id > 0)
+  {{ Breadcrumbs::render('sheet/project/edit','修改') }}
+  @else
+  {{ Breadcrumbs::render('sheet/project/edit','新增') }}
+  @endif
 </section>
 
 <!-- Main content -->

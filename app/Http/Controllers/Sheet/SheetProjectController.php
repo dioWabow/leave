@@ -23,18 +23,18 @@ class SheetProjectController extends Controller
 
         if(!empty($search)) {
 
-            $request->session()->forget('project');
-            $request->session()->push('project.search', $search);
+            $request->session()->forget('sheet_project');
+            $request->session()->push('sheet_project.search', $search);
 
         } else {
 
-            if ( !empty($request->input('page')) && !empty($request->session()->get('project')) ) {
+            if ( !empty($request->input('page')) && !empty($request->session()->get('sheet_project')) ) {
 
-                $search = $request->session()->get('project.search.0');
+                $search = $request->session()->get('sheet_project.search.0');
 
             } else {
 
-                $request->session()->forget('project');
+                $request->session()->forget('sheet_project');
 
             }
         }
@@ -60,7 +60,7 @@ class SheetProjectController extends Controller
      */
     public function getCreate(Request $request)
     {
-        $data = $request->old('project');
+        $data = $request->old('sheet_project');
 
         $model = new Team;
         $main_team = $model->getMainTeam();
@@ -95,7 +95,7 @@ class SheetProjectController extends Controller
      */
     public function getEdit(Request $request, $id)
     {
-        $data = $request->old('project');
+        $data = $request->old('sheet_project');
 
         // 專案名稱 團隊 狀態
         $team = new Team;
@@ -143,7 +143,7 @@ class SheetProjectController extends Controller
      */
     public function postInsert(Request $request)
     {
-        $input = $request->input('project');
+        $input = $request->input('sheet_project');
 
         $project_judge = false;
         $projectTeam_judge = false;
@@ -212,7 +212,7 @@ class SheetProjectController extends Controller
      */
     public function postUpdate(Request $request)
     {
-        $input = $request->input('project');
+        $input = $request->input('sheet_project');
 
         $project_judge = false;
         $projectTeam_judge = false;
