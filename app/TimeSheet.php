@@ -69,9 +69,9 @@ class TimeSheet extends BaseModel
         return $result;
     }
 
-    public static function getTimeSheetUserIdByNotLeavedUserId($data)
+    public static function getTimeSheetUserIdByNotLeavedUserId($user_id, $date)
     {
-        $result = self::where('user_id', $data)->where('working_day', '2017-10-31')->sum('hour');
+        $result = self::where('user_id', $user_id)->where('working_day', $date)->sum('hour');
         return $result;
     }
 

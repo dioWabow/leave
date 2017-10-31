@@ -236,10 +236,10 @@ class TimeHelper
     public function checkHolidayDate($data, $type='')
     {
         $holiday = new Holiday;
-        $get_date = $holiday->getWorkDayByType($type)->toArray();
+        $get_date_by_type = $holiday->getWorkDayByType($type)->toArray();
         $confirm_holiday_date = false;
 
-        if (in_array($data, $get_date)){
+        if (in_array($data, $get_date_by_type)){
 
             $confirm_holiday_date = true;
 

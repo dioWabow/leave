@@ -61,7 +61,7 @@ class AbsenceSheetEveryDay extends Command
  
                  if (!in_array($user_id, $get_leave_user_id)) {
  
-                     $get_user_id_sum_hour = TimeSheet::getTimeSheetUserIdByNotLeavedUserId($user_id);
+                     $get_user_id_sum_hour = TimeSheet::getTimeSheetUserIdByNotLeavedUserId($user_id, $now_day);
                      
                      if ($get_user_id_sum_hour <= 0) {
  
