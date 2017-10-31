@@ -199,4 +199,13 @@ class User extends BaseModel
             ->get();
         return $result;
     }
+
+    public static function getAllUserIdWithNotLeaved()
+    {
+        $result = self::whereNull('leave_date')
+            ->where('status', '1')
+            ->get()
+            ->pluck('id');
+        return $result;
+    }
 }

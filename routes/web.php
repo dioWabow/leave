@@ -544,7 +544,7 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 });
-# 缺填次數報表
+    # 缺填次數報表
     Route::group(['prefix'=>'sheet'], function(){
         
         Route::any('rank_report/index',[

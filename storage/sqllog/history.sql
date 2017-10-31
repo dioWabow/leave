@@ -1,3 +1,5 @@
+--2017-10-31 carrie id 加上 auto_increment 
+ALTER TABLE `absences` CHANGE `id` `id` INT(7) NOT NULL AUTO_INCREMENT COMMENT 'id';
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb
