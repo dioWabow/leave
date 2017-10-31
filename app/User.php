@@ -204,8 +204,7 @@ class User extends BaseModel
     {
         $result = self::whereNull('leave_date')
             ->where('status', '1')
-            ->get()
-            ->pluck('id');
+            ->get();
         return $result;
     }
 }
