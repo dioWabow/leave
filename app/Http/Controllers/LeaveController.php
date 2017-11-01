@@ -181,9 +181,11 @@ class LeaveController extends Controller
         $user_no_team = $team_users = [];
         foreach (User::getAllUsersExcludeUserId($user_id) as $users) {
 
-            if ($users->fetchUserTeam()->first()) {
+            $user_team = $users->fetchUserTeam()->first();
 
-                $team_users[] = $users->fetchUserTeam()->first();
+            if ($user_team) {
+
+                $team_users[] = $user_team;
 
             } else {
 

@@ -47,9 +47,12 @@ class Leave extends BaseModel
     public function searchForProveInManager($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'user_id') {
                     
@@ -79,6 +82,13 @@ class Leave extends BaseModel
         return $result;
     }
 
+    public function searchForProveForAdmin($tag_id,$hours)
+    {
+        $query = self::where('hours', $hours)->where('tag_id',$tag_id);
+        $result = $query->remember(0.2)->get();
+        return $result;
+    }
+
     /**
      * 搜尋table多個資料 (主管=>即將放假搜尋)
      * 若有多個傳回第一個
@@ -91,9 +101,12 @@ class Leave extends BaseModel
     public function searchForUpComingInManager($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'id') {
                     
@@ -133,9 +146,12 @@ class Leave extends BaseModel
     public function searchForHistoryInManager($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'id' && !empty($value)) {
                     
@@ -184,9 +200,11 @@ class Leave extends BaseModel
     {
         $query = self::OrderedBy();
 
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'tag_id') {
                     
@@ -208,7 +226,7 @@ class Leave extends BaseModel
             }
         }
 
-        $result = $query->paginate($this->pagesize);
+        $result = $query->remember(0.2)->paginate($this->pagesize);
         return $result;
     }
 
@@ -307,10 +325,12 @@ class Leave extends BaseModel
     public function searchForProveAndUpComInHr($where = [])
     {
         $query = self::OrderedBy();
-        
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'tag_id') {
 
@@ -344,10 +364,12 @@ class Leave extends BaseModel
     public function searchForHistoryInHr($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
         
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'tag_id') {
                     
@@ -355,7 +377,7 @@ class Leave extends BaseModel
                         //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
                         $value = explode(',', $value);
 
-                    } 
+                    }
                         $query->whereIn('tag_id', $value);
 
                 } elseif ($key == 'id' && !empty($value)) {
@@ -394,9 +416,12 @@ class Leave extends BaseModel
     public function searchForLeaveAgent($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'id') {
                     
@@ -430,9 +455,12 @@ class Leave extends BaseModel
     public function searchForAgentApprove($where = [])
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('leaves', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'tag_id') {
 
@@ -537,6 +565,53 @@ class Leave extends BaseModel
     public static function getLeaveByIdArr($id)
     {
         $result = self::whereIn('id', $id)->get();
+        return $result;
+    }
+
+    public static function getLeaveByTagId($tag_id)
+    {
+        $result = self::whereIn('tag_id', $tag_id)->remember(0.2)->get();
+        return $result;
+    }
+
+    public static function getLeaveByTagIdAndStartTime($tag_id,$start_time)
+    {
+        $result = self::whereIn('tag_id', $tag_id)
+            ->where('start_time', '>=', $start_time)
+            ->remember(0.2)
+            ->get();
+        return $result;
+    }
+
+    public static function getLeaveByUserIdTagIdAndStartTime($user_id,$tag_id,$start_time)
+    {
+        $result = self::where('user_id',$user_id)
+            ->whereIn('tag_id', $tag_id)
+            ->where('start_time', '>=', $start_time)
+            ->remember(0.2)
+            ->get();
+        return $result;
+    }
+
+    public static function getLeaveByIdTagIdAndStartTime($id,$tag_id,$start_time)
+    {
+        if (!is_array($id)){
+            //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+            $id = explode(',', $id);
+
+        }
+
+        if (!is_array($tag_id)){
+            //如果傳近來不是array,先將字串分割再搜尋條件(搜尋全部時)
+            $tag_id = explode(',', $tag_id);
+
+        }
+
+        $result = self::whereIn('id',$id)
+            ->whereIn('tag_id', $tag_id)
+            ->where('start_time', '>=', $start_time)
+            ->remember(0.2)
+            ->get();
         return $result;
     }
 }

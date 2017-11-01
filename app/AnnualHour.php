@@ -31,14 +31,18 @@ class AnnualHour extends BaseModel
     {
         $query = self::OrderedBy();
 
+        $columns = array_map('strtolower', Schema::getColumnListing('annuals_hours'));
+
         foreach($where as $key => $value){
 
-            if ($key == 'year' && isset($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
-                $query->whereYear('create_time' , $value);
+                if ($key == 'year' && isset($value)) {
 
+                    $query->whereYear('create_time' , $value);
+
+                }
             }
-            
         }
 
         $result =  $query->get();

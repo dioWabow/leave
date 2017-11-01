@@ -170,7 +170,7 @@ class LeaveHelper
         }
 
         $in_check_annual_hours = LeaveDay::getLeaveInCheckHoursByUserIdDateType($user_id,$start_time,$end_time,$leave_type_arr);
-
+        
         return $in_check_annual_hours;
 
     }
@@ -1115,9 +1115,9 @@ class LeaveHelper
     private static function getAdminLeavesTotal()
     {
         $model = new Leave;
-        $search['tag_id'] = ['4'];
-        $search['hours'] = ConfigHelper::getConfigValueByKey('boss_days')*8;
-        $result = $model->searchForProveInManager($search)->count();
+        $tag_id = '4';
+        $hours = ConfigHelper::getConfigValueByKey('boss_days') * 8;
+        $result = $model->searchForProveForAdmin($tag_id ,$hours )->count();
         return $result;
     }
 
@@ -1209,7 +1209,7 @@ class LeaveHelper
         $today = Carbon::now()->format('Y-m-d');
         $leave_id = LeaveAgent::getLeaveByUserId($id)->pluck('leave_id');
         $tag_id = '9';
-        $result = Leave::whereIn('id', $leave_id)->where('tag_id', $tag_id)->where('start_time', '>=' , $today)->count();
+        $result = Leave::getLeaveByIdTagIdAndStartTime($leave_id,$tag_id,$today)->count();
         return $result;
     }
     
@@ -1222,10 +1222,9 @@ class LeaveHelper
     */
     public static function getProveMyLeavesTotalByUserId()
     {
-        $model = new Leave;
         $user_id = Auth::user()->id;
         $tag_id = ['1','2','3','4'];
-        $result = $model->getMyLeavesTotalByUserId($user_id,$tag_id)->count();
+        $result = Leave::getMyLeavesTotalByUserId($user_id,$tag_id)->count();
         return $result;
     }
 
@@ -1237,11 +1236,10 @@ class LeaveHelper
     */
     public static function getUpComingMyLeavesTotalByUserId()
     {
-        $model = new Leave;
-        $search['user_id'] = Auth::user()->id;
-        $search['tag_id'] = ['9'];
-        $search['start_time'] = Carbon::now()->format('Y-m-d');
-        $result = $model->searchForProveAndUpComInMy($search)->count();
+        $user_id = Auth::user()->id;
+        $tag_id = ['9'];
+        $start_time = Carbon::now()->format('Y-m-d');
+        $result = Leave::getLeaveByUserIdTagIdAndStartTime($user_id,$tag_id,$start_time)->count();
         return $result;
     }
 
@@ -1253,7 +1251,7 @@ class LeaveHelper
     public static function getHrProveLeavesTotal()
     {
         $tag_id = ['1','2','3','4'];
-        $result = Leave::whereIn('tag_id', $tag_id)->count();
+        $result = Leave::getLeaveByTagId($tag_id)->count();
         return $result;
     }
     
@@ -1264,10 +1262,9 @@ class LeaveHelper
         */
     public static function getHrUpComingLeavesTotal()
     {
-        $model = new Leave;
-        $search['tag_id'] = ['9'];
-        $search['start_time'] = Carbon::now()->format('Y-m-d');
-        $result = $model->searchForProveAndUpComInHr($search)->count();
+        $tag_id = ['9'];
+        $start_time = Carbon::now()->format('Y-m-d');
+        $result = Leave::getLeaveByTagIdAndStartTime($tag_id,$start_time)->count();
         return $result;
     }
 
@@ -1278,12 +1275,11 @@ class LeaveHelper
      */
     public static function getUpComingManagerLeavesTotal()
     {
-        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $search['tag_id'] = ['9'];
-        $search['start_time'] = Carbon::now()->format('Y-m-d');
+        $id = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
+        $tag_id = ['9'];
+        $start_time = Carbon::now()->format('Y-m-d');
 
-        $model = new Leave;
-        $result = $model->searchForUpComingInManager($search)->count();
+        $result = Leave::getLeaveByIdTagIdAndStartTime($id,$tag_id,$start_time)->count();
         return $result;
     }
     
@@ -1363,9 +1359,10 @@ class LeaveHelper
         }
 
         //請假人team id
-        if (count(UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')) > 0) {
+        $user_team = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user');
+        if (count($user_team) > 0) {
 
-            $leave_user_team_id = UserTeam::getTeamIdByUserIdAndRole($leave_user_id,'user')->first()->team_id;
+            $leave_user_team_id = $user_team->first()->team_id;
 
             //請假人team裡的主管id
             if (count(UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')) > 0 ) {
@@ -1597,6 +1594,11 @@ class LeaveHelper
             }
 
         }
+    }
+
+    public static function hasColumn($table,$column)
+    {
+        
     }
 
 }
