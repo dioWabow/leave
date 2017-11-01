@@ -122,7 +122,7 @@
           <a href="{{ route('sheet/daily/index') }}"><i class="fa fa-calendar-plus-o"></i> <span>日誌</span></a>
         </li>
         <li>
-          <a href="{{ route('sheet/calendar') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>
+          <a href="{{ route('sheet/calendar/view') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>
           </a>
         </li>
         <li>

@@ -458,6 +458,7 @@ Route::group(['middleware' => 'auth'], function () {
         ]);
     });
 
+<<<<<<< HEAD
     // 
     Route::group(['prefix'=>'sheet'], function(){
 
@@ -480,6 +481,17 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
+    // 月報表
+    Route::group(['prefix'=>'sheet'], function(){
+
+        Route::get('calendar', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Timesheet\TimesheetController@getCalendar',
+        ]);
+    });
+
+=======
+>>>>>>> sheet/monthlyReport
     // 工作日誌
     Route::group(['prefix'=>'sheet'], function(){
         //搜尋
@@ -499,17 +511,9 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         // 月報表
-        Route::group(['prefix'=>'calendar'], function(){
-            Route::get('view/{user_id?}', [
-                'as' => 'sheet/calendar/view',
-                'uses' => 'Sheet\CalendarController@view',
-            ]);
-        });
-
-        # 缺填次數報表
-        Route::any('rank_report/index',[
-            'as'=>'rank_report/index',
-            'uses'=> 'Sheet\RankReportController@getIndex',
+        Route::get('calendar/{user_id?}', [
+            'as' => 'sheet/calendar',
+            'uses' => 'Sheet\CalendarController@getCalendar',
         ]);
     });
 
@@ -550,10 +554,15 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'Sheet\SheetProjectController@ajaxUpdateData',
         ]);
     });
-
-    
 });
-    
+# 缺填次數報表
+    Route::group(['prefix'=>'sheet'], function(){
+        
+        Route::any('rank_report/index',[
+            'as'=>'rank_report/index',
+            'uses'=> 'Sheet\RankReportController@getIndex',
+        ]);
+    }); 
 
 
 Route::match(['get', 'post'], '/demo/image',[

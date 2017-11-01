@@ -204,3 +204,8 @@ Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$leave_name = 
     
     $breadcrumbs->push('假單檢示');
 });
+
+// 月日誌
+Breadcrumbs::register('sheet/calendar/view', function ($breadcrumbs) {
+    $breadcrumbs->push('月日誌');
+});
