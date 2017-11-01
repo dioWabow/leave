@@ -506,9 +506,11 @@ class LeaveController extends Controller
         $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
 
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
-        
+
+        $leave_day = LeaveDay::getLeaveDayByLeaveId($id);
+
         return view('leave_view',compact(
-            'pre_url','http_referer','model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
+            'pre_url','http_referer','model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent','leave_day'
         ));
     }
 

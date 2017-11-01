@@ -1006,6 +1006,28 @@ $(function () {
         $(".modal-body h1").html("確定 <span class='text-red'>代理</span> 此假單嗎？");
 
       });
+  
+    $("#checkall").on("ifChecked ifUnchecked",function(event){
+      if(event.type == "ifChecked")
+        $(".check").iCheck("check");
+      else
+        $(".check").iCheck("uncheck");
+    });
+
+    /*確認check有勾選才可打開核准按鈕*/
+    $("input[name='leave_day[]']").on("ifChanged", function () {
+      if ($('.check:checked').length > 0) {
+        $(".eliminate_confirm").prop("disabled", false);
+      } else {
+        $(".eliminate_confirm").prop("disabled", true);
+      }
+    });
+
+    $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
   });
 
 </script>

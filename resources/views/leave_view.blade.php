@@ -211,6 +211,9 @@
 			<ul class="nav nav-tabs">
 				<li class="active"><a href="#timeline" data-toggle="tab">Timeline</a></li>
 				<li><a href="#settings" data-toggle="tab">證明（補）</a></li>
+        @if(!empty($leave_prove_process['manager']) && in_array(Auth::getUser()->id,[$leave_prove_process['manager']->id]))
+        <li><a href="#eliminateleaves" data-toggle="tab">銷假</a></li>
+        @endif
 			</ul>
 			<div class="tab-content">
 				<!-- /.tab-pane -->
@@ -261,13 +264,49 @@
 				</div>
 				<!-- /.tab-pane -->
 
-          <div class="tab-pane" id="settings">
-            <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
-              {!!csrf_field()!!}
-              <input type="hidden" name="leave_view[id]" value="{{$model->id}}">
-              <input id="leave_view_fileupload" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
-            </form>
-          </div>
+        <div class="tab-pane" id="settings">
+          <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+            {!!csrf_field()!!}
+            <input type="hidden" name="leave_view[id]" value="{{$model->id}}">
+            <input id="leave_view_fileupload" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
+          </form>
+        </div>
+
+        <div class="tab-pane" id="eliminateleaves">
+          <form action="{{route('leave/upload')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+            <table class="table table-bordered table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th width="1%"><input type="checkbox" id="checkall" name="checkall" class="flat-red" value="all"></th>
+                      <th width="40%"><a href="javascript:void(0)" class="sort" sortname="user_id">請假時段</a></th>
+                      <th width="59%"><a href="javascript:void(0)" class="sort" sortname="user_id">假別</a></th>
+                    </tr>
+                  </thead>
+                <tbody>
+                    @foreach($leave_day as $value)
+                    <tr>
+                      <td>
+                        <input type="checkbox" name="leave_day[]" id="approve_check" class="flat-red check"  value="{{ $value->id }}">
+                      </td>
+                      <td>{{TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id)}}</td>
+                      <td>{{$value->fetchType->name}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+              </table>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-commenting-o"></i>
+                    </div>
+                    <input style="width:30%" type="text" id="leave_reason" name="leave[memo]" class="form-control pull-left" placeholder="請填寫原因(必填)">
+                    <button type="button" class="btn btn-danger eliminate_confirm" disabled="disabled"  data-toggle="modal" data-target="#myModalConfirm">確定銷假</button>
+                  </div>
+                </div>
+              </div>
+          </form>
+        </div>
 
 				<!-- /.tab-pane -->
 			</div>
