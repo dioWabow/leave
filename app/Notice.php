@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Notice extends Model
+class Notice extends BaseModel
 {
     /**
      * 與Model關聯的table

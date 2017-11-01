@@ -1,0 +1,91 @@
+<?php
+
+namespace App;
+
+use Schema;
+
+class LeaveAgent extends BaseModel
+{
+    /**
+    * 與Model關聯的table
+    *
+    * @var string
+    */
+    protected $table = 'leaves_agents';
+
+
+    protected $fillable = [
+        'leave_id',
+        'agent_id',
+    ];
+    
+    protected $attributes = [
+        'order_by' => "id",
+        'order_way' => "DESC",
+        'pagesize' => '25',
+    ];
+
+    /**
+     * 搜尋table多個資料
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+    public function search($where = [])
+    {
+        $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves_agents'));
+
+        foreach ($where as $key => $value) {
+
+            if (in_array($key, $columns)  && !empty($value)) {
+
+                $query->where($key, $value);
+                
+            } 
+        }
+        
+        $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
+    public function scopeOrderedBy($query)
+    {
+        $result = $query->orderBy($this->order_by, $this->order_way);
+        return $result;
+    }
+
+    public static function getLeaveByUserId($id) 
+    {
+        $result = self::where('agent_id', $id)->remember(0.2)->get();
+        return $result;     
+    }
+
+    public static function getAgentByLeaveId($leave_id)
+    {
+        $result = self::where('leave_id', $leave_id)->get();
+        return $result;
+    }
+ 	    
+    public static function getLeaveIdByAgentId($leave_id)
+    {
+        $result = self::where('leave_id',$leave_id)->get();
+        return $result;
+    }
+
+    public function fetchLeave()
+    {
+        $result = $this->hasOne('App\Leave', 'id' , 'leave_id');
+        return $result;
+    }
+
+    public function fetchUser() 
+    {
+        $result = self::hasOne('App\User', 'id', 'agent_id');
+        return $result;
+    }
+}
