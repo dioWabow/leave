@@ -204,3 +204,14 @@ Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$leave_name = 
     
     $breadcrumbs->push('假單檢示');
 });
+
+// 工作日誌
+Breadcrumbs::register('sheet/daily', function ($breadcrumbs) {
+    $breadcrumbs->push('工作日誌',route('sheet/daily/index'));
+});
+
+// 假別管理 - 修改資料
+Breadcrumbs::register('sheet/daily/edit', function ($breadcrumbs,$action) {
+    $breadcrumbs->parent('sheet/daily');
+    $breadcrumbs->push('日誌'.$action);
+});

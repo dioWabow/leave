@@ -6,7 +6,7 @@ use TimeHelper;
 use App\TimeSheet;
 use App\UserTeam;
 use App\Project;
-use App\Permission;
+use App\TimesheetPermission;
 use App\ProjectTeam;
 use App\Http\Requests\DailyRequest;
 
@@ -20,7 +20,7 @@ use App\Http\Controllers\Controller;
 class DailyController extends Controller
 {
     private $current_user;
-    
+
     public function __construct(Request $request)
     {
         //先取得現在的使用者
@@ -35,9 +35,17 @@ class DailyController extends Controller
      */
     public function getIndex (Request $request)
     {
-        $permission = new Permission;
-        $get_permission_user = $permission->getAllowUserIdByUserId(Auth::user()->id);
+        /* 判斷傳過來的copy_date */
+        if (!empty($request->old('time_sheet'))){
 
+            $time_sheet = $request->old('time_sheet');
+            $copy_date = $time_sheet['copy_date'];
+            
+        }
+        
+        $permission = new TimesheetPermission;
+        $get_permission_user = $permission->getAllowUserIdByUserId(Auth::user()->id);
+        
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $current_user = (!empty($this->current_user) && $this->current_user != Auth::user()->id) ? $this->current_user : Auth::user()->id;
@@ -52,17 +60,23 @@ class DailyController extends Controller
                 
                 $search['working_day'] = $search['work_day'];
 
-            } else {
-                
-                $search['working_day'] = $search['today'];
-
             }
            
             $search['user_id'] =  $current_user;
 
         } else {
+            
+            /** 判斷是不是複製過來的日期 */
+            if (!empty($copy_date)) {
+                
+                $search['working_day'] = $copy_date;
+                
+            } else {
 
-            $search['working_day'] = Carbon::now()->format('Y-m-d');
+                $search['working_day'] = Carbon::now()->format('Y-m-d');
+
+            }
+            
             $search['user_id'] =  $current_user;
 
             if (!empty($request->input('page') && !empty($request->session()->get('time_sheet')))) {
@@ -77,8 +91,8 @@ class DailyController extends Controller
             }
             
         }
-        $model = new TimeSheet;
         
+        $model = new TimeSheet;
         $dataProvider = $model->fill($order_by)->search($search);
         
         return view('daily_list', compact(
@@ -150,10 +164,11 @@ class DailyController extends Controller
     public function postInsert(DailyRequest $request)
     {
         $input = $request->input('daily');
-        
+        $input = self::checkDataValue($input);
+
         if (!TimeHelper::checkEditSheetDate($input['working_day'])){
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '不可以新增小於七天內，大於一天內']);
+            return Redirect::back()->withInput()->withErrors(['msg' => '不可以新增小於七天前，大於一天後']);
 
         }
 
@@ -204,17 +219,17 @@ class DailyController extends Controller
 
                 if (!$model->save()) {
                      
-                     return Redirect::back()->withInput()->withErrors(['msg' => '新增失敗']);
+                     return Redirect::back()->withInput()->withErrors(['msg' => '複製失敗']);
 
                 }  
 
             }
             
-            return Redirect::route( 'sheet/daily/index' )->with('success', '新增成功 !');
+            return Redirect::route( 'sheet/daily/index' )->withInput()->with('success', '複製成功 !');
 
         } else {
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '不可複製小於七天內，大於一天內']);
+            return Redirect::back()->withInput()->withErrors(['msg' => '不可以複製小於七天前，大於一天後']);
 
         }
         
@@ -229,6 +244,7 @@ class DailyController extends Controller
     public function postUpdate(DailyRequest $request)
     {
         $input = $request->input('daily');
+        $input = self::checkDataValue($input);
         
         //更新資料
         $model = new TimeSheet;
@@ -269,5 +285,26 @@ class DailyController extends Controller
         }
 
         return $model;
+    }
+
+    private function checkDataValue($data)
+    {
+        if (!empty($data)) {
+
+            $str_transfer = '';
+            $str_transfer = e($data['items']);
+            $str_transfer = trim($str_transfer);
+            $str_transfer = preg_replace(
+                "/(\t|\n|\v|\f|\r| |\xC2\x85|\xc2\xa0|\xe1\xa0\x8e|\xe2\x80[\x80-\x8D]|\xe2\x80\xa8|\xe2\x80\xa9|\xe2\x80\xaF|\xe2\x81\x9f|\xe2\x81\xa0|\xe3\x80\x80|\xef\xbb\xbf)+/",
+                '',
+                $str_transfer
+            );
+
+            $data['items'] = $str_transfer;
+            
+            return $data;
+            // $acd = preg_replace('/\s/', '', $input['items']);
+            // $aa = preg_replace('/\s(?=)/', '', $input['items']); 
+        }
     }
 }

@@ -4,13 +4,10 @@
     <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-	<i class="fa fa-calendar-plus-o"></i> @if(count($search)>2) {{ $search['work_day'] }}@else{{ TimeHelper::getNowDate() }}@endif
+	<i class="fa fa-calendar-plus-o"></i> @if(count($search)>0) {{ $search['working_day'] }}@else{{ TimeHelper::getNowDate() }}@endif
 	<small>Work Sheet</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li class="active">工作日誌</li>
-  </ol>
+	{{ Breadcrumbs::render('sheet/daily') }}
 </section>
 
 <!-- Main content -->
@@ -126,7 +123,7 @@
 													</td>
 													<td data-breakpoints="xs sm"   data-th="標籤">
 														@foreach(explode(',', $value->tag) as $tag) 
-															<small class="label" style="background-color:#000000;">{{ $tag }}</small>
+															<small class="label" style="background-color:#00AA00;">{{ $tag }}</small>
 														@endforeach
 													</td>
 												</tr>

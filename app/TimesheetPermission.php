@@ -2,15 +2,8 @@
 
 namespace App;
 
-class Permission extends BaseModel
+class TimesheetPermission extends BaseModel
 {
-    /**
-    * 與Model關聯的table
-    *
-    * @var string
-    */
-    protected $table = 'timesheet_permissions';
-
     protected $fillable = [
         'user_id',
         'allow_user_id',

@@ -13,15 +13,11 @@
 	<small>New Sheet</small>
 	@endif
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li><a href="{{ route( 'sheet/daily/index' ) }}">工作日誌</a></li>
 	@if($model->id > 0)
-	<li class="active">修改工作項目</li>
+	{{ Breadcrumbs::render('sheet/daily/edit','修改') }}
 	@else
-	<li class="active">新增工作項目</li>
+  	{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
 	@endif
-  </ol>
 </section>
 
 <!-- Main content -->

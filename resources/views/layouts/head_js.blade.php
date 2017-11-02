@@ -163,23 +163,33 @@ $(function () {
 </script>
 @endif
 
-<!--工作日至調整用-->
+<!--工作日誌調整用-->
 @if(Request::is('sheet/daily/*'))
 <script>
   $(function () {
+    /*算前7天的日期*/
+    var minDate = new Date();
+    minDate.setDate(minDate.getDate() - 7);
+    var minDate = moment(minDate).format("YYYY-MM-DD");
+
+    /*算後1天的日期*/
+    var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 1);
+    var maxDate = moment(maxDate).format("YYYY-MM-DD");
+
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
-    var minDate = yyyy + '-' + mm + '-' + (dd-7);
-    var maxDate = yyyy + '-' + mm + '-' + (dd+1);
     var $search_work_day = $("#search_work_day");
     var time = $search_work_day.val();
 
+    /*按下今日，變換日期*/
     $(".search-today").on("click", function(){
       $("#search_work_day").val(yyyy + '-' + mm + '-' + dd)
     });
 
+    /*checkbox 樣式*/
     $('input[type="checkbox"].flat-red').iCheck({
       checkboxClass: 'icheckbox_flat-blue',
       radioClass: 'iradio_flat-blue'
@@ -195,6 +205,7 @@ $(function () {
       window.location = $(this).data("href");
     });
 
+    /* checkbox 選取全部 效果 */
     $("#checkall").on("ifChecked ifUnchecked",function(evant){
       if(evant.type == "ifChecked")
         $(".check").iCheck("check");
@@ -211,6 +222,7 @@ $(function () {
       }
     });
 
+    /* 排序  */
     $(".sort").on("click", function(){
       var $sortname = $(this).attr("sortname");
       var $order_by = "{{ $model->order_by }}";
@@ -226,8 +238,8 @@ $(function () {
       $("#frmOrderBy").submit();
     });
 
-
-    $("#time_sheet_copy_date,#daily_working_day").daterangepicker({
+    /* 列表複製 & 新增 + 修改 datarangepicker */
+    $("#time_sheet_copy_date, #daily_working_day").daterangepicker({
       alwaysShowCalendars: true,
       singleDatePicker: true,
       showDropdowns: true,
@@ -236,6 +248,7 @@ $(function () {
       locale: {format: 'YYYY-MM-DD'},
     });
 
+    /* 前往日期的 datarangepicker */
     $("#search_work_day").daterangepicker({
       alwaysShowCalendars: true,
       singleDatePicker: true,
