@@ -504,6 +504,11 @@ Route::group(['middleware' => 'auth'], function () {
                 'as' => 'sheet/calendar/view',
                 'uses' => 'Sheet\CalendarController@view',
             ]);
+
+            Route::post('ajax_sheet', [
+                'as' => 'sheet/calendar/ajax_sheet',
+                'uses' => 'Sheet\CalendarController@ajaxGetWorkByUserAndMonth',
+            ]);
         });
 
         # 缺填次數報表

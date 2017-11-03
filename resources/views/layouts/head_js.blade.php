@@ -1580,23 +1580,39 @@ $(function () {
         buttonText: {
           listMonth: '月列表',
         },
+        //Random default events
+        events: function(start, end, timezone, callback) {
+          $.ajax({
+              url: "{{route('sheet/calendar/ajax_sheet')}}",
+              type: 'POST',
+              dataType: 'json',
+              data: {
+                  // our hypothetical feed requires UNIX timestamps
+                  "_token": "{{ csrf_token() }}",
+                  id: {{$chosed_user_id}},
+                  start: start.unix(),
+                  end: end.unix()
+              },
+              success: function(data) {
+
+                var events = [];
+
+                $.each(data, function(index, value) {
+                  events.push({
+                      title: value['items'] + ' / ' + value['hour'] + '小時',
+                      start: value['working_day'], // will be parsed
+                  });
+                });
+
+                callback(events);
+              }
+          });
+        },
         defaultDate: '{{Carbon\Carbon::now()->format("Y-m-d")}}}',
         locale: initialLocaleCode,
         navLinks: false, // can click day/week names to navigate views
         editable: true,
         eventLimit: true, // allow "more" link when too many events
-        events: [
-          @foreach($timesheets as $timesheet)
-          {
-              title: '{{$timesheet->items}} / {{$timesheet->hour}}小時',
-              start: '{{$timesheet->working_day}}',
-              description: '{{$timesheet->description}}',
-          },
-          @endforeach
-        ],
-        eventRender: function(event, element) {
-          element.prop("title", event.title);
-        }
       });
     });
 
