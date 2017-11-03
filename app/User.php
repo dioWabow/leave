@@ -52,8 +52,12 @@ class User extends BaseModel
     public function search($where = array())
     {
         $query = self::OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('users'));
+
         foreach($where as $key => $value){
-            if(Schema::hasColumn('users', $key) && isset($value)){
+            
+            if(in_array($key, $columns) && isset($value)){
 
                 $query->where($key, $value);
 

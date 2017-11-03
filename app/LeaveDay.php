@@ -250,7 +250,7 @@ class LeaveDay extends BaseModel
 
         }
 
-        $LeaveDays = $query->get();
+        $LeaveDays = $query->remember(0.2)->get();
 
         foreach ($LeaveDays as $LeaveDay) {
 

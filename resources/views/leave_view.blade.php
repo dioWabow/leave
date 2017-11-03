@@ -229,7 +229,7 @@
               <!-- timeline item -->
               <li>
                 <i class="fa bg-blue">
-                  <img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($response->fetchUser->avatar)}}" alt="Neo">
+                  <img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($response->fetchUser->avatar)}}" alt="{{$response->fetchUser->nickname}}">
                 </i>
 
                 <div class="timeline-item">

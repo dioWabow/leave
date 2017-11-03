@@ -38,9 +38,11 @@ class LeaveAgent extends BaseModel
     {
         $query = self::OrderedBy();
 
+        $columns = array_map('strtolower', Schema::getColumnListing('leaves_agents'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('leaves_agents', $key)  && !empty($value)) {
+            if (in_array($key, $columns)  && !empty($value)) {
 
                 $query->where($key, $value);
                 
@@ -59,8 +61,7 @@ class LeaveAgent extends BaseModel
 
     public static function getLeaveByUserId($id) 
     {
-        
-        $result = self::where('agent_id', $id)->get();
+        $result = self::where('agent_id', $id)->remember(0.2)->get();
         return $result;     
     }
 

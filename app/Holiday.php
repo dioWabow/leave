@@ -38,9 +38,11 @@ class Holiday extends BaseModel
     {
         $query = self::OrderedBy();
 
+        $columns = array_map('strtolower', Schema::getColumnListing('holidays'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('holidays', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 if ($key == 'name') {
 

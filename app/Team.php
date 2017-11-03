@@ -94,7 +94,7 @@ class Team extends BaseModel
 
         }
 
-        $result = self::whereIn('parent_id', $teams_id)->get();
+        $result = self::whereIn('parent_id', $teams_id)->remember(0.2)->get();
         return $result;
     }
 }

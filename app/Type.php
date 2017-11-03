@@ -42,9 +42,12 @@ class Type extends BaseModel
     public function search($where = [])
     {
         $query = $this->OrderedBy();
+
+        $columns = array_map('strtolower', Schema::getColumnListing('types'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('types', $key) && isset($value)) {
+            if (in_array($key, $columns) && isset($value)) {
 
                 if ($key == 'name') {
 
@@ -86,7 +89,7 @@ class Type extends BaseModel
 
     public static function getTypeByException($exception)
     {
-        $result = self::whereIn('exception', $exception)->get();
+        $result = self::whereIn('exception', $exception)->remember(0.2)->get();
         return $result;
     }
 
