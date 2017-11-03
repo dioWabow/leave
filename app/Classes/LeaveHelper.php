@@ -665,7 +665,6 @@ class LeaveHelper
             }
 
         }
-        
 
         //假是否有設定使用區間
         if (!empty($leave_type->start_time) && !empty($leave_type->end_time)) {

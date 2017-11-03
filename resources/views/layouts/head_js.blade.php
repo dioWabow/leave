@@ -1028,6 +1028,22 @@ $(function () {
       radioClass: 'iradio_flat-blue'
     });
 
+    $("#eliminate").on("click", function(){
+
+      if ($('#leave_reason').val()) {
+
+        $("#eliminate").attr("data-target", "#myModalConfirm1");
+        $(".modal-body h1").html("確定 <span class='text-red'>銷假</span> 嗎？");
+
+      } else {
+
+        $("#eliminate").attr("data-target", "");
+        alert("請輸入原因");
+
+      }
+
+    });
+
   });
 
 </script>
