@@ -492,7 +492,7 @@ Route::group(['middleware' => 'auth'], function () {
     // 工作日誌
     Route::group(['prefix'=>'sheet'], function(){
         Route::group(['prefix'=>'search'], function(){
-            Route::get('index',[
+            Route::match(['get', 'post'], 'index',[
                 'as'=>'sheet/search/index',
                 'uses'=> 'SheetSearchController@getIndex',
             ]);

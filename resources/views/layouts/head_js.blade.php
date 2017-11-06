@@ -1093,8 +1093,8 @@ $(function () {
   }
 </script>
 @endif
-<!-- 我是代理人頁面用 -->
-@if(Request::is('agent/index'))
+<!-- 我是代理人頁面/工作日誌搜尋用 -->
+@if(Request::is('agent/index','sheet/search/index'))
 <script>
 $(function () {
   $(".sort").on("click", function(){
