@@ -33,11 +33,6 @@ $(function () {
     radioClass: 'iradio_flat-blue'
   });
 
-  // alert 消失用
-  $(".msg_alert").fadeTo(2000, 500).slideUp(500, function(){
-    $(".msg_alert").slideUp(500);
-  });
-
 });
 
 </script>

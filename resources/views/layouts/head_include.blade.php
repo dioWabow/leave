@@ -29,6 +29,9 @@
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
+<!-- toastr -->
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/toastr/build/toastr.css">
+
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
 <script src="{{route('root_path')}}/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -62,3 +65,6 @@
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
+
+<!-- toastr -->
+<script src="{{route('root_path')}}/plugins/toastr/toastr.js"></script>
