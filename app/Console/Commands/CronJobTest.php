@@ -26,7 +26,7 @@ class CronJobTest extends Command
     // Console 執行的程式
     public function handle()
     {
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        $myfile = fopen("/home/web/dayoff/newfile.txt", "a") or die("Unable to open file!");
         $txt = Carbon::now()->format('Y-m-d H:i:s'."\n");
 
         fwrite($myfile, $txt);
