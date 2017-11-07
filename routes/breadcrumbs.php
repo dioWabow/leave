@@ -1,4 +1,4 @@
-<?php 
+<?php
 // DashBoard
 Breadcrumbs::register('index/ajax', function ($breadcrumbs) {
     $breadcrumbs->push('Dashboard');
@@ -7,6 +7,17 @@ Breadcrumbs::register('index/ajax', function ($breadcrumbs) {
 // 缺填報表
 Breadcrumbs::register('absense_report/index', function ($breadcrumbs) {
     $breadcrumbs->push('缺填日誌');
+});
+
+// 專案項目
+Breadcrumbs::register('sheet/project/index', function ($breadcrumbs) {
+    $breadcrumbs->push('專案項目',route('sheet/project/index'));
+});
+
+// 專案項目 - 修改資料
+Breadcrumbs::register('sheet/project/edit', function ($breadcrumbs,$action) {
+    $breadcrumbs->parent('sheet/project/index');
+    $breadcrumbs->push('資料'.$action);
 });
 
 // 我要放假

@@ -2,6 +2,58 @@
 ALTER TABLE `leaves_responses` ADD `system_memo` VARCHAR(300) NULL DEFAULT NULL AFTER `memo`;
 --2017-11-02 tony 新增銷假tag
 INSERT INTO `tags` (`id`, `name`, `shortname`, `sort`) VALUES (10, '銷除假單', '銷假', '99');
+--2017-10-23 michael 新增專案項目關聯資表
+CREATE TABLE `project_teams` (
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
+  `team_id` int(7) NOT NULL COMMENT '團隊id',
+  `project_id` int(7) NOT NULL COMMENT '專案id',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 日報表SQL
+CREATE TABLE `timesheets` (
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
+  `project_id` int(7) NOT NULL COMMENT '專案項目',
+  `tag` varchar(200) NULL DEFAULT NULL COMMENT '標籤',
+  `user_id` int(7) NOT NULL COMMENT '使用者',
+  `items` varchar(255) NOT NULL COMMENT '標題',
+  `description` text NOT NULL COMMENT '內容',
+  `hour` float NOT NULL COMMENT '小時',
+  `working_day` date NOT NULL COMMENT '工作日',
+  `url` text NULL DEFAULT NULL COMMENT '連結',
+  `remark` text NULL DEFAULT NULL COMMENT '備註',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 專案項目SQL
+CREATE TABLE `projects` (
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
+  `name` varchar(50) NOT NULL COMMENT '專案名稱',
+  `available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否開啟',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 權限頁SQL
+CREATE TABLE `timesheet_permissions` (
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
+  `user_id` int(7) NOT NULL COMMENT '使用者',
+  `allow_user_id` int(7) NOT NULL COMMENT '允許觀看用戶',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--2017-10-18 michael 缺填報表SQL
+CREATE TABLE `absences` (
+  `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
+  `user_id` int(7) NOT NULL COMMENT '缺填人',
+  `notfill_at` date NOT NULL COMMENT '哪天沒填',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb
