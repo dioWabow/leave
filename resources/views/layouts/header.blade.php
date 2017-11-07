@@ -130,7 +130,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('rank_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
+          <a href="{{ route('absense_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
           </a>
         </li>
        	<li>
