@@ -8,17 +8,17 @@ CREATE TABLE `project_teams` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --2017-10-18 michael 日報表SQL
-CREATE TABLE `timesheet` (
+CREATE TABLE `timesheets` (
   `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
   `project_id` int(7) NOT NULL COMMENT '專案項目',
-  `tag` varchar(200) NOT NULL COMMENT '標籤',
+  `tag` varchar(200) NULL DEFAULT NULL COMMENT '標籤',
   `user_id` int(7) NOT NULL COMMENT '使用者',
   `items` varchar(255) NOT NULL COMMENT '標題',
   `description` text NOT NULL COMMENT '內容',
   `hour` float NOT NULL COMMENT '小時',
   `working_day` date NOT NULL COMMENT '工作日',
-  `url` text NOT NULL COMMENT '連結',
-  `remark` text NOT NULL COMMENT '備註',
+  `url` text NULL DEFAULT NULL COMMENT '連結',
+  `remark` text NULL DEFAULT NULL COMMENT '備註',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -27,13 +27,13 @@ CREATE TABLE `timesheet` (
 CREATE TABLE `projects` (
   `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
   `name` varchar(50) NOT NULL COMMENT '專案名稱',
-   `available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否開啟',
+  `available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否開啟',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --2017-10-18 michael 權限頁SQL
-CREATE TABLE `timesheet_permission` (
+CREATE TABLE `timesheet_permissions` (
   `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
   `user_id` int(7) NOT NULL COMMENT '使用者',
   `allow_user_id` int(7) NOT NULL COMMENT '允許觀看用戶',
@@ -42,7 +42,7 @@ CREATE TABLE `timesheet_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --2017-10-18 michael 缺填報表SQL
-CREATE TABLE `absence` (
+CREATE TABLE `absences` (
   `id` int(7) NOT NULL AUTO_INCREMENT COMMENT 'id' PRIMARY KEY,
   `user_id` int(7) NOT NULL COMMENT '缺填人',
   `notfill_at` date NOT NULL COMMENT '哪天沒填',
