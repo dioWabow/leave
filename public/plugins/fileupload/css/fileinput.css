@@ -95,6 +95,7 @@
 .file-preview-image {
     font: 40px Impact, Charcoal, sans-serif;
     color: green;
+    max-width: 100%;
 }
 
 .krajee-default.file-preview-frame {
