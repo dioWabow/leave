@@ -32,8 +32,14 @@ class SheetAuthController extends Controller
         $user_result = [];
 
         $team_result = $model->getAllTeam();
-        foreach ($team_result as $key => $value) {
-            $user_team_result[$value->id] = UserTeam::getNotManagerUsersIdByTeamsId($value->id);
+        foreach ($team_result as $team) {
+            $user_team_result[$team->id] = UserTeam::getNotManagerUsersIdByTeamsId($team->id);
+            if (!empty($user_team_result[$team->id])) {
+                foreach ($user_team_result as $user) {
+                    //$user_result[$user] = User
+                }
+                $timesheet_permission_result[]
+            }
         }
 
         dd($user_team_result);
