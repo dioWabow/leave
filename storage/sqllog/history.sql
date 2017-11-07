@@ -1,3 +1,7 @@
+--2017-11-02 tony 新增system_memo欄位
+ALTER TABLE `leaves_responses` ADD `system_memo` VARCHAR(300) NULL DEFAULT NULL AFTER `memo`;
+--2017-11-02 tony 新增銷假tag
+INSERT INTO `tags` (`id`, `name`, `shortname`, `sort`) VALUES (10, '銷除假單', '銷假', '99');
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb

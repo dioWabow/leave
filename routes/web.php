@@ -326,10 +326,12 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'agent_approve/edit',
             'uses'=> 'AgentApproveController@getEdit',
         ]);
+
         Route::any('leave_detail/{id}', [
             'as' => 'agent_approve/leave_detail',
             'uses' => 'LeaveController@getEdit',
         ]);
+        
     });
 
     // 我要放假
@@ -369,6 +371,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('delete', [
             'as' => 'leave/delete',
             'uses' => 'LeaveController@postDelete',
+        ]);
+
+        Route::any('leave_eliminate/{id}', [
+            'as' => 'leave/leave_eliminate',
+            'uses' => 'LeaveController@postEliminateLeaves',
         ]);
     });
 

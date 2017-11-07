@@ -512,4 +512,9 @@ class LeaveDay extends BaseModel
         return $result->first();
     }
 
+    public static function getLeaveDayByLeaveId($leave_id)
+    {
+        $result = self::where('leave_id' ,$leave_id)->orderby('start_time')->get();
+        return $result;
+    }
 }

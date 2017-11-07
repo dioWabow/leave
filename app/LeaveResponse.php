@@ -17,6 +17,7 @@ class LeaveResponse extends BaseModel
         'user_id',
         'tag_id',
         'memo',
+        'system_memo',
     ];
 
     public static function getLeavesIdByUserId($id)

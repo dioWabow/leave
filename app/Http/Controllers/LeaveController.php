@@ -442,7 +442,7 @@ class LeaveController extends Controller
     {
         $http_referer = $this->http_referer;
         $pre_url = $this->pre_url;
-
+        
         if (empty($id)) {
 
             return Redirect::route('index')->withErrors(['msg' => '無此假單']);
@@ -508,9 +508,11 @@ class LeaveController extends Controller
         $leave_notice = LeaveNotice::getNoticeByLeaveId($id);
 
         $leave_agent = LeaveAgent::getAgentByLeaveId($id);
-        
+
+        $leave_day = LeaveDay::getLeaveDayByLeaveId($id);
+
         return view('leave_view',compact(
-            'pre_url','http_referer','model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent'
+            'pre_url','http_referer','model','leave_response','leave_response_reverse','leave_prove_process','leave_prove_tag_name','leave_notice','leave_agent','leave_day'
         ));
     }
 
@@ -890,13 +892,13 @@ class LeaveController extends Controller
             //有薪病假start
             while ($remain_paid_sick_hours > 0 ) {
 
-                $start_paid_sick_time = end($date_list)['start_time'];
+                $start_paid_sick_time = $date_list['0']['start_time'];
                 $end_paid_sick_time = TimeHelper::changeHourValue($start_paid_sick_time,['+,'.$remain_paid_sick_hours.',hour'],'Y-m-d H:i:s');
 
                 //如果有薪假結尾時間大於當天時間，結尾改為當天時間
-                if ($end_paid_sick_time > end($date_list)['end_time']) {
+                if ($end_paid_sick_time > $date_list['0']['end_time']) {
 
-                    $end_paid_sick_time = end($date_list)['end_time'];
+                    $end_paid_sick_time = $date_list['0']['end_time'];
 
                 }
 
@@ -916,13 +918,13 @@ class LeaveController extends Controller
 
                 }
 
-                //將有薪時數扣掉當天總時數，如果>=0代表當天已請完，將當天抽掉，在判斷前一天
-                $the_day_hours = LeaveHelper::calculateRangeDateHours([end($date_list)]);
+                //將有薪時數扣掉當天總時數，如果>=0代表當天已請完，將當天抽掉，在判斷後一天
+                $the_day_hours = LeaveHelper::calculateRangeDateHours([$date_list['0']]);
                 $remain_paid_sick_hours -= $the_day_hours;
 
                 if ($remain_paid_sick_hours >= 0) {
 
-                    array_pop($date_list);
+                    array_shift($date_list);
 
                 }
 
@@ -950,7 +952,7 @@ class LeaveController extends Controller
 
                 }
 
-                array_pop($date_list);
+                array_shift($date_list);
 
             }
 
@@ -1001,6 +1003,65 @@ class LeaveController extends Controller
             }
 
         }
+    }
+
+    public function postEliminateLeaves(Request $request,$leave_id)
+    {
+        $leave_day_arr = $request->input('leave_day');
+        $eliminate_hours = 0;
+        $system_memo = "銷假時間：";
+
+        foreach ($leave_day_arr as $id) {
+
+            $leave_day = LeaveDay::find($id);
+            $eliminate_hours += $leave_day->hours;
+
+            if ($system_memo == "銷假時間：") {
+
+                $system_memo .= '<br>' . TimeHelper::changeViewTime($leave_day->start_time,$leave_day->end_time,$leave_day->user_id);
+
+            } else {
+
+                $system_memo .= '<br>' . TimeHelper::changeViewTime($leave_day->start_time,$leave_day->end_time,$leave_day->user_id);
+
+            }
+
+            $eliminate_arr['hours'] = 0;
+            $leave_day->fill($eliminate_arr);
+            if (!$leave_day->save()) {
+
+                return Redirect::back()->withInput()->withErrors(['msg' => '子單銷假失敗']);
+
+            }
+
+        }
+
+        $model = $this->loadModel($leave_id);
+        $leave['hours'] = $model->hours - $eliminate_hours;
+        $model->fill($leave);
+
+        if (!$model->save()) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '主單銷假失敗']);
+
+        }
+
+        $leave_response = new LeaveResponse;
+        $leave_response->fill([
+            'leave_id' => $leave_id,
+            'user_id' => Auth::user()->id,
+            'tag_id' => '10',
+            'memo' => $request->input('leave_response')['memo'],
+            'system_memo' => $system_memo,
+        ]);
+
+        if (!$leave_response->save()) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '新增審核紀錄失敗']);
+
+        }
+
+        return Redirect::back()->with(['success' => '銷假成功 !','id' => $leave_id]);
     }
 
     private function loadModel($id) 
