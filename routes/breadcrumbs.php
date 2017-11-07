@@ -4,11 +4,6 @@ Breadcrumbs::register('index/ajax', function ($breadcrumbs) {
     $breadcrumbs->push('Dashboard');
 });
 
-// 缺填報表
-Breadcrumbs::register('absense_report/index', function ($breadcrumbs) {
-    $breadcrumbs->push('缺填日誌');
-});
-
 // 我要放假
 Breadcrumbs::register('leave/create', function ($breadcrumbs) {
     $breadcrumbs->push('我要放假');
