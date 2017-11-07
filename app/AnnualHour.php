@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Schema;
+
 class AnnualHour extends BaseModel
 {
     //可以傳入數值的欄位

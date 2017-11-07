@@ -212,6 +212,10 @@ return [
         App\Providers\SlackHelperServiceProvider::class,
         App\Providers\EmailHelperServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        /*
+         * 匯出Excel
+         */
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -260,7 +264,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,                
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Image' => Intervention\Image\Facades\Image::class,
 
@@ -277,6 +281,11 @@ return [
         'UserHelper' => App\Facades\UserHelper::class,
         'SlackHelper' => App\Facades\SlackHelper::class,
         'EmailHelper' => App\Facades\EmailHelper::class,
+
+        /*
+         * 匯出Excel
+         */
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

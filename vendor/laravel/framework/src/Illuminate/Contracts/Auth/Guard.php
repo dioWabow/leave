@@ -54,7 +54,7 @@ interface Guard
      * @return array(TeamObj)/false
      */
     public function hasMiniManagement();
-    
+
     /**
     * 取得是否有主管權限
     *

@@ -565,6 +565,26 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::get('export_excel/{year}/{month}',[
+    'as' => 'export_excel',
+    'uses' => 'ExportController@ExportReport',
+]);
+
+Route::get('export_annual_excel/{year}',[
+    'as' => 'export_annual_excel',
+    'uses' => 'ExportController@ExportAnnualReport',
+]);
+
+Route::get('export_annual_hour_excel/{year}',[
+    'as' => 'export_annual_hour_excel',
+    'uses' => 'ExportController@ExportAnnualHoursReport',
+]);
+
+Route::get('export_leaved_hour_excel/{year}',[
+    'as' => 'export_leaved_hour_excel',
+    'uses' => 'ExportController@ExportLeavedHoursReport',
+]);
+
 Route::match(['get', 'post'], '/demo/image',[
     'as'=>'demo_image',
     'uses'=> 'DemoControllor@getImage',

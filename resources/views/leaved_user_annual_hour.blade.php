@@ -92,6 +92,7 @@
 							</div>
 						</div>
             </form>
+            <a href="{{  route('export_leaved_hour_excel' ,['year' => $search['year']])}}"><button class="label bg-blue" style="font-size:20px">匯出報表</button></a>
 					</div>
 				</div>
 			</div>

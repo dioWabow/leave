@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Schema;
+use Schema;
 
 class Type extends BaseModel
 {

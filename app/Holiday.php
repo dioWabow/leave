@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Schema;
+use Schema;
 use Illuminate\Pagination\Paginator;
 
 class Holiday extends BaseModel

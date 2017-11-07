@@ -117,14 +117,14 @@ trait GuardHelpers
      {
          $Teams = false;
          if (!empty($this->user()->getAuthIdentifier())) {
-             
-             $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
- 
+
+            $Teams = UserTeam::getTeamIdByUserIdInMiniManagement($this->user()->getAuthIdentifier());
+
          }
- 
+
          return $Teams;
      }
- 
+
     /**
     * 取得是否有主管權限
     *
