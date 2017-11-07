@@ -23,8 +23,8 @@ class Timesheet extends BaseModel
         'order_by' => 'id',
         'order_way' => 'DESC',
         'pagesize' => '25',
-        'start_time' => '',
-        'end_time' => '',
+        'start_time' => '2000-01-01',
+        'end_time' => '2000-01-02',
         'exception' => '',
     ];
 
@@ -37,7 +37,7 @@ class Timesheet extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForTimeSheetSearch($where = [])
+    public function searchForTimeSheetSearch($where = [],$allow_users_id)
     {
         $query = self::OrderedBy();
         
@@ -57,6 +57,8 @@ class Timesheet extends BaseModel
             }
 
         }
+
+        $query->whereIn("user_id",$allow_users_id);
 
         if (!empty($where['start_time']) && !empty($where['end_time'])) {
 

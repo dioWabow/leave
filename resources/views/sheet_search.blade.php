@@ -7,10 +7,7 @@
   <i class="fa fa-search"></i> 搜尋
   <small>Search</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li class="active">搜尋</li>
-  </ol>
+  {{ Breadcrumbs::render('sheet/search/index') }}
 </section>
 
 <!-- Main content -->

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Auth;
+
 class TimesheetPermission extends BaseModel
 {
     /**

@@ -53,24 +53,28 @@ class SheetSearchController extends Controller
 
         }
 
-        $model = new TimeSheet;
-        $dataProvider = $model->fill($order_by)->searchForTimeSheetSearch($search);
-
-        foreach ($dataProvider as $key => $value) {
-
-            $dataProvider[$key]->tag = explode(",",$value->tag);
-
-        }
-
         $allow_users = [];
+        $allow_users_id = [];
         $allow_users_not_self = TimesheetPermission::getAllowUserIdByUserId( Auth::user()->id );
         if ( !empty($allow_users_not_self) ) {
 
             foreach ($allow_users_not_self as $key => $value) {
 
                 $allow_users[] = $value;
+                $allow_users_id[] = $value->allow_user_id;
 
             }
+
+        }
+
+        $allow_users_id[] = Auth::user()->id;
+
+        $model = new TimeSheet;
+        $dataProvider = $model->fill($order_by)->searchForTimeSheetSearch($search,$allow_users_id);
+
+        foreach ($dataProvider as $key => $value) {
+
+            $dataProvider[$key]->tag = explode(",",$value->tag);
 
         }
 
