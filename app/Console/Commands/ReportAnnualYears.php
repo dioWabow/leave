@@ -21,7 +21,7 @@ class ReportAnnualYears extends Command
      *
      * @var string
      */
-    protected $signature = 'Report:AnnualYears';
+    protected $signature = 'Report:AnnualYears {date?}';
 
     /**
      * The console command description.
@@ -47,7 +47,10 @@ class ReportAnnualYears extends Command
      */
     public function handle()
     {
-        $now_year = Carbon::now()->format('Y');
+        $date = $this->argument('date');
+        $today = (!empty($date)) ? Carbon::parse($date) : Carbon::now();
+        $now_year = $today->format('Y');
+
         $start_year = Carbon::create($now_year, 1, 1)->format('Y-m-d');
         $end_year = Carbon::create($now_year, 12, 31)->format('Y-m-d');
         

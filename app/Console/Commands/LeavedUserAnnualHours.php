@@ -20,7 +20,7 @@ class LeavedUserAnnualHours extends Command
      *
      * @var string
      */
-    protected $signature = 'Report:LeavedUserAnnualHours';
+    protected $signature = 'Report:LeavedUserAnnualHours  {date?}';
 
     /**
      * The console command description.
@@ -46,8 +46,10 @@ class LeavedUserAnnualHours extends Command
      */
     public function handle()
     {
-        $now_year = Carbon::now()->format('Y');
-        $now_month = Carbon::now()->format('m');
+        $date = $this->argument('date');
+        $today = (!empty($date)) ? Carbon::parse($date) : Carbon::now();
+        $now_year = $today->format('Y');
+        $now_month = $today->format('m');
 
         $users = User::getUserByLeaveYearAndMonth($now_year,$now_month);
 
