@@ -20,7 +20,7 @@ class EveryDayAnnualHours extends Command
      *
      * @var string
      */
-    protected $signature = 'Report:AnnualHoursEveryDay';
+    protected $signature = 'Report:AnnualHoursEveryDay {date?}';
 
     /**
      * The console command description.
@@ -46,14 +46,17 @@ class EveryDayAnnualHours extends Command
      */
     public function handle()
     {
-        $users = User::getUserByEnterMonthAndDayOrAnnualHoursNull(Carbon::now()->format('m'),Carbon::now()->format('d'));
+        $date = $this->argument('date');
+        $today = (!empty($date)) ? Carbon::parse($date) : Carbon::now();
+
+        $users = User::getUserByEnterMonthAndDayOrAnnualHoursNull($today->format('m'),$today->format('d'));
 
         foreach($users as $user) {
 
             if (!empty($user->status)) {
 
                 $model = User::find($user->id);
-                $annual_hours = LeaveHelper::calculateAnnualDate(Carbon::now()->format('Y-m-d'),$user->id);
+                $annual_hours = LeaveHelper::calculateAnnualDate($today->format('Y-m-d'),$user->id);
 
                 $model->fill(['annual_hours' => $annual_hours]);
                 $model->save();
@@ -66,11 +69,11 @@ class EveryDayAnnualHours extends Command
 
         foreach($no_annual_hours_user as $user) {
             
-            if (!empty($user->status) && TimeHelper::changeDateValue($user->enter_date,['+,6,month'],'Y-m-d') == Carbon::now()->format('Y-m-d')) {
+            if (!empty($user->status) && TimeHelper::changeDateValue($user->enter_date,['+,6,month'],'Y-m-d') == $today->format('Y-m-d')) {
 
                 $model = User::find($user->id);
 
-                $annual_hours = LeaveHelper::calculateAnnualDate(Carbon::now()->format('Y-m-d'),$user->id);
+                $annual_hours = LeaveHelper::calculateAnnualDate($today->format('Y-m-d'),$user->id);
 
                 $model->fill(['annual_hours' => $annual_hours]);
                 $model->save();
