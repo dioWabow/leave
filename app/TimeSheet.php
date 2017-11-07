@@ -23,6 +23,8 @@ class TimeSheet extends BaseModel
         'working_day',
         'url',
         'remark',
+        'order_by',
+        'order_way',
     ];
 
     protected $attributes = [

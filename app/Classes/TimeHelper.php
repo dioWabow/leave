@@ -139,7 +139,11 @@ class TimeHelper
         return $dt->format($format);
     }
 
-
+    /** 
+     * 取得日期
+     * 計算日期星期
+     * 
+     */
     public static function getWeekNumberByDate($date)
     {
         $dt = Carbon::parse($date);
@@ -264,5 +268,4 @@ class TimeHelper
         return $confirm_holiday_date;
 
     }
-
 }

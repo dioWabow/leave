@@ -20,15 +20,15 @@
             <a href="{{ route('sheet/daily/index') }}">
               <img src="{{ UrlHelper::getUserAvatarUrl( Auth::user()->avatar ) }}" width="50px">
             <br>
-              <span class="fonts">{{ Auth::user()->name }}</span>
+              <span class="fonts">{{ Auth::user()->nickname }}</span>
             </a>
           </li>
         @foreach ($get_permission_user as $user)
-					<li @if($current_user == $user->allow_user_id)class="active"@endif>
+					<li @if($current_user == $user->allow_user_id) class="active"@endif>
             <a href="{{ route('sheet/daily/index', [ 'current_user' => $user->allow_user_id ]) }}">
               <img src="{{ UrlHelper::getUserAvatarUrl( $user->fetchUser->avatar ) }}" width="50px">
             <br>
-              <span class="fonts">{{ $user->fetchUser->name }}</span>
+              <span class="fonts">{{ $user->fetchUser->nickname }}</span>
             </a>
           </li>
         @endforeach
@@ -36,14 +36,14 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="list">
 						<div class="dataTables_wrapper form-inline dt-bootstrap">
-							<form name="frmOrderBy" action="{{ route('sheet/daily/index', [ 'current_user' => $current_user ]) }}" method="POST">
-                @if(count($model->order_by)>0)
-                  <input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
-                  <input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
-                @else
-                  <input id="order_by" type="hidden" name="order_by[order_by]" value="">
-                  <input id="order_way" type="hidden" name="order_by[order_way]" value="">
-                @endif
+							<form name="frmOrderBy" id="frmOrderby" action="{{ route('sheet/daily/index', [ 'current_user' => $current_user ]) }}" method="POST">
+								@if(count($model->order_by)>0)
+									<input id="order_by" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+									<input id="order_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
+								@else
+									<input id="order_by" type="hidden" name="order_by[order_by]" value="">
+									<input id="order_way" type="hidden" name="order_by[order_way]" value="">
+								@endif
 								<div class="row">
 									<div class="col-sm-6">
 										<div class="input-group input-group-sm">
@@ -62,13 +62,13 @@
 											<!-- 新增按鈕 -->
                       @if ($current_user == Auth::user()->id)
                         @if ( count($search)>0 && TimeHelper::checkEditSheetDate($search['working_day']) )
-                        <a href="{{ route('sheet/daily/creat') }}">
+                        <a href="{{ route('sheet/daily/create') }}">
                           <button type="button" class="btn btn-primary">
                             <i class="fa fa-edit"></i>
                           </button>
                         </a>
                         @elseif ( count($search)>0 && !TimeHelper::checkEditSheetDate($search['working_day']) && TimeHelper::checkHolidayDate($search['working_day']) )
-                        <a href="{{ route('sheet/daily/creat') }}">
+                        <a href="{{ route('sheet/daily/create') }}">
                           <button type="button" class="btn btn-primary">
                             <i class="fa fa-edit"></i>
                           </button>
@@ -128,7 +128,7 @@
 													</td>
 												</tr>
 											@empty
-												@if ((Carbon\Carbon::now()->dayOfWeek == 6) || (Carbon\Carbon::now()->dayOfWeek == 0))
+												@if ((TimeHelper::getWeekNumberByDate($search['working_day']) == 6) || (TimeHelper::getWeekNumberByDate($search['working_day']) == 0))
 													<tr>
 														<td colspan="11" align="center"><span class="glyphicon glyphicon-remove"> 假日，不用填寫工作表唷~</span></td>
 													</tr>

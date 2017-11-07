@@ -14,14 +14,15 @@
 	@endif
   </h1>
 	@if($model->id > 0)
-	{{ Breadcrumbs::render('sheet/daily/edit','修改') }}
+	  {{ Breadcrumbs::render('sheet/daily/edit','修改') }}
 	@else
   	{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
 	@endif
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'sheet/daily/update' : 'sheet/daily/insert') }}" method="POST">
+<form action="{{ route($model->id > 0 ? 'sheet/daily/update' : 'sheet/daily/insert') }}" method="POST" id="daily_list_form">
+{{ csrf_field() }}
   <input type="hidden" id="daily_id" name="daily[id]" class="form-control pull-right" value="{{ $model->id }}">
   <input type="hidden" id="daily_user_id" name="daily[user_id]" class="form-control pull-right" value="{{ Auth::user()->id }}">
 	<section class="content">
@@ -47,7 +48,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-clock-o"></i>
 								</div>
-								<input type="text" id="daily_working_day" name="daily[working_day]" value="{{ TimeHelper::getNowDate($model->working_day) }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif class="form-control pull-right single-date">
+								<input type="text" id="daily_working_day" name="daily[working_day]" data-fv-date-format="YYYY-MM-DD" value="{{ TimeHelper::getNowDate($model->working_day) }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif class="form-control pull-right single-date">
 							</div>
 							<span class="text-danger">{{ $errors->first('daily.working_day') }}</span>
 						</div>
@@ -75,7 +76,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group {{ $errors->has('daily.items') ? 'has-error' : '' }}">
+				<div class="form-group {{ $errors->has('daily.items') ? 'has-feedback has-error' : '' }}">
 					<div class="row">
 						<div class="col-md-1">
 							<label>標題</label>
@@ -106,31 +107,36 @@
 						<div class="col-md-1">
 							<label>工作時數 <span style="color:red">*</span></label>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-11">
 							<div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-hourglass"></i>
 								</div>
-                  <input type="text" class="form-control" id="daily_hour"  name="daily[hour]" value="{{ $model->hour }}" placeholder="(單位小時 0.1,0.5,1,2 依此類推)"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+									<input type="text" class="form-control daily-hour" id="daily_hour" name="daily[hour]" value="{{ $model->hour }}" placeholder="(單位小時 0.1,0.5,1,2 依此類推)"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
 								<div class="input-group-addon">
 									HR
 								</div>
 								<span class="text-danger">{{ $errors->first('daily.hour') }}</span>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
 						<div class="col-md-1">
 							<label>標籤</label>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-11">
 							<div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-tags"></i>
 								</div>
-                  <input type="text" class="form-control" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+									<input type="text" class="form-control daily-tag" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<div class="form-group {{ $errors->has('daily.url') ? 'has-error' : '' }}">
 					<div class="row">
 						<div class="col-md-1">
@@ -157,7 +163,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</form>
       @if (!TimeHelper::checkEditSheetDate($model->working_day))
 			<div class="box-footer">
 				<div class="pull-right">
@@ -184,7 +190,6 @@
     @endif
 	</section>
 		<input type="hidden" id="ajax_switch" value="0">
-    {!!csrf_field()!!}
 </form>
 <!-- /.content -->
 @stop

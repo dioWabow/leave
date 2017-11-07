@@ -171,7 +171,7 @@ $(function () {
     var minDate = new Date();
     minDate.setDate(minDate.getDate() - 7);
     var minDate = moment(minDate).format("YYYY-MM-DD");
-
+    
     /*算後1天的日期*/
     var maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 1);
@@ -183,7 +183,9 @@ $(function () {
     var yyyy = today.getFullYear();
     var $search_work_day = $("#search_work_day");
     var time = $search_work_day.val();
-
+    if(dd <= 9) dd = '0'+ dd;
+    if(mm <= 9) mm = '0'+ mm;
+    
     /*按下今日，變換日期*/
     $(".search-today").on("click", function(){
       $("#search_work_day").val(yyyy + '-' + mm + '-' + dd)
@@ -224,10 +226,11 @@ $(function () {
 
     /* 排序  */
     $(".sort").on("click", function(){
+
       var $sortname = $(this).attr("sortname");
       var $order_by = "{{ $model->order_by }}";
       var $order_way = "{{ $model->order_way }}";
-
+      
       $("#order_by").val($sortname);
 
       if ($order_by == $sortname && $order_way == "DESC") {
@@ -235,7 +238,9 @@ $(function () {
       } else {
         $("#order_way").val("DESC");
       }
-      $("#frmOrderBy").submit();
+      
+      $("#frmOrderby").submit();
+
     });
 
     /* 列表複製 & 新增 + 修改 datarangepicker */
@@ -256,10 +261,10 @@ $(function () {
       locale: {format: 'YYYY-MM-DD'},
     });
 
-    if (time.empty()) 
+   /* if (time.empty()) 
       $("#search_work_day").val(yyyy + '-' + mm + '-' + dd);
     else 
-      $("#search_work_day").val(time);
+      $("#search_work_day").val(time);*/
 
   });
 </script>
@@ -319,6 +324,74 @@ $(function () {
 }
 }
 </style>
+@endif
+@if(Request::is('sheet/daily/create','sheet/daily/edit/*'))
+<script>
+$(function () {
+  $('#daily_list_form').bootstrapValidator({
+      message: 'This value is not valid',
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        'daily[working_day]': {
+            validators: {
+                notEmpty: {
+                  message: '請填寫工作日期'
+                },
+                date: {
+                  format: 'YYYY-MM-DD',
+                  message: '日期格式不正確'
+                }
+            }
+        },
+        'daily[project_id]': {
+            validators: {
+                notEmpty: {
+                  message: '至少選擇一項專案名稱'
+                },
+            }
+        },
+       'daily[items]': {
+            validators: {
+                notEmpty: {
+                  message: '請填寫標題'
+                },
+                stringLength: {
+                  max: 100,
+                  message: '標題不可超過100個字'
+                },
+                regexp: {
+                  regexp: /^\S+$/,
+                  message: '不可輸入空格',
+                  /*regexp: /^[^"']+$/,
+                  message: '不可輸入單引號',*/
+                }
+            }
+        },
+        'daily[hour]': {
+            validators: {
+                notEmpty: {
+                    message: '請填寫工作時數'
+                },
+                numeric: {
+                  message: '請填寫數字',
+                }
+            }
+        },
+        'daily[url]': {
+            validators: {
+                uri: {
+                  message: '填寫正確連結',
+                }
+            }
+        },
+      }
+  });
+});
+</script>
 @endif
 
 <!-- 團隊設定用 -->

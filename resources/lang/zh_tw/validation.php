@@ -182,6 +182,8 @@ return [
 
         'daily.items' => [
             'required' => '請填寫標題',
+            'regex' => '不可以輸入空白',
+            'max' => '標題不可超過100字元',
         ],
         'daily.working_day' => [
             'required' => '請填工作日期',
