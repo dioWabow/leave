@@ -4,10 +4,10 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
   <h1>
-    <i class="glyphicon glyphicon-file"></i> 專案項目{{ $projectModel->id > 0 ? '修改' : '新增' }}
+    <i class="glyphicon glyphicon-file"></i> 專案項目{{ $model->id > 0 ? '修改' : '新增' }}
     <small>Project Management</small>
   </h1>
-  @if($projectModel->id > 0)
+  @if($model->id > 0)
   {{ Breadcrumbs::render('sheet/project/edit','修改') }}
   @else
   {{ Breadcrumbs::render('sheet/project/edit','新增') }}
@@ -15,11 +15,11 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($projectModel->id > 0 ? 'sheet/project/update' : 'sheet/project/insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'sheet/project/update' : 'sheet/project/insert') }}" method="POST" enctype="multipart/form-data">
 	<section class="content">
 		<div class="box box-info">
 			<div class="box-header with-border">
-				<h3 class="box-title">{{$projectModel->name}} 資料{{ $projectModel->id > 0 ? '修改' : '新增' }}</h3>
+				<h3 class="box-title">{{$model->name}} 資料{{ $model->id > 0 ? '修改' : '新增' }}</h3>
 			</div>
 			<div class="box-body">
 				<div class="form-group"><div class="row">
@@ -27,8 +27,8 @@
 						<label>專案</label>
 					</div>
 					<div class="col-md-11">
-						<input type="text" id="sheet_project_title" name="sheet_project[title]" class="form-control pull-right" value="{{$projectModel->name}}">
-						<input type="hidden" name="sheet_project[id]" value="{{$projectModel->id}}">
+						<input type="text" id="sheet_project_title" name="sheet_project[title]" class="form-control pull-right" value="{{$model->name}}">
+						<input type="hidden" name="sheet_project[id]" value="{{$model->id}}">
 					</div>
 				</div></div>
 				<div class="form-group">
@@ -76,7 +76,7 @@
 						</div>
 						<div class="col-md-11">
 							<label>
-								<input type="checkbox" name="sheet_project[available]" class="sheet_project_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($projectModel->available == "1") checked="checked" @endif>
+								<input type="checkbox" name="sheet_project[available]" class="sheet_project_available" data-toggle="toggle" data-on="開啟" data-off="關閉" @if ($model->available == "1") checked="checked" @endif>
 							</label>
 						</div>
 					</div>

@@ -62,11 +62,11 @@ class SheetProjectController extends Controller
     {
         $data = $request->old('sheet_project');
 
-        $model = new Team;
-        $main_team = $model->getMainTeam();
-        $sub_team = $model->getSubTeam();
+        $team = new Team;
+        $main_team = $team->getMainTeam();
+        $sub_team = $team->getSubTeam();
 
-        $projectModel = new Project;
+        $model = new Project;
 
         $project_team = [];
 
@@ -79,12 +79,12 @@ class SheetProjectController extends Controller
             $project_team = (empty($data['team'])) ? [] : $data['team'];
 
 
-            $projectModel->fill($input);
+            $model->fill($input);
 
         }
 
         return  view('sheet_project_form', compact(
-            'main_team', 'sub_team', 'projectModel', 'project_team'
+            'main_team', 'sub_team', 'model', 'project_team'
         ));
     }
 
@@ -102,8 +102,8 @@ class SheetProjectController extends Controller
         $main_team = $team->getMainTeam();
         $sub_team = $team->getSubTeam();
 
-        $projectModel = new Project;
-        $project_data = $projectModel->whichProject($id);
+        $model = new Project;
+        $project_data = $model->whichProject($id);
 
         $input = [];
 
@@ -125,13 +125,13 @@ class SheetProjectController extends Controller
 
         }
 
-        $projectModel->fill($input);
+        $model->fill($input);
 
         $projectTeamModel = new ProjectTeam;
         $project_team = $projectTeamModel->getProjectTeamByProjectId($id)->pluck('team_id')->toArray();
 
         return  view('sheet_project_form', compact(
-            'main_team', 'sub_team','projectModel', 'project_team'
+            'main_team', 'sub_team','model', 'project_team'
         ));
     }
 
