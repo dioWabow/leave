@@ -38,7 +38,7 @@
 				@endif
 			</div>
 			<div class="box-body">
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave.type_id') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>假別</label>
 					</div>
@@ -51,9 +51,12 @@
 								</label>&emsp;
 							@endif
 						@endforeach
+            </br>
+            <span class="text-danger">{{ $errors->first('leave.type_id') }}</span>
 					</div>
-				</div></div>
-				<div class="form-group" id="group_timepicker"><div class="row">
+				</div>
+        </div>
+				<div class="form-group {{ $errors->has('leave.timepicker') ? 'has-error' : '' }}"  id="group_timepicker"><div class="row">
 					<div class="col-md-1">
 						<label>日期</label>
 					</div>
@@ -64,6 +67,7 @@
 							</div>
 							<input type="text" id="leave_timepicker" name="leave[timepicker]" value="{{$model->timepicker}}" class="form-control pull-right" date="{{$model->timepicker}}">
 						</div>
+						<span class="text-danger">{{ $errors->first('leave.timepicker') }}</span>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -118,7 +122,7 @@
 						</div>
 					</div>
 				</div></div>
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave.agent') ? 'has-error' : '' }}" ><div class="row">
 					<div class="col-md-1">
 						<label>代理人</label>
 					</div>
@@ -136,7 +140,10 @@
 									<font style="color: red">無代理人</font>
 							</label>&emsp;
 						@endforelse
+            </br>
+            <span class="text-danger">{{ $errors->first('leave.agent') }}</span>
 					</div>
+          
 				</div></div>
 				@if(Auth::getUser()->id == $user->id)
 				<div class="form-group"><div class="row">

@@ -26,6 +26,7 @@ class LeaveRequest extends FormRequest
         return [
             'leave.timepicker' => 'required',
             'leave.type_id' => 'required|Integer',
+            'leave.agent' => 'required',
         ];
     }
 }
