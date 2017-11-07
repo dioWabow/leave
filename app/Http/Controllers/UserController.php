@@ -82,6 +82,13 @@ class UserController extends Controller
 
         if (!empty($input)) {
 
+            if ($input['status'] == 2) {
+
+                $input['job_seek'] = 1;
+                $input['status'] = 1;
+
+            }
+
             $model->fill($input);
 
             //使用者目前所有代理人(前台in_array)
@@ -141,6 +148,14 @@ class UserController extends Controller
             $input['job_seek'] = 1;
             $input['status'] = 1;
 
+        } elseif($input['status'] == 0) {
+
+            if (empty($input['leave_date'])) {
+
+                return Redirect::back()->withInput()->withErrors(['msg' => '請選擇離職日期']);
+
+            }
+
         }
 
         //員工編號不得重複
@@ -151,14 +166,14 @@ class UserController extends Controller
         }
 
         //代理人必填
-        if (empty($input['agent'])) {
+        if (empty($input['agent']) && !empty($input['status'])) {
 
             return Redirect::back()->withInput()->withErrors(['msg' => '代理人必選']);
 
         }
 
         //團隊必填
-        if (empty($input['team'])) {
+        if (empty($input['team']) && !empty($input['status'])) {
 
             return Redirect::back()->withInput()->withErrors(['msg' => '團隊必選']);
 
