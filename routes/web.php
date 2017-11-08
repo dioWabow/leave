@@ -504,6 +504,13 @@ Route::group(['middleware' => 'auth'], function () {
                 'uses'=> 'SheetAuthController@getIndex',
             ]);
         });
+
+        Route::group(['prefix'=>'auth'], function(){
+            Route::post('update',[
+                'as'=>'sheet/auth/update',
+                'uses'=> 'SheetAuthController@postUpdate',
+            ]);
+        });
     });
 
     # 工作日誌 - 專案項目設定

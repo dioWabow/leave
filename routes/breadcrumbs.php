@@ -166,6 +166,11 @@ Breadcrumbs::register('sheet/search/index', function ($breadcrumbs) {
     $breadcrumbs->push('搜尋',route('sheet/search/index'));
 });
 
+// 權限設定
+Breadcrumbs::register('sheet/auth/index', function ($breadcrumbs) {
+    $breadcrumbs->push('權限設定',route('sheet/auth/index'));
+});
+
 // 假單詳細頁
 Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$leave_name = '') {
 
