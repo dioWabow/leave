@@ -82,7 +82,49 @@ $(function () {
 });
 </script>
 @endif
-
+@if(Request::is('holidies/create','holidies/edit/*'))
+<style>
+/* Adjust feedback icon position */
+#holidies_form .form-control-feedback {
+    right: 15px;
+}
+#holidies_form .selectContainer .form-control-feedback {
+    right: 25px;
+}
+</style>
+<script>
+$(function () {
+  $('#holidies_form').bootstrapValidator({
+      message: 'This value is not valid',
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        'holidies[name]': {
+            validators: {
+              stringLength: {
+                  max: 10,
+                  message: '最長為10個字,請縮減長度'
+                },
+                notEmpty: {
+                  message: '請輸入假日名稱'
+                },
+            }
+        },
+        'holidies[date]': {
+            validators: {
+                notEmpty: {
+                  message: '請選擇日期'
+                },
+            }
+        },
+      }
+  });
+});
+</script>
+@endif
 <!-- 我的假單頁面用 -->
 @if(Request::is('leaves_my/*'))
   @if(Request::is('leaves_my/history'))
@@ -549,6 +591,48 @@ $(document).ready(function () {
 
 </script>
 @endif
+@if(Request::is('leave_type/create','leave_type/edit/*'))
+<style>
+/* Adjust feedback icon position */
+#leave_type_form .form-control-feedback {
+    right: 15px;
+}
+#leave_type_form .selectContainer .form-control-feedback {
+    right: 25px;
+}
+</style>
+<script>
+$(function () {
+  $('#leave_type_form').bootstrapValidator({
+      message: 'This value is not valid',
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        'leave_type[name]': {
+            validators: {
+                notEmpty: {
+                  message: '請輸入假別名稱'
+                },
+            }
+        },
+        'leave_type[hours]': {
+            validators: {
+                notEmpty: {
+                    message: '請填寫工作時數'
+                },
+                numeric: {
+                  message: '請填寫數字',
+                }
+            }
+        },
+      }
+  });
+});
+</script>
+@endif
 
 <!-- 協助請假 -->
 @if(Request::is('leave_assist/getIndex'))
@@ -568,6 +652,15 @@ $(document).ready(function () {
 @endif
 <!-- 我要請假用、協助請假 -->
 @if(Request::is('leave/create','leave_assist/create/*'))
+<style>
+/* Adjust feedback icon position */
+#leave_form .form-control-feedback {
+    right: 15px;
+}
+#leave_form .selectContainer .form-control-feedback {
+    right: 25px;
+}
+</style>
 <script>
 $(function () {
   
@@ -867,6 +960,33 @@ $(function () {
 
   });
 
+  $('#leave_form').bootstrapValidator({
+      message: 'This value is not valid',
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        'leave[timepicker]': {
+            validators: {
+                notEmpty: {
+                  message: '請選擇請假時間'
+                },
+            }
+        },
+        'leave[agent][]': {
+            row: '.col-md-11',
+            validators: {
+                choice: {
+                  min: 1,
+                  message: '請選擇代理人，若無代理人請洽HR'
+                },
+            }
+        },
+      }
+  });
+
 });
 </script>
 @endif
@@ -1070,6 +1190,15 @@ function changeSort(sort){
 </script>
 @endif
 @if(Request::is('user/edit/*'))
+<style>
+/* Adjust feedback icon position */
+#user_form .form-control-feedback {
+    right: 15px;
+}
+#user_form .selectContainer .form-control-feedback {
+    right: 25px;
+}
+</style>
 <script>
 $(function () {
   $('.single-date').daterangepicker({
@@ -1095,6 +1224,102 @@ $(function () {
     $("#clear_leave_date").click(function() {
       $("#user_leave_date").val("");
     });
+
+    $('#user_form').bootstrapValidator({
+      message: 'This value is not valid',
+      feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+      },
+      fields: {
+        'user[employee_no]': {
+            row: '.col-md-3',
+            validators: {
+                notEmpty: {
+                  message: '請輸入員工編號'
+                },
+                stringLength: {
+                  max: 7,
+                  message: '員工編號最多7碼'
+                },
+                numeric: {
+                  message: '員工編號僅限數字',
+                }
+            }
+        },
+        'user[name]': {
+            row: '.col-md-3',
+            validators: {
+                notEmpty: {
+                  message: '請輸入姓名'
+                },
+                stringLength: {
+                  max: 20,
+                  message: '稱呼最大20字元'
+                },
+            }
+        },
+        'user[nickname]': {
+            row: '.col-md-3',
+            validators: {
+              notEmpty: {
+                message: '請輸入稱呼'
+              },
+            }
+        },
+        'user[birthday]': {
+            row: '.col-md-5',
+            validators: {
+              notEmpty: {
+                message: '請輸入生日'
+              },
+            }
+        },
+        'user[enter_date]': {
+            row: '.col-md-1',
+            validators: {
+              notEmpty: {
+                message: '請輸入到職日期'
+              },
+            }
+        },
+        'user[arrive_time]': {
+            row: '.col-md-3',
+            validators: {
+              notEmpty: {
+                message: '請輸入到職時間'
+              },
+            }
+        },
+        'user[agent][]': {
+            row: '.col-md-5',
+            validators: {
+              notEmpty: {
+                message: '至少選擇一個代理人'
+              },
+            }
+        },
+        'user[team][]': {
+            row: '.col-md-5',
+            validators: {
+              notEmpty: {
+                message: '至少選擇一個團隊'
+              },
+            }
+        },
+        'avatar': {
+            row: '.col-md-5',
+            validators: {
+              file: {
+                extension: 'jpeg,jpg,png',
+                type: 'image/jpeg,image/png',
+                message: '大頭貼請選擇圖片'
+              },
+            }
+        },
+      }
+  });
 });
 </script>
 @endif

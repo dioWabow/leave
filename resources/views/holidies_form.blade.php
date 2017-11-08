@@ -15,7 +15,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'holidies/update' : 'holidies/insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'holidies/update' : 'holidies/insert') }}" method="POST" id="holidies_form" enctype="multipart/form-data">
   <section class="content">
     <div class="box box-info">
       <div class="box-header with-border">

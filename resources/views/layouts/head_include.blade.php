@@ -62,3 +62,7 @@
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
+
+<!-- BootstrapValidator-->
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/BootstrapValidator/css/bootstrapValidator.css"/>
+<script src="{{route('root_path')}}/plugins/BootstrapValidator/js/bootstrapValidator.js"></script>

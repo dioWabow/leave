@@ -21,16 +21,16 @@
 							<div class="col-sm-3">
 								<div class="dataTables_length">
 								<form name="frmSearch" id="frmSearch" action="{{ route('holidies') }}" method="POST">
-			                    <input id="sort" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
-			                    <input id="sort_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
+										<input id="sort" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+										<input id="sort_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
 									<label>
-					                    每頁 
-					                    <select name="order_by[pagesize]" class="form-control input-sm" onchange="javascript:changePageSize(this.value);">
-					                      <option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
-					                      <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
-					                      <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
-					                    </select> 
-					                  筆</label>
+										每頁 
+										<select name="order_by[pagesize]" class="form-control input-sm" onchange="javascript:changePageSize(this.value);">
+											<option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
+											<option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
+											<option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
+										</select> 
+									筆</label>
 									</div>
 								</div>
 									<div class="col-sm-9">

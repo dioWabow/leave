@@ -15,7 +15,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" id="leave_type_form" method="POST" enctype="multipart/form-data">
 {!!csrf_field()!!}
 	<section class="content">
         <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
@@ -41,7 +41,7 @@
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="radio" name="leave_type[exception]" class="flat-red" value="normal" @if ($model->exception == 'normal') checked="checked" @endif checked="checked>
+							<input type="radio" name="leave_type[exception]" class="flat-red" value="normal" @if ($model->exception == 'normal') checked="checked" @endif checked="checked">
 							{{ WebHelper::getTypesExceptionLabel('normal') }}
 						</label>&emsp;
 						<label>
@@ -87,7 +87,7 @@
 					</div>
 					<div class="col-md-11">
 						<label>
-							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="none" @if ($model->reset_time == 'none') checked="checked" @endif checked="checked>
+							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="none" @if ($model->reset_time == 'none') checked="checked" @endif checked="checked">
 							{{ WebHelper::getTypesResetTimeLabel('none') }}
 						</label>&emsp;
 						<label>

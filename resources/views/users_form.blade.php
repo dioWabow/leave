@@ -12,7 +12,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{route('user/update')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('user/update')}}" method="POST" id="user_form" enctype="multipart/form-data">
 {!!csrf_field()!!}
 <input type="hidden" id="user_id" name="user[id]" value="{{$model->id}}">
 	<section class="content">
