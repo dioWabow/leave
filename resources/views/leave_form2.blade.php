@@ -144,7 +144,7 @@
 						<label>檔案上傳</label>
 					</div>
 					<div class="col-md-11">
-						<input id="leave_fileupload" name="fileupload[]" class="file" type="file" multiple data-max-file-count="5">
+						<input id="leave_fileupload" name="fileupload[]" class="file-loading" type="file" multiple data-max-file-count="5">
 					</div>
 				</div></div>
 				@endif

@@ -860,6 +860,8 @@ $(function () {
   $("#leave_fileupload").fileinput({
     initialPreviewAsData: true,
     showUpload: false,
+    maxFileSize: 8000,
+    'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
   });
 
   $("#rechoose").click(function(){
@@ -891,6 +893,8 @@ $(function () {
           overwriteInitial: false,
           showUpload: false,
           showRemove: false,
+          maxFileSize: 8000,
+          'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
           @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) 
           showBrowse: false,
           initialPreviewShowDelete: false,
@@ -962,12 +966,12 @@ $(function () {
               return ext.match(/(mp3|wav)$/i);
           }
       }
-      }).on("filebatchselected", function(event, data, previewId, index) {
+      }).on("fileloaded", function(event, data, previewId, index) {
           $("#leave_view_fileupload").fileinput("upload");
       }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
 
       }).on('filepredelete ', function(event, data, previewId, index) {
-          // console.log(event);
+
       }).on('filedeleted ', function(event, data, previewId, index) {
 
       });
@@ -1090,6 +1094,8 @@ $(function () {
         @endif
         initialPreviewAsData: true,
         showUpload: false,
+        maxFileSize: 8000,
+        'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
     });
     
     $("#clear_leave_date").click(function() {
@@ -1460,9 +1466,13 @@ $(function () {
       showUpload: false,
       showRemove: false,
       initialPreviewAsData: true,
+      maxFileSize : 8000,
+      'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
       uploadExtraData : {
         "_token": "{{ csrf_token() }}",
       },
+      'msgInvalidFileType' : '"{name}"的檔案格式錯誤，只能上傳"{types}"',
+      'msgInvalidFileExtension' : '"{name}"的檔案格式錯誤，只能用"{extensions}"',
       @if(ConfigHelper::getConfigValueByKey('login_pictures'))
       initialPreview: [
         @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
@@ -1532,8 +1542,11 @@ $(function () {
 
     @if( $config['company_logo'] != '')
     $option.initialPreview = ['{{ UrlHelper::getCompanyLogoUrl($config['company_logo']) }}'];
-    $option.initialPreviewAsData = true;
     @endif
+
+    $option.initialPreviewAsData = true;
+    $option.maxFileSize = 8000;
+    $option.msgSizeTooLarge = '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇';
 
     $("#config_company_logo").fileinput($option);
 });
