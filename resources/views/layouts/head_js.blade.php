@@ -1468,6 +1468,7 @@ $(function () {
       initialPreviewAsData: true,
       maxFileSize : 8000,
       'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
+      'msgFilesTooMany': '你選了{n}個檔案</b>，最多只能上傳<b>{m}</b>個檔案',
       uploadExtraData : {
         "_token": "{{ csrf_token() }}",
       },
