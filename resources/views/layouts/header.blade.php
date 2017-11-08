@@ -129,11 +129,11 @@
           <a href="{{ route('sheet/search/index') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
           </a>
         </li>
-        <li>
+        <li @if(Request::is('sheet/absense_report/index'))class="active" @endif>
           <a href="{{ route('absense_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
           </a>
         </li>
-       	<li>
+        <li @if(Request::is('sheet/project/index'))class="active" @endif>
           <a href="{{ route('sheet/project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
