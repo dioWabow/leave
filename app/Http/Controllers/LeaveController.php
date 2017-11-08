@@ -150,7 +150,7 @@ class LeaveController extends Controller
         }
 
         //抓出所有假別，並判斷謀職假是否開啟
-        $types = Type::getAllType();
+        $types = Type::getAvailableType();
 
         if (!User::getJobSeekByUserId($user_id)[0]) {
 
@@ -213,6 +213,13 @@ class LeaveController extends Controller
 
         $start = ' 09:00';
         $end = ' 18:00';
+
+        if (empty(Type::find($leave['type_id'])->available)) {
+
+            return Redirect::back()->withInput()->withErrors(['msg' => '該假別已關閉']);
+
+        }
+
 
         if (count(explode(' - ', $leave['timepicker'])) > 1) {
 
