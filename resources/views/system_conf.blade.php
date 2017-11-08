@@ -40,7 +40,7 @@
                         <div class="form-group">
                             <label for="config_company_logo" class="col-sm-2 control-label">LOGO</label>
                             <div class="col-sm-10">
-                                <input id="config_company_logo" name="company_logo" class="file" type="file" value="{{ $config['company_logo'] }}">
+                                <input id="config_company_logo" name="company_logo" class="file-loading" type="file" value="{{ $config['company_logo'] }}">
                             </div>
                         </div>
                         <div class="form-group">

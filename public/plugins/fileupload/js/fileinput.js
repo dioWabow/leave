@@ -3871,8 +3871,8 @@
         msgFilePreviewAborted: 'File preview aborted for "{name}".',
         msgFilePreviewError: 'An error occurred while reading the file "{name}".',
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
-        msgInvalidFileType: '"{name}"的檔案格式錯誤，只能上傳"{types}"',
-        msgInvalidFileExtension: '"{name}"的檔案格式錯誤，只能用"{extensions}"',
+        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
+        msgInvalidFileExtension: 'Invalid extension for file "{name}". Only "{extensions}" files are supported.',
         msgFileTypes: {
             'image': 'image',
             'html': 'HTML',
