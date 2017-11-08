@@ -967,7 +967,7 @@ $(function () {
               return ext.match(/(mp3|wav)$/i);
           }
       }
-      }).on("fileloaded", function(event, data, previewId, index) {
+      }).on("filebatchselected", function(event, data, previewId, index) {
           $("#leave_view_fileupload").fileinput("upload");
       }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
 
