@@ -47,7 +47,7 @@ class Timesheet extends BaseModel
                 $query->where($key, $value);
 
             }elseif ($key == "text") {
-echo "string";
+
                     $query->where(function ($query) use ($value) {
                         $query->where("items","like","%$value%")
                             ->orWhere("tag","like","%$value%")

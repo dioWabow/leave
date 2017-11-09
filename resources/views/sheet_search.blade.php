@@ -71,7 +71,7 @@
                       &nbsp;
                       <label>
                         關鍵字：
-                        <input type="search" class="form-control" placeholder="請輸入標籤、標題、內容、備註" name="search[text]" style="width:270px" value="@if(count($search)>0) {{$search['text']}} @endif">
+                        <input type="search" class="form-control" placeholder="請輸入標籤、標題、內容、備註" name="search[text]" style="width:270px" value="@if(count($search)>0){{$search['text']}}@endif">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                       </label>
                     </div>
