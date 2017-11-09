@@ -42,13 +42,13 @@
                       <label>
                         填寫人：
                         <select id="search_user_id" name="search[user_id]" class="form-control">
-                          <option value="" selected="selected">全部</option>
+                          <option value="">全部</option>
                           @if( !empty($allow_users) )
                           @foreach($allow_users as $allow_user)
-                          <option value="{{$allow_user->fetchUser->id}}" @if(!empty($search['allow_user']) && $search['allow_user']==$allow_user->fetchUser->id) selected="selected" @endif >{{$allow_user->fetchUser->name}}</option>
+                          <option value="{{$allow_user->fetchUser->id}}" @if(!empty($search['user_id']) && $search['user_id']==$allow_user->fetchUser->id) selected="selected" @endif >{{$allow_user->fetchUser->name}}</option>
                           @endforeach
                           @endif
-                          <option value="{{Auth::user()->id}}" @if(!empty($search['allow_user']) && $search['allow_user']==Auth::user()->id) selected="selected" @endif >{{Auth::user()->name}}</option>
+                          <option value="{{Auth::user()->id}}" @if(!empty($search['user_id']) && $search['user_id']==Auth::user()->id) selected="selected" @endif >{{Auth::user()->name}}</option>
                         </select>
                       </label>
                       &nbsp;
@@ -66,11 +66,7 @@
                       &nbsp;
                       <label>
                         區間：
-                        @if(1!=1)
-                          @if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}}
-                          @endif
-                        @endif
-                        <input type="text" id="search_daterange" placeholder="請選擇時間區間" name="search[daterange]" value="@if(!empty($model->start_time)){{$model->start_time}} - {{$model->end_time}} @endif"  class="form-control">
+                        <input type="text" id="search_daterange" placeholder="請選擇時間區間" name="search[daterange]" value="@if(!empty($search['daterange'])){{$search['start_time']}} - {{$search['end_time']}} @endif"  class="form-control">
                       </label>
                       &nbsp;
                       <label>
@@ -90,13 +86,13 @@
                   <table class="table table-bordered table-striped table-hover">
                     <thead>
                       <tr >
-                        <th width="3%" align="center"><a href="javascript:void(0)" class="sort" sortname="user_id">填寫人</a></th>
-                        <th width="5%"><a href="javascript:void(0)" class="sort" sortname="working_day"> 日期</a></th>
-                        <th  width="5%"><a href="javascript:void(0)" class="sort" sortname="project_id">專案</a></th>
-                        <th width="15%"><a href="javascript:void(0)" class="sort" sortname="items">標題</a></th>
-                        <th  width="15%"><a href="javascript:void(0)" class="sort" sortname="tag">標籤</a></th>
-                        <th width="30%"><a href="javascript:void(0)" class="sort" sortname="description">內容</a></th>
-                        <th width="4%"><a href="javascript:void(0)" class="sort" sortname="hour">時數</a></th>
+                        <th width="3%" align="center">填寫人</th>
+                        <th width="5%">日期</th>
+                        <th width="5%">專案</th>
+                        <th width="15%">標題</th>
+                        <th width="15%">標籤</th>
+                        <th width="30%">內容</th>
+                        <th width="4%">時數</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -126,6 +122,7 @@
             </div>
           </div>
       </div>
+      @if (!empty($dataProvider) )
       <div class="row">
         <div class="col-sm-12">
           <ul class="pagination">
@@ -135,6 +132,7 @@
           </ul>
         </div>
       </div>
+      @endif
     </div>
   </div>
 </section>

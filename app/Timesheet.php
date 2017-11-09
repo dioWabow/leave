@@ -23,8 +23,8 @@ class Timesheet extends BaseModel
         'order_by' => 'id',
         'order_way' => 'DESC',
         'pagesize' => '25',
-        'start_time' => '2000-01-01',
-        'end_time' => '2000-01-02',
+        'start_time' => '',
+        'end_time' => '',
         'exception' => '',
     ];
 
@@ -40,7 +40,6 @@ class Timesheet extends BaseModel
     public function searchForTimeSheetSearch($where = [],$allow_users_id)
     {
         $query = self::OrderedBy();
-        
         foreach ($where as $key => $value) {
             
             if (Schema::hasColumn('timesheets', $key) && !empty($value)) {
@@ -49,23 +48,30 @@ class Timesheet extends BaseModel
 
             }elseif ($key == "text") {
 
-                    $query->where("items","like","%$value%")
-                        ->orWhere("tag","like","%$value%")
-                        ->orWhere("description","like","%$value%")
-                        ->orWhere("remark","like","%$value%");
+                    $query->where(function ($query) use ($value) {
+                        $query->where("items","like","%$value%")
+                            ->orWhere("tag","like","%$value%")
+                            ->orWhere("description","like","%$value%")
+                            ->orWhere("remark","like","%$value%");
+                    });
+
 
             }
 
         }
 
-        $query->whereIn("user_id",$allow_users_id);
+        if (empty($where["user_id"])) {
+
+            $query->whereIn("user_id",$allow_users_id);
+
+        }
+
 
         if (!empty($where['start_time']) && !empty($where['end_time'])) {
 
             $query->whereBetween('working_day', [$where['start_time'], $where['end_time']]);
 
         }
-
         $result = $query->paginate($this->pagesize);
         return $result;
     }

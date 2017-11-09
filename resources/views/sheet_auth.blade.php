@@ -25,7 +25,7 @@
                 <label>團隊</label>
               </div>
               <div class="col-md-2">
-                <label>姓名</label>
+                <label>名稱</label>
               </div>
               <div class="col-md-8">
                   <label>可觀看名單</label>
@@ -34,11 +34,11 @@
           </div>
           @if(!empty($team_result) )
           @foreach($team_result as $team_data)
-            <div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}" team_name="{{$team_data->name}}">
-              @if( !empty($user_team_result[$team_data->id]) )
-                @foreach($user_team_result as $team_id => $user_team)
-                @if( $team_id ==  $team_data->id)
-                  @foreach($user_team as $user_id)
+            @if( !empty($user_team_result[$team_data->id]) )
+              @foreach($user_team_result as $team_id => $user_team)
+              @if( $team_id ==  $team_data->id)
+                @foreach($user_team as $user_id)
+                <div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}" team_name="{{$team_data->name}}">
                   <div class="row">
                     <div class="col-md-2">
                       @if ($user_team->first() == $user_id )
@@ -52,7 +52,7 @@
                       @endif
                     </div>
                     <div class="col-md-2">
-                      <label>{{$user_result[$user_id]->name}}</label>
+                      <label>{{$user_result[$user_id]->nickname}}</label>
                     </div>
                     <div class="col-md-8">
                       <select class="form-control select2  team_member" name="teams[{{$user_id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員" id="member_{{$user_id}}" member_id="{{$user_id}}">
@@ -67,11 +67,11 @@
                       </select>
                     </div>
                   </div>
-                  @endforeach
-                @endif
-                @endforeach
-              @endif
-            </div>
+                </div>
+              @endforeach
+            @endif
+            @endforeach
+          @endif
           @endforeach
           @else
           <div class="form-group member_list" id="member_match_manager"><div class="row">

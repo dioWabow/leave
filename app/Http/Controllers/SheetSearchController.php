@@ -72,6 +72,9 @@ class SheetSearchController extends Controller
         $model = new TimeSheet;
         $dataProvider = $model->fill($order_by)->searchForTimeSheetSearch($search,$allow_users_id);
 
+        if ( empty($search) && empty($order_by) && empty($request->input('page') ) ) {
+            $dataProvider = [];
+        }
         foreach ($dataProvider as $key => $value) {
 
             $dataProvider[$key]->tag = explode(",",$value->tag);
