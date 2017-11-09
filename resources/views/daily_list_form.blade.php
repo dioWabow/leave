@@ -48,7 +48,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-clock-o"></i>
 								</div>
-								<input type="text" id="daily_working_day" name="daily[working_day]" data-fv-date-format="YYYY-MM-DD" value="{{ TimeHelper::getNowDate($model->working_day) }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif class="form-control pull-right single-date">
+								<input type="text" id="daily_working_day" name="daily[working_day]" value="{{ TimeHelper::getNowDate($model->working_day) }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif class="form-control pull-right single-date">
 							</div>
 							<span class="text-danger">{{ $errors->first('daily.working_day') }}</span>
 						</div>
@@ -76,12 +76,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group {{ $errors->has('daily.items') ? 'has-feedback has-error' : '' }}">
+				<div class="form-group">
 					<div class="row">
-						<div class="col-md-1">
+						<div class="col-md-1 form-group {{ $errors->has('daily.items') ? 'has-feedback has-error' : '' }}">
 							<label>標題</label>
 						</div>
-						<div class="col-md-11">
+						<div class="col-md-11 form-group {{ $errors->has('daily.items') ? 'has-feedback has-error' : '' }}">
 							<div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-file-text-o"></i>
@@ -104,10 +104,10 @@
 				</div>
 				<div class="form-group">
 					<div class="row">
-						<div class="col-md-1">
+						<div class="col-md-1 form-group {{ $errors->has('daily.hour') ? 'has-feedback has-error' : '' }}">
 							<label>工作時數 <span style="color:red">*</span></label>
 						</div>
-						<div class="col-md-11">
+						<div class="col-md-11 form-group {{ $errors->has('daily.hour') ? 'has-feedback has-error' : '' }}">
 							<div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-hourglass"></i>
@@ -116,8 +116,8 @@
 								<div class="input-group-addon">
 									HR
 								</div>
-								<span class="text-danger">{{ $errors->first('daily.hour') }}</span>
 							</div>
+              <span class="text-danger">{{ $errors->first('daily.hour') }}</span>
 						</div>
 					</div>
 				</div>

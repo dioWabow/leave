@@ -191,10 +191,11 @@ return [
         ],
         'daily.project_id' => [
             'required' => '請填專案名稱',
+            'numeric' => '專案名稱只能是數字',
         ],
         'daily.hour' => [
             'required' => '請填工作時數',
-            'Integer' => '工作時數必須為數字',
+            'numeric' => '工作時數必須為數字',
         ],
         'daily.url' => [
             'url' => '請填正確連結',

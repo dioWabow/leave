@@ -26,9 +26,9 @@ class DailyRequest extends FormRequest
         return [
             'daily.items' => 'required|regex:/^\S+$/|max:100',
             'daily.working_day' => 'required|date',
-            'daily.project_id' => 'required',
+            'daily.project_id' => 'required|numeric',
             'daily.description' => 'nullable',
-            'daily.hour' => 'required|Integer',
+            'daily.hour' => 'required|numeric',
             'daily.url' => 'nullable|url',
             'daily.remark' => 'nullable',
             
