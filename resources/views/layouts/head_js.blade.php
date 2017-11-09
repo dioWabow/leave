@@ -243,26 +243,13 @@ $(function () {
 
     });
 
-    /*var q = new Date();
-    var m = q.getMonth();
-    var d = q.getDate();
-    var y = q.getFullYear();
-    var date = new Date(y,m,d);
-    mydate = new Date('2018-10-05');
-    alert(mydate);
-    if(date<mydate){
-      alert("還沒到")
-    }else{
-      alert("超過");
-    }*/
     /* 如果是查看過去的日誌，會有日期的問題  */
     /* 當日誌的日期小於最小日期，則將日期清空，這樣datarangepicker才不會因為樣式不顯示原本的日期  */
     var daily_working_day = $("#daily_working_day").val();
-    alert(daily_working_day);
-    if (daily_working_day > minDate  ){
+    
+    if ( new Date(daily_working_day) < new Date(minDate) ){
       minDate = "";
     }
-
   
     /* 列表複製 & 新增 + 修改 datarangepicker */
     $("#time_sheet_copy_date, #daily_working_day").daterangepicker({
@@ -282,11 +269,6 @@ $(function () {
       showDropdowns: true,
       locale: {format: 'YYYY-MM-DD'},
     });
-
-    /*if (time.empty()) 
-      $("#search_work_day").val(yyyy + '-' + mm + '-' + dd);
-    else 
-      $("#search_work_day").val(time);*/
 
   });
 </script>
