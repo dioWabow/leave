@@ -45,10 +45,10 @@
                           <option value="">全部</option>
                           @if( !empty($allow_users) )
                           @foreach($allow_users as $allow_user)
-                          <option value="{{$allow_user->fetchUser->id}}" @if(!empty($search['user_id']) && $search['user_id']==$allow_user->fetchUser->id) selected="selected" @endif >{{$allow_user->fetchUser->name}}</option>
+                          <option value="{{$allow_user->fetchUser->id}}" @if(!empty($search['user_id']) && $search['user_id']==$allow_user->fetchUser->id) selected="selected" @endif >{{$allow_user->fetchUser->nickname}}</option>
                           @endforeach
                           @endif
-                          <option value="{{Auth::user()->id}}" @if(!empty($search['user_id']) && $search['user_id']==Auth::user()->id) selected="selected" @endif >{{Auth::user()->name}}</option>
+                          <option value="{{Auth::user()->id}}" @if(!empty($search['user_id']) && $search['user_id']==Auth::user()->id) selected="selected" @endif >{{Auth::user()->nickname}}</option>
                         </select>
                       </label>
                       &nbsp;
@@ -71,10 +71,7 @@
                       &nbsp;
                       <label>
                         關鍵字：
-                        <input type="search" class="form-control" id="search_text" name="search[text]" placeholder="請輸入標籤、標題、內容、備註" style="width:270px" value="">
-                        @if(1!=1)
-                        <input type="search" class="form-control" placeholder="請輸入標籤、標題、內容、備註" name="search[keywords]" style="width:270px" value="@if(count($search)>0){{$search['keywords']}}@endif">
-                        @endif
+                        <input type="search" class="form-control" placeholder="請輸入標籤、標題、內容、備註" name="search[text]" style="width:270px" value="@if(count($search)>0) {{$search['text']}} @endif">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                       </label>
                     </div>
