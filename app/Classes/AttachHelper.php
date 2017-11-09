@@ -17,12 +17,21 @@ class AttachHelper
         $this->upload_path = '/public/';
     }
 
-    public function uploadFiles($name, $folder = 'tmp', $fixedname = '')
+    public function uploadFiles($name, $folder = 'tmp', $fixedname = '', $number='-1')
     {
         $this->_save_folder = $folder . '/';
         $this->_file_path = $this->upload_path . $this->_save_folder;
 
-        $input = $this->getAvailableFiles($name);
+        if ($number != '-1' && !empty($fixedname)) {
+
+            $input = $this->getAvailableFiles($name,$number);
+
+        } else {
+
+            $input = $this->getAvailableFiles($name);
+
+        }
+
         if($input === null) return null;
 
         if (is_array($input)) {
@@ -32,7 +41,7 @@ class AttachHelper
 
                 if (!empty($fixedname)) {
 
-                    $filename = $this->saveFile($file,$fixedname);
+                    $filename = $this->saveFile($file,$fixedname,$number);
 
                 } else {
 
@@ -58,7 +67,7 @@ class AttachHelper
 
             if (!empty($fixedname)) {
 
-                return $this->saveFile($input,$fixedname);
+                return $this->saveFile($input,$fixedname,$number);
 
             } else {
 
@@ -79,25 +88,40 @@ class AttachHelper
         return $this->_file_path;
     }
 
-    private function getAvailableFiles($name) 
+    private function getAvailableFiles($name, $number='-1') 
     {
-        if(Input::hasFile($name)) {
+        if ($number != '-1') {
 
-            $input = Input::file($name);
-            if(is_array($input)) {
+            if(!empty(Input::file('fileupload')[$number])) {
 
-                $result = array();
-                foreach ($input as $key=>$file) {
-
-                    if($file->isValid()) $result[] = $file;
-
-                }
-
-                if(count($result) > 0) return $result;
-
-            }else{
+                $input = Input::file($name)[$number];
 
                 if($input->isValid()) return $input;
+
+            }
+
+        } else {
+
+            if (Input::hasFile($name)) {
+
+                $input = Input::file($name);
+
+                if (is_array($input)) {
+
+                    $result = array();
+                    foreach ($input as $key=>$file) {
+
+                        if($file->isValid()) $result[] = $file;
+
+                    }
+
+                    if(count($result) > 0) return $result;
+
+                } else {
+
+                    if($input->isValid()) return $input;
+
+                }
 
             }
 
