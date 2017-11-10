@@ -177,6 +177,16 @@ Breadcrumbs::register('leaved_user_annual_leave_calculate/view', function ($brea
     $breadcrumbs->push('特休假單列表(離職)','javascript:window.history.go(-1);');
 });
 
+// 搜尋
+Breadcrumbs::register('sheet/search/index', function ($breadcrumbs) {
+    $breadcrumbs->push('搜尋',route('sheet/search/index'));
+});
+
+// 權限設定
+Breadcrumbs::register('sheet/auth/index', function ($breadcrumbs) {
+    $breadcrumbs->push('權限設定',route('sheet/auth/index'));
+});
+
 // 假單詳細頁
 Breadcrumbs::register('leave/view', function ($breadcrumbs,$bread,$leave_name = '') {
 

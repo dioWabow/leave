@@ -108,4 +108,11 @@ class Team extends BaseModel
         $result = self::whereIn('parent_id', $teams_id)->remember(0.2)->get();
         return $result;
     }
+
+    public function fetchParentTeam()
+    {
+        $result = $this::hasMany('App\Team','id','parent_id');
+        return $result;
+    }
+
 }

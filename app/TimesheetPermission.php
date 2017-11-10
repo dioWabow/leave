@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Auth;
+
 class TimesheetPermission extends BaseModel
 {
     /**
@@ -17,6 +19,18 @@ class TimesheetPermission extends BaseModel
         'allow_user_id',
     ];
 
+    public static function getAllPermission()
+    {
+        $result = self::get();
+        return $result;
+    }
+
+    public static function getAllowUserIdByUserId($id)
+    {
+        $result = self::where('user_id', $id)->get();
+        return $result;
+    }
+
     public static function getTimeSheetPermissionByUserId($user_id)
     {
         $result = self::where('user_id',$user_id)->get();
@@ -28,4 +42,5 @@ class TimesheetPermission extends BaseModel
         $result = self::hasOne('App\User','id','allow_user_id');
         return $result;
     }
+
 }

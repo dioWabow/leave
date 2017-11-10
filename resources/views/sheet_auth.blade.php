@@ -7,10 +7,7 @@
   <i class="glyphicon glyphicon-eye-open"></i> 權限設定
   <small>Sheet Authority</small>
   </h1>
-  <ol class="breadcrumb">
-  <li><a href="{{ route('index') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-  <li class="active">權限設定</li>
-  </ol>
+  {{ Breadcrumbs::render('sheet/auth/index') }}
 </section>
 
 <!-- Main content -->
@@ -18,36 +15,63 @@
   <div class="row">
     <div class="col-md-12">
       
-      <form action="{{ route('teams/memberSet')}}" method="POST" name="member_form">
+      <form action="{{ route('sheet/auth/update')}}" method="POST" name="member_form">
         <div class="box box-info">
           <div class="box-body" id="member_set">
 
-          @if(1!=1)
-          @foreach($team_result as $team_data)
-            <div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}" team_name="{{$team_data->name}}"><div class="row">
+          <div class="form-group member_list" id="member_match_manager">
+            <div class="row">
               <div class="col-md-2">
-                @if (empty($team_data->parent_id))
-                  <label>{{$team_data->name}}</label>
-                @else
-                  <label>{{$team_data->parent_name}} / {{$team_data->name}}</label>
-                @endif
+                <label>團隊</label>
               </div>
-              <div class="col-md-10">
-                <select class="form-control select2  team_member" name="teams[{{$team_data->id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員" id="member_{{$team_data->id}}" member_id="{{$team_data->id}}">
-                @foreach($user_result as $user_data)
-                  @if(array_key_exists("$team_data->id", $team_user_list))
-                    @if(in_array($user_data->id, $team_user_list[$team_data->id]))
-                      <option value="{{$user_data->id}}" selected="">{{$user_data->nickname}}</option>
-                    @else
-                      <option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
-                    @endif
-                  @else
-                    <option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
-                  @endif
-                @endforeach
-                </select>
+              <div class="col-md-2">
+                <label>名稱</label>
               </div>
-            </div></div>
+              <div class="col-md-8">
+                  <label>可觀看名單</label>
+              </div>
+            </div>
+          </div>
+          @if(!empty($team_result) )
+          @foreach($team_result as $team_data)
+            @if( !empty($user_team_result[$team_data->id]) )
+              @foreach($user_team_result as $team_id => $user_team)
+              @if( $team_id ==  $team_data->id)
+                @foreach($user_team as $user_id)
+                <div class="form-group member_list" id="member_match_manager" team_id="{{$team_data->id}}" team_name="{{$team_data->name}}">
+                  <div class="row">
+                    <div class="col-md-2">
+                      @if ($user_team->first() == $user_id )
+                        @if (empty($team_data->parent_id))
+                          <label>{{$team_data->name}}</label>
+                        @else
+                          <label>{{$team_data->fetchParentTeam[0]->name}} / {{$team_data->name}}</label>
+                        @endif
+                      @else
+                        <label></label>
+                      @endif
+                    </div>
+                    <div class="col-md-2">
+                      <label>{{$user_result[$user_id]->nickname}}</label>
+                    </div>
+                    <div class="col-md-8">
+                      <select class="form-control select2  team_member" name="teams[{{$user_id}}][]" multiple="multiple" data-placeholder="請選擇隸屬人員" id="member_{{$user_id}}" member_id="{{$user_id}}">
+                        @foreach($user_result as $user_data)
+                        @if( in_array( $user_data->id, $timesheet_permission_result[$user_id]->pluck("allow_user_id")->toArray() ) )
+                          <option value="{{$user_data->id}}" selected>{{$user_data->nickname}}</option>
+                        @elseif($user_data->id == $user_id)
+                        @else
+                          <option value="{{$user_data->id}}">{{$user_data->nickname}}</option>
+                        @endif
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            @endif
+            @endforeach
+          @endif
           @endforeach
           @else
           <div class="form-group member_list" id="member_match_manager"><div class="row">

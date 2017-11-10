@@ -490,19 +490,24 @@ Route::group(['middleware' => 'auth'], function () {
 
     // 工作日誌
     Route::group(['prefix'=>'sheet'], function(){
-        //搜尋
         Route::group(['prefix'=>'search'], function(){
-            Route::get('index',[
+            Route::match(['get', 'post'], 'index',[
                 'as'=>'sheet/search/index',
                 'uses'=> 'SheetSearchController@getIndex',
             ]);
         });
 
-        //權限
         Route::group(['prefix'=>'auth'], function(){
             Route::get('index',[
                 'as'=>'sheet/auth/index',
                 'uses'=> 'SheetAuthController@getIndex',
+            ]);
+        });
+
+        Route::group(['prefix'=>'auth'], function(){
+            Route::post('update',[
+                'as'=>'sheet/auth/update',
+                'uses'=> 'SheetAuthController@postUpdate',
             ]);
         });
 
