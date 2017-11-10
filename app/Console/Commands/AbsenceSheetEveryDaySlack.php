@@ -54,8 +54,8 @@ class AbsenceSheetEveryDaySlack extends Command
 
         if (!$checkHolidayDate && !$checkWeekendDate) {
 
-            /*取得所有可以登入&離值日是空的人的人*/
-            $all_not_leaved_user = User::getAllUserIdWithNotLeaved();
+           /*取得所有可以發送通知 & 離值日是空的人的人*/
+           $all_not_leaved_user = User::getAllUserIdWithSheetNotice();
             
             /*取得今日有請假的user_id*/
             $get_leave_user_id = LeaveDay::getTodayLeave('all_day')->pluck('user_id')->toArray();

@@ -1,3 +1,5 @@
+--2017-11-10 carrie 加上是否通知 欄位 
+ALTER TABLE `users` ADD `sheet_notices` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '是否發送通知' AFTER `annual_hours`;
 --2017-10-18 eno 加大請假理由
 ALTER TABLE `leaves` CHANGE `reason` `reason` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '請假原因';
 --2017-10-17 tony Breadcrumb
