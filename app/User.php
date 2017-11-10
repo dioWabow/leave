@@ -201,10 +201,11 @@ class User extends BaseModel
         return $result;
     }
 
-    public static function getAllUserIdWithNotLeaved()
+    public static function getAllUserIdWithSheetNotice()
     {
         $result = self::whereNull('leave_date')
             ->where('status', '1')
+            ->where('sheet_notices', '1')
             ->get();
         return $result;
     }
