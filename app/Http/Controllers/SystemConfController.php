@@ -144,13 +144,17 @@ class SystemConfController extends Controller
 
         if (Input::hasFile('fileupload')) {
 
-            do {
+            foreach (Input::file('fileupload') as $key => $value) {
+
+                do {
 
                 $filename = 'wabow-team' . rand(10,99);
 
-            } while (is_file(substr_replace(Storage::url('login_pictures/' . $filename. '.' . Input::file('fileupload')['0']->getClientOriginalExtension()), '', 0, 1)));
+                } while (is_file(substr_replace(Storage::url('login_pictures/' . $filename. '.' . strtolower(Input::file('fileupload')[$key]->getClientOriginalExtension())), '', 0, 1)));
 
-            $file_name = AttachHelper::uploadFiles('fileupload','login_pictures',$filename);
+                $file_name[$key] = AttachHelper::uploadFiles('fileupload','login_pictures',$filename,$key);
+
+            }
 
             if (!empty($file_name)) {
 

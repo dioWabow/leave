@@ -895,6 +895,7 @@ $(function () {
           showRemove: false,
           maxFileSize: 8000,
           'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
+          'msgFilesTooMany': '你選了{n}個檔案</b>，最多只能上傳<b>{m}</b>個檔案',
           @if(Auth::getUser()->id != $model->user_id||in_array($model->tag_id,[7,8])) 
           showBrowse: false,
           initialPreviewShowDelete: false,
@@ -966,7 +967,7 @@ $(function () {
               return ext.match(/(mp3|wav)$/i);
           }
       }
-      }).on("fileloaded", function(event, data, previewId, index) {
+      }).on("filebatchselected", function(event, data, previewId, index) {
           $("#leave_view_fileupload").fileinput("upload");
       }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
 
@@ -1468,6 +1469,7 @@ $(function () {
       initialPreviewAsData: true,
       maxFileSize : 8000,
       'msgSizeTooLarge': '檔案："{name}" (<b>{size} KB</b>)，檔案上限超過<b>{maxSize} KB</b>，請重新選擇',
+      'msgFilesTooMany': '你選了{n}個檔案</b>，最多只能上傳<b>{m}</b>個檔案',
       uploadExtraData : {
         "_token": "{{ csrf_token() }}",
       },
@@ -1491,7 +1493,7 @@ $(function () {
       @endforeach
       ],
       @endif
-  }).on("fileloaded", function(event, data, previewId, index) {
+  }).on("filebatchselected", function(event, data, previewId, index) {
       $("#config_fileupload").fileinput("upload");
   }).on('filebatchuploadsuccess', function(event, data, previewId, index) {
   }).on('filepredelete ', function(event, data, previewId, index) {
