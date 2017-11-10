@@ -96,11 +96,6 @@ $(function () {
 $(function () {
   $('#holidies_form').bootstrapValidator({
       message: 'This value is not valid',
-      feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-      },
       fields: {
         'holidies[name]': {
             validators: {
@@ -115,13 +110,19 @@ $(function () {
         },
         'holidies[date]': {
             validators: {
-                notEmpty: {
-                  message: '請選擇日期'
-                },
+              notEmpty: {
+                message: '請選擇日期'
+              },
             }
         },
       }
   });
+
+  /*使用daterangerpicker 後 重新驗證*/
+  $("#holidies_date").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#holidies_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('holidies[date]', 'NOT_VALIDATED', null).validateField('holidies[date]'); //错误提示信息变了  
+  });  
 });
 </script>
 @endif
@@ -593,23 +594,11 @@ $(document).ready(function () {
 @endif
 @if(Request::is('leave_type/create','leave_type/edit/*'))
 <style>
-/* Adjust feedback icon position */
-#leave_type_form .form-control-feedback {
-    right: 15px;
-}
-#leave_type_form .selectContainer .form-control-feedback {
-    right: 25px;
-}
 </style>
 <script>
 $(function () {
   $('#leave_type_form').bootstrapValidator({
       message: 'This value is not valid',
-      feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-      },
       fields: {
         'leave_type[name]': {
             validators: {
@@ -652,15 +641,6 @@ $(function () {
 @endif
 <!-- 我要請假用、協助請假 -->
 @if(Request::is('leave/create','leave_assist/create/*'))
-<style>
-/* Adjust feedback icon position */
-#leave_form .form-control-feedback {
-    right: 15px;
-}
-#leave_form .selectContainer .form-control-feedback {
-    right: 25px;
-}
-</style>
 <script>
 $(function () {
   
@@ -789,6 +769,7 @@ $(function () {
 
   //請假類別檢查
   $input_leave_type_id.on('ifChecked', function(event){
+    
     $leave_timepicker.val('');
     $leave_spent_hours.val('');
     $leave_spent_hours_hide.val('');
@@ -960,32 +941,56 @@ $(function () {
 
   });
 
-  $('#leave_form').bootstrapValidator({
-      message: 'This value is not valid',
-      feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-      },
-      fields: {
-        'leave[timepicker]': {
-            validators: {
-                notEmpty: {
-                  message: '請選擇請假時間'
-                },
-            }
-        },
-        'leave[agent][]': {
-            row: '.col-md-11',
-            validators: {
-                choice: {
-                  min: 1,
-                  message: '請選擇代理人，若無代理人請洽HR'
-                },
-            }
-        },
-      }
-  });
+    
+   /* $(".btn").click(function(e) {
+      e.preventDefault();
+        if ($("#leave_timepicker").val() == '')
+        {
+          $('#group_timepicker').addClass('has-error has-feedback');
+          $('.leave-timepicker').removeAttr("style");
+
+        } else {
+
+          $('#group_timepicker').addClass('has-success');
+          $('#group_timepicker').revmoveClass('has-error');
+          $('.leave-timepicker').removeAttr("style")
+
+        }
+    });*/
+
+    
+      $('#leave_form').bootstrapValidator({
+        message: 'This value is not valid',
+        framework: 'bootstrap',
+        fields: {
+          /*'leave[timepicker]': {
+              validators: {
+                  notEmpty: {
+                    message: '請選擇請假時間'
+                  },
+              }
+          },*/
+          'leave[agent][]': {
+              row: '.leave_user_agent',
+              validators: {
+                  notEmpty: {
+                      message: '請選擇代理人，若無代理人請洽HR'
+                  },
+              }
+          },
+        }
+    });
+      /*使用daterangerpicker 後 重新驗證 
+      $("#leave_timepicker").on("hide.daterangepicker", function(){  
+        var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
+        bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
+      }); */
+
+      /* 當勾選和未勾選時 後 重新驗證 */
+      $("#user_agent").on("ifChecked ifUnchecked", function(){  
+        var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
+        bootstrapValidator.updateStatus('leave[agent][]', 'NOT_VALIDATED', null).validateField('leave[agent][]');
+      }); 
 
 });
 </script>
@@ -1163,7 +1168,6 @@ $(function () {
       }
 
     });
-
   });
 
 </script>
@@ -1193,7 +1197,7 @@ function changeSort(sort){
 <style>
 /* Adjust feedback icon position */
 #user_form .form-control-feedback {
-    right: 15px;
+    right: 30px;
 }
 #user_form .selectContainer .form-control-feedback {
     right: 25px;
@@ -1227,14 +1231,9 @@ $(function () {
 
     $('#user_form').bootstrapValidator({
       message: 'This value is not valid',
-      feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-      },
       fields: {
         'user[employee_no]': {
-            row: '.col-md-3',
+            row: '.user-number',
             validators: {
                 notEmpty: {
                   message: '請輸入員工編號'
@@ -1249,7 +1248,7 @@ $(function () {
             }
         },
         'user[name]': {
-            row: '.col-md-3',
+            row: '.user-name',
             validators: {
                 notEmpty: {
                   message: '請輸入姓名'
@@ -1261,7 +1260,7 @@ $(function () {
             }
         },
         'user[nickname]': {
-            row: '.col-md-3',
+            row: '.user-nickname',
             validators: {
               notEmpty: {
                 message: '請輸入稱呼'
@@ -1269,7 +1268,7 @@ $(function () {
             }
         },
         'user[birthday]': {
-            row: '.col-md-5',
+            row: '.user-birthday',
             validators: {
               notEmpty: {
                 message: '請輸入生日'
@@ -1277,7 +1276,7 @@ $(function () {
             }
         },
         'user[enter_date]': {
-            row: '.col-md-1',
+            row: '.user-enter-date',
             validators: {
               notEmpty: {
                 message: '請輸入到職日期'
@@ -1285,7 +1284,7 @@ $(function () {
             }
         },
         'user[arrive_time]': {
-            row: '.col-md-3',
+            row: '.user-arrive-time',
             validators: {
               notEmpty: {
                 message: '請輸入到職時間'
@@ -1293,7 +1292,7 @@ $(function () {
             }
         },
         'user[agent][]': {
-            row: '.col-md-5',
+          row: '.user-agent',
             validators: {
               notEmpty: {
                 message: '至少選擇一個代理人'
@@ -1301,7 +1300,7 @@ $(function () {
             }
         },
         'user[team][]': {
-            row: '.col-md-5',
+            row: '.user-team',
             validators: {
               notEmpty: {
                 message: '至少選擇一個團隊'
@@ -1309,7 +1308,7 @@ $(function () {
             }
         },
         'avatar': {
-            row: '.col-md-5',
+            row: '.user-avater',
             validators: {
               file: {
                 extension: 'jpeg,jpg,png',
@@ -1320,6 +1319,15 @@ $(function () {
         },
       }
   });
+  /*使用daterangerpicker 後 重新驗證*/
+  $("#user_birthday").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#user_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('user[birthday]', 'NOT_VALIDATED', null).validateField('user[birthday]');
+  });  
+  $("#user_enter_date").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#user_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('user[enter_date]', 'NOT_VALIDATED', null).validateField('user[enter_date]');
+  });  
 });
 </script>
 @endif
@@ -1760,7 +1768,6 @@ $(function () {
     $option.initialPreviewAsData = true;
     @endif
 
-    $("#config_company_logo").fileinput($option);
 });
 </script>
 

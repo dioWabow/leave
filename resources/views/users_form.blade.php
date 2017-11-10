@@ -55,33 +55,39 @@
 							<input type="radio" name="user[status]" class="flat-red" value="0" @if ($model->status == "0") checked="checked" @endif>
 							已離職
 						</label>&emsp;
-					</div>
+					</div>	
 				</div></div>
-				<div class="form-group"><div class="row">
-					<div class="col-md-1 form-group {{ $errors->has('user.employee_no') ? 'has-error' : '' }}">
-						<label>員工編號</label>
+				<div class=""><div class="row">
+					<div class="user-number form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.employee_no') ? 'has-error' : '' }}">
+							<label>員工編號</label>
+						</div>
+						<div class="col-md-3 form-group {{ $errors->has('user.employee_no') ? 'has-error' : '' }}">
+							<input type="text" id="user_number" name="user[employee_no]" class="form-control pull-right" value="{{$model->employee_no}}">
+							<span class="text-danger">{{ $errors->first('user.employee_no') }}</span>
+						</div>
 					</div>
-					<div class="col-md-3 form-group {{ $errors->has('user.employee_no') ? 'has-error' : '' }}">
-						<input type="text" id="user_number" name="user[employee_no]" class="form-control pull-right" value="{{$model->employee_no}}">
-						<span class="text-danger">{{ $errors->first('user.employee_no') }}</span>
+					<div class="user-name form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.name') ? 'has-error' : '' }}">
+							<label>姓名</label>
+						</div>
+						<div class="col-md-3 form-group {{ $errors->has('user.name') ? 'has-error' : '' }}">
+							<input type="text" id="user_name" name="user[name]" class="form-control pull-right" value="{{$model->name}}">
+							<span class="text-danger">{{ $errors->first('user.name') }}</span>
+						</div>
 					</div>
-					<div class="col-md-1 form-group {{ $errors->has('user.name') ? 'has-error' : '' }}">
-						<label>姓名</label>
-					</div>
-					<div class="col-md-3 form-group {{ $errors->has('user.name') ? 'has-error' : '' }}">
-						<input type="text" id="user_name" name="user[name]" class="form-control pull-right" value="{{$model->name}}">
-						<span class="text-danger">{{ $errors->first('user.name') }}</span>
-					</div>
-					<div class="col-md-1 form-group {{ $errors->has('user.nickname') ? 'has-error' : '' }}">
-						<label>稱呼</label>
-					</div>
-					<div class="col-md-3 form-group {{ $errors->has('user.nickname') ? 'has-error' : '' }}">
-						<input type="text" id="user_nickname" name="user[nickname]" class="form-control pull-right" value="{{$model->nickname}}">
-						<span class="text-danger">{{ $errors->first('user.nickname') }}</span>
+					<div class="user-nickname form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.nickname') ? 'has-error' : '' }}">
+							<label>稱呼</label>
+						</div>
+						<div class="col-md-3 form-group {{ $errors->has('user.nickname') ? 'has-error' : '' }}">
+							<input type="text" id="user_nickname" name="user[nickname]" class="form-control pull-right" value="{{$model->nickname}}">
+							<span class="text-danger">{{ $errors->first('user.nickname') }}</span>
+						</div>
 					</div>
 				</div></div>
 
-				<div class="form-group"><div class="row">
+				<div class=""><div class="row">
 					<div class="col-md-1">
 						<label>性別</label>
 					</div>
@@ -95,23 +101,27 @@
 							女孩
 						</label>&emsp; 
 					</div>
-					<div class="col-md-1 form-group {{ $errors->has('user.birthday') ? 'has-error' : '' }}">
-            <label>生日</label>
-          </div>
-          <div class="col-md-5 form-group {{ $errors->has('user.birthday') ? 'has-error' : '' }}">
-            <input type="text" id="user_birthday" name="user[birthday]" class="form-control pull-right single-date" date="{{$model->birthday}}" value="{{$model->birthday}}">
-						<span class="text-danger">{{ $errors->first('user.birthday') }}</span>
+					<div class="user-birthday form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.birthday') ? 'has-error' : '' }}">
+							<label>生日</label>
+						</div>
+						<div class="col-md-5 form-group {{ $errors->has('user.birthday') ? 'has-error' : '' }}">
+							<input type="text" id="user_birthday" name="user[birthday]" class="form-control pull-right single-date" date="{{$model->birthday}}" value="{{$model->birthday}}">
+							<span class="text-danger">{{ $errors->first('user.birthday') }}</span>
+						</div>
           </div>
         </div></div>
 
-        <div class="form-group"><div class="row">
-          <div class="col-md-1 form-group {{ $errors->has('user.enter_date') ? 'has-error' : '' }}">
-            <label>到職日</label>
-          </div>
-          <div class="col-md-3 form-group {{ $errors->has('user.enter_date') ? 'has-error' : '' }}">
-            <input type="text" id="user_enter_date" name="user[enter_date]" class="form-control pull-right single-date" date="@if($model->enter_date){{date('Y-m-d', strtotime($model->enter_date))}}@endif" value="@if($model->enter_date){{date('Y-m-d', strtotime($model->enter_date))}}@endif">
-						<span class="text-danger">{{ $errors->first('user.enter_date') }}</span>
-          </div>
+        <div class=""><div class="row">
+					<div class="user-enter-date form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.enter_date') ? 'has-error' : '' }}">
+							<label>到職日</label>
+						</div>
+						<div class="col-md-3 form-group {{ $errors->has('user.enter_date') ? 'has-error' : '' }}">
+							<input type="text" id="user_enter_date" name="user[enter_date]" class="form-control pull-right single-date" date="@if($model->enter_date){{date('Y-m-d', strtotime($model->enter_date))}}@endif" value="@if($model->enter_date){{date('Y-m-d', strtotime($model->enter_date))}}@endif">
+							<span class="text-danger">{{ $errors->first('user.enter_date') }}</span>
+						</div>
+					</div>
           <div class="col-md-1 form-group {{ $errors->has('user.leave_date') ? 'has-error' : '' }}">
             <label>離職日</label>
           </div>
@@ -124,62 +134,68 @@
               </span>
             </div>
           </div>
-          <div class="col-md-1 form-group {{ $errors->has('user.arrive_time') ? 'has-error' : '' }}">
-						<label>上班時間</label>
+					<div class="user-arrive-time form-group">
+						<div class="col-md-1 form-group {{ $errors->has('user.arrive_time') ? 'has-error' : '' }}">
+							<label>上班時間</label>
+						</div>
+						<div class="col-md-3 form-group {{ $errors->has('user.arrive_time') ? 'has-error' : '' }}">
+							<select class="form-control select2" id="user_work_time" name="user[arrive_time]" data-placeholder="請選擇上班時段">
+								<option value="0900" @if($model->arrive_time=="0900")selected="selected"@endif>09:00-18:00</option>
+								<option value="0930" @if($model->arrive_time=="0930")selected="selected"@endif>09:30-18:30</option>
+							</select>
+						</div>
+						<span class="text-danger">{{ $errors->first('user.arrive_time') }}</span>
 					</div>
-					<div class="col-md-3 form-group {{ $errors->has('user.arrive_time') ? 'has-error' : '' }}">
-						<select class="form-control select2" id="user_work_time" name="user[arrive_time]" data-placeholder="請選擇上班時段">
-							<option value="0900" @if($model->arrive_time=="0900")selected="selected"@endif>09:00-18:00</option>
-							<option value="0930" @if($model->arrive_time=="0930")selected="selected"@endif>09:30-18:30</option>
-						</select>
-					</div>
-					<span class="text-danger">{{ $errors->first('user.arrive_time') }}</span>
 				</div></div>
 				
-				<div class="form-group" id="group_timepicker"><div class="row">
-					<div class="col-md-1">
-						<label>代理人</label>
+				<div class="" id="group_timepicker"><div class="row">
+					<div class="user-agent form-group">
+						<div class="col-md-1">
+							<label>代理人</label>
+						</div>
+						<div class="col-md-5">
+							<select class="form-control select2" id="user_agent" name="user[agent][]" multiple="multiple" data-placeholder="請選擇職務代理人">
+								@foreach($teams as $team)
+								<optgroup label="{{$team->name}}">
+									@foreach($team_users as $team_user)
+											@if($team->id==$team_user->team_id)
+												<option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->fetchUser->nickname}}</option>
+											@endif
+									@endforeach
+								</optgroup>
+								@endforeach
+								@if(count($user_no_team)>0)
+									<optgroup label="NOGROUP">
+										@foreach($user_no_team as $user)
+											<option value="{{$user->id}}" @if(in_array($user->id,$user_agents))selected="selected"@endif>{{$user->nickname}}</option>
+										@endforeach
+									</optgroup>
+								@endif
+							</select>
+						</div>
 					</div>
-					<div class="col-md-5">
-
-						<select class="form-control select2" id="user_agent" name="user[agent][]" multiple="multiple" data-placeholder="請選擇職務代理人">
-              @foreach($teams as $team)
-              <optgroup label="{{$team->name}}">
-                @foreach($team_users as $team_user)
-                    @if($team->id==$team_user->team_id)
-                      <option value="{{$team_user->user_id}}" @if(in_array($team_user->user_id,$user_agents))selected="selected"@endif>{{$team_user->fetchUser->nickname}}</option>
-                    @endif
-                @endforeach
-              </optgroup>
-              @endforeach
-              @if(count($user_no_team)>0)
-                <optgroup label="NOGROUP">
-                  @foreach($user_no_team as $user)
-                    <option value="{{$user->id}}" @if(in_array($user->id,$user_agents))selected="selected"@endif>{{$user->nickname}}</option>
-                  @endforeach
-                </optgroup>
-              @endif
-						</select>
-					</div>
-					<div class="col-md-1">
-						<label>團隊</label>
-					</div>
-					<div class="col-md-5">
-						<select class="form-control select2" id="user_agent" name="user[team][]" multiple="multiple" data-placeholder="請選擇團隊">
-              @foreach($teams as $team)
-              <option value="{{$team->id}}" @if(in_array($team->id,$user_teams))selected="selected"@endif>{{$team->name}}</option>
-              @endforeach
-						</select>
+					<div class="user-team form-group">
+						<div class="col-md-1">
+							<label>團隊</label>
+						</div>
+						<div class="col-md-5">
+							<select class="form-control select2" id="user_agent" name="user[team][]" multiple="multiple" data-placeholder="請選擇團隊">
+								@foreach($teams as $team)
+								<option value="{{$team->id}}" @if(in_array($team->id,$user_teams))selected="selected"@endif>{{$team->name}}</option>
+								@endforeach
+							</select>
+						</div>
 					</div>
 				</div></div>
-				<div class="form-group"><div class="row">
-					<div class="col-md-1 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
-						<label>頭像</label>
-					</div>
-					<div class="col-md-11 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
-						<input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
-						<span class="text-danger">{{ $errors->first('user.avatar') }}</span>
-					</div>
+
+				<div class="user-avater form-group"><div class="row">
+						<div class="col-md-1 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
+							<label>頭像</label>
+						</div>
+						<div class="col-md-11 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
+							<input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
+							<span class="text-danger">{{ $errors->first('user.avatar') }}</span>
+						</div>
 				</div></div>
 			</div>
 			<div class="box-footer">

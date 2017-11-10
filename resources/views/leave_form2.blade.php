@@ -46,7 +46,7 @@
 						@foreach( $types as $type)
 							@if($type->exception!='paid_sick' && $type->exception!='natural_disaster')
 								<label>
-									<input type="radio" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
+									<input type="radio" id="leave_type_id" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
 									{{$type->name}}
 								</label>&emsp;
 							@endif
@@ -60,14 +60,14 @@
 					<div class="col-md-1">
 						<label>日期</label>
 					</div>
-					<div class="col-md-11">
+					<div class="leave-timepicker  col-md-11">
 						<div class="input-group">
 							<div class="input-group-addon">
 								<i class="fa fa-clock-o"></i>
 							</div>
 							<input type="text" id="leave_timepicker" name="leave[timepicker]" value="{{$model->timepicker}}" class="form-control pull-right" date="{{$model->timepicker}}">
 						</div>
-						<span class="text-danger">{{ $errors->first('leave.timepicker') }}</span>
+						<span  style="" class="text-danger">@if($errors->has('leave.timepicker')){{ $errors->first('leave.timepicker') }} @else 請選擇日期1 @endif</span>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -123,6 +123,7 @@
 					</div>
 				</div></div>
 				<div class="form-group {{ $errors->has('leave.agent') ? 'has-error' : '' }}" ><div class="row">
+        <div class="leave_user_agent form-group">
 					<div class="col-md-1">
 						<label>代理人</label>
 					</div>
@@ -130,7 +131,7 @@
 						@forelse($user_agents as $user_agent)
 							@if($user_agent->fetchUser->status != 0)
 								<label>
-								<input type="checkbox" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->fetchUser->id}}"> 
+								<input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->fetchUser->id}}"> 
 									{{$user_agent->fetchUser->nickname}}
 								</label>&emsp;
 							@endif
@@ -143,8 +144,9 @@
             </br>
             <span class="text-danger">{{ $errors->first('leave.agent') }}</span>
 					</div>
-          
+					</div>
 				</div></div>
+
 				@if(Auth::getUser()->id == $user->id)
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">
