@@ -334,21 +334,12 @@ $(function () {
 $(function () {
   $('#daily_list_form').bootstrapValidator({
       message: 'This value is not valid',
-      feedbackIcons: {
-        valid: 'glyphicon glyphicon-ok',
-        invalid: 'glyphicon glyphicon-remove',
-        validating: 'glyphicon glyphicon-refresh'
-      },
       fields: {
         'daily[working_day]': {
             validators: {
                 notEmpty: {
                   message: '請填寫工作日期'
                 },
-                date: {
-                  format: 'YYYY-MM-DD',
-                  message: '日期格式不正確'
-                }
             }
         },
         'daily[project_id]': {
@@ -370,8 +361,6 @@ $(function () {
                 regexp: {
                   regexp: /^\S+$/,
                   message: '不可輸入空格',
-                  /*regexp: /^[^"']+$/,
-                  message: '不可輸入單引號',*/
                 }
             }
         },
@@ -394,6 +383,13 @@ $(function () {
         },
       }
   });
+
+  /*使用daterangerpicker 後 重新驗證 */
+  $("#daily_working_day").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#daily_list_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('daily[working_day]', 'NOT_VALIDATED', null).validateField('daily[working_day]');
+  }); 
+
 });
 </script>
 @endif
