@@ -30,7 +30,7 @@ class SheetSearchController extends Controller
 
         } else {
 
-            if (!empty($request->input('page') && !empty($request->session()->get('timesheets')))) {
+            if ( !empty( $request->input('page') ) && !empty($request->session()->get('timesheets'))) {
 
                 $search = $request->session()->get('timesheets.search.0');
                 $order_by = $request->session()->get('timesheets.order_by.0');
