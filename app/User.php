@@ -31,6 +31,7 @@ class User extends BaseModel
         'order_way',
         'pagesize',
         'annual_hours',
+        'sheet_notices',
     ];
 
     protected $attributes = [
