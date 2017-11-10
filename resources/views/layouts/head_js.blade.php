@@ -394,8 +394,13 @@ $(function () {
         },
       }
   });
+
+  $('#daily_tag').tagit();
+
 });
+
 </script>
+
 @endif
 
 <!-- 團隊設定用 -->
