@@ -5,10 +5,10 @@ namespace Illuminate\Foundation\Testing;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Traits\Macroable;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * @mixin \Illuminate\Http\Response
@@ -172,6 +172,45 @@ class TestResponse
     }
 
     /**
+     * Asserts that the response contains the given cookie and is expired.
+     *
+     * @param  string  $cookieName
+     * @return $this
+     */
+    public function assertCookieExpired($cookieName)
+    {
+        PHPUnit::assertNotNull(
+            $cookie = $this->getCookie($cookieName),
+            "Cookie [{$cookieName}] not present on response."
+        );
+
+        $expiresAt = Carbon::createFromTimestamp($cookie->getExpiresTime());
+
+        PHPUnit::assertTrue(
+            $expiresAt->lessThan(Carbon::now()),
+            "Cookie [{$cookieName}] is not expired, it expires at [{$expiresAt}]."
+        );
+
+        return $this;
+    }
+
+    /**
+     * Asserts that the response does not contains the given cookie.
+     *
+     * @param  string  $cookieName
+     * @return $this
+     */
+    public function assertCookieMissing($cookieName)
+    {
+        PHPUnit::assertNull(
+            $this->getCookie($cookieName),
+            "Cookie [{$cookieName}] is present on response."
+        );
+
+        return $this;
+    }
+
+    /**
      * Get the given cookie from the response.
      *
      * @param  string  $cookieName
@@ -242,12 +281,13 @@ class TestResponse
      * Assert that the response is a superset of the given JSON.
      *
      * @param  array  $data
+     * @param  bool  $strict
      * @return $this
      */
-    public function assertJson(array $data)
+    public function assertJson(array $data, $strict = false)
     {
         PHPUnit::assertArraySubset(
-            $data, $this->decodeResponseJson(), false, $this->assertJsonMessage($data)
+            $data, $this->decodeResponseJson(), $strict, $this->assertJsonMessage($data)
         );
 
         return $this;
@@ -546,15 +586,16 @@ class TestResponse
      *
      * @param  string|array  $keys
      * @param  mixed  $format
+     * @param  string  $errorBag
      * @return $this
      */
-    public function assertSessionHasErrors($keys = [], $format = null)
+    public function assertSessionHasErrors($keys = [], $format = null, $errorBag = 'default')
     {
         $this->assertSessionHas('errors');
 
         $keys = (array) $keys;
 
-        $errors = app('session.store')->get('errors');
+        $errors = app('session.store')->get('errors')->getBag($errorBag);
 
         foreach ($keys as $key => $value) {
             if (is_int($key)) {
@@ -565,6 +606,19 @@ class TestResponse
         }
 
         return $this;
+    }
+
+    /**
+     * Assert that the session has the given errors.
+     *
+     * @param  string  $errorBag
+     * @param  string|array  $keys
+     * @param  mixed  $format
+     * @return $this
+     */
+    public function assertSessionHasErrorsIn($errorBag, $keys = [], $format = null)
+    {
+        return $this->assertSessionHasErrors($keys, $format, $errorBag);
     }
 
     /**
