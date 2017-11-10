@@ -1463,10 +1463,10 @@ class LeaveHelper
 
                                 foreach ( $agent_list as $key => $agent) {
 
-                                    SlackHelper::notify(new AgentLeaveSuccessSlack( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
+                                    SlackHelper::notify(new AgentLeaveSuccessSlack( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) , $agent->fetchUser->nickname )  );
                                     $EmailHelper = new EmailHelper;
                                     $EmailHelper->to = $agent->fetchUser->email;
-                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
+                                    $EmailHelper->notify(new AgentLeaveSuccessEmail( $leave->fetchUser->nickname , TimeHelper::changeViewTime( $leave->start_time , $leave->end_time , $agent->fetchUser->id ) ) );
 
                                 }
 
