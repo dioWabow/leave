@@ -20,7 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\LeavedUserAnnualHours::class,
         Commands\DailyWaitProve::class,
         Commands\EveryDayAnnualHours::class,
-        Commands\AbsenceSheetEveryDay::class,
+        Commands\AbsenceSheetEveryDaySlack::class,
     ];
 
     /**
@@ -48,6 +48,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('Report:AnnualHoursEveryDay')->dailyAt('00:05'); //每天早上00:05算當日特休
 
         $schedule->command('Report:AbsenceSheetEveryDay')->dailyAt('10:30'); //每天早上10:30算當日沒填的
+	
+	$schedule->command('Slack:AbsenceSheetEveryDaySlack')->dailyAt('18:00'); //每天晚上18:00提醒未填寫日誌的人
     }
     
     /**
