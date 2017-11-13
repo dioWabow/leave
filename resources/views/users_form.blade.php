@@ -21,7 +21,7 @@
 				<h3 class="box-title">{{$model->name}} 基本資料修改</h3>
 			</div>
 			<div class="box-body">
-				<div class="form-group"><div class="row">
+				<div class="row"><div class="form-group">
 					<div class="col-md-1">
 						<label>角色權限</label>
 					</div>
@@ -57,7 +57,7 @@
 						</label>&emsp;
 					</div>	
 				</div></div>
-				<div class=""><div class="row">
+			  <div class="row"><div>
 					<div class="user-number form-group">
 						<div class="col-md-1 form-group {{ $errors->has('user.employee_no') ? 'has-error' : '' }}">
 							<label>員工編號</label>
@@ -87,7 +87,7 @@
 					</div>
 				</div></div>
 
-				<div class=""><div class="row">
+				<div class="row"><div>
 					<div class="col-md-1">
 						<label>性別</label>
 					</div>
@@ -112,7 +112,7 @@
           </div>
         </div></div>
 
-        <div class=""><div class="row">
+        <div class="row"><div>
 					<div class="user-enter-date form-group">
 						<div class="col-md-1 form-group {{ $errors->has('user.enter_date') ? 'has-error' : '' }}">
 							<label>到職日</label>
@@ -148,7 +148,7 @@
 					</div>
 				</div></div>
 				
-				<div class="" id="group_timepicker"><div class="row">
+				<div class="row"><div id="group_timepicker">
 					<div class="user-agent form-group">
 						<div class="col-md-1">
 							<label>代理人</label>
@@ -187,15 +187,16 @@
 						</div>
 					</div>
 				</div></div>
-
-				<div class="user-avater form-group"><div class="row">
-						<div class="col-md-1 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
-							<label>頭像</label>
-						</div>
-						<div class="col-md-11 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
-							<input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
-							<span class="text-danger">{{ $errors->first('user.avatar') }}</span>
-						</div>
+				<div class="row"><div>
+        <div class="user-avater form-group">
+          <div class="col-md-1 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
+            <label>頭像</label>
+          </div>
+          <div class="col-md-11 form-group {{ $errors->has('user.avatar') ? 'has-error' : '' }}">
+            <input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
+            <span class="text-danger">{{ $errors->first('user.avatar') }}</span>
+          </div>
+        </div>
 				</div></div>
 			</div>
 			<div class="box-footer">
