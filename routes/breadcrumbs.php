@@ -91,7 +91,7 @@ Breadcrumbs::register('user', function ($breadcrumbs) {
 
 // 員工管理 - 修改資料
 Breadcrumbs::register('user/edit', function ($breadcrumbs) {
-    $breadcrumbs->parent('setting');
+    $breadcrumbs->parent('user');
     $breadcrumbs->push('基本資料修改');
 });
 
