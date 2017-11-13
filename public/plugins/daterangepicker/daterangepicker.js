@@ -57,6 +57,9 @@
         this.autoUpdateInput = true;
         this.alwaysShowCalendars = false;
         this.ranges = {};
+        this.leave_compute = false;
+        this.minute_select = false;
+        this.minute_option = '00';
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -247,6 +250,15 @@
 
         if (typeof options.timePicker24Hour === 'boolean')
             this.timePicker24Hour = options.timePicker24Hour;
+
+        if (typeof options.leave_compute === 'boolean')
+            this.leave_compute = options.leave_compute;
+
+        if (typeof options.minute_select === 'boolean')
+            this.minute_select = options.minute_select;
+
+        if (typeof options.minute_option === 'number')
+            this.minute_option = options.minute_option;
 
         if (typeof options.autoApply === 'boolean')
             this.autoApply = options.autoApply;
@@ -487,8 +499,12 @@
             if (this.timePicker && this.timePickerIncrement)
                 this.endDate.minute(Math.round(this.endDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
 
-            if (this.endDate.isBefore(this.startDate))
+            if (this.endDate.isBefore(this.startDate)) {
+
                 this.endDate = this.startDate.clone();
+                this.container.find('.right .hourselect').val(this.container.find('.left .hourselect').val());
+            
+            }
 
             if (this.maxDate && this.endDate.isAfter(this.maxDate))
                 this.endDate = this.maxDate;
@@ -870,6 +886,13 @@
             var start = this.timePicker24Hour ? 0 : 1;
             var end = this.timePicker24Hour ? 23 : 12;
 
+            if (this.leave_compute) {
+
+                var start = 9;
+                var end = 18;
+
+            }
+
             for (var i = start; i <= end; i++) {
                 var i_in_24 = i;
                 if (!this.timePicker24Hour)
@@ -899,24 +922,33 @@
 
             html += ': <select class="minuteselect">';
 
-            for (var i = 0; i < 60; i += this.timePickerIncrement) {
-                var padded = i < 10 ? '0' + i : i;
-                var time = selected.clone().minute(i);
+            if (this.minute_select) {
+                var padded = this.minute_option < 10 ? '0' + this.minute_option : this.minute_option;
+                html += '<option value="' + this.minute_option + '">' + padded + '</option>';
 
-                var disabled = false;
-                if (minDate && time.second(59).isBefore(minDate))
-                    disabled = true;
-                if (maxDate && time.second(0).isAfter(maxDate))
-                    disabled = true;
+            } else {
 
-                if (selected.minute() == i && !disabled) {
-                    html += '<option value="' + i + '" selected="selected">' + padded + '</option>';
-                } else if (disabled) {
-                    html += '<option value="' + i + '" disabled="disabled" class="disabled">' + padded + '</option>';
-                } else {
-                    html += '<option value="' + i + '">' + padded + '</option>';
+                for (var i = 0; i < 60; i += this.timePickerIncrement) {
+                    var padded = i < 10 ? '0' + i : i;
+                    var time = selected.clone().minute(i);
+
+                    var disabled = false;
+                    if (minDate && time.second(59).isBefore(minDate))
+                        disabled = true;
+                    if (maxDate && time.second(0).isAfter(maxDate))
+                        disabled = true;
+
+                    if (selected.minute() == i && !disabled) {
+                        html += '<option value="' + i + '" selected="selected">' + padded + '</option>';
+                    } else if (disabled) {
+                        html += '<option value="' + i + '" disabled="disabled" class="disabled">' + padded + '</option>';
+                    } else {
+                        html += '<option value="' + i + '">' + padded + '</option>';
+                    }
                 }
+
             }
+            
 
             html += '</select> ';
 
