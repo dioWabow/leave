@@ -1804,6 +1804,52 @@ $(function () {
   });
 </script>
 @endif
+@if(Request::is('sheet/project/create','sheet/project/edit/*'))
+<script>
+$(function () {
+  //var sheet_project_team = ($("#sheet_project_team" + id));
+
+  //alert(sheet_project_team);
+
+  $('#sheet_project_form')
+  .find('[name="sheet_project[team][]"]')
+       .change(function(e) {
+         $('#sheet_project_form').bootstrapValidator('revalidateField', 'sheet_project[team][]');
+       })
+       .end()
+  .bootstrapValidator({
+      message: 'This value is not valid',
+      excluded: ':disabled',
+      fields: {
+        'sheet_project[title]': {
+            validators: {
+                notEmpty: {
+                  message: '專案項目必填'
+                },
+            }
+        },
+        'sheet_project[team][]': {
+            validators: {
+                choice: {
+                    min: 1,
+                    message: 'Please choose 2 - 4 programming languages you are good at'
+                }
+            }
+        },
+      }
+  });
+
+    /* 當勾選和未勾選時 後 重新驗證 */
+    $("#sheet_project_team").on("ifChecked ifUnchecked", function(){  
+      var bootstrapValidator = $("#sheet_project_form").data('bootstrapValidator');  
+      bootstrapValidator.updateStatus('sheet_project[team][]', 'NOT_VALIDATED', null).validateField('sheet_project[team][]');
+    }); 
+});
+
+</script>
+
+@endif
+
 @if(Request::is('sheet/calendar*'))
   <script>
 

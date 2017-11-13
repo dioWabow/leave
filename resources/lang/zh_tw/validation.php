@@ -197,6 +197,12 @@ return [
             'required' => '請填工作時數',
             'numeric' => '工作時數必須為數字',
         ],
+        'sheet_project.title' => [
+            'required' => '專案項目必填',
+        ],
+        'sheet_project.team' => [
+            'required' => '團隊必選',
+        ],
     ],
 
     /*

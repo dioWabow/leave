@@ -133,7 +133,7 @@
           <a href="{{ route('absense_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
           </a>
         </li>
-        <li @if(Request::is('sheet/project/index'))class="active" @endif>
+        <li @if(Request::is('sheet/project/*'))class="active" @endif>
           <a href="{{ route('sheet/project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
