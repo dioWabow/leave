@@ -7,7 +7,7 @@
 	<i class="fa fa-anchor"></i> 國定假日/補班
 	<small>Holiday Setting</small>
   </h1>
-  {{ Breadcrumbs::render('holidies') }}
+  {{ Breadcrumbs::render('holidies/index') }}
 </section>
 
 <!-- Main content -->
@@ -20,7 +20,7 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="dataTables_length">
-								<form name="frmSearch" id="frmSearch" action="{{ route('holidies') }}" method="POST">
+								<form name="frmSearch" id="frmSearch" action="{{ route('holidies/index') }}" method="POST">
 			                    <input id="sort" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
 			                    <input id="sort_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
 									<label>
@@ -53,7 +53,7 @@
 												關鍵字：
 												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" @if(count($search) > 0)value="{{$search['name']}}@endif">
 												<!-- 搜尋按鈕 -->
-												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												<button type="submit" class="btn btn-default"><i class="fa fa-calendar-plus-o"></i></button>
 												<!-- 新增按鈕 -->
 												<a href="{{ route('holidies/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
 											</label>

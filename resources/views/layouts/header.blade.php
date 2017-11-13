@@ -241,7 +241,7 @@
           </a>
           <ul class="treeview-menu">
             <li  @if(Request::is('leave_type/*')) class="active" @endif><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies/index') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview @if(Request::is('report/*','annual_report/*','annual_leave_calculate/*','leaved_user_annual_leave_calculate/*'))active @endif">

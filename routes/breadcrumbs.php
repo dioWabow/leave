@@ -113,14 +113,14 @@ Breadcrumbs::register('leave_type/edit', function ($breadcrumbs,$action) {
 });
 
 // 國定假日/補班
-Breadcrumbs::register('holidies', function ($breadcrumbs) {
+Breadcrumbs::register('holidies/index', function ($breadcrumbs) {
     $breadcrumbs->parent('leave_setting');
-    $breadcrumbs->push('國定假日/補班', route('holidies'));
+    $breadcrumbs->push('國定假日/補班', route('holidies/index'));
 });
 
 // 國定假日/補班 - 修改資料
 Breadcrumbs::register('holidies/edit', function ($breadcrumbs,$action) {
-    $breadcrumbs->parent('holidies');
+    $breadcrumbs->parent('holidies/index');
     $breadcrumbs->push('資料'.$action);
 });
 

@@ -185,7 +185,7 @@ Route::group(['middleware' => 'auth'], function () {
     # 國定假日/補班
     Route::group(['prefix'=>'holidies'], function(){
         Route::any( 'index', [
-            'as' => 'holidies',
+            'as' => 'holidies/index',
             'uses' => 'HolidayController@getIndex',
         ]);
 
@@ -208,6 +208,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('insert', [
             'as' => 'holidies/insert',
             'uses' => 'HolidayController@postInsert',
+        ]);
+
+        Route::get('insert_api', [
+            'as' => 'holidies/insert_api',
+            'uses' => 'HolidayController@postInsertFromTaipeiData',
         ]);
 
         Route::post('update', [
