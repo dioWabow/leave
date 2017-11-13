@@ -24,7 +24,7 @@ class DailyRequest extends FormRequest
     public function rules()
     {
         return [
-            'daily.items' => 'required|regex:/^\S+$/|max:100',
+            'daily.items' => 'required|regex:/^[^　]+$/|max:100',
             'daily.working_day' => 'required|date',
             'daily.project_id' => 'required|numeric',
             'daily.description' => 'nullable',
