@@ -140,9 +140,9 @@ class UserController extends Controller
      public function postUpdate(UserRequest $request) 
      {
         $input = $request->input('user');
+        $input['sheet_notices']  = empty($input['sheet_notices']) || $input['sheet_notices'] != 'on' ? 0 : 1 ;
         $input['job_seek'] = 0;
         $remove_image = $request->input('remove_file');
-
         if ($input['status'] == 2) {
 
             $input['job_seek'] = 1;
@@ -207,7 +207,7 @@ class UserController extends Controller
             $input["avatar"] = NULL;
 
         }
-
+        
         $model->fill($input);
         if ($model->save()) {
 

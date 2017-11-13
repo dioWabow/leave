@@ -173,6 +173,14 @@
 						<input id="user_fileupload" name="avatar" class="file-loading" type="file" multiple data-min-file-count="0">
 					</div>
 				</div></div>
+				<div class="form-group"><div class="row">
+					<div class="col-md-1">
+						<label>是否接收通知</label>
+					</div>
+					<div class="col-md-11">
+						<input type="checkbox" name="user[sheet_notices]" class="user_sheet_notices" data-toggle="toggle" data-on="是" data-off="否" @if ($model->sheet_notices == 1) checked="checked" @endif>
+					</div>
+				</div></div>
 			</div>
 			<div class="box-footer">
 				<div class="pull-right">

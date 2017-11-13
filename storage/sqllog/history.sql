@@ -1,3 +1,7 @@
+--2017-11-10 carrie 加上是否通知 欄位 
+ALTER TABLE `users` ADD `sheet_notices` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '是否發送通知' AFTER `annual_hours`;
+--2017-10-31 carrie id 加上 auto_increment 
+ALTER TABLE `absences` CHANGE `id` `id` INT(7) NOT NULL AUTO_INCREMENT COMMENT 'id';
 --2017-11-02 tony 新增system_memo欄位
 ALTER TABLE `leaves_responses` ADD `system_memo` VARCHAR(300) NULL DEFAULT NULL AFTER `memo`;
 --2017-11-02 tony 新增銷假tag
@@ -53,7 +57,6 @@ CREATE TABLE `absences` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '建立時間',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新時間'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --2017-10-25 carrie 日誌 url 可以選填
 ALTER TABLE `timesheets` CHANGE `url` `url` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '連結';
 --2017-10-25 carrie 日誌 id 自動新增

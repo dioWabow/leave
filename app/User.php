@@ -31,6 +31,7 @@ class User extends BaseModel
         'order_way',
         'pagesize',
         'annual_hours',
+        'sheet_notices',
     ];
 
     protected $attributes = [
@@ -200,6 +201,15 @@ class User extends BaseModel
     {
         $result = self::where('employee_no',$employee_no)
             ->where('id' ,'!=' , $id)
+            ->get();
+        return $result;
+    }
+
+    public static function getAllUserIdWithSheetNotice()
+    {
+        $result = self::whereNull('leave_date')
+            ->where('status', '1')
+            ->where('sheet_notices', '1')
             ->get();
         return $result;
     }

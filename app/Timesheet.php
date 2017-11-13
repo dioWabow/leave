@@ -23,18 +23,12 @@ class TimeSheet extends BaseModel
         'working_day',
         'url',
         'remark',
-        'order_by',
-        'order_way',
-        'pagesize',
     ];
 
     protected $attributes = [
-        'order_by' => 'id',
-        'order_way' => 'DESC',
+        'order_by' => "id",
+        'order_way' => "DESC",
         'pagesize' => '25',
-        'start_time' => '',
-        'end_time' => '',
-        'exception' => '',
     ];
 
     /**
@@ -124,6 +118,12 @@ class TimeSheet extends BaseModel
         return $result;
     }
 
+    public static function getTimeSheetUserIdByNotLeavedUserId($user_id, $date)
+    {
+        $result = self::where('user_id', $user_id)->where('working_day', $date)->sum('hour');
+        return $result;
+    }
+    
     public function fetchUser()
     {
         $result = $this->hasOne('App\User', 'id' , 'user_id');

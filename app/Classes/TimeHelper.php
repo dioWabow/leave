@@ -230,7 +230,7 @@ class TimeHelper
         $result = Carbon::now()->format($type);
         return $result;
     }
-
+    
     /** 
      * 取得日期
      * 判斷該日期是否可以新增或修改日誌
@@ -246,7 +246,6 @@ class TimeHelper
         $confirm_date = ($working_day->lte($future) && $working_day->gte($past))? true : false ;
         return $confirm_date;
     }
-
     /** 
      * 取得日期
      * 判斷該日期是否為補班日
@@ -266,6 +265,19 @@ class TimeHelper
         }
 
         return $confirm_holiday_date;
+    }
 
+    /** 
+     * 取得日期
+     * 判斷該日期是否為假日
+     * 
+     *  @return true/false
+     */
+
+    public function checkWeekendDate()
+    {
+        $today = Carbon::now();
+        $result = $today->isWeekend();
+        return $result;
     }
 }

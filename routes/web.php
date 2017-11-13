@@ -327,12 +327,10 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'agent_approve/edit',
             'uses'=> 'AgentApproveController@getEdit',
         ]);
-
         Route::any('leave_detail/{id}', [
             'as' => 'agent_approve/leave_detail',
             'uses' => 'LeaveController@getEdit',
         ]);
-        
     });
 
     // 我要放假
@@ -500,14 +498,14 @@ Route::group(['middleware' => 'auth'], function () {
                 'as' => 'sheet/daily/update',
                 'uses' => 'sheet\DailyController@postUpdate',
             ]);
-
-            Route::get('delete/{id}',[
+	    
+	    Route::get('delete/{id}',[
                 'as' => 'sheet/daily/delete',
                 'uses' => 'sheet\DailyController@postDelete',
             ]);
-
         });
     });
+
 
     // 工作日誌
     Route::group(['prefix'=>'sheet'], function(){
