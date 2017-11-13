@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Auth;
-
 class TimesheetPermission extends BaseModel
 {
     /**
@@ -37,9 +35,9 @@ class TimesheetPermission extends BaseModel
         return $result;
     }
 
-    public function fetchUser() 
+    public function fetchUser()
     {
-        $result = self::hasOne('App\User','id','allow_user_id');
+        $result = $this->hasOne('App\User', 'id' , 'allow_user_id');
         return $result;
     }
 

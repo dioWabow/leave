@@ -29,9 +29,12 @@
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/skins/skin-blue-light.min.css">
 <link rel="stylesheet" href="{{route('root_path')}}/dist/css/wabow.css">
 
+<!-- tag-it -->
+<link href="{{route('root_path')}}/plugins/tag_it/css/jquery.tagit.css" rel="stylesheet" type="text/css">
+<link href="{{route('root_path')}}/plugins/tag_it/css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
 <!-- toastr -->
 <link rel="stylesheet" href="{{route('root_path')}}/plugins/toastr/build/toastr.css">
-
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 2.2.3 -->
 <script src="{{route('root_path')}}/plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -65,6 +68,13 @@
 <script src="{{route('root_path')}}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 
 <script src="{{route('root_path')}}/plugins/fullcalendar/locale-all.js"></script>
+
+<!-- jquery Validate -->
+<link rel="stylesheet" href="{{route('root_path')}}/plugins/BootstrapValidator/css/bootstrapValidator.css"/>
+<script src="{{route('root_path')}}/plugins/BootstrapValidator/js/bootstrapValidator.js"></script>
+
+<!-- tag-it -->
+<script src="{{route('root_path')}}/plugins/tag_it/js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
 <!-- toastr -->
 <script src="{{route('root_path')}}/plugins/toastr/toastr.js"></script>

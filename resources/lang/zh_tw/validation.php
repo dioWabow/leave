@@ -179,6 +179,24 @@ return [
         'leave.timepicker' => [
             'required' => '請選擇請假時間',
         ],
+
+        'daily.items' => [
+            'required' => '請填寫標題',
+            'regex' => '標題請不要輸入全形空白',
+            'max' => '標題不可超過100字元',
+        ],
+        'daily.working_day' => [
+            'required' => '請填工作日期',
+            'date' => '請填正確日期',
+        ],
+        'daily.project_id' => [
+            'required' => '請填專案名稱',
+            'numeric' => '專案名稱只能是數字',
+        ],
+        'daily.hour' => [
+            'required' => '請填工作時數',
+            'numeric' => '工作時數必須為數字',
+        ],
     ],
 
     /*

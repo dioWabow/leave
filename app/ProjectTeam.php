@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 class ProjectTeam extends BaseModel
 {
     protected $fillable = [
@@ -23,9 +21,21 @@ class ProjectTeam extends BaseModel
         return $result;
     }
 
+    public static function getProjectIdByTeamId($team_id)
+    {
+        $result = self::where('team_id', $team_id)->get();
+        return $result;
+    }
+
     public function fetchTeam()
     {
         $result = self::hasOne('App\Team','id','team_id');
+        return $result;
+    }
+
+    public function fetchProject()
+    {
+        $result = self::hasOne('App\Project','id','project_id');
         return $result;
     }
 }

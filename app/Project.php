@@ -2,13 +2,13 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Pagination\Paginator;
 
 class Project extends BaseModel
 {
 	protected $fillable = [
-		'id',
+	'id',
         'name',
         'available',
         'pagesize',

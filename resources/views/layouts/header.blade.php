@@ -118,7 +118,7 @@
           <a href="{{ route('index') }}"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
         </li>
         <li class="header">TIMESHEET</li>
-        <li @if(Request::is('sheet/daily/index'))class="active" @endif>
+        <li @if(Request::is('sheet/daily/*'))class="active" @endif>
           <a href="{{ route('sheet/daily/index') }}"><i class="fa fa-calendar-plus-o"></i> <span>日誌</span></a>
         </li>
         <li @if(Request::is('sheet/calendar/view*'))class="active" @endif>

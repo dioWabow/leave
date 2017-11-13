@@ -2,12 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 
-class Timesheet extends Model
+class TimeSheet extends BaseModel
 {
+    /**
+    * 與Model關聯的table
+    *
+    * @var string
+    */
+    protected $table = 'timesheets';
+
     protected $fillable = [
         'project_id',
         'tag',
@@ -18,6 +23,8 @@ class Timesheet extends Model
         'working_day',
         'url',
         'remark',
+        'order_by',
+        'order_way',
         'pagesize',
     ];
 
@@ -29,7 +36,45 @@ class Timesheet extends Model
         'end_time' => '',
         'exception' => '',
     ];
-    
+
+    /**
+     * 搜尋table多個資料
+     * 若有多個傳回第一個
+     *
+     * @param  array   $where     搜尋條件
+     * @param  int     $page      頁數(1為開始)
+     * @param  int     $pagesize  每頁筆數
+     * @return 資料object/false
+     */
+    public function search($where = [])
+    {
+        $query = $this->OrderedBy();
+        foreach ($where as $key => $value) {
+
+            if (Schema::hasColumn('timesheets', $key) && isset($value)) {
+
+                $query->where($key, $value);
+
+            }
+
+        }
+
+        $result = $query->paginate($this->pagesize);
+        return $result;
+    }
+
+    public function scopeOrderedBy($query)
+    {
+        $result = $query->orderBy($this->order_by, $this->order_way);
+        return $result;
+    }
+
+    public static function getTimeSheetById($data)
+    {
+        $result = self::whereIn('id', $data)->get();
+        return $result;
+    }
+
     public static function getTimeSheetsByUserIdAndPeriod($user_id, $start_date = null, $end_date = null)
     {
         $query = self::where('user_id', $user_id)
@@ -88,12 +133,6 @@ class Timesheet extends Model
     public function fetchProject()
     {
         $result = $this->hasOne('App\Project', 'id' , 'project_id');
-        return $result;
-    }
-
-    public function scopeOrderedBy($query)
-    {
-        $result = $query->orderBy($this->order_by, $this->order_way);
         return $result;
     }
 }

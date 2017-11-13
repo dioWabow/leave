@@ -159,17 +159,114 @@ $(function () {
 </script>
 @endif
 
-<!--工作日至調整用-->
-@if(Request::is('sheet/daily/index'))
+<!--工作日誌調整用-->
+@if(Request::is('sheet/daily/*'))
 <script>
-$(function () {
-    $('.single-date').daterangepicker({
-        alwaysShowCalendars: true,
-        singleDatePicker: true,
-        showDropdowns: true,
-        locale: {format: 'YYYY-MM-DD'}
+  $(function () {
+    /*算前7天的日期*/
+    var minDate = new Date();
+    minDate.setDate(minDate.getDate() - 7);
+    var minDate = moment(minDate).format("YYYY-MM-DD");
+    
+    /*算後1天的日期*/
+    var maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 1);
+    var maxDate = moment(maxDate).format("YYYY-MM-DD");
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var $search_work_day = $("#search_work_day");
+    var time = $search_work_day.val();
+    if(dd <= 9) dd = '0'+ dd;
+    if(mm <= 9) mm = '0'+ mm;
+    
+    /*按下今日，變換日期*/
+    $(".search-today").on("click", function(){
+      $("#search_work_day").val(yyyy + '-' + mm + '-' + dd)
     });
-});
+
+    /*checkbox 樣式*/
+    $('input[type="checkbox"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+
+    $(".clickable-row").click(function(e) {
+      if($(e.target).hasClass("ignore")) return;
+
+      var ignore = ["input", "a", "button", "textarea", "label"];
+      var clicked = e.target.nodeName.toLowerCase();
+      if($.inArray(clicked, ignore) > -1) return;
+      
+      window.location = $(this).data("href");
+    });
+
+    /* checkbox 選取全部 效果 */
+    $("#checkall").on("ifChecked ifUnchecked",function(evant){
+      if(evant.type == "ifChecked")
+        $(".check").iCheck("check");
+      else
+        $(".check").iCheck("uncheck");
+    });
+
+    /*確認check有勾選才可打開核准按鈕*/
+    $("input[name='time_sheet[id][]']").on("ifChanged", function () {
+      if ($('.check:checked').length > 0) {
+        $("#time_sheet_copy_date,#time_sheet_copy_to").prop("disabled", false);
+      } else {
+          $("#time_sheet_copy_date,#time_sheet_copy_to").prop("disabled", true);
+      }
+    });
+
+    /* 排序  */
+    $(".sort").on("click", function(){
+
+      var $sortname = $(this).attr("sortname");
+      var $order_by = "{{ $model->order_by }}";
+      var $order_way = "{{ $model->order_way }}";
+      
+      $("#order_by").val($sortname);
+
+      if ($order_by == $sortname && $order_way == "DESC") {
+        $("#order_way").val("ASC");
+      } else {
+        $("#order_way").val("DESC");
+      }
+      
+      $("#frmOrderby").submit();
+
+    });
+
+    /* 如果是查看過去的日誌，會有日期的問題  */
+    /* 當日誌的日期小於最小日期，則將日期清空，這樣datarangepicker才不會因為樣式不顯示原本的日期  */
+    var daily_working_day = $("#daily_working_day").val();
+    
+    if ( new Date(daily_working_day) < new Date(minDate) ){
+      minDate = "";
+    }
+  
+    /* 列表複製 & 新增 + 修改 datarangepicker */
+    $("#time_sheet_copy_date, #daily_working_day").daterangepicker({
+      alwaysShowCalendars: true,
+      singleDatePicker: true,
+      showDropdowns: true,
+      minDate: minDate,
+      maxDate: maxDate,
+      locale: {format: 'YYYY-MM-DD'}
+    });  
+    
+
+    /* 前往日期的 datarangepicker */
+    $("#search_work_day").daterangepicker({
+      alwaysShowCalendars: true,
+      singleDatePicker: true,
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+    });
+
+  });
 </script>
 <style>
   .rwd-table {
@@ -227,6 +324,68 @@ $(function () {
 }
 }
 </style>
+@endif
+@if(Request::is('sheet/daily/create','sheet/daily/edit/*'))
+<script>
+$(function () {
+  $('#daily_list_form').bootstrapValidator({
+      message: 'This value is not valid',
+      fields: {
+        'daily[working_day]': {
+            validators: {
+                notEmpty: {
+                  message: '請填寫工作日期'
+                },
+            }
+        },
+        'daily[project_id]': {
+            validators: {
+                notEmpty: {
+                  message: '至少選擇一項專案名稱'
+                },
+            }
+        },
+       'daily[items]': {
+            validators: {
+                notEmpty: {
+                  message: '請填寫標題'
+                },
+                stringLength: {
+                  max: 100,
+                  message: '標題不可超過100個字'
+                },
+                regexp: {
+                  regexp: /^[^　]+$/,
+                  message: '標題請不要輸入全形空白',
+                }
+            }
+        },
+        'daily[hour]': {
+            validators: {
+                notEmpty: {
+                    message: '請填寫工作時數'
+                },
+                numeric: {
+                  message: '請填寫數字',
+                }
+            }
+        },
+      }
+  });
+
+
+  /*使用daterangerpicker 後 重新驗證 */
+  $("#daily_working_day").on("hide.daterangepicker", function(){
+    var bootstrapValidator = $("#daily_list_form").data('bootstrapValidator');
+    bootstrapValidator.updateStatus('daily[working_day]', 'NOT_VALIDATED', null).validateField('daily[working_day]');
+  });
+
+  $('#daily_tag').tagit();
+
+});
+
+</script>
+
 @endif
 
 <!-- 團隊設定用 -->
