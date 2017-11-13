@@ -384,14 +384,19 @@ $(function () {
       }
   });
 
+
   /*使用daterangerpicker 後 重新驗證 */
-  $("#daily_working_day").on("hide.daterangepicker", function(){  
-    var bootstrapValidator = $("#daily_list_form").data('bootstrapValidator');  
+  $("#daily_working_day").on("hide.daterangepicker", function(){
+    var bootstrapValidator = $("#daily_list_form").data('bootstrapValidator');
     bootstrapValidator.updateStatus('daily[working_day]', 'NOT_VALIDATED', null).validateField('daily[working_day]');
-  }); 
+  });
+
+  $('#daily_tag').tagit();
 
 });
+
 </script>
+
 @endif
 
 <!-- 團隊設定用 -->

@@ -131,7 +131,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-tags"></i>
 								</div>
-									<input type="text" class="form-control daily-tag" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+									<input type="text" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤" @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif></input>
 							</div>
 						</div>
 					</div>
