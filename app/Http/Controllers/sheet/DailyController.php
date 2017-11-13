@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\sheet;
+namespace App\Http\Controllers\Sheet;
 
 use TimeHelper;
 use App\TimeSheet;
