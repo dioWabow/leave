@@ -303,8 +303,6 @@ class DailyController extends Controller
             $data['items'] = $str_transfer;
             
             return $data;
-            // $acd = preg_replace('/\s/', '', $input['items']);
-            // $aa = preg_replace('/\s(?=)/', '', $input['items']); 
         }
     }
 }

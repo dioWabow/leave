@@ -29,7 +29,7 @@ class DailyRequest extends FormRequest
             'daily.project_id' => 'required|numeric',
             'daily.description' => 'nullable',
             'daily.hour' => 'required|numeric',
-            'daily.url' => 'nullable|url',
+            'daily.url' => 'nullable',
             'daily.remark' => 'nullable',
             
         ];

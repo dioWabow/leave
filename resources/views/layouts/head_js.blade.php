@@ -359,8 +359,8 @@ $(function () {
                   message: '標題不可超過100個字'
                 },
                 regexp: {
-                  regexp: /^\S+$/,
-                  message: '不可輸入空格',
+                  regexp: /^[^　]+$/,
+                  message: '標題請不要輸入全形空白',
                 }
             }
         },
@@ -371,13 +371,6 @@ $(function () {
                 },
                 numeric: {
                   message: '請填寫數字',
-                }
-            }
-        },
-        'daily[url]': {
-            validators: {
-                uri: {
-                  message: '填寫正確連結',
                 }
             }
         },
