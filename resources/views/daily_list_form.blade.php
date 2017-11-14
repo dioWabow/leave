@@ -14,9 +14,9 @@
 	@endif
   </h1>
 	@if($model->id > 0)
-	  {{ Breadcrumbs::render('sheet/daily/edit','修改') }}
+		{{ Breadcrumbs::render('sheet/daily/edit','修改') }}
 	@else
-  	{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
+  		{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
 	@endif
 </section>
 

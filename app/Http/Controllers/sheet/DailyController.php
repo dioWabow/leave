@@ -25,7 +25,7 @@ class DailyController extends Controller
     {
         //先取得現在的使用者
         $this->current_user = $request->current_user;
-        
+
     }
 
     /**
@@ -35,11 +35,16 @@ class DailyController extends Controller
      */
     public function getIndex (Request $request)
     {
-        /* 判斷傳過來的copy_date */
-        if (!empty($request->old('time_sheet'))){
+        
+        /* 取得新增&修改日誌的日期，完畢後，回到該日期頁面 */
+        if (!empty($request->old('daily'))) {
 
-            $time_sheet = $request->old('time_sheet');
-            $copy_date = $time_sheet['copy_date'];
+            $working_day = old('daily')['working_day'];
+            
+        } elseif (!empty($request->old('time_sheet'))){
+
+            /* 判斷傳過來的copy_date */
+            $copy_date = $request->old('time_sheet')['copy_date'];
             
         }
         
@@ -71,6 +76,11 @@ class DailyController extends Controller
                 
                 $search['working_day'] = $copy_date;
                 
+                /** 判斷是不是新增過來的日期 */
+            } elseif (!empty($working_day)) {
+
+                $search['working_day'] = $working_day;
+
             } else {
 
                 $search['working_day'] = Carbon::now()->format('Y-m-d');
@@ -171,13 +181,13 @@ class DailyController extends Controller
             return Redirect::back()->withInput()->withErrors(['msg' => '不可以新增小於七天前，大於一天後']);
 
         }
-
+        
         //儲存資料
         $model = new TimeSheet;
         $model->fill($input);
         if ($model->save()) {
 
-            return Redirect::route('sheet/daily/index')->with('success', '新增成功 !');
+            return Redirect::route('sheet/daily/index')->withInput()->with('success', '新增成功 !');
 
         } else {
 
@@ -253,7 +263,7 @@ class DailyController extends Controller
         
         if ($model->save()) {
 
-            return Redirect::route('sheet/daily/index')->with('success', '更新成功 !');
+            return Redirect::route('sheet/daily/index')->withInput()->with('success', '更新成功 !');
 
         } else {
 

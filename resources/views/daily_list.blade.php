@@ -7,7 +7,7 @@
 	<i class="fa fa-calendar-plus-o"></i> @if(count($search)>0) {{ $search['working_day'] }}@else{{ TimeHelper::getNowDate() }}@endif
 	<small>Work Sheet</small>
   </h1>
-	{{ Breadcrumbs::render('sheet/daily') }}
+	 {{ Breadcrumbs::render('sheet/daily') }} 
 </section>
 
 <!-- Main content -->
