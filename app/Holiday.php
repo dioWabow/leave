@@ -66,6 +66,25 @@ class Holiday extends BaseModel
         return $result;
     }
 
+    public static function isDayExist($date)
+    {
+        $query = self::OrderedBy();
+
+        $query->where("date", date("Y-m-d",strtotime( $date ) ) );
+
+        $result = $query->count();
+
+        if (!empty($result)) {
+
+            return true;
+
+        }else{
+
+            return false;
+
+        }
+    }
+
     public function scopeOrderedBy($query)
     {
         $result = $query->orderBy($this->order_by, $this->order_way);

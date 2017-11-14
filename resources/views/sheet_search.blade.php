@@ -95,7 +95,7 @@
                     <tbody>
                       @forelse ($dataProvider as $value)
                       <tr class='clickable-row' data-href="{{ route('sheet/daily/edit', [ 'id' => $value->id ]) }}">
-                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl($value->fetchUser->avatar)}}" class="img-circle" alt="Tony" width="50px">{{$value->fetchUser->name}}</td>
+                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl($value->fetchUser->avatar)}}" class="img-circle" alt="{{$value->fetchUser->nickname}}" width="50px">{{$value->fetchUser->nickname}}</td>
                         <td>{{$value->working_day}}</td>
                         <td>{{$value->fetchProject->name}}</td>
                         <td>{{$value->items}}</td>

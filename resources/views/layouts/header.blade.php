@@ -129,6 +129,7 @@
           <a href="{{ route('sheet/search/index') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
           </a>
         </li>
+        @if( Auth::hasHr() )
         <li @if(Request::is('sheet/absense_report/index'))class="active" @endif>
           <a href="{{ route('absense_report/index') }}"><i class="glyphicon glyphicon-thumbs-down"></i> <span>缺填日誌</span>
           </a>
@@ -141,6 +142,7 @@
           <a href="{{ route('sheet/auth/index') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
           </a>
         </li>
+        @endif
         <li class="header">PERSONAL</li>
         <!-- Optionally, you can add icons to the links -->
         <li @if(Request::is('leave/*'))class="active" @endif>
@@ -241,7 +243,7 @@
           </a>
           <ul class="treeview-menu">
             <li  @if(Request::is('leave_type/*')) class="active" @endif><a href="{{ route('leave_type') }}"><i class="fa fa-circle-o"></i>假別管理</a></li>
-            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
+            <li @if(Request::is('holidies/*'))class="active" @endif><a href="{{ route('holidies/index') }}"><i class="fa fa-circle-o"></i>國定假日/補班</a></li>
           </ul>
         </li>
             <li class="treeview @if(Request::is('report/*','annual_report/*','annual_leave_calculate/*','leaved_user_annual_leave_calculate/*'))active @endif">

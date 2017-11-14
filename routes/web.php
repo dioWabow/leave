@@ -185,7 +185,7 @@ Route::group(['middleware' => 'auth'], function () {
     # 國定假日/補班
     Route::group(['prefix'=>'holidies'], function(){
         Route::any( 'index', [
-            'as' => 'holidies',
+            'as' => 'holidies/index',
             'uses' => 'HolidayController@getIndex',
         ]);
 
@@ -327,10 +327,12 @@ Route::group(['middleware' => 'auth'], function () {
             'as'=>'agent_approve/edit',
             'uses'=> 'AgentApproveController@getEdit',
         ]);
+
         Route::any('leave_detail/{id}', [
             'as' => 'agent_approve/leave_detail',
             'uses' => 'LeaveController@getEdit',
         ]);
+        
     });
 
     // 我要放假
@@ -471,37 +473,37 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::any('index/{current_user?}',[
                 'as'=>'sheet/daily/index',
-                'uses'=> 'sheet\DailyController@getIndex',
+                'uses'=> 'Sheet\DailyController@getIndex',
             ]);
 
             Route::get('create',[
                 'as'=>'sheet/daily/create',
-                'uses'=> 'sheet\DailyController@getCreate',
+                'uses'=> 'Sheet\DailyController@getCreate',
             ]);
 
             Route::post('insert',[
                 'as' => 'sheet/daily/insert',
-                'uses' => 'sheet\DailyController@postInsert',
+                'uses' => 'Sheet\DailyController@postInsert',
             ]);
 
             Route::post('copy',[
                 'as' => 'sheet/daily/copy',
-                'uses' => 'sheet\DailyController@postCopy',
+                'uses' => 'Sheet\DailyController@postCopy',
             ]);
 
             Route::get('edit/{id}',[
                 'as'=>'sheet/daily/edit',
-                'uses'=> 'sheet\DailyController@getEdit',
+                'uses'=> 'Sheet\DailyController@getEdit',
             ]);
 
             Route::post('update',[
                 'as' => 'sheet/daily/update',
-                'uses' => 'sheet\DailyController@postUpdate',
+                'uses'=> 'Sheet\DailyController@postUpdate',
             ]);
 	    
 	    Route::get('delete/{id}',[
                 'as' => 'sheet/daily/delete',
-                'uses' => 'sheet\DailyController@postDelete',
+                'uses' => 'Sheet\DailyController@postDelete',
             ]);
         });
     });
@@ -512,21 +514,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix'=>'search'], function(){
             Route::match(['get', 'post'], 'index',[
                 'as'=>'sheet/search/index',
-                'uses'=> 'SheetSearchController@getIndex',
+                'uses'=> 'Sheet\SheetSearchController@getIndex',
             ]);
         });
 
         Route::group(['prefix'=>'auth'], function(){
             Route::get('index',[
                 'as'=>'sheet/auth/index',
-                'uses'=> 'SheetAuthController@getIndex',
+                'uses'=> 'Sheet\SheetAuthController@getIndex',
             ]);
         });
 
         Route::group(['prefix'=>'auth'], function(){
             Route::post('update',[
                 'as'=>'sheet/auth/update',
-                'uses'=> 'SheetAuthController@postUpdate',
+                'uses'=> 'Sheet\SheetAuthController@postUpdate',
             ]);
         });
 
