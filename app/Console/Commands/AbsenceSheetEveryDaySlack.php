@@ -6,7 +6,7 @@ use TimeHelper;
 use SlackHelper;
 use App\Absence;
 use App\LeaveDay;
-use App\TimeSheet;
+use App\Timesheet;
 use App\User;
 use App\Notifications\AbsenceSheetSlack;
 
@@ -64,7 +64,7 @@ class AbsenceSheetEveryDaySlack extends Command
                 
                 if (!in_array($value->id, $get_leave_user_id)) {
 
-                    $get_user_id_sum_hour = TimeSheet::getTimeSheetUserIdByNotLeavedUserId($value->id, $now_day);
+                    $get_user_id_sum_hour = Timesheet::getTimesheetUserIdByNotLeavedUserId($value->id, $now_day);
                     
                     if ($get_user_id_sum_hour <= 0) {
 

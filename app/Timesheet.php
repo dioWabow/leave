@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Support\Facades\Schema;
 
-class TimeSheet extends BaseModel
+class Timesheet extends BaseModel
 {
     /**
     * 與Model關聯的table
@@ -63,13 +63,13 @@ class TimeSheet extends BaseModel
         return $result;
     }
 
-    public static function getTimeSheetById($data)
+    public static function getTimesheetById($data)
     {
         $result = self::whereIn('id', $data)->get();
         return $result;
     }
 
-    public static function getTimeSheetsByUserIdAndPeriod($user_id, $start_date = null, $end_date = null)
+    public static function getTimesheetsByUserIdAndPeriod($user_id, $start_date = null, $end_date = null)
     {
         $query = self::where('user_id', $user_id)
                 ->whereBetween('working_day' , [$start_date, $end_date])
@@ -79,7 +79,7 @@ class TimeSheet extends BaseModel
         return $result;
     }
 
-    public function searchForTimeSheetSearch($where = [],$allow_users_id)
+    public function searchForTimesheetSearch($where = [],$allow_users_id)
     {
         $query = self::OrderedBy();
         foreach ($where as $key => $value) {
@@ -118,7 +118,7 @@ class TimeSheet extends BaseModel
         return $result;
     }
 
-    public static function getTimeSheetUserIdByNotLeavedUserId($user_id, $date)
+    public static function getTimesheetUserIdByNotLeavedUserId($user_id, $date)
     {
         $result = self::where('user_id', $user_id)->where('working_day', $date)->sum('hour');
         return $result;

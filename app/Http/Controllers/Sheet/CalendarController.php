@@ -17,7 +17,7 @@ class CalendarController extends Controller
         $chosed_user_id = intval($request->user_id);
         $chosed_user_id = $chosed_user_id ?: Auth::user()->id;
 
-        $timesheetpermissions = TimesheetPermission::getTimeSheetPermissionByUserId(Auth::user()->id);
+        $timesheetpermissions = TimesheetPermission::getTimesheetPermissionByUserId(Auth::user()->id);
         
         if ($chosed_user_id != Auth::user()->id && !in_array($chosed_user_id, $timesheetpermissions->pluck('allow_user_id')->toArray())) {
 
@@ -41,7 +41,7 @@ class CalendarController extends Controller
         $end_time = date('Y-m-d', $request['end']);
         $user_id = $request['id'];
 
-        $timesheets = Timesheet::getTimeSheetsByUserIdAndPeriod($user_id,$start_time,$end_time);
+        $timesheets = Timesheet::getTimesheetsByUserIdAndPeriod($user_id,$start_time,$end_time);
 
         return json_encode(
             $timesheets

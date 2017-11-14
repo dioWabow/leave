@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Sheet;
 
 use TimeHelper;
-use App\TimeSheet;
+use App\Timesheet;
 use App\UserTeam;
 use App\Project;
 use App\TimesheetPermission;
@@ -92,7 +92,7 @@ class DailyController extends Controller
             
         }
         
-        $model = new TimeSheet;
+        $model = new Timesheet;
         $dataProvider = $model->fill($order_by)->search($search);
         
         return view('daily_list', compact(
@@ -113,7 +113,7 @@ class DailyController extends Controller
         /*再取得該team可使用的project*/ 
         $project = ProjectTeam::getProjectIdByTeamId($get_team_id);
 
-        $model = new TimeSheet;
+        $model = new Timesheet;
 
         if (!empty($request->old('daily'))) {
 
@@ -173,7 +173,7 @@ class DailyController extends Controller
         }
 
         //儲存資料
-        $model = new TimeSheet;
+        $model = new Timesheet;
         $model->fill($input);
         if ($model->save()) {
 
@@ -195,7 +195,7 @@ class DailyController extends Controller
     public function postCopy(Request $request)
     {
         $time_sheet = $request->input('time_sheet');
-        $get_sheet = TimeSheet::getTimeSheetById($time_sheet['id']);
+        $get_sheet = Timesheet::getTimesheetById($time_sheet['id']);
         
         if (TimeHelper::checkEditSheetDate($time_sheet['copy_date'])) {
 
@@ -204,7 +204,7 @@ class DailyController extends Controller
                 //如果要先往前新增日誌，小時必須是0
                 $hour = (Carbon::parse($time_sheet['copy_date'])->gt(Carbon::parse())) ? '0' : $value->hour ;
 
-                $model = new TimeSheet;
+                $model = new Timesheet;
                 $model->fill([
                     'project_id' => $value->project_id,
                     'tag' => $value->tag,
@@ -247,7 +247,7 @@ class DailyController extends Controller
         $input = self::checkDataValue($input);
         
         //更新資料
-        $model = new TimeSheet;
+        $model = new Timesheet;
         $model = $this->loadModel($input['id']);
         $model->fill($input);
         
@@ -276,7 +276,7 @@ class DailyController extends Controller
 
     private function loadModel($id)
     {
-        $model = TimeSheet::find($id);
+        $model = Timesheet::find($id);
 
         if ($model===false) {
 

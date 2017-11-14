@@ -69,8 +69,8 @@ class SheetSearchController extends Controller
 
         $allow_users_id[] = Auth::user()->id;
 
-        $model = new TimeSheet;
-        $dataProvider = $model->fill($order_by)->searchForTimeSheetSearch($search,$allow_users_id);
+        $model = new Timesheet;
+        $dataProvider = $model->fill($order_by)->searchForTimesheetSearch($search,$allow_users_id);
 
         if ( empty($search) && empty($order_by) && empty($request->input('page') ) ) {
             $dataProvider = [];
