@@ -958,39 +958,44 @@ $(function () {
         }
     });*/
 
-    
-      $('#leave_form').bootstrapValidator({
-        message: 'This value is not valid',
-        framework: 'bootstrap',
-        fields: {
-          /*'leave[timepicker]': {
-              validators: {
-                  notEmpty: {
-                    message: '請選擇請假時間'
-                  },
-              }
-          },*/
-          'leave[agent][]': {
-              row: '.leave_user_agent',
-              validators: {
-                  notEmpty: {
-                      message: '請選擇代理人，若無代理人請洽HR'
-                  },
-              }
-          },
-        }
+  
+    $('#leave_form').bootstrapValidator({
+      message: 'This value is not valid',
+      fields: {
+        'leave[timepicker]': {
+            validators: {
+                notEmpty: {
+                  message: '請選擇請假時間'
+                },
+            }
+        },
+        'leave[agent][]': {
+            row: '.leave_user_agent',
+            validators: {
+                notEmpty: {
+                    message: '請選擇代理人，若無代理人請洽HR'
+                },
+            }
+        },
+      }
     });
-      /*使用daterangerpicker 後 重新驗證 
-      $("#leave_timepicker").on("hide.daterangepicker", function(){  
-        var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
-        bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
-      }); */
+    /*使用daterangerpicker 後 重新驗證 
+    $("#leave_timepicker").on("hide.daterangepicker", function(){  
+      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
+      bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
+    }); */
 
-      /* 當勾選和未勾選時 後 重新驗證 */
-      $("#user_agent").on("ifChecked ifUnchecked", function(){  
-        var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
-        bootstrapValidator.updateStatus('leave[agent][]', 'NOT_VALIDATED', null).validateField('leave[agent][]');
-      }); 
+    /* 當勾選和未勾選時 後 重新驗證 *
+    $(".leave-type-id").on("ifChecked ifUnchecked", function(){ 
+      /*alert($(this).val()); 
+      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
+      bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
+
+    }); */
+    $(".user-agent").on("ifChecked ifUnchecked", function(){  
+      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
+      bootstrapValidator.updateStatus('leave[agent][]', 'NOT_VALIDATED', null).validateField('leave[agent][]');
+    }); 
 
 });
 </script>

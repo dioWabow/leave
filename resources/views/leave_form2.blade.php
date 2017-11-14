@@ -46,7 +46,7 @@
 						@foreach( $types as $type)
 							@if($type->exception!='paid_sick' && $type->exception!='natural_disaster')
 								<label>
-									<input type="radio" id="leave_type_id" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
+									<input type="radio" id="leave_type_id" name="leave[type_id]" class="flat-red leave-type-id"  @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
 									{{$type->name}}
 								</label>&emsp;
 							@endif
@@ -67,7 +67,7 @@
 							</div>
 							<input type="text" id="leave_timepicker" name="leave[timepicker]" value="{{$model->timepicker}}" class="form-control pull-right" date="{{$model->timepicker}}">
 						</div>
-						<span  style="" class="text-danger">@if($errors->has('leave.timepicker')){{ $errors->first('leave.timepicker') }} @else 請選擇日期1 @endif</span>
+						<span  style="" class="text-danger">{{ $errors->has('leave.timepicker') }}</span>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -131,7 +131,7 @@
 						@forelse($user_agents as $user_agent)
 							@if($user_agent->fetchUser->status != 0)
 								<label>
-								<input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->fetchUser->id}}"> 
+								<input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red user-agent" value="{{$user_agent->fetchUser->id}}"> 
 									{{$user_agent->fetchUser->nickname}}
 								</label>&emsp;
 							@endif
