@@ -125,7 +125,7 @@
           <a href="{{ route('sheet/calendar/view') }}"><i class="glyphicon glyphicon-list-alt"></i> <span>月日誌</span>
           </a>
         </li>
-        <li>
+        <li @if(Request::is('sheet/search/*'))class="active" @endif>
           <a href="{{ route('sheet/search/index') }}"><i class="glyphicon glyphicon-search"></i> <span>搜尋</span>
           </a>
         </li>
@@ -138,7 +138,7 @@
           <a href="{{ route('sheet/project/index') }}"><i class="glyphicon glyphicon-file"></i> <span>專案項目</span>
           </a>
         </li>
-	      <li>
+	      <li @if(Request::is('sheet/auth/*'))class="active" @endif>
           <a href="{{ route('sheet/auth/index') }}"><i class="glyphicon glyphicon-eye-open"></i> <span>權限設定</span>
           </a>
         </li>
