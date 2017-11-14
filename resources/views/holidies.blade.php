@@ -7,11 +7,7 @@
 	<i class="fa fa-anchor"></i> 國定假日/補班
 	<small>Holiday Setting</small>
   </h1>
-  <ol class="breadcrumb">
-	<li><a href="./index.html"><i class="fa fa-dashboard"></i> Home</a></li>
-	<li>假期設定</li>
-	<li class="active">國定假日/補班</li>
-  </ol>
+  {{ Breadcrumbs::render('holidies/index') }}
 </section>
 
 <!-- Main content -->
@@ -24,39 +20,31 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<div class="dataTables_length">
+								<form name="frmSearch" id="frmSearch" action="{{ route('holidies/index') }}" method="POST">
+			                    <input id="sort" type="hidden" name="order_by[order_by]" value="{{ $model->order_by }}">
+			                    <input id="sort_way" type="hidden" name="order_by[order_way]" value="{{ $model->order_way }}">
 									<label>
-										每頁 
-										<select name="search_page" class="form-control input-sm">
-											<option value="25">25</option>
-											<option value="50">50</option>
-											<option value="100">100</option>
-										</select> 
-									筆</label>
+					                    每頁 
+					                    <select name="order_by[pagesize]" class="form-control input-sm" onchange="javascript:changePageSize(this.value);">
+					                      <option value="25"@if( "{{ $model->pagesize }}" == "{{25}}")selected="selected"@endif>25</option>
+					                      <option value="50"@if( "{{ $model->pagesize }}" == "{{50}}")selected="selected"@endif>50</option>
+					                      <option value="100"@if( "{{ $model->pagesize }}" == "{{100}}")selected="selected"@endif>100</option>
+					                    </select> 
+					                  筆</label>
 									</div>
 								</div>
-								<div class="col-sm-9">
-									<form name="frmSearch" action="" method="POST">
+									<div class="col-sm-9">
 										<div class="pull-right">
 											<label>
-												類型：
-												<select id="search_type" name="search[type]" class="form-control">
-													<option value="">全部</option>
-													<option value="holiday">國定假日</option>
-													<option value="work-day">工作日</option>
-												</select>
-											</label>
-											&nbsp;
-											<label>
-												區間：
-												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
-											</label>
-											&nbsp;
-											<label>
-												關鍵字：
-												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[keywords]" style="width:270px">
-												<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+												匯入年份：
+												<input type="search" class="form-control" placeholder="請輸入年分匯入(EX:2017)" name="input[year]" style="width:270px">
+												<!-- 匯入按鈕 -->
+												<button type="submit" class="btn btn-default"><i class="fa fa-calendar-plus-o "></i></button>
+												<!-- 新增按鈕 -->
+												<a href="{{ route('holidies/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
 											</label>
 										</div>
+										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 									</form>
 								</div>
 							</div>
@@ -65,90 +53,34 @@
 									<table class="table table-bordered table-striped table-hover">
 										<thead>
 											<tr>
-												<th width="15%"><a href="#sort_type">類型</a></th>
-												<th><a href="#sort_name">名稱</a></th>
-												<th width="15%"><a href="#sort_date">日期</a></th>
-												<th width="15%"><a href="#sort_available_date">可使用區間</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('type');">類型</a></th>
+												<th><a href="javascript:void(0)" onclick="changeSort('name');">名稱</a></th>
+												<th width="15%"><a href="javascript:void(0)" onclick="changeSort('date');">日期</a></th>
 												<th width="5%"></th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>國定假日</td>
-												<td>中秋節</td>
-												<td>2017-10-4</td>
-												<td>-</td>
+											@foreach($dataProvider as $data)
+											<tr class='clickable-row' data-href="{{ route('holidies/edit', ['id'=>$data['id']])}}">
+												<td>{{$data->type}}</td>
+												<td>{{$data->name}}</td>
+												<td>{{ Carbon\Carbon::parse($data->date)->format('Y-m-d') }}</td>
 												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+													<a href="{{ route('holidies/delete', ['id'=>$data['id']])}}"><button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></a>
 												</td>
 											</tr>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>工作日</td>
-												<td>國慶日連續假期補上班日</td>
-												<td>2017-09-30</td>
-												<td>-</td>
-												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
+											@endforeach
+											@if(count($dataProvider) == 0)
+											<tr class="">
+												<td colspan="4" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
 											</tr>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>國定假日</td>
-												<td>國慶日</td>
-												<td>2017-10-10</td>
-												<td>-</td>
-												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
-											</tr>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>國定假日</td>
-												<td>國慶日連續假期</td>
-												<td>2017-10-9</td>
-												<td>-</td>
-												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
-											</tr>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>國定假日</td>
-												<td>兒童節及民俗掃墓節</td>
-												<td>2017-04-04</td>
-												<td>-</td>
-												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
-											</tr>
-											<tr class='clickable-row' data-href='holidies_form.html'>
-												<td>工作日</td>
-												<td>端午節假期補上班日</td>
-												<td>2017-06-03</td>
-												<td>-</td>
-												<td>
-													<button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-												</td>
-											</tr>
+											@endif
 										</tbody>
+
 									</table>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-sm-12">
-									<ul class="pagination">
-										<li class="paginate_button previous disabled">
-											<a href="#">上一頁</a>
-										</li>
-										<li class="paginate_button active"><a href="#">1</a></li>
-										<li class="paginate_button"><a href="#">2</a></li>
-										<li class="paginate_button"><a href="#">3</a></li>
-										<li class="paginate_button"><a href="#">4</a></li>
-										<li class="paginate_button"><a href="#">5</a></li>
-										<li class="paginate_button"><a href="#">6</a></li>
-										<li class="paginate_button next">
-											<a href="#">下一頁</a>
-										</li>
-									</ul>
-								</div>
-							</div>
+							{!! $dataProvider->render() !!}
 						</div>
                     </div>
                 </div>
@@ -156,4 +88,22 @@
 		</div>
 	</div>
 </section>
+<script>
+function changePageSize(pagesize){
+  $("#frmSearch").submit();
+}
+
+function changeSort(sort){
+  order_by = $('#sort').val();
+  order_way = $('#sort_way').val();
+  $('#sort').val(sort);
+  if (order_by == sort && order_way == "DESC") {
+      $('#sort_way').val("ASC");
+  } else {
+    $('#sort_way').val("DESC");
+  }
+  $("#frmSearch").submit();
+}
+</script>
 @stop
+
