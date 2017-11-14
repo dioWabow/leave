@@ -491,7 +491,7 @@
                 '    <div class="kv-fileinput-error"></div>\n' +
                 '    </div>\n' +
                 '</div>';
-            tClose = '<div class="close fileinput-remove">&times;</div>\n';
+            tClose = '<input type="hidden" id="remove_file" name="remove_file" value="false">';
             tFileIcon = '<i class="glyphicon glyphicon-file kv-caption-icon"></i>';
             tCaption = '<div tabindex="500" class="form-control file-caption {class}">\n' +
                 '   <div class="file-caption-name"></div>\n' +
@@ -542,7 +542,7 @@
                 '{uploadIcon}</button>';
             tActionZoom = '<button type="button" class="kv-file-zoom {zoomClass}" ' +
                 'title="{zoomTitle}">{zoomIcon}</button>';
-            tActionDrag = '<span class="file-drag-handle {dragClass}" title="{dragTitle}">{dragIcon}</span>';
+            tActionDrag = '';
             tIndicator = '<div class="file-upload-indicator" title="{indicatorTitle}">{indicator}</div>';
             tTagBef = '<div class="file-preview-frame {frameClass}" id="{previewId}" data-fileindex="{fileindex}"' +
                 ' data-template="{template}"';
@@ -3530,6 +3530,7 @@
                 self.$caption.attr('title', '');
                 $h.addCss(self.$container, 'file-input-new');
                 self._validateDefaultPreview();
+                $("#remove_file").val("true");
             }
             if (self.$container.find($h.FRAMES).length === 0) {
                 if (!self._initCaption()) {
@@ -3870,8 +3871,8 @@
         msgFilePreviewAborted: 'File preview aborted for "{name}".',
         msgFilePreviewError: 'An error occurred while reading the file "{name}".',
         msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
-        msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
-        msgInvalidFileExtension: 'Invalid extension for file "{name}". Only "{extensions}" files are supported.',
+        msgInvalidFileType: '"{name}"的檔案格式錯誤，只能上傳"{types}"',
+        msgInvalidFileExtension: '"{name}"的檔案格式錯誤，只能用"{extensions}"',
         msgFileTypes: {
             'image': 'image',
             'html': 'HTML',
