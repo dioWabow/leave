@@ -123,28 +123,28 @@
 					</div>
 				</div></div>
 				<div class="form-group {{ $errors->has('leave.agent') ? 'has-error' : '' }}" ><div class="row">
-        <div class="leave_user_agent form-group">
-					<div class="col-md-1">
-						<label>代理人</label>
-					</div>
-					<div class="col-md-11">
-						@forelse($user_agents as $user_agent)
-							@if($user_agent->fetchUser->status != 0)
-								<label>
-								<input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red user-agent" value="{{$user_agent->fetchUser->id}}"> 
-									{{$user_agent->fetchUser->nickname}}
-								</label>&emsp;
-							@endif
-						@empty
-							<label>
-								<input type="hidden" name="leave[agent]" class="flat-red" value=""> 
-									<font style="color: red">無代理人</font>
-							</label>&emsp;
-						@endforelse
-            </br>
-            <span class="text-danger">{{ $errors->first('leave.agent') }}</span>
-					</div>
-					</div>
+          <div class="leave_user_agent form-group">
+            <div class="col-md-1">
+              <label>代理人</label>
+            </div>
+            <div class="col-md-11">
+              @forelse($user_agents as $user_agent)
+                @if($user_agent->fetchUser->status != 0)
+                  <label>
+                  <input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red user-agent" value="{{$user_agent->fetchUser->id}}"> 
+                    {{$user_agent->fetchUser->nickname}}
+                  </label>&emsp;
+                @endif
+              @empty
+                <label>
+                  <input type="hidden" name="leave[agent]" class="flat-red" value=""> 
+                    <font style="color: red">無代理人</font>
+                </label>&emsp;
+              @endforelse
+              </br>
+              <span class="text-danger">{{ $errors->first('leave.agent') }}</span>
+            </div>
+          </div>
 				</div></div>
 
 				@if(Auth::getUser()->id == $user->id)

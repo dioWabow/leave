@@ -941,61 +941,50 @@ $(function () {
 
   });
 
-    
-   /* $(".btn").click(function(e) {
-      e.preventDefault();
-        if ($("#leave_timepicker").val() == '')
-        {
-          $('#group_timepicker').addClass('has-error has-feedback');
-          $('.leave-timepicker').removeAttr("style");
+  $('#leave_form').bootstrapValidator({
+    message: 'This value is not valid',
+    fields: {
+      'leave[timepicker]': {
+          validators: {
+              notEmpty: {
+                message: '請選擇請假時間'
+              },
+          }
+      },
+      'leave[agent][]': {
+          row: '.leave_user_agent',
+          validators: {
+              notEmpty: {
+                  message: '請選擇代理人，若無代理人請洽HR'
+              },
+          }
+      },
+    }
+  });
 
-        } else {
+  /*當變換假別時 */
+  $(".leave-type-id").on("ifChecked ifUnchecked", function(){ 
 
-          $('#group_timepicker').addClass('has-success');
-          $('#group_timepicker').revmoveClass('has-error');
-          $('.leave-timepicker').removeAttr("style")
+    /* 新增欄位後重新驗證 */
+    $("#leave_form").bootstrapValidator("addField", "leave[timepicker]");
+    $("#leave_form").data("bootstrapValidator").resetForm();
 
-        }
-    });*/
-
-  
-    $('#leave_form').bootstrapValidator({
-      message: 'This value is not valid',
-      fields: {
-        'leave[timepicker]': {
-            validators: {
-                notEmpty: {
-                  message: '請選擇請假時間'
-                },
-            }
-        },
-        'leave[agent][]': {
-            row: '.leave_user_agent',
-            validators: {
-                notEmpty: {
-                    message: '請選擇代理人，若無代理人請洽HR'
-                },
-            }
-        },
-      }
-    });
-    /*使用daterangerpicker 後 重新驗證 
+    /* 重新選擇picker時，重新驗證一次 */
     $("#leave_timepicker").on("hide.daterangepicker", function(){  
-      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
-      bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
-    }); */
+      $('#leave_form').bootstrapValidator("revalidateField", "leave[timepicker]");
+    });
+    
+  }); 
 
-    /* 當勾選和未勾選時 後 重新驗證 *
-    $(".leave-type-id").on("ifChecked ifUnchecked", function(){ 
-      /*alert($(this).val()); 
-      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
-      bootstrapValidator.updateStatus('leave[timepicker]', 'NOT_VALIDATED', null).validateField('leave[timepicker]');
+  /* 一進入時，重新選擇picker時，重新驗證一次 */
+  $("#leave_timepicker").on("hide.daterangepicker", function(){  
+    $("#leave_form").bootstrapValidator("revalidateField", "leave[timepicker]");
+  });
 
-    }); */
-    $(".user-agent").on("ifChecked ifUnchecked", function(){  
-      var bootstrapValidator = $("#leave_form").data('bootstrapValidator');  
-      bootstrapValidator.updateStatus('leave[agent][]', 'NOT_VALIDATED', null).validateField('leave[agent][]');
-    }); 
+  /* 選取勾選時，重新驗證欄位 */
+  $(".user-agent").on("ifChecked ifUnchecked", function(){  
+    $("#leave_form").bootstrapValidator("revalidateField", "leave[agent][]");
+  }); 
 
 });
 </script>
