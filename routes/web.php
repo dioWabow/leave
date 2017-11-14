@@ -473,17 +473,17 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::get('index',[
                 'as'=>'sheet/daily/index',
-                'uses'=> 'sheet\DailyController@getIndex',
+                'uses'=> 'Sheet\DailyController@getIndex',
             ]);
 
             Route::get('creat',[
                 'as'=>'sheet/daily/creat',
-                'uses'=> 'sheet\DailyController@getEdit',
+                'uses'=> 'Sheet\DailyController@getEdit',
             ]);
 
             Route::post('update',[
                 'as'=>'sheet/daily/update',
-                'uses'=> 'sheet\DailyController@postUpdate',
+                'uses'=> 'Sheet\DailyController@postUpdate',
             ]);
         });
     });
@@ -493,21 +493,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix'=>'search'], function(){
             Route::match(['get', 'post'], 'index',[
                 'as'=>'sheet/search/index',
-                'uses'=> 'SheetSearchController@getIndex',
+                'uses'=> 'Sheet\SheetSearchController@getIndex',
             ]);
         });
 
         Route::group(['prefix'=>'auth'], function(){
             Route::get('index',[
                 'as'=>'sheet/auth/index',
-                'uses'=> 'SheetAuthController@getIndex',
+                'uses'=> 'Sheet\SheetAuthController@getIndex',
             ]);
         });
 
         Route::group(['prefix'=>'auth'], function(){
             Route::post('update',[
                 'as'=>'sheet/auth/update',
-                'uses'=> 'SheetAuthController@postUpdate',
+                'uses'=> 'Sheet\SheetAuthController@postUpdate',
             ]);
         });
 

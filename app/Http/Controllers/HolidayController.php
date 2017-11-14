@@ -28,7 +28,7 @@ class HolidayController extends Controller
             $data = [];//國定假日資料放置
             $data_count = 0;//國定假日資料數量
             $curl = [];//國定假日未處理資料
-            $input_year = !empty($input["year"]) ? $input["year"] : 2018;//匯入年份
+            $input_year = $input["year"];//匯入年份
             $error = false;//國定假日資料放置
             $url = "http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=c9b60d40-cb14-4796-9a6f-276fc1525128";
             $curl_json = self::curl($url, $params = false, $ispost = 0, $https = 0);
@@ -79,7 +79,7 @@ class HolidayController extends Controller
 
                     }else{
 
-                        return Redirect::route('holidies/index')->with('success', '匯入成功 !');
+                        return Redirect::route('holidies/index')->with('success', '匯入 '.$data_count.' 筆成功 !');
 
                     }
 

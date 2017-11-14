@@ -52,7 +52,7 @@
             <label>日期</label>
           </div>
           <div class="col-md-11">
-            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" @if("{{$model->date}}" > "{{0}}")date="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }} @endif ">
+            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" @if("{{$model->date}}" > "{{0}}") date="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }}"  value="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }}" @endif >
           </div>
         </div></div>
       </div>
