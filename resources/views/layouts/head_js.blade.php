@@ -1840,7 +1840,7 @@ $(function () {
 
                 $.each(data, function(index, value) {
                   events.push({
-                      title: value['items'] + ' / ' + value['hour'] + '小時',
+                      title: unescapeHtml(value['items']) + ' / ' + value['hour'] + '小時',
                       start: value['working_day'], // will be parsed
                   });
                 });
@@ -1859,6 +1859,14 @@ $(function () {
         }
       });
     });
+
+    function unescapeHtml(safe) {
+        return safe.replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#039;/g, "'");
+    }
 
   </script>
 @endif
