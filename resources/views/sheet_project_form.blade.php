@@ -35,19 +35,20 @@
 
 				<div class="form-group {{ $errors->has('sheet_project.team') ? 'has-error' : '' }}">
 					<div class="row">
+					<div class="sheet-project-team form-group">
 						<div class="col-md-1">
 							<label>團隊</label>
 						</div>
 						<div class="col-md-11">
 							<label>
-								<input type="checkbox" name="sheet_project[team][]" class="flat-red sheet_project_team" value="0"@if(in_array(0, $project_team)) checked="checked" @endif> 共用
+								<input type="checkbox" name="sheet_project[team][]" class="flat-red sheet-project-team" value="0"@if(in_array(0, $project_team)) checked="checked" @endif> 共用
 							</label>
 						</div>
 						@foreach($main_team as $main_data)
 						<div class="col-md-1"></div>
 						<div class="col-md-11">
 							<label>
-								<input type="checkbox"  name="sheet_project[team][]" class="flat-red main_team sheet_project_team" value="{{$main_data->id}}" @if(in_array($main_data->id, $project_team)) checked="checked" @endif> {{$main_data->name}}
+								<input type="checkbox"  name="sheet_project[team][]" class="flat-red main_team sheet-project-team" value="{{$main_data->id}}" @if(in_array($main_data->id, $project_team)) checked="checked" @endif> {{$main_data->name}}
 							</label>&emsp;
 							@foreach($sub_team as $sub_data)
 								@if($main_data->id == $sub_data->parent_id)
@@ -57,26 +58,31 @@
 								@endif
 							@endforeach
 						</div>
-              @foreach($sub_team as $sub_data)
-                @if($main_data->id == $sub_data->parent_id)
-                  <div class="col-md-1"></div>
-                    <div class="col-md-11">
-                      <label>
-                        　<input type="checkbox"  name="sheet_project[team][]" class="flat-red sheet_project_team" value="{{$sub_data->id}}" @if(in_array($sub_data->id, $project_team)) checked="checked" @endif> {{$sub_data->name}}
-                      </label>
-                    </div>
-                  @endif
-                @endforeach
-						  @endforeach
+						@foreach($sub_team as $sub_data)
+							@if($main_data->id == $sub_data->parent_id)
+								<div class="col-md-1"></div>
+									<div class="col-md-11">
+										<label>
+											　<input type="checkbox"  name="sheet_project[team][]" class="flat-red sheet-project-team" value="{{$sub_data->id}}" @if(in_array($sub_data->id, $project_team)) checked="checked" @endif> {{$sub_data->name}}
+										</label>
+									</div>
+								@endif
+							@endforeach
+						@endforeach
               <div class="col-md-1"></div>
               <div class="col-md-11">
                 <label>
                   <span class="text-danger">{{ $errors->first('sheet_project.team') }}</span>
                 </label>
 						  </div>
+						</div>
 					</div>
 				</div>
-
+				<div class="form-group">
+        <div class="col-xs-9 col-xs-offset-3">
+            <div id="error_messages"></div>
+        </div>
+    		</div>
 				<div class="form-group">
 					<div class="row">
 						<div class="col-md-1">
@@ -92,7 +98,7 @@
 			</div>
 			<div class="box-footer">
 				<div class="pull-right">
-					<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
+					<button type="reset" id="reset_btn" class="btn btn-default "><i class="fa fa-undo"></i> 取消</button>
 					<button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i> Send</button>
 				</div>
 			</div>
