@@ -210,11 +210,6 @@ Route::group(['middleware' => 'auth'], function () {
             'uses' => 'HolidayController@postInsert',
         ]);
 
-        Route::get('insert_api', [
-            'as' => 'holidies/insert_api',
-            'uses' => 'HolidayController@postInsertFromTaipeiData',
-        ]);
-
         Route::post('update', [
             'as' => "holidies/update",
             'uses' => 'HolidayController@postUpdate',

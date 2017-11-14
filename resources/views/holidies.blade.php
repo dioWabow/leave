@@ -36,24 +36,10 @@
 									<div class="col-sm-9">
 										<div class="pull-right">
 											<label>
-												類型：
-												<select id="search_type" name="search[type]" class="form-control">
-													<option value="" @if(count($search)>0 && $search['type']=="")selected="selected"@endif>全部</option>
-													<option value="holiday" @if(count($search)>0 && $search['type']=="holiday")selected="selected"@endif>國定假日</option>
-													<option value="work" @if(count($search)>0 && $search['type']=="work")selected="selected"@endif>工作日</option>
-												</select>
-											</label>
-											&nbsp;
-											<label>
-												區間：
-												<input type="text" id="search_daterange" name="search[daterange]" class="form-control pull-right">
-											</label>
-											&nbsp;
-											<label>
-												關鍵字：
-												<input type="search" class="form-control" placeholder="請輸入名稱進行查詢" name="search[name]" style="width:270px" @if(count($search) > 0)value="{{$search['name']}}@endif">
-												<!-- 搜尋按鈕 -->
-												<button type="submit" class="btn btn-default"><i class="fa fa-calendar-plus-o"></i></button>
+												匯入年份：
+												<input type="search" class="form-control" placeholder="請輸入年分匯入(EX:2017)" name="input[year]" style="width:270px">
+												<!-- 匯入按鈕 -->
+												<button type="submit" class="btn btn-default"><i class="fa fa-calendar-plus-o "></i></button>
 												<!-- 新增按鈕 -->
 												<a href="{{ route('holidies/create') }}"><button type="button" class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
 											</label>
