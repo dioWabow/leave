@@ -1844,13 +1844,17 @@ $(function () {
                       start: value['working_day'], // will be parsed
                       url: value['url'],
                   });
+
                 });
+
+                start = start.toArray();
+                $('#date').val(start[0] + '-' + (start[1]+2) + '-' + start[2]);
 
                 callback(events);
               }
           });
         },
-        defaultDate: '{{Carbon\Carbon::now()->format("Y-m-d")}}}',
+        defaultDate: '{{$chosed_date}}',
         locale: initialLocaleCode,
         navLinks: false, // can click day/week names to navigate views
         editable: true,
@@ -1867,6 +1871,11 @@ $(function () {
             .replace(/&gt;/g, '>')
             .replace(/&quot;/g, '"')
             .replace(/&#039;/g, "'");
+    }
+
+    function test(id){
+      date = $('#date').val();
+      location.href="{{route('sheet/calendar/view')}}"+'/'+id + '/' + date;
     }
 
   </script>

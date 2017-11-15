@@ -534,7 +534,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // 月報表
         Route::group(['prefix'=>'calendar'], function(){
-            Route::get('view/{user_id?}', [
+            Route::get('view/{user_id?}/{chosed_date?}', [
                 'as' => 'sheet/calendar/view',
                 'uses' => 'Sheet\CalendarController@view',
             ]);
