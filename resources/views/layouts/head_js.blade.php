@@ -315,11 +315,18 @@ $(function () {
 <script>
 /* 選擇其他人頭像時，重新post，取得search日期 */
 $(function () {
-  $(".changePost").on("click", function(){
-    var post_to = "{{ route('sheet/daily/index', [ 'current_user' => $user->allow_user_id ]) }}";
-    $('#frmOrderby').attr('action', post_to);
-    $("#frmOrderby").submit();
+  
+  $(".changeOtherSheet").on("click", function(){
+    var allow_user_id = $(this).prop('id');
+    var post_to = "{{ route('sheet/daily/index')}}" + "/" + allow_user_id;
+    $('#frmOrderby').attr('action', post_to).submit();
   });
+
+  $(".changeMySheet").on("click", function(){
+    var post_to = "{{ route('sheet/daily/index', [ 'current_user' => Auth::user()->id ]) }}";
+    $('#frmOrderby').attr('action', post_to).submit();
+  });
+
 });
 </script>
 @endif
