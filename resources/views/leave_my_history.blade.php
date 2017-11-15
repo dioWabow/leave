@@ -102,7 +102,7 @@
             <tr class="">
               <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
             </tr>
-            @endif
+            @else
           </tbody>
           <tfotter>
             <tr class="text-red">
@@ -114,6 +114,7 @@
               <th>{{ $leaves_totle_hours }}</th>
             </tr>
           </tfotter>
+          @endif
         </table>
       </div>
     </div>
