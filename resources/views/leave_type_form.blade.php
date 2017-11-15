@@ -15,7 +15,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'leave_type/update' : 'leave_type/insert') }}" id="leave_type_form" method="POST" enctype="multipart/form-data">
 {!!csrf_field()!!}
 	<section class="content">
         <input type="hidden" id="leave_type_id" name="leave_type[id]" class="form-control pull-right" value="{{ $model->id }}">
@@ -24,16 +24,18 @@
 				<h3 class="box-title">{{$model->name}} {{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
 			</div>
 			<div class="box-body">
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave_type.name') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>名稱</label>
 					</div>
 					<div class="col-md-11">
 						<input type="text" id="leave_type_name" name="leave_type[name]" class="form-control pull-right" value="{{ $model->name }}">
+            <span class="text-danger">{{ $errors->first('leave_type.name') }}</span>
 					</div>
+          
 				</div></div>
 
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave_type.exception') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>類型</label>
 					</div>
@@ -74,10 +76,12 @@
 							<input type="radio" name="leave_type[exception]" class="flat-red" value="natural_disaster" @if ($model->exception == 'natural_disaster') checked="checked" @endif>
 							{{ WebHelper::getTypesExceptionLabel('natural_disaster') }}
 						</label>&emsp;
+            </br>
+            <span class="text-danger">{{ $errors->first('leave_type.exception') }}</span>
 					</div>
 				</div></div>
 
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave_type.reset_time') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>重置形式</label>
 					</div>
@@ -106,15 +110,18 @@
 							<input type="radio" name="leave_type[reset_time]" class="flat-red" value="other" @if ($model->reset_time == 'other') checked="checked" @endif>
 							{{ WebHelper::getTypesResetTimeLabel('other') }}
 						</label>&emsp;
+            </br>
+          <span class="text-danger">{{ $errors->first('leave_type.reset_time') }}</span>
 					</div>
 				</div></div>
 
-				<div class="form-group"><div class="row">
+				<div class="form-group  {{ $errors->has('leave_type.hours') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>上限（HR)</label>
 					</div>
 					<div class="col-md-5">
 						<input type="text" id="leave_type_hour" name="leave_type[hours]" class="form-control pull-right" value="{{ $model->hours }}">
+            <span class="text-danger">{{ $errors->first('leave_type.hours') }}</span>
 					</div>
 					<div class="col-md-6">
 						<label class="text-red">(0 為無上限)</label>

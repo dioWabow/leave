@@ -77,7 +77,50 @@ $(function () {
 });
 </script>
 @endif
+@if(Request::is('holidies/create','holidies/edit/*'))
+<style>
+/* Adjust feedback icon position */
+#holidies_form .form-control-feedback {
+    right: 15px;
+}
+#holidies_form .selectContainer .form-control-feedback {
+    right: 25px;
+}
+</style>
+<script>
+$(function () {
+  $('#holidies_form').bootstrapValidator({
+      message: 'This value is not valid',
+      fields: {
+        'holidies[name]': {
+            validators: {
+              stringLength: {
+                  max: 10,
+                  message: '最長為10個字,請縮減長度'
+                },
+                notEmpty: {
+                  message: '請輸入假日名稱'
+                },
+            }
+        },
+        'holidies[date]': {
+            validators: {
+              notEmpty: {
+                message: '請選擇日期'
+              },
+            }
+        },
+      }
+  });
 
+  /*使用daterangerpicker 後 重新驗證*/
+  $("#holidies_date").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#holidies_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('holidies[date]', 'NOT_VALIDATED', null).validateField('holidies[date]'); //错误提示信息变了  
+  });  
+});
+</script>
+@endif
 <!-- 我的假單頁面用 -->
 @if(Request::is('leaves_my/*'))
   @if(Request::is('leaves_my/history'))
@@ -690,20 +733,48 @@ $(function () {
   var yyyy = today.getFullYear();
   var $leave_type_available_date = $("#leave_type_available_date");
   var time = $leave_type_available_date.val();
-
   $("#leave_type_available_date").daterangepicker({
-          showDropdowns: true,
-          locale: {format: 'YYYY-MM-DD'},
-      });
-      
-  $("#leave_type_available_date").val(time);
-  
+      showDropdowns: true,
+      locale: {format: 'YYYY-MM-DD'},
+   });      
+   
+  $("#leave_type_available_date").val(time);  
   $('input[name="leave_type[available_date]"]').on("apply.daterangepicker", function(ev, picker) {
     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
   });
 
   $('input[name="leave_type[available_date]"]').on("cancel.daterangepicker", function(ev, picker) {
     $(this).val('');
+  });
+});
+</script>
+@endif
+@if(Request::is('leave_type/create','leave_type/edit/*'))
+<style>
+</style>
+<script>
+$(function () {
+  $('#leave_type_form').bootstrapValidator({
+      message: 'This value is not valid',
+      fields: {
+        'leave_type[name]': {
+            validators: {
+                notEmpty: {
+                  message: '請輸入假別名稱'
+                },
+            }
+        },
+        'leave_type[hours]': {
+            validators: {
+                notEmpty: {
+                    message: '請填寫工作時數'
+                },
+                numeric: {
+                  message: '請填寫數字',
+                }
+            }
+        },
+      }
   });
 });
 </script>
@@ -1027,6 +1098,51 @@ $(function () {
 
   });
 
+  $('#leave_form').bootstrapValidator({
+    message: 'This value is not valid',
+    fields: {
+      'leave[timepicker]': {
+          validators: {
+              notEmpty: {
+                message: '請選擇請假時間'
+              },
+          }
+      },
+      'leave[agent][]': {
+          row: '.leave_user_agent',
+          validators: {
+              notEmpty: {
+                  message: '請選擇代理人，若無代理人請洽HR'
+              },
+          }
+      },
+    }
+  });
+
+  /*當變換假別時 */
+  $(".leave-type-id").on("ifChecked ifUnchecked", function(){ 
+
+    /* 新增欄位後重新驗證 */
+    $("#leave_form").bootstrapValidator("addField", "leave[timepicker]");
+    $("#leave_form").data("bootstrapValidator").resetForm();
+
+    /* 重新選擇picker時，重新驗證一次 */
+    $("#leave_timepicker").on("hide.daterangepicker", function(){  
+      $('#leave_form').bootstrapValidator("revalidateField", "leave[timepicker]");
+    });
+    
+  }); 
+
+  /* 一進入時，重新選擇picker時，重新驗證一次 */
+  $("#leave_timepicker").on("hide.daterangepicker", function(){  
+    $("#leave_form").bootstrapValidator("revalidateField", "leave[timepicker]");
+  });
+
+  /* 選取勾選時，重新驗證欄位 */
+  $(".user-agent").on("ifChecked ifUnchecked", function(){  
+    $("#leave_form").bootstrapValidator("revalidateField", "leave[agent][]");
+  }); 
+
 });
 </script>
 @endif
@@ -1260,6 +1376,106 @@ $(function () {
     $("#clear_leave_date").click(function() {
       $("#user_leave_date").val("");
     });
+
+    $('#user_form').bootstrapValidator({
+      message: 'This value is not valid',
+      fields: {
+        'user[employee_no]': {
+            row: '.user-number',
+            validators: {
+                notEmpty: {
+                  message: '請輸入員工編號'
+                },
+                stringLength: {
+                  max: 7,
+                  message: '員工編號最多7碼'
+                },
+                numeric: {
+                  message: '員工編號僅限數字',
+                }
+            }
+        },
+        'user[name]': {
+            row: '.user-name',
+            validators: {
+                notEmpty: {
+                  message: '請輸入姓名'
+                },
+                stringLength: {
+                  max: 20,
+                  message: '稱呼最大20字元'
+                },
+            }
+        },
+        'user[nickname]': {
+            row: '.user-nickname',
+            validators: {
+              notEmpty: {
+                message: '請輸入稱呼'
+              },
+            }
+        },
+        'user[birthday]': {
+            row: '.user-birthday',
+            validators: {
+              notEmpty: {
+                message: '請輸入生日'
+              },
+            }
+        },
+        'user[enter_date]': {
+            row: '.user-enter-date',
+            validators: {
+              notEmpty: {
+                message: '請輸入到職日期'
+              },
+            }
+        },
+        'user[arrive_time]': {
+            row: '.user-arrive-time',
+            validators: {
+              notEmpty: {
+                message: '請輸入到職時間'
+              },
+            }
+        },
+        'user[agent][]': {
+          row: '.user-agent',
+            validators: {
+              notEmpty: {
+                message: '至少選擇一個代理人'
+              },
+            }
+        },
+        'user[team][]': {
+            row: '.user-team',
+            validators: {
+              notEmpty: {
+                message: '至少選擇一個團隊'
+              },
+            }
+        },
+        'avatar': {
+            row: '.user-avater',
+            validators: {
+              file: {
+                extension: 'jpeg,jpg,png',
+                type: 'image/jpeg,image/png',
+                message: '大頭貼請選擇圖片'
+              },
+            }
+        },
+      }
+  });
+  /*使用daterangerpicker 後 重新驗證*/
+  $("#user_birthday").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#user_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('user[birthday]', 'NOT_VALIDATED', null).validateField('user[birthday]');
+  });  
+  $("#user_enter_date").on("hide.daterangepicker", function(){  
+    var bootstrapValidator = $("#user_form").data('bootstrapValidator');  
+    bootstrapValidator.updateStatus('user[enter_date]', 'NOT_VALIDATED', null).validateField('user[enter_date]');
+  });  
 });
 </script>
 @endif

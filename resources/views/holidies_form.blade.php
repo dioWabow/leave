@@ -15,14 +15,14 @@
 </section>
 
 <!-- Main content -->
-<form action="{{ route($model->id > 0 ? 'holidies/update' : 'holidies/insert') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route($model->id > 0 ? 'holidies/update' : 'holidies/insert') }}" method="POST" id="holidies_form" enctype="multipart/form-data">
   <section class="content">
     <div class="box box-info">
       <div class="box-header with-border">
         <h3 class="box-title">{{$model->name}} {{ $model->id > 0 ? '修改' : '新增' }}資料</h3>
       </div>
       <div class="box-body">
-        <div class="form-group"><div class="row">
+        <div class="form-group {{ $errors->has('holidies.type') ? 'has-error' : '' }}"><div class="row">
           <div class="col-md-1">
             <label>類型</label>
           </div>
@@ -36,23 +36,27 @@
               <input type="radio" name="holidies[type]" class="flat-red" value="work"@if( "{{$model->type}}" == "{{work}}")checked="checked"@endif>
               工作日
             </label>&emsp;
+            </br>
+            <span class="text-danger">{{ $errors->first('holidies.type') }}</span>
           </div>
         </div></div>
 
-        <div class="form-group"><div class="row">
+        <div class="form-group {{ $errors->has('holidies.name') ? 'has-error' : '' }}"><div class="row">
           <div class="col-md-1">
             <label>名稱</label>
           </div>
           <div class="col-md-11">
             <input type="text" id="holidies_title" name="holidies[name]" class="form-control pull-right" value="{{$model->name}}">
+            <span class="text-danger">{{ $errors->first('holidies.name') }}</span>
           </div>
         </div></div>
-        <div class="form-group"><div class="row">
+        <div class="form-group {{ $errors->has('holidies.date') ? 'has-error' : '' }}"><div class="row">
           <div class="col-md-1">
             <label>日期</label>
           </div>
           <div class="col-md-11">
-            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" @if("{{$model->date}}" > "{{0}}") date="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }}"  value="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }}" @endif >
+            <input type="text" id="holidies_date" name="holidies[date]" class="form-control pull-right" @if("{{$model->date}}" > "{{0}}")date="{{ Carbon\Carbon::parse($model->date)->format('Y-m-d') }} @endif ">
+            <span class="text-danger">{{ $errors->first('holidies.date') }}</span>
           </div>
         </div></div>
       </div>

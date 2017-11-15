@@ -23,7 +23,7 @@
 </section>
 
 <!-- Main content -->
-<form action="{{route('leave/insert')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('leave/insert')}}" method="POST" id="leave_form" enctype="multipart/form-data">
 <input type="hidden" name="leave[user_id]" id='leave_user_id' value="{{$user->id}}">
 <input type="hidden" name="leave[create_user_id]" value="{{Auth::user()->id}}">
 <input type="hidden" name="leave[tag_id]" value="1">
@@ -38,7 +38,7 @@
 				@endif
 			</div>
 			<div class="box-body">
-				<div class="form-group"><div class="row">
+				<div class="form-group {{ $errors->has('leave.type_id') ? 'has-error' : '' }}"><div class="row">
 					<div class="col-md-1">
 						<label>假別</label>
 					</div>
@@ -46,24 +46,28 @@
 						@foreach( $types as $type)
 							@if($type->exception!='paid_sick' && $type->exception!='natural_disaster')
 								<label>
-									<input type="radio" name="leave[type_id]" class="flat-red" @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
+									<input type="radio" id="leave_type_id" name="leave[type_id]" class="flat-red leave-type-id"  @if ($model->type_id == $type->id) checked="checked" @elseif($loop->first) checked="checked" @endif value="{{$type->id}}" exception="{{$type->exception}}">
 									{{$type->name}}
 								</label>&emsp;
 							@endif
 						@endforeach
+            </br>
+            <span class="text-danger">{{ $errors->first('leave.type_id') }}</span>
 					</div>
-				</div></div>
-				<div class="form-group" id="group_timepicker"><div class="row">
+				</div>
+        </div>
+				<div class="form-group {{ $errors->has('leave.timepicker') ? 'has-error' : '' }}"  id="group_timepicker"><div class="row">
 					<div class="col-md-1">
 						<label>日期</label>
 					</div>
-					<div class="col-md-11">
+					<div class="leave-timepicker  col-md-11">
 						<div class="input-group">
 							<div class="input-group-addon">
 								<i class="fa fa-clock-o"></i>
 							</div>
 							<input type="text" id="leave_timepicker" name="leave[timepicker]" value="{{$model->timepicker}}" class="form-control pull-right" date="{{$model->timepicker}}">
 						</div>
+						<span  style="" class="text-danger">{{ $errors->has('leave.timepicker') }}</span>
 					</div>
 				</div></div>
 				<div class="form-group"><div class="row">
@@ -118,26 +122,31 @@
 						</div>
 					</div>
 				</div></div>
-				<div class="form-group"><div class="row">
-					<div class="col-md-1">
-						<label>代理人</label>
-					</div>
-					<div class="col-md-11">
-						@forelse($user_agents as $user_agent)
-							@if($user_agent->fetchUser->status != 0)
-								<label>
-								<input type="checkbox" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red" value="{{$user_agent->fetchUser->id}}"> 
-									{{$user_agent->fetchUser->nickname}}
-								</label>&emsp;
-							@endif
-						@empty
-							<label>
-								<input type="hidden" name="leave[agent]" class="flat-red" value=""> 
-									<font style="color: red">無代理人</font>
-							</label>&emsp;
-						@endforelse
-					</div>
+				<div class="form-group {{ $errors->has('leave.agent') ? 'has-error' : '' }}" ><div class="row">
+          <div class="leave_user_agent form-group">
+            <div class="col-md-1">
+              <label>代理人</label>
+            </div>
+            <div class="col-md-11">
+              @forelse($user_agents as $user_agent)
+                @if($user_agent->fetchUser->status != 0)
+                  <label>
+                  <input type="checkbox" id="user_agent" @if((count($model->agent)>0)&&in_array($user_agent->fetchUser->id,$model->agent)) checked="checked" @endif name="leave[agent][]" class="flat-red user-agent" value="{{$user_agent->fetchUser->id}}"> 
+                    {{$user_agent->fetchUser->nickname}}
+                  </label>&emsp;
+                @endif
+              @empty
+                <label>
+                  <input type="hidden" name="leave[agent]" class="flat-red" value=""> 
+                    <font style="color: red">無代理人</font>
+                </label>&emsp;
+              @endforelse
+              </br>
+              <span class="text-danger">{{ $errors->first('leave.agent') }}</span>
+            </div>
+          </div>
 				</div></div>
+
 				@if(Auth::getUser()->id == $user->id)
 				<div class="form-group"><div class="row">
 					<div class="col-md-1">

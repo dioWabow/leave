@@ -120,10 +120,10 @@ return [
             'numeric' => '時間上限僅限數字',
         ],
         'leave_type.exception' => [
-            'required' => '請輸入類型',
+            'required' => '至少選取一項類型',
         ],
         'leave_type.reset_time' => [
-            'required' => '請輸入重置時間',
+            'required' => '至少選取一項重置的時間',
         ],
         'leave_type.start_time' => [
             'Date' => '開始時間請填入日期',
@@ -173,14 +173,16 @@ return [
             'required' => '請選擇上班時間',
             'in' => '上班時間錯誤',
         ],
-        'leave.leave_id' => [
+        'leave.type_id' => [
             'required' => '至少勾選一項',
         ],
         'leave.timepicker' => [
             'required' => '請選擇請假時間',
         ],
-
-        'daily.items' => [
+        'leave.agent' => [
+            'required' => '請選擇代理人，若無代理人請洽HR',
+        ],
+	'daily.items' => [
             'required' => '請填寫標題',
             'regex' => '標題請不要輸入全形空白',
             'max' => '標題不可超過100字元',
