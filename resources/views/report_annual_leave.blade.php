@@ -68,7 +68,7 @@
                     @empty
                     <tr class="clickable-row" data-href="#">
                       <td colspan="7" align="center">
-                        無資料
+                        <span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span>
                       </td>
                     </tr>
                     @endforelse

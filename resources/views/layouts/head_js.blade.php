@@ -624,31 +624,9 @@ $(document).ready(function () {
 @endif
 
 <!-- 假別管理與修改頁面用 -->
-@if(Request::is('leave_type/*'))
+@if(Request::is('leave_type/index'))
 <script>
-  $(function () {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    var $leave_type_available_date = $("#leave_type_available_date");
-    var time = $leave_type_available_date.val();
-
-    $("#leave_type_available_date").daterangepicker({
-            showDropdowns: true,
-            locale: {format: 'YYYY-MM-DD'},
-        });
-        
-    $("#leave_type_available_date").val(time);
-    
-    $('input[name="leave_type[available_date]"]').on("apply.daterangepicker", function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-    });
-
-    $('input[name="leave_type[available_date]"]').on("cancel.daterangepicker", function(ev, picker) {
-      $(this).val('');
-    });
-
+$(function () {
     $("input[name^=leave_type]").on("change", function(){
       var id = $(this).val();
       var deductions = ($(".leave_type_deductions" + id).prop("checked")) ? '1' : '0';
@@ -703,7 +681,33 @@ $(document).ready(function () {
 
 </script>
 @endif
+@if(Request::is('leave_type/*'))
+<script>
+$(function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  var $leave_type_available_date = $("#leave_type_available_date");
+  var time = $leave_type_available_date.val();
 
+  $("#leave_type_available_date").daterangepicker({
+          showDropdowns: true,
+          locale: {format: 'YYYY-MM-DD'},
+      });
+      
+  $("#leave_type_available_date").val(time);
+  
+  $('input[name="leave_type[available_date]"]').on("apply.daterangepicker", function(ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+  });
+
+  $('input[name="leave_type[available_date]"]').on("cancel.daterangepicker", function(ev, picker) {
+    $(this).val('');
+  });
+});
+</script>
+@endif
 <!-- 協助請假 -->
 @if(Request::is('leave_assist/getIndex'))
   <script>
