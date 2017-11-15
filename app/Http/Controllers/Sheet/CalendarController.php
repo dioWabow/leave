@@ -43,6 +43,12 @@ class CalendarController extends Controller
 
         $timesheets = Timesheet::getTimesheetsByUserIdAndPeriod($user_id,$start_time,$end_time);
 
+        foreach ($timesheets as $key => $timesheet) {
+
+            $timesheets["$key"]['url'] = route("sheet/daily/edit", [ "id" => $timesheet['id']]);
+
+        }
+
         return json_encode(
             $timesheets
         );

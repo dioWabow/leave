@@ -1842,6 +1842,7 @@ $(function () {
                   events.push({
                       title: unescapeHtml(value['items']) + ' / ' + value['hour'] + '小時',
                       start: value['working_day'], // will be parsed
+                      url: value['url'],
                   });
                 });
 
