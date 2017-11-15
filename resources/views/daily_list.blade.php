@@ -7,7 +7,7 @@
 	<i class="fa fa-calendar-plus-o"></i> @if(count($search)>0) {{ $search['working_day'] }}@else{{ TimeHelper::getNowDate() }}@endif
 	<small>Work Sheet</small>
   </h1>
-	{{ Breadcrumbs::render('sheet/daily') }}
+	 {{ Breadcrumbs::render('sheet/daily') }} 
 </section>
 
 <!-- Main content -->
@@ -18,14 +18,14 @@
 				<ul class="nav nav-tabs">
           <li @if($current_user == Auth::user()->id) class="active" @endif>
             <a href="{{ route('sheet/daily/index') }}">
-              <img src="{{ UrlHelper::getUserAvatarUrl( Auth::user()->avatar ) }}" width="50px">
+						<img src="{{ UrlHelper::getUserAvatarUrl( Auth::user()->avatar ) }}" width="50px">
             <br>
               <span class="fonts">{{ Auth::user()->nickname }}</span>
             </a>
           </li>
         @foreach ($get_permission_user as $user)
 					<li @if($current_user == $user->allow_user_id) class="active"@endif>
-            <a href="{{ route('sheet/daily/index', [ 'current_user' => $user->allow_user_id ]) }}">
+            <a href="javascript:void(0)" class="changePost">
               <img src="{{ UrlHelper::getUserAvatarUrl( $user->fetchUser->avatar ) }}" width="50px">
             <br>
               <span class="fonts">{{ $user->fetchUser->nickname }}</span>
@@ -105,7 +105,7 @@
 											</thead>
 											<tbody>
 											@forelse($dataProvider as $value)
-												<tr class="clickable-row" @if ($current_user != Auth::user()->id) data-href="#" @else data-href="{{route('sheet/daily/edit', [ 'id' => $value->id ])}}" @endif>
+												<tr class="clickable-row"  data-href="{{route('sheet/daily/edit', [ 'id' => $value->id ])}}">
 													<td>
 														<input type="checkbox" name="time_sheet[id][]" id="work_check" class="flat-red check"  value="{{ $value->id }}">
 													</td>

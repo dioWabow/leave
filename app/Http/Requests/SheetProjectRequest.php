@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DailyRequest extends FormRequest
+class SheetProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,8 @@ class DailyRequest extends FormRequest
     public function rules()
     {
         return [
-            'daily.items' => 'required|regex:/^[^　]+$/|max:100',
-            'daily.working_day' => 'required|date',
-            'daily.project_id' => 'required|numeric',
-            'daily.description' => 'nullable',
-            'daily.hour' => 'required|numeric|min:0',
-            'daily.url' => 'nullable',
-            'daily.remark' => 'nullable',
-            
+            'sheet_project.title' => 'required',
+            'sheet_project.team' => 'required',
         ];
     }
 }

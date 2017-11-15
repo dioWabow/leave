@@ -23,7 +23,7 @@ class ProjectTeam extends BaseModel
 
     public static function getProjectIdByTeamId($team_id)
     {
-        $result = self::where('team_id', $team_id)->get();
+        $result = self::where('team_id', $team_id)->orWhere('team_id', '0')->get();
         return $result;
     }
 

@@ -14,9 +14,9 @@
 	@endif
   </h1>
 	@if($model->id > 0)
-	  {{ Breadcrumbs::render('sheet/daily/edit','修改') }}
+		{{ Breadcrumbs::render('sheet/daily/edit','修改') }}
 	@else
-  	{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
+  		{{ Breadcrumbs::render('sheet/daily/edit','新增') }}
 	@endif
 </section>
 
@@ -30,7 +30,7 @@
 			<div class="box-header with-border">
 				@if($model->id > 0)
 				<h3 class="box-title">修改工作項目</h3>&nbsp;&nbsp;
-          @if (!TimeHelper::checkEditSheetDate($model->working_day))
+          @if (!TimeHelper::checkEditSheetDate($model->working_day) || $model->user_id != Auth::user()->id)
             <font size="4" color="red"><i class="fa fa-ban fa-2x"></i>&nbsp;僅供顯示</font>
           @endif
 				@else
@@ -48,7 +48,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-clock-o"></i>
 								</div>
-								<input type="text" id="daily_working_day" name="daily[working_day]" value="{{ TimeHelper::getNowDate($model->working_day) }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif class="form-control pull-right single-date">
+								<input type="text" id="daily_working_day" name="daily[working_day]" value="{{ TimeHelper::getNowDate($model->working_day) }}" class="form-control pull-right single-date" @if(!TimeHelper::checkEditSheetDate($model->working_day) ||  $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>
 							</div>
 							<span class="text-danger">{{ $errors->first('daily.working_day') }}</span>
 						</div>
@@ -64,7 +64,7 @@
 							<div class="input-group-addon">
 								<i class="fa fa-folder"></i>
 							</div>
-								<select class="form-control" name="daily[project_id]"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+								<select class="form-control" id="daily_project_id" name="daily[project_id]" @if(!TimeHelper::checkEditSheetDate($model->working_day) ||  $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>
 								@foreach( $project as $value)
 									@if( $value->fetchProject->available != 0)
 										<option value="{{ $value->fetchProject->id }}" @if ($model->project_id == $value->fetchProject->id) selected @endif>{{ $value->fetchProject->name }}</option>
@@ -86,7 +86,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-file-text-o"></i>
 								</div>
-                  <input type="text" class="form-control" id="daily_items" name="daily[items]" value="{{ $model->items }}"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+                  <input type="text" class="form-control" id="daily_items" name="daily[items]" value="{{ $model->items }}" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>
 							</div>
 							<span class="text-danger">{{ $errors->first('daily.items') }}</span>
 						</div>
@@ -98,7 +98,7 @@
 							<label>內容</label>
 						</div>
 						<div class="col-md-11">
-              <textarea class="form-control" id="daily_description" name="daily[description]" rows="3"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>{{ $model->description }}</textarea>
+              <textarea class="form-control" id="daily_description" name="daily[description]" rows="3" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>{{ $model->description }}</textarea>
 						</div>
 					</div>
 				</div>
@@ -112,7 +112,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-hourglass"></i>
 								</div>
-									<input type="text" class="form-control daily-hour" id="daily_hour" name="daily[hour]" value="{{ $model->hour }}" placeholder="(單位小時 0.1,0.5,1,2 依此類推)"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+									<input type="text" class="form-control daily-hour" id="daily_hour" name="daily[hour]" value="{{ $model->hour }}" placeholder="(單位小時 0.1,0.5,1,2 依此類推)" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>
 								<div class="input-group-addon">
 									HR
 								</div>
@@ -131,7 +131,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-tags"></i>
 								</div>
-									<input type="text" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤" @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif></input>
+									<input type="text" id="daily_tag" name="daily[tag]" value="{{ $model->tag }}" placeholder="測試,未完成,待追蹤" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif></input>
 							</div>
 						</div>
 					</div>
@@ -147,7 +147,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-link"></i>
 								</div>
-                  <input type="text" value="{{ $model->url }}" id="daily_url" name="daily[url]" class="form-control" placeholder="http://redmine.wabow.com/issues/xxxx"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>
+                  <input type="text" value="{{ $model->url }}" id="daily_url" name="daily[url]" class="form-control" placeholder="http://redmine.wabow.com/issues/xxxx" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>
 							</div>
 							<span class="text-danger">{{ $errors->first('daily.url') }}</span>
 						</div>
@@ -159,15 +159,15 @@
 							<label>備註</label>
 						</div>
 						<div class="col-md-11">
-							<textarea class="form-control" id="daily_remark" name="daily[remark]" rows="3"  @if (!TimeHelper::checkEditSheetDate($model->working_day)) disabled="disabled" @endif>{{ $model->remark }}</textarea>
+							<textarea class="form-control" id="daily_remark" name="daily[remark]" rows="3" @if(!TimeHelper::checkEditSheetDate($model->working_day) || $model->id > 0 && $model->user_id != Auth::user()->id) disabled="disabled" @endif>{{ $model->remark }}</textarea>
 						</div>
 					</div>
 				</div>
 			</form>
-      @if (!TimeHelper::checkEditSheetDate($model->working_day))
+      @if ( $model->id > 0 && $model->user_id != Auth::user()->id || !TimeHelper::checkEditSheetDate($model->working_day))
 			<div class="box-footer">
 				<div class="pull-right">
-          <a href="{{ route( 'sheet/daily/index' ) }}">
+          <a href="javascript:window.history.go(-1);">
             <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-repeat"></i> 回到列表</button>
           </a>
 				</div>

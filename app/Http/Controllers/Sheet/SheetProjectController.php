@@ -6,6 +6,7 @@ use App\Project;
 use App\ProjectTeam;
 use App\Team;
 use Redirect;
+use App\Http\Requests\SheetProjectRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -141,26 +142,12 @@ class SheetProjectController extends Controller
      * @param Request $request
      * @return Redirect
      */
-    public function postInsert(Request $request)
+    public function postInsert(SheetProjectRequest $request)
     {
         $input = $request->input('sheet_project');
-
+        
         $project_judge = false;
         $projectTeam_judge = false;
-
-        //專案項目必填
-        if (empty($input['title'])) {
-
-            return Redirect::back()->withInput()->withErrors(['msg' => '專案項目必填']);
-
-        }
-
-        //團隊必填
-        if (empty($input['team'])) {
-
-            return Redirect::back()->withInput()->withErrors(['msg' => '團隊必選']);
-
-        }
 
         //狀態 空 則為 0
         $input['available'] = (empty($input['available'])) ? "0" : "1";
@@ -210,26 +197,12 @@ class SheetProjectController extends Controller
      * @param Request $request
      * @return Redirect
      */
-    public function postUpdate(Request $request)
+    public function postUpdate(SheetProjectRequest $request)
     {
         $input = $request->input('sheet_project');
 
         $project_judge = false;
         $projectTeam_judge = false;
-
-        //專案項目必填
-        if (empty($input['title'])) {
-
-            return Redirect::back()->withInput()->withErrors(['msg' => '專案項目必填']);
-
-        }
-
-        //團隊必填
-        if (empty($input['team'])) {
-
-            return Redirect::back()->withInput()->withErrors(['msg' => '團隊必選']);
-
-        }
 
         //狀態 空 則為 0
         $input['available'] = (empty($input['available'])) ? "0" : "1";

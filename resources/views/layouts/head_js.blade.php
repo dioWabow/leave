@@ -311,6 +311,18 @@ $(function () {
 
   });
 </script>
+@if(Request::is('sheet/daily/index', 'sheet/daily/index/*'))
+<script>
+/* 選擇其他人頭像時，重新post，取得search日期 */
+$(function () {
+  $(".changePost").on("click", function(){
+    var post_to = "{{ route('sheet/daily/index', [ 'current_user' => $user->allow_user_id ]) }}";
+    $('#frmOrderby').attr('action', post_to);
+    $("#frmOrderby").submit();
+  });
+});
+</script>
+@endif
 <style>
   .rwd-table {
 　background: #fff;
@@ -408,29 +420,31 @@ $(function () {
                 notEmpty: {
                     message: '請填寫工作時數'
                 },
-                numeric: {
-                  message: '請填寫數字',
-                }
+                between: {
+                  min:0,
+                  max:100,
+                  message: '請填選正確時數',
+                },
             }
         },
       }
   });
-
+    
+  /* reset button resetForm */
+  $("#reset_btn").click(function() {
+      $("#daily_list_form").data("bootstrapValidator").resetForm();
+  });
 
   /*使用daterangerpicker 後 重新驗證 */
   $("#daily_working_day").on("hide.daterangepicker", function(){
-    var bootstrapValidator = $("#daily_list_form").data('bootstrapValidator');
-    bootstrapValidator.updateStatus('daily[working_day]', 'NOT_VALIDATED', null).validateField('daily[working_day]');
+    $("#daily_list_form").bootstrapValidator("revalidateField", "daily[working_day]");
   });
 
   $('#daily_tag').tagit();
 
 });
-
 </script>
-
 @endif
-
 <!-- 團隊設定用 -->
 @if(Request::is('teams/*'))
 <script>
@@ -2024,9 +2038,70 @@ $(function () {
   });
 </script>
 @endif
+@if(Request::is('sheet/project/create','sheet/project/edit/*'))
+<script>
+$(function () {
+
+  $('#sheet_project_form').bootstrapValidator({
+      fields: {
+        'sheet_project[title]': {
+            validators: {
+                notEmpty: {
+                  message: '專案項目必填'
+                },
+            }
+        },
+        'sheet_project[team][]': {
+            row: '.sheet-project-team',
+            validators: {
+                notEmpty: {
+                    message: '團隊必選'
+                }
+            }
+          },
+      }
+  });
+
+  $("#sheet_project_form").submit(function() { 
+
+    teamValidator();
+      
+  });
+
+  $(".sheet-project-team").on("ifChecked ifUnchecked", function(){ 
+     $('#sheet_project_form').bootstrapValidator("revalidateField", "sheet_project[team][]");
+
+      teamValidator();
+
+  });
+
+  /* reset button resetForm */
+  $("#reset_btn").click(function() {
+      $("#sheet_project_form").data("bootstrapValidator").resetForm();
+      $(".sheet-project-team small").css('display','none');
+  });
+
+  function teamValidator() {
+
+    if(!$('#sheet_project_form').data('bootstrapValidator').isValidField('sheet_project[team][]')) {  
+
+        $(".sheet-project-team small").css('display','');
+
+      } else {
+
+        $(".sheet-project-team small").css('display','none');
+
+      };
+
+  }
+
+  
+  
+});
+</script>
+@endif
 @if(Request::is('sheet/calendar*'))
   <script>
-
     $(document).ready(function() {
 
       var initialLocaleCode = 'zh-tw';

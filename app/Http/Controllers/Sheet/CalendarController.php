@@ -49,6 +49,12 @@ class CalendarController extends Controller
 
         }
 
+        foreach ($timesheets as $key => $timesheet) {
+            
+            $timesheets["$key"]['url'] = route("sheet/daily/edit", [ "id" => $timesheet['id']]);
+            
+        }
+        
         return json_encode(
             $timesheets
         );

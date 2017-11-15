@@ -238,7 +238,7 @@ Breadcrumbs::register('sheet/calendar/view', function ($breadcrumbs) {
 
 // 工作日誌
 Breadcrumbs::register('sheet/daily', function ($breadcrumbs) {
-    $breadcrumbs->push('工作日誌',route('sheet/daily/index'));
+    $breadcrumbs->push('工作日誌', 'javascript:window.history.go(-1);');
 });
 
 // 工作日誌 - 修改資料

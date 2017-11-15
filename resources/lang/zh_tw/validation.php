@@ -198,6 +198,13 @@ return [
         'daily.hour' => [
             'required' => '請填工作時數',
             'numeric' => '工作時數必須為數字',
+            'min' => '請填選正確時數',
+        ],
+        'sheet_project.title' => [
+            'required' => '專案項目必填',
+        ],
+        'sheet_project.team' => [
+            'required' => '團隊必選',
         ],
     ],
 
