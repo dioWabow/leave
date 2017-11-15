@@ -35,7 +35,6 @@ class DailyController extends Controller
      */
     public function getIndex (Request $request)
     {
-        
         /* 取得新增&修改日誌的日期，完畢後，回到該日期頁面 */
         if (!empty($request->old('daily'))) {
 
@@ -48,9 +47,10 @@ class DailyController extends Controller
             
         }
         
+        /* 取得該登入者可觀看得權限 */
         $permission = new TimesheetPermission;
         $get_permission_user = $permission->getAllowUserIdByUserId(Auth::user()->id);
-        
+
         $order_by = (!empty($request->input('order_by'))) ? $request->input('order_by') : [];
         $search = (!empty($request->input('search'))) ? $request->input('search') : [];
         $current_user = (!empty($this->current_user) && $this->current_user != Auth::user()->id) ? $this->current_user : Auth::user()->id;
@@ -151,7 +151,6 @@ class DailyController extends Controller
         $project = ProjectTeam::getProjectIdByTeamId($get_team_id);
         
         $model = $this->loadModel($id);
-
         
         if (!empty($request->old('daily'))) {
             
@@ -279,9 +278,19 @@ class DailyController extends Controller
      */
     public function postDelete(Request $request, $id)
     {
-        $model = $this->loadModel($id)->delete();
+        $model = $this->loadModel($id);
+        if ($model->user_id != Auth::user()->id) {
+ 
+            return Redirect::route('sheet/daily/index')->withErrors(['msg' => '不可以任意刪除別人的日誌!!']);
 
-        return Redirect::route('sheet/daily/index')->with('success', '刪除完畢。');
+        } else {
+
+            $model = $this->loadModel($id)->delete();
+                    
+            return Redirect::route('sheet/daily/index')->with('success', '刪除完畢。');
+
+        }
+        
     }
 
     private function loadModel($id)

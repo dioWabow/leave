@@ -268,6 +268,18 @@ $(function () {
 
   });
 </script>
+@if(Request::is('sheet/daily/index', 'sheet/daily/index/*'))
+<script>
+/* 選擇其他人頭像時，重新post，取得search日期 */
+$(function () {
+  $(".changePost").on("click", function(){
+    var post_to = "{{ route('sheet/daily/index', [ 'current_user' => $user->allow_user_id ]) }}";
+    $('#frmOrderby').attr('action', post_to);
+    $("#frmOrderby").submit();
+  });
+});
+</script>
+@endif
 <style>
   .rwd-table {
 　background: #fff;
@@ -374,7 +386,6 @@ $(function () {
         },
       }
   });
-  
     
   /* reset button resetForm */
   $("#reset_btn").click(function() {
@@ -389,11 +400,8 @@ $(function () {
   $('#daily_tag').tagit();
 
 });
-
 </script>
-
 @endif
-
 <!-- 團隊設定用 -->
 @if(Request::is('teams/*'))
 <script>
@@ -1850,6 +1858,7 @@ $(function () {
   /* reset button resetForm */
   $("#reset_btn").click(function() {
       $("#sheet_project_form").data("bootstrapValidator").resetForm();
+      $(".sheet-project-team small").css('display','none');
   });
 
   function teamValidator() {
@@ -1908,6 +1917,7 @@ $(function () {
                   events.push({
                       title: value['items'] + ' / ' + value['hour'] + '小時',
                       start: value['working_day'], // will be parsed
+                      url: value['url'],
                   });
                 });
 
