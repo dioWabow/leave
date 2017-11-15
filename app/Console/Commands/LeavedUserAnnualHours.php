@@ -92,7 +92,7 @@ class LeavedUserAnnualHours extends Command
                 'annual_hours' => $real_annual_hours,
                 'used_annual_hours' => $used_annual_hours,
                 'remain_annual_hours' => $remain_annual_hours,
-                'create_time' => Carbon::now()->format('Y-m-d'),
+                'create_time' => $today->format('Y-m-d'),
             ]);
             $LeavedUser->save();
 

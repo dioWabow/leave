@@ -85,7 +85,7 @@ class ReportAnnualYears extends Command
                 'annual_next_years' => $annual_next_years,
                 'used_annual_hours' => $used_annual_hours,
                 'remain_annual_hours' => $remain_annual_hours,
-                'create_time' => Carbon::now()->format('Y-m-d'),
+                'create_time' => $today->format('Y-m-d'),
             ]);
             $model->save();
         }
