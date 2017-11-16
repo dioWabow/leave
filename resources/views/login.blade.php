@@ -2,9 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>請假系統 DEMO</title>
+  <title>請假系統</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-@include('layouts.head_css')
+  @include('layouts.head_include')
+  @include('layouts.head_js')
 
 
   <!--[if lt IE 9]>
@@ -18,18 +19,14 @@
   <script>
   $(function() {
       $('#login').click(function(){
-        location.href = 'index.html';
+        location.href = '{{ route('login_google') }}';
       });
       
       $('body').vegas({
           slides: [
-              { src: 'dist/img/wabow-team2.jpg' },
-              { src: 'dist/img/wabow-team3.jpg' },
-              { src: 'dist/img/wabow-team4.jpg' },
-              { src: 'dist/img/wabow-team5.jpg' },
-              { src: 'dist/img/wabow-team6.jpg' },
-              { src: 'dist/img/wabow-team7.jpg' },
-              { src: 'dist/img/wabow-team8.jpg' },
+              @foreach(explode(',' , ConfigHelper::getConfigValueByKey('login_pictures')) as $picture)
+                { src: '{{UrlHelper::getLoginPictureUrl($picture)}}' },
+              @endforeach
           ],
           //transition: 'zoomOut',
           animation: 'random',
@@ -43,9 +40,17 @@
 <body class="hold-transition login-page">
   <div class="login-box">
   <div class="login-logo">
-    <a href="index.html"><img src="dist/img/wabow_logo.png" width="50"> <b>哇寶</b>請假系統</a>
+    <a href="{{ route('index') }}"><img src="{{ UrlHelper::getCompanyLogoUrl(ConfigHelper::getConfigValueByKey('company_logo') )}}" width="50"> <b>{{ConfigHelper::getConfigValueByKey('company_short_name')}}</b>請假系統</a>
   </div>
   <button type="button" name="login" id="login" class="btn btn-block btn-warning btn-lg"><i class="fa fa-sign-in"></i> 我要登入</button>
+  <br>
+  @if ($errors->has('msg'))
+    <div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h4><i class="icon fa fa-ban"></i> 錯誤</h4>
+      {{ $errors->first('msg') }}
+    </div>
+  @endif
 </div>
 </body>
 </html>
