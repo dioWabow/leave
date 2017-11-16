@@ -23,13 +23,14 @@
       <div class="nav-tabs-custom" style="margin-top: 5px;">
         <ul class="nav nav-tabs">
           <li class="{{$chosed_user_id==Auth::user()->id ? 'active' : ''}} fonts">
-              <a href="{{route('sheet/calendar/view')}}">
+              <a href="javascript:void(0);" onclick="test('{{Auth::user()->id}}')">
               <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->nickname}}</span></a>
           </li>
           @foreach($timesheetpermissions as $timesheetpermission)
           @if($timesheetpermission->fetchUser->status)
             <li class="fonts {{$chosed_user_id==$timesheetpermission->fetchUser->id ? 'active' : ''}}">
-                <a href="{{route('sheet/calendar/view' ,['user_id' => $timesheetpermission->fetchUser->id])}}">
+
+                <a href="javascript:void(0);" onclick="test('{{$timesheetpermission->fetchUser->id}}')">
                   <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" width="50px" alt="{{$timesheetpermission->fetchUser->nickname}}"><br>
                   <span class="fonts">
                       {{$timesheetpermission->fetchUser->nickname}}
@@ -42,6 +43,7 @@
       <!-- /.nav-tabs-custom -->
     </div>
       <!-- THE CALENDAR -->
+      <input type='hidden' id="date" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
       <div id="calendar"></div>
     </div>
     <!-- /.box-body -->

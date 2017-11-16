@@ -9,13 +9,14 @@ use App\User;
 use App\TimesheetPermission;
 use Auth;
 use Redirect;
+use Carbon\Carbon;
 
 class CalendarController extends Controller
 {
-    public function view(Request $request)
+    public function view(Request $request,$user_id = '',$date = '')
     {
-        $chosed_user_id = intval($request->user_id);
-        $chosed_user_id = $chosed_user_id ?: Auth::user()->id;
+        $chosed_user_id = !empty($user_id) ? $user_id : Auth::user()->id;
+        $chosed_date = !empty($date) ? $date : Carbon::now();
 
         $timesheetpermissions = TimesheetPermission::getTimesheetPermissionByUserId(Auth::user()->id);
         
@@ -26,7 +27,7 @@ class CalendarController extends Controller
         }
 
     	return view('timesheet_calendar',compact(
-            'chosed_user_id','timesheetpermissions'
+            'chosed_user_id','chosed_date','timesheetpermissions'
         ));
     }
 
@@ -42,12 +43,6 @@ class CalendarController extends Controller
         $user_id = $request['id'];
 
         $timesheets = Timesheet::getTimesheetsByUserIdAndPeriod($user_id,$start_time,$end_time);
-
-        foreach ($timesheets as $key => $timesheet) {
-
-            $timesheets["$key"]['url'] = route("sheet/daily/edit", [ "id" => $timesheet['id']]);
-
-        }
 
         foreach ($timesheets as $key => $timesheet) {
             
