@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Sheet;
 
-use App\Absences;
+use App\Absence;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -30,14 +30,14 @@ class AbsenceController extends Controller
 
         $dataAll = [];
 
-        $model = new Absences;
-        $dataProvider = $model->search($year,$month);
+        $model = new Absence;
+        $dataProvider = $model->absenceReportSearch($year,$month);
 
         foreach ($dataProvider as $value) {
         	$dataAll[$value['user_id']] = $model->countUserId($value['user_id']);
         }
 
-        return  view('absences_report', compact(
+        return  view('absence_report', compact(
         	'year', 'month', 'dataProvider', 'dataAll'
         ));
     }
