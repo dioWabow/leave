@@ -274,6 +274,7 @@ class Leave extends BaseModel
      public function searchForHistoryInMy($where = [])
      {
          $query = self::OrderedBy();
+         
          foreach ($where as $key => $value) {
              
              if (Schema::hasColumn('leaves', $key) && !empty($value)) {
@@ -308,7 +309,6 @@ class Leave extends BaseModel
 
              }
          }
- 
          $result = $query->paginate($this->pagesize);
          return $result;
      }
@@ -612,6 +612,22 @@ class Leave extends BaseModel
             ->where('start_time', '>=', $start_time)
             ->remember(0.2)
             ->get();
+        return $result;
+    }
+
+    public function getLeaveIdByTagIdAndUserId($where = [])
+    {
+        $result = self::whereIn('tag_id', $where['tag_id'])
+            ->where('user_id', $where['user_id'])
+            ->pluck('id');
+        return $result;
+    }
+
+    public function getLeaveByTagIdAndLeaveId($where = [])
+    {
+        $result = self::whereIn('tag_id', $where['tag_id'])
+            ->where('user_id', $where['user_id'])
+            ->pluck('id');
         return $result;
     }
 }

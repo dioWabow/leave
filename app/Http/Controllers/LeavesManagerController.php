@@ -512,9 +512,9 @@ class LeavesManagerController extends Controller
     {
         $model = new Leave;
         //取得該主管審核過的「已準假、不准假」 假單
-        $search['tag_id'] = ['8', '9'];
-        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_leaves_id = $model->searchForHistoryInManager($search)->pluck('id');
+        $leaves['tag_id'] = ['8', '9'];
+        $leaves['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
+        $get_leaves_id = $model->getLeaveByTagIdAndLeaveId($leaves)->pluck('id');
 
         //因為搜尋的日期沒有分秒，先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
         $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);

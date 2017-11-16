@@ -207,12 +207,12 @@ class LeavesHrController extends Controller
     {
         $model = new Leave;
         //取得所有「不准假」的 假單id
-        $search['tag_id'] = ['8'];
-        $get_not_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+        $not_leaves['tag_id'] = ['8'];
+        $get_not_leaves_id = $model->getLeaveByTagId($not_leaves)->pluck('id');
 
-        $search['tag_id'] = ['9'];
         //取得所有「已准假」 的 假單id
-        $get_upcoming_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+        $upcoming['tag_id'] = ['9'];
+        $get_upcoming_leaves_id = $model->getLeaveByTagId($upcoming)->pluck('id');
         //取得所有小於今天的子單記錄，狀態在「已準假」
         $today = Carbon::now()->format('Y-m-d');
         $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
@@ -225,7 +225,7 @@ class LeavesHrController extends Controller
         $model = new Leave;
         $search['tag_id'] = ['8', '9'];
         //取得所有「不准假、已准假」的 假單id
-        $get_leaves_id = $model->searchForProveAndUpComInHr($search)->pluck('id');
+        $get_leaves_id = $model->getLeaveByTagIdAndLeaveId($search)->pluck('id');
         
         //先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
         $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);
