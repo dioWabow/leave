@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\LeavedUserAnnualHours::class,
         Commands\DailyWaitProve::class,
         Commands\EveryDayAnnualHours::class,
+        Commands\AbsenceSheetEveryDay::class,
         Commands\AbsenceSheetEveryDaySlack::class,
     ];
 
