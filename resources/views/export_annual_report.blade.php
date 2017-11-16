@@ -18,7 +18,7 @@
 		<tbody>
 			@forelse ($dataProvider as $value)
 	            <tr>
-					<td>{{ $value->fetchUser->name }}</td>
+					<td>{{ $value->fetchUser->nickname }}</td>
 					<td>{{ TimeHelper::changeDateFormat($value->fetchUser->enter_date,'Y-m-d') }}</td>
 					<td>{{ $value->annual_this_years }}</td>
 					<td>{{ $value->annual_next_years }}</td>
