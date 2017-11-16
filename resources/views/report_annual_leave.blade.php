@@ -58,7 +58,7 @@
 											<td>
 												<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
 											</td>
-											<td>{{ $value->fetchUser->name }}</td>
+											<td>{{ $value->fetchUser->nickname }}</td>
 											<td>{{ TimeHelper::changeDateFormat($value->fetchUser->enter_date,'Y-m-d') }}</td>
 											<td>{{ $value->annual_this_years }}</td>
 											<td>{{ $value->annual_next_years }}</td>
