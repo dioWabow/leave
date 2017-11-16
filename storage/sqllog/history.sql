@@ -1,3 +1,5 @@
+--2017-11-16 Eno修正db註解
+ALTER TABLE `users` CHANGE `status` `status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '離職狀態';
 --2017-11-10 carrie 加上是否通知 欄位 
 ALTER TABLE `users` ADD `sheet_notices` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '是否發送通知' AFTER `annual_hours`;
 --2017-10-31 carrie id 加上 auto_increment 

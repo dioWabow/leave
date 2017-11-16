@@ -80,7 +80,9 @@ class UserTeam extends BaseModel
     public static function getNotManagerUsersIdByTeamsId($team_id)
     {
         $result = self::where('team_id', $team_id)
-            ->where('role', '!=', "manager")
+            ->leftJoin('users', 'users.id', '=', 'users_teams.user_id')
+            ->where('users_teams.role', '!=', "manager")
+            ->where('users.status', '!=', "0")
             ->get()
             ->pluck('user_id');
         return $result;
