@@ -499,7 +499,7 @@ class Leave extends BaseModel
         $result = $this->whereBetween('start_time', [$first_day, $last_day])
             ->where('tag_id', '9')
             ->get();
-    	return $result;
+        return $result;
     }
 
     public function userVacationList($user_id, $type_id, $year, $month, $order_by, $order_way)
@@ -559,6 +559,15 @@ class Leave extends BaseModel
     public function fetchUserTeam()
     {
         $result = $this->hasOne('App\UserTeam', 'user_id', 'user_id');
+        return $result;
+    }
+
+    public function leaveManagerDataRange($all_user, $first_day, $last_day)
+    {
+        $result = $this->whereIn('user_id', $all_user)
+            ->whereBetween('start_time', [$first_day, $last_day])
+            ->where('tag_id', '9')
+            ->get();
         return $result;
     }
 
