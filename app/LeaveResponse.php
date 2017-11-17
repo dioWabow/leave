@@ -38,6 +38,7 @@ class LeaveResponse extends BaseModel
     {
         $result = self::where('leave_id' , $leave_id)
             ->where('tag_id' , $tag_id)
+            ->remember(0.2)
             ->get();
         return $result;
     }
