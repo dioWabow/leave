@@ -113,6 +113,11 @@ $(function () {
       }
   });
 
+ /* reset button resetForm  */
+  $("#reset_btn").click(function() {
+      $("#holidies_form").data("bootstrapValidator").resetForm();
+  });
+
   /*使用daterangerpicker 後 重新驗證*/
   $("#holidies_date").on("hide.daterangepicker", function(){  
     var bootstrapValidator = $("#holidies_form").data('bootstrapValidator');  
@@ -797,6 +802,10 @@ $(function () {
         },
       }
   });
+   /* reset button resetForm  */
+  $("#reset_btn").click(function() {
+      $("#leave_type_form").data("bootstrapValidator").resetForm();
+  });
 });
 </script>
 @endif
@@ -1164,6 +1173,11 @@ $(function () {
     $("#leave_form").bootstrapValidator("revalidateField", "leave[agent][]");
   }); 
 
+  /* reset button resetForm  */
+  $("#reset_btn").click(function() {
+      $("#leave_form").data("bootstrapValidator").resetForm();
+  });
+  
 });
 </script>
 @endif
@@ -1398,7 +1412,7 @@ $(function () {
       $("#user_leave_date").val("");
     });
 
-    $('#user_form').bootstrapValidator({
+    $("#user_form").bootstrapValidator({
       message: 'This value is not valid',
       fields: {
         'user[employee_no]': {
@@ -1487,6 +1501,11 @@ $(function () {
             }
         },
       }
+  });
+
+  /* reset button resetForm  */
+  $("#reset_btn").click(function() {
+      $("#user_form").data("bootstrapValidator").resetForm();
   });
   /*使用daterangerpicker 後 重新驗證*/
   $("#user_birthday").on("hide.daterangepicker", function(){  
@@ -1989,6 +2008,11 @@ $(function () {
   /*主團隊 勾選checkbox時顯示子團隊*/
   $(".sub_team").hide();
 
+  /* 點選取消 reset button*/
+  $("#reset_btn").click(function() {
+     $(".sub_team").hide()
+  });
+
   // 如果一開始就被選 就要顯示
   $(".main_team").each(function() {
 
@@ -2082,27 +2106,25 @@ $(function () {
 
   });
 
-  /* reset button resetForm */
+  /* reset button resetForm  */
   $("#reset_btn").click(function() {
       $("#sheet_project_form").data("bootstrapValidator").resetForm();
-      $(".sheet-project-team small").css('display','none');
+      $(".sheet-project-team small").eq(1).css('display','none');
   });
 
   function teamValidator() {
 
     if(!$('#sheet_project_form').data('bootstrapValidator').isValidField('sheet_project[team][]')) {  
 
-        $(".sheet-project-team small").css('display','');
+        $(".sheet-project-team small").eq(1).css('display','');
 
       } else {
 
-        $(".sheet-project-team small").css('display','none');
+        $(".sheet-project-team small").eq(1).css('display','none');
 
       };
 
   }
-
-  
   
 });
 </script>

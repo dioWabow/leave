@@ -189,7 +189,7 @@
 			<div class="box-footer">
 				<div class="pull-right">
 					@if(Auth::getUser()->id == $user->id)
-					<button type="reset" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
+					<button type="reset" id="reset_btn" class="btn btn-default"><i class="fa fa-undo"></i> 取消</button>
 					@else
 					<button type="button" id="rechoose" class="btn btn-default"><i class="fa fa-undo"></i> 重選對象</button>
 					@endif

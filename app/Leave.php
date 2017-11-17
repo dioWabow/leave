@@ -627,7 +627,7 @@ class Leave extends BaseModel
     public function getLeaveIdByTagIdAndLeaveId($tag_id, $leave_id)
     {
         $result = self::whereIn('tag_id', $tag_id)
-            ->where('id', $leave_id)
+            ->whereIn('id', $leave_id)
             ->remember(0.2)
             ->pluck('id');
         return $result;

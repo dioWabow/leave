@@ -177,9 +177,8 @@ class LeavesManagerController extends Controller
         }
 
         //傳入user_id,取得該user的審核單, 再回來進入search()
-        
-        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $search['tag_id'] = ['9'];
+        $tag_id = ['9'];
+        $search['id'] = LeaveResponse::getLeavesIdByTagIdAndUserId($tag_id, Auth::user()->id);
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         
         $model = new Leave;
@@ -492,19 +491,23 @@ class LeavesManagerController extends Controller
     {
         $model = new Leave;
         //取得該主管審核過的「不准假」 假單
-        $not_leave_id_tag_id = ['8'];
-        $not_leave_id = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_not_leaves_id = $model->getLeaveIdByTagIdAndLeaveId($not_leave_id_tag_id, $not_leave_id);
-       
+        $not_leave_tag_id = ['8'];
+        $get_not_leave_id = LeaveResponse::getLeavesIdByTagIdAndUserId($not_leave_tag_id, Auth::user()->id);
+        
         //取得該主管審核過的「已准假」 假單
-        $upcoming_tag_id = ['9'];
-        $upcoming_id = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_upcoming_leaves_id = $model->getLeaveIdByTagIdAndLeaveId($upcoming_tag_id, $upcoming_id);
-
+        $upcoming_tag_id = ['4','9'];
+        $upcoming_id = LeaveResponse::getLeavesIdByTagIdAndUserId($upcoming_tag_id, Auth::user()->id);
+        
+        /* 確認這些假單在主單是通過的狀態 */
+        $main_tag_id = ['9'];
+        $get_upcoming_leaves_id = $model->getLeaveIdByTagIdAndLeaveId($main_tag_id, $upcoming_id);
+        
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
         $today = Carbon::now()->format('Y-m-d');
         $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
-        $result = $get_not_leaves_id->merge($get_leaves_id_today);
+        
+        $result = $get_not_leave_id->merge($get_leaves_id_today);
+        
         return $result;
     }
 
@@ -513,8 +516,7 @@ class LeavesManagerController extends Controller
         $model = new Leave;
         //取得該主管審核過的「已準假、不准假」 假單
         $tag_id = ['8', '9'];
-        $id = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_leaves_id = $model->getLeaveIdByTagIdAndLeaveId($tag_id, $id);
+        $get_leaves_id = LeaveResponse::getLeavesIdByTagIdAndUserId($tag_id, Auth::user()->id);
 
         //因為搜尋的日期沒有分秒，先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
         $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);
