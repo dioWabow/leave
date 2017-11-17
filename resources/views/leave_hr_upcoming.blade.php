@@ -25,14 +25,14 @@
       @forelse ($dataProvider as $value)
         <tr class="clickable-row" data-href="{{ route('leaves_hr/leave_detail', [ 'id' => $value->id ]) }}">
           <td>
-            <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
+            <img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" title="{{ $value->fetchUser->nickname }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
           </td>
           <td>{{$value->fetchType->name}}</td>
           <td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
           <td>{{ $value->reason }}</td>
           <td>
           @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-            <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+            <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" title="{{ $agent->fetchUser->nickname }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
           @endforeach
           </td>
           <td>{{ $value->hours }}</td>

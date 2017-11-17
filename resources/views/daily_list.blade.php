@@ -18,7 +18,7 @@
 				<ul class="nav nav-tabs">
           <li @if($current_user == Auth::user()->id) class="active" @endif>
 						<a href="javascript:void(0)" class="changeMySheet">
-						<img src="{{ UrlHelper::getUserAvatarUrl( Auth::user()->avatar ) }}" width="50px">
+						<img src="{{ UrlHelper::getUserAvatarUrl( Auth::user()->avatar ) }}" title="{{ Auth::user()->nickname }}" alt="{{ Auth::user()->nickname }}" width="50px">
             <br>
               <span class="fonts">{{ Auth::user()->nickname }}</span>
             </a>
@@ -26,7 +26,7 @@
         @foreach ($get_permission_user as $user)
 					<li @if($current_user == $user->allow_user_id) class="active"@endif>
             <a href="javascript:void(0)" id="{{$user->allow_user_id}}" class="changeOtherSheet">
-              <img src="{{ UrlHelper::getUserAvatarUrl( $user->fetchUser->avatar ) }}" width="50px">
+              <img src="{{ UrlHelper::getUserAvatarUrl( $user->fetchUser->avatar ) }}" title="{{ $user->fetchUser->nickname }}" alt="{{ $user->fetchUser->nickname }}" width="50px">
             <br>
               <span class="fonts">{{ $user->fetchUser->nickname }}</span>
             </a>

@@ -174,9 +174,9 @@ class DailyController extends Controller
     {
         $input = $request->input('daily');
         $input = self::checkDataValue($input);
-
+       
         if (!TimeHelper::checkEditSheetDate($input['working_day'])){
-
+            
             return Redirect::back()->withInput()->withErrors(['msg' => '不可以新增小於七天前，大於一天後']);
 
         }

@@ -240,10 +240,12 @@ class TimeHelper
      */
     public function checkEditSheetDate($data)
     {
-        $working_day = Carbon::parse($data);
-        $past = Carbon::parse('-7 day');
-        $future = Carbon::parse('+1 day');
-        $confirm_date = ($working_day->lte($future) && $working_day->gte($past))? true : false ;
+        $working_day = $this->changeDateFormat($data, 'Y-m-d');
+        $past = Carbon::parse('-7 day')->format('Y-m-d');
+        $future = Carbon::parse('+1 day')->format('Y-m-d');
+        
+        $confirm_date = ($working_day < $future && $working_day >= $past)? true : false ;
+        
         return $confirm_date;
     }
     /** 

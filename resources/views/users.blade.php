@@ -86,7 +86,7 @@
                     <tbody>
                       @forelse($dataProvider as $user)
                       <tr class='clickable-row' data-href="{{ route('user/edit', ['id'=>$user->id]) }}">
-                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
+                        <td align="center"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" title="{{$user->nickname}}" class="img-circle" alt="{{$user->nickname}}" width="50px"></td>
                         <td align="center">
                           <div>{{$user->employee_no}}</div>
                           <div>
@@ -116,7 +116,7 @@
                         <td>
                           @foreach (App\UserAgent::getUserAgentByUserId($user->id) as $agent)
                             @if($agent->fetchUser->status == 1)
-                            <img src="{{UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}" class="img-circle" alt="{{$agent->fetchUser->avatar}}" width="50px">
+                            <img src="{{UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}" title="{{ $agent->fetchUser->nickname }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                             @endif
                           @endforeach
                         </td>
