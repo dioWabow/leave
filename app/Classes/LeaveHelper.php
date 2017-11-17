@@ -1331,7 +1331,7 @@ class LeaveHelper
     {
         $leave_prove_process = [];
 
-        $leave_user_id = Leave::find($id)->user_id;
+        $leave_user_id = Leave::where('id',$id)->remember(0.2)->get()->first()->user_id;
 
         // 判斷有沒有代理人審核
         $leave_response = LeaveResponse::getResponseByLeaveIdAndTagId($id , '2');
@@ -1353,8 +1353,8 @@ class LeaveHelper
 
         if (!empty($agent_user_id)) {
 
-            $leave_prove_process['agent'] = User::find($agent_user_id);
-
+            $leave_prove_process['agent'] = User::where('id',$agent_user_id)->remember(0.2)->get()->first();
+            
         }
 
         //請假人team id
