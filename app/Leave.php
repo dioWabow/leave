@@ -44,7 +44,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForProveInManager($where = [])
+    public function ManagerProveSearch($where = [])
     {
         $query = self::OrderedBy();
 
@@ -78,11 +78,11 @@ class Leave extends BaseModel
             }
         }
 
-        $result = $query->paginate($this->pagesize);
+        $result = $query->get();
         return $result;
     }
 
-    public function searchForProveForAdmin($tag_id,$hours)
+    public function getAdminLeavesTotalByTagIdAndHours($tag_id,$hours)
     {
         $query = self::where('hours', $hours)->where('tag_id',$tag_id);
         $result = $query->remember(0.2)->get();
@@ -98,7 +98,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForUpComingInManager($where = [])
+    public function ManagerUpComingSearch($where = [])
     {
         $query = self::OrderedBy();
 
@@ -128,7 +128,7 @@ class Leave extends BaseModel
             }
         }
         
-        $result = $query->paginate($this->pagesize);
+        $result = $query->get();
         return $result;
     }
 
@@ -143,7 +143,7 @@ class Leave extends BaseModel
      * @return 資料object/false
      */
    
-    public function searchForHistoryInManager($where = [])
+    public function ManagerHistorySearch($where = [])
     {
         $query = self::OrderedBy();
 
@@ -196,7 +196,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForProveAndUpComInMy($where = [])
+    public function MyProveAndUpComingSearch($where = [])
     {
         $query = self::OrderedBy();
 
@@ -226,7 +226,7 @@ class Leave extends BaseModel
             }
         }
 
-        $result = $query->remember(0.2)->paginate($this->pagesize);
+        $result = $query->remember(0.2)->get();
         return $result;
     }
 
@@ -271,7 +271,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-     public function searchForHistoryInMy($where = [])
+     public function MyHistorySearch($where = [])
      {
          $query = self::OrderedBy();
          
@@ -322,10 +322,10 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForProveAndUpComInHr($where = [])
+    public function HrProveAndUpComingSearch($where = [])
     {
         $query = self::OrderedBy();
-
+        
         $columns = array_map('strtolower', Schema::getColumnListing('leaves'));
 
         foreach ($where as $key => $value) {
@@ -348,7 +348,7 @@ class Leave extends BaseModel
             }
         }
 
-        $result = $query->paginate($this->pagesize);
+        $result = $query->get();
         return $result;
     }
  
@@ -361,7 +361,7 @@ class Leave extends BaseModel
      * @param  int     $pagesize  每頁筆數
      * @return 資料object/false
      */
-    public function searchForHistoryInHr($where = [])
+    public function HrHistorySearch($where = [])
     {
         $query = self::OrderedBy();
 
@@ -615,19 +615,22 @@ class Leave extends BaseModel
         return $result;
     }
 
-    public function getLeaveIdByTagIdAndUserId($where = [])
+    public function getLeaveIdByTagIdAndUserId($tag_id, $user_id)
     {
-        $result = self::whereIn('tag_id', $where['tag_id'])
-            ->where('user_id', $where['user_id'])
+        $result = self::whereIn('tag_id', $tag_id)
+            ->where('user_id', $user_id)
+            ->remember(0.2)
             ->pluck('id');
         return $result;
     }
 
-    public function getLeaveByTagIdAndLeaveId($where = [])
+    public function getLeaveIdByTagIdAndLeaveId($tag_id, $leave_id)
     {
-        $result = self::whereIn('tag_id', $where['tag_id'])
-            ->where('user_id', $where['user_id'])
+        $result = self::whereIn('tag_id', $tag_id)
+            ->where('id', $leave_id)
+            ->remember(0.2)
             ->pluck('id');
         return $result;
     }
+
 }

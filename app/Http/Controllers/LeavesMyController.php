@@ -51,7 +51,7 @@ class LeavesMyController extends Controller
         $model = new Leave;
         $search['tag_id'] = ['1','2','3','4'];
         $search['user_id'] = Auth::user()->id;
-        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInMy($search);
+        $dataProvider = $model->fill($order_by)->MyProveAndUpComingSearch($search);
         
         return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
@@ -91,7 +91,7 @@ class LeavesMyController extends Controller
         $search['tag_id'] = ['9'];
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         $search['user_id'] = Auth::user()->id;
-        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInMy($search);
+        $dataProvider = $model->fill($order_by)->MyProveAndUpComingSearch($search);
         
         return  view('leave_my', compact(
             'search', 'model', 'dataProvider'
@@ -119,20 +119,20 @@ class LeavesMyController extends Controller
                 
                 $date_range = explode(" - ", $search['daterange']);
                 // 先去找子單的時間再搜尋主單
-                $search['id'] = self::getHistoryLeaveIdForSearch($date_range[0], $date_range[1]);
+                $search['id'] = self::getHistoryLeaveIdByDate($date_range[0], $date_range[1]);
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
                             
             }  else {
 
                  //如果日期進來為空，搜尋該user < 今天的子單 的leave_id
-                $search['id'] = $this->getHistoryLeaveIdForDate();
+                $search['id'] = self::getHistoryLeaveIdByToDay();
 
             }
 
         } else {
 
-            $search['id'] = $this->getHistoryLeaveIdForDate();
+            $search['id'] = self::getHistoryLeaveIdByToDay();
 
             // 沒有搜尋，判斷有沒有page 和 session 是不是空的
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_my')))) {
@@ -162,7 +162,7 @@ class LeavesMyController extends Controller
 
         }
         
-        $dataProvider = $model->fill($order_by)->searchForHistoryInMy($search);
+        $dataProvider = $model->fill($order_by)->MyHistorySearch($search);
         $leaves_totle_hours = LeaveHelper::getLeavesHoursTotal($dataProvider);
         
         return  view('leave_my', compact(
@@ -227,19 +227,19 @@ class LeavesMyController extends Controller
 
     }
 
-    private static function getHistoryLeaveIdForDate()
+    private static function getHistoryLeaveIdByToDay()
     {
         $model = new Leave;
         
         //取得該user 的「已取消、不准假」 假單
-        $not_leaves['tag_id'] = ['7','8'];
-        $not_leaves['user_id'] = Auth::user()->id;
-        $get_not_leaves_id = $model->getLeaveIdByTagIdAndUserId($not_leaves);
+        $not_leaves_tag_id = ['7','8'];
+        $not_leaves_user_id = Auth::user()->id;
+        $get_not_leaves_id = $model->getLeaveIdByTagIdAndUserId($not_leaves_tag_id, $not_leaves_user_id);
 
         //取得該user 的「已准假」 假單
-        $upcoming['tag_id'] = ['9'];
-        $upcoming['user_id'] = Auth::user()->id;
-        $get_upcoming_leaves_id = $model->getLeaveIdByTagIdAndUserId($upcoming);
+        $upcoming_tag_id = ['9'];
+        $upcoming_user_id = Auth::user()->id;
+        $get_upcoming_leaves_id = $model->getLeaveIdByTagIdAndUserId($upcoming_tag_id, $upcoming_user_id);
 
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
         $today = Carbon::now()->format('Y-m-d');
@@ -249,13 +249,13 @@ class LeavesMyController extends Controller
         return $result;
     }
 
-    private static function getHistoryLeaveIdForSearch($start_time, $end_time)
+    private static function getHistoryLeaveIdByDate($start_time, $end_time)
     {
         $model = new Leave;
-        $search['tag_id'] = ['7','8','9'];
-        $search['user_id'] = Auth::user()->id;
+        $tag_id = ['7','8','9'];
+        $user_id= Auth::user()->id;
         //取得user「不准假、已取消、已準假」 假單
-        $get_leaves_id = $model->getLeaveIdByTagIdAndUserId($search);
+        $get_leaves_id = $model->getLeaveIdByTagIdAndUserId($tag_id, $user_id);
         
         //先將日期轉換成正確的搜尋條件，09:00 ~ 18:00
         $range = TimeHelper::changeDateTimeFormat($start_time, $end_time);

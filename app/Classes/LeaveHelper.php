@@ -1116,7 +1116,7 @@ class LeaveHelper
         $model = new Leave;
         $tag_id = '4';
         $hours = ConfigHelper::getConfigValueByKey('boss_days') * 8;
-        $result = $model->searchForProveForAdmin($tag_id ,$hours )->count();
+        $result = $model->getAdminLeavesTotalByTagIdAndHours($tag_id ,$hours )->count();
         return $result;
     }
 

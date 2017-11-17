@@ -106,7 +106,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($dataProvider as $value)
+											@forelse ($dataProvider as $value)
 												<tr class="clickable-row" data-href="{{ route('leave_type/edit', [ 'id' => $value->id ]) }}">
 													<td>{{ $value->name }}</td>
 														<td>
@@ -152,12 +152,11 @@
 													</td>
                         </tr>
                       </tr>
-                      @endforeach
-                      @if(count($dataProvider) == 0)
+                      @empty
 											<tr class="">
 												<td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
 											</tr>
-											@endif
+											@endforelse
 									  </tbody>
 									</table>
 								</div>

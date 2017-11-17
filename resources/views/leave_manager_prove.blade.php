@@ -28,7 +28,7 @@
                 </tr>
               </thead>
             <tbody>
-              @foreach ($dataProvider as $value)
+              @forelse ($dataProvider as $value)
               <tr class="clickable-row" data-href="{{ route('leaves_manager/leave_detail', [ 'id' => $value->id ]) }}">
                 <td>
                   <input type="checkbox" name="leave[leave_id][]" class="flat-red check" value="{{ $value->id }}">
@@ -51,12 +51,11 @@
                   @if ($value->start_time >= Carbon\Carbon::now()) 倒數{{ LeaveHelper::getDiffDaysLabel($value->start_time) }}天 @endif
                 </td>
               </tr>
-              @endforeach
-              @if(count($dataProvider) == 0)
+              @empty
                 <tr class="">
                   <td colspan="9" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
                 </tr>
-              @endif
+             @endforelse
           </tbody>
         </table>
       </div>

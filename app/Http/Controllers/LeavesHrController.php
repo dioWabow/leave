@@ -54,7 +54,7 @@ class LeavesHrController extends Controller
 
         $model = new Leave;
         $search['tag_id'] = ['1','2','3','4'];
-        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInHr($search);
+        $dataProvider = $model->fill($order_by)->HrProveAndUpComingSearch($search);
 
         return  view('leave_hr', compact(
             'search', 'model', 'dataProvider'
@@ -100,8 +100,9 @@ class LeavesHrController extends Controller
         $model = new Leave;
         $search['tag_id'] = ['9'];
         $search['start_time'] = Carbon::now()->format('Y-m-d');
-        $dataProvider = $model->fill($order_by)->searchForProveAndUpComInHr($search);
-
+        
+        $dataProvider = $model->fill($order_by)->HrProveAndUpComingSearch($search);
+        
         return  view('leave_hr', compact(
             'search', 'model', 'dataProvider'
         ));
@@ -133,18 +134,18 @@ class LeavesHrController extends Controller
                 $date_range = explode(" - ", ($search['daterange']));
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
-                $search['id'] = self::getHistoryLeaveIdForSearch($date_range[0], $date_range[1]);
+                $search['id'] = self::getHistoryLeaveIdByDate($date_range[0], $date_range[1]);
                             
             } else {
 
                  //如果日期進來為空，搜尋所有 < 今天以子單日期為主 的leave_id
-                 $search['id'] = self::getHistoryLeaveIdForToDay();
+                 $search['id'] = self::getHistoryLeaveIdByToDay();
                  
             }
             
         } else {
 
-            $search['id'] = self::getHistoryLeaveIdForToDay();
+            $search['id'] = self::getHistoryLeaveIdByToDay();
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_hr')))) {
 
@@ -172,7 +173,7 @@ class LeavesHrController extends Controller
         }
         
         $model = new Leave;
-        $dataProvider = $model->fill($order_by)->searchForHistoryInHr($search);
+        $dataProvider = $model->fill($order_by)->HrHistorySearch($search);
         
         return  view('leave_hr', compact(
             'dataProvider', 'search', 'model'
@@ -203,16 +204,16 @@ class LeavesHrController extends Controller
 
     }
 
-    private static function getHistoryLeaveIdForToDay()
+    private static function getHistoryLeaveIdByToDay()
     {
         $model = new Leave;
         //取得所有「不准假」的 假單id
-        $not_leaves['tag_id'] = ['8'];
-        $get_not_leaves_id = $model->getLeaveByTagId($not_leaves)->pluck('id');
+        $not_leaves_tag_id = ['8'];
+        $get_not_leaves_id = $model->getLeaveByTagId($not_leaves_tag_id)->pluck('id');
 
         //取得所有「已准假」 的 假單id
-        $upcoming['tag_id'] = ['9'];
-        $get_upcoming_leaves_id = $model->getLeaveByTagId($upcoming)->pluck('id');
+        $upcoming_tag_id = ['9'];
+        $get_upcoming_leaves_id = $model->getLeaveByTagId($upcoming_tag_id)->pluck('id');
         //取得所有小於今天的子單記錄，狀態在「已準假」
         $today = Carbon::now()->format('Y-m-d');
         $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
@@ -220,12 +221,12 @@ class LeavesHrController extends Controller
         return $result;
     }
 
-    private static function getHistoryLeaveIdForSearch($start_time, $end_time)
+    private static function getHistoryLeaveIdByDate($start_time, $end_time)
     {
         $model = new Leave;
-        $search['tag_id'] = ['8', '9'];
+        $tag_id = ['8', '9'];
         //取得所有「不准假、已准假」的 假單id
-        $get_leaves_id = $model->getLeaveByTagIdAndLeaveId($search)->pluck('id');
+        $get_leaves_id = $model->getLeaveByTagId($tag_id)->pluck('id');
         
         //先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
         $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);

@@ -75,7 +75,7 @@
             </tr>
           </thead>
           <tbody>
-          @foreach ($dataProvider as $value)
+          @forelse ($dataProvider as $value)
             <tr class="clickable-row" data-href="{{ route('leaves_manager/leave_detail',[ 'id' => $value->id ]) }}">
               <td>
                 <button type="button"
@@ -100,12 +100,11 @@
               </td>
               <td id="hours">{{ $value->hours }}</td>
             </tr>
-            @endforeach
-            @if(count($dataProvider) == 0)
-            <tr class="">
-              <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
-            </tr>
-            @endif
+            @empty
+              <tr class="">
+                <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+              </tr>
+            @endforelse
           </tbody>
           <tfotter>
             <tr class="text-red">
