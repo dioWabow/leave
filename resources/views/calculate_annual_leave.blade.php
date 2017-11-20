@@ -59,7 +59,7 @@
                       @if($annual_hour->annual_hours>0)
     										<tr class='clickable-row' data-href='{{route("annual_leave_calculate/view" , ["id" => $annual_hour->user_id ,"year" => $search["year"]])}}'>
     											<td>
-    												<img src="{{UrlHelper::getUserAvatarUrl($annual_hour->fetchUser->avatar)}}" class="img-circle" alt="{{$annual_hour->fetchUser->nickname}}" width="50px">
+    												<img src="{{UrlHelper::getUserAvatarUrl($annual_hour->fetchUser->avatar)}}" class="img-circle" title="{{$annual_hour->fetchUser->nickname}}" alt="{{$annual_hour->fetchUser->nickname}}" width="50px">
     											</td>
                           <td>{{$annual_hour->fetchUser->nickname}}</td>
                           <td>{{TimeHelper::changeDateFormat($annual_hour->fetchUser->enter_date,'Y-m-d')}}</td>

@@ -42,7 +42,7 @@
 									@foreach ($dataProvider as $value)
 										<tr class="clickable-row" data-href="{{ route('agent/leave_detail', [ 'id' => $value->id ]) }}">
 											<td>
-                      	<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->avatar }}" width="50px">
+                      	<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" title="{{ $value->fetchUser->nickname }}" alt="{{ $value->fetchUser->nickname }}" class="img-circle"  width="50px">
                     	</td>
 											<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
 											<td>{{ $value->reason }}</td>

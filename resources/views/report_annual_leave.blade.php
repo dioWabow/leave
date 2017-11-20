@@ -56,7 +56,7 @@
 										@forelse ($dataProvider as $value)
                       <tr class="clickable-row" data-href="{{  route('annual_report/view', ['id' => $value->user_id, 'year' => $search['year'] ] ) }}">
 											<td>
-												<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px">
+												<img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}" class="img-circle" title="{{ $value->fetchUser->nickname }}" alt="{{ $value->fetchUser->nickname }}" width="50px">
 											</td>
 											<td>{{ $value->fetchUser->nickname }}</td>
 											<td>{{ TimeHelper::changeDateFormat($value->fetchUser->enter_date,'Y-m-d') }}</td>

@@ -75,7 +75,7 @@
             </tr>
           </thead>
           <tbody>
-          @foreach ($dataProvider as $value)
+          @forelse ($dataProvider as $value)
             <tr class="clickable-row" data-href="{{ route('leaves_manager/leave_detail',[ 'id' => $value->id ]) }}">
               <td>
                 <button type="button"
@@ -87,7 +87,7 @@
               </td>
               @foreach (App\User::getLeavesUserIdByUserId($value->user_id) as $user)
                 <td>
-                  <img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $user->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($user->avatar) }}?v={{ rand(1,99) }}" title="{{ $user->nickname }}" class="img-circle" alt="{{ $user->nickname }}" width="50px">
                 </td>
               @endforeach
               <td>{{ $value->fetchType->name }}</td>
@@ -95,29 +95,17 @@
               <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar)}}?v={{ rand(1,99) }}" title="{{ $agent->fetchUser->nickname }}"  class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                 @endforeach
               </td>
               <td id="hours">{{ $value->hours }}</td>
             </tr>
-            @endforeach
-            @if(count($dataProvider) == 0)
-            <tr class="">
-              <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
-            </tr>
-            @endif
+            @empty
+              <tr class="">
+                <td colspan="8" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
+              </tr>
+            @endforelse
           </tbody>
-          <tfotter>
-            <tr class="text-red">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th class="pull-right"></th>
-              <th></th>
-            </tr>
-          </tfotter>
         </table>
       </div>
     </div>

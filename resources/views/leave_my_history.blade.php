@@ -76,7 +76,7 @@
             </tr>
           </thead>
           <tbody>
-          @foreach ($dataProvider as $value)
+          @forelse ($dataProvider as $value)
             <tr class="clickable-row" data-href="{{ route('leaves_my/leave_detail',[ 'id' => $value->id ]) }}" @if ($value->tag_id == '7') style="text-decoration:line-through" @endif>
               <td>
                 <button type="button"
@@ -92,18 +92,18 @@
               <td>{{ $value->reason }}</td>
               <td>
                 @foreach (App\LeaveAgent::getLeaveIdByAgentId($value->id) as $agent)
-                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
+                  <img src="{{ UrlHelper::getUserAvatarUrl($agent->fetchUser->avatar) }}?v={{ rand(1,99) }}" title="{{$agent->fetchUser->nickname}}" class="img-circle" alt="{{ $agent->fetchUser->nickname }}" width="50px">
                 @endforeach
               </td>
               <td>{{ $value->hours }}</td>
             </tr>
-            @endforeach
-            @if(count($dataProvider) == 0)
+            @empty
             <tr class="">
               <td colspan="7" align="center"><span class="glyphicon glyphicon-search"> 沒有查詢到相關結果</span></td>
             </tr>
-            @else
+            @endforelse
           </tbody>
+          @if(count($dataProvider) > 0)
           <tfotter>
             <tr class="text-red">
               <th></th>
@@ -119,15 +119,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12">
-        <ul class="pagination">
-          <li class="paginate_button previous disabled">
-            <li>
-              {{ $dataProvider->links() }}
-            </li>
-          </li>
-        </ul>
-      </div>
+      {{ $dataProvider->render() }}
     </div>
   </div>
 </div>

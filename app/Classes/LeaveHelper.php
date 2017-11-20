@@ -1116,7 +1116,7 @@ class LeaveHelper
         $model = new Leave;
         $tag_id = '4';
         $hours = ConfigHelper::getConfigValueByKey('boss_days') * 8;
-        $result = $model->searchForProveForAdmin($tag_id ,$hours )->count();
+        $result = $model->getAdminLeavesTotalByTagIdAndHours($tag_id ,$hours )->count();
         return $result;
     }
 
@@ -1274,11 +1274,11 @@ class LeaveHelper
      */
     public static function getUpComingManagerLeavesTotal()
     {
-        $id = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
         $tag_id = ['9'];
+        $leave_id = LeaveResponse::getLeavesIdByTagIdAndUserId($tag_id, Auth::user()->id);
         $start_time = Carbon::now()->format('Y-m-d');
 
-        $result = Leave::getLeaveByIdTagIdAndStartTime($id,$tag_id,$start_time)->count();
+        $result = Leave::getLeaveByIdTagIdAndStartTime($leave_id, $tag_id, $start_time)->count();
         return $result;
     }
     

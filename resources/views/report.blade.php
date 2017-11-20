@@ -63,7 +63,7 @@
 										@foreach($all_user as $user_data)
 											<tr class="clickable-row" data-href="#">
 												<td>
-													<img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" class="img-circle" alt="{{$user_data->nickname}}" width="60px">
+													<img src="{{UrlHelper::getUserAvatarUrl($user_data->avatar)}}" title="{{$user_data->nickname}}" class="img-circle" alt="{{$user_data->nickname}}" width="60px">
 												</td>
 												<td>{{$user_data->nickname}}</td>
 												@foreach($all_type as $type_data)

@@ -34,15 +34,15 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('Report:AnnualHours')->dailyAt('10:15')->when(function () {
             return Carbon::now()->endOfMonth()->isToday();
-        });
+        });// 每月月底早上10:15 算特休結算
         
         $schedule->command('Report:LeavedUserAnnualHours')->dailyAt('20:00')->when(function () {
             return Carbon::now()->endOfMonth()->isToday();
-        });
+        });// 每月月底晚上20:00 算特休結算(離職)
 
         $schedule->command('Report:AnnualYears')->dailyAt('11:00')->when(function () {
             return (Carbon::now()->format('m-d') == "12-31");
-        });
+        }); // 每年最後一天早上11:00 算特休報表
 
         $schedule->command('Notice:DailyLeave')->dailyAt('10:00');//每天10點通知今日請假人
 
@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('Report:AbsenceSheetEveryDay')->dailyAt('10:30'); //每天早上10:30算當日沒填的
 	
-	$schedule->command('Slack:AbsenceSheetEveryDaySlack')->dailyAt('18:00'); //每天晚上18:00提醒未填寫日誌的人
+	    $schedule->command('Slack:AbsenceSheetEveryDaySlack')->dailyAt('18:00'); //每天晚上18:00提醒未填寫日誌的人
     }
     
     /**

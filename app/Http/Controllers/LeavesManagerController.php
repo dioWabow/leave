@@ -81,7 +81,7 @@ class LeavesManagerController extends Controller
 
             $search['tag_id'] = ['4'];
             $search['hours'] = ConfigHelper::getConfigValueByKey('boss_days') * 8;
-            $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
+            $dataProvider = $model->fill($order_by)->ManagerProveSearch($search);
 
         } elseif ($this->role == 'manager' && !empty(Auth::hasManagement())) {
 
@@ -94,13 +94,13 @@ class LeavesManagerController extends Controller
             
             if (!empty($search_sub_teams['user_id'])) {
 
-                $dataProvider_sub_teams = $model->fill($order_by)->searchForProveInManager($search_sub_teams);
+                $dataProvider_sub_teams = $model->fill($order_by)->ManagerProveSearch($search_sub_teams);
 
             } 
 
             if (!empty($search_teams['user_id'])) {
 
-                $dataProvider_teams = $model->fill($order_by)->searchForProveInManager($search_teams);
+                $dataProvider_teams = $model->fill($order_by)->ManagerProveSearch($search_teams);
 
             }
 
@@ -125,7 +125,7 @@ class LeavesManagerController extends Controller
             $get_user_id = UserTeam::getUserByTeams($teams);
             $search['user_id'] = LeaveHelper::getExcludeManagerUserId($get_user_id);
             $search ['tag_id'] = ['2'];
-            $dataProvider = $model->fill($order_by)->searchForProveInManager($search);
+            $dataProvider = $model->fill($order_by)->ManagerProveSearch($search);
             
         } else {
 
@@ -177,13 +177,12 @@ class LeavesManagerController extends Controller
         }
 
         //傳入user_id,取得該user的審核單, 再回來進入search()
-        
-        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $search['tag_id'] = ['9'];
+        $tag_id = ['9'];
+        $search['id'] = LeaveResponse::getLeavesIdByTagIdAndUserId($tag_id, Auth::user()->id);
         $search['start_time'] = Carbon::now()->format('Y-m-d');
         
         $model = new Leave;
-        $dataProvider = $model->fill($order_by)->searchForUpComingInManager($search);
+        $dataProvider = $model->fill($order_by)->ManagerUpComingSearch($search);
         return  view('leave_manager', compact(
             'search' ,'getRole', 'model', 'dataProvider'
         ));
@@ -219,18 +218,18 @@ class LeavesManagerController extends Controller
                 $date_range = explode(" - ", $search['daterange']);
                 $order_by['start_time'] = $date_range[0];
                 $order_by['end_time'] = $date_range[1];
-                $search['id'] = self::getHistoryLeaveIdForSearch($date_range[0], $date_range[1]);
+                $search['id'] = self::getHistoryLeaveIdByDate($date_range[0], $date_range[1]);
                 
             }  else {
 
                 //如果日期進來為空，搜尋主管審核過 < 今天的子單 的leave_id
-                $search['id'] = self::getHistoryLeaveIdForToDay();
+                $search['id'] = self::getHistoryLeaveIdByToDay();
                
             }
 
         } else {
 
-            $search['id'] = self::getHistoryLeaveIdForToDay();
+            $search['id'] = self::getHistoryLeaveIdByToDay();
 
             if (!empty($request->input('page') && !empty($request->session()->get('leaves_manager')))) {
 
@@ -257,7 +256,7 @@ class LeavesManagerController extends Controller
 
         }
         
-        $dataProvider = $model->fill($order_by)->searchForHistoryInManager($search);
+        $dataProvider = $model->fill($order_by)->ManagerHistorySearch($search);
         $leaves_totle_hours = LeaveHelper::getLeavesHoursTotal($dataProvider);
 
         return  view('leave_manager', compact(
@@ -488,39 +487,42 @@ class LeavesManagerController extends Controller
         return $search_teams;
     }
 
-    private static function getHistoryLeaveIdForToDay()
+    private static function getHistoryLeaveIdByToDay()
     {
         $model = new Leave;
         //取得該主管審核過的「不准假」 假單
-        $search_not_leave_id['tag_id'] = ['8'];
-        $search_not_leave_id['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_not_leaves_id = $model->searchForHistoryInManager($search_not_leave_id)->pluck('id');
-       
+        $not_leave_tag_id = ['8'];
+        $get_not_leave_id = LeaveResponse::getLeavesIdByTagIdAndUserId($not_leave_tag_id, Auth::user()->id);
+        
         //取得該主管審核過的「已准假」 假單
-        $search_upcoming['tag_id'] = ['9'];
-        $search_upcoming['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_upcoming_leaves_id = $model->searchForHistoryInManager($search_upcoming)->pluck('id');
-
+        $upcoming_tag_id = ['4','9'];
+        $upcoming_id = LeaveResponse::getLeavesIdByTagIdAndUserId($upcoming_tag_id, Auth::user()->id);
+        
+        /* 確認這些假單在主單是通過的狀態 */
+        $main_tag_id = ['9'];
+        $get_upcoming_leaves_id = $model->getLeaveIdByTagIdAndLeaveId($main_tag_id, $upcoming_id);
+        
         //取得小於今天的子單記錄，狀態在「已準假」為該主管審核過的單
         $today = Carbon::now()->format('Y-m-d');
         $get_leaves_id_today = LeaveDay::getLeavesIdByDate($get_upcoming_leaves_id, $today);
-        $result = $get_not_leaves_id->merge($get_leaves_id_today);
+        
+        $result = $get_not_leave_id->merge($get_leaves_id_today);
+        
         return $result;
     }
 
-    private static function getHistoryLeaveIdForSearch($start_time, $end_time)
+    private static function getHistoryLeaveIdByDate($start_time, $end_time)
     {
         $model = new Leave;
         //取得該主管審核過的「已準假、不准假」 假單
-        $search['tag_id'] = ['8', '9'];
-        $search['id'] = LeaveResponse::getLeavesIdByUserId(Auth::user()->id);
-        $get_leaves_id = $model->searchForHistoryInManager($search)->pluck('id');
+        $tag_id = ['4', '8', '9'];
+        $get_leaves_id = LeaveResponse::getLeavesIdByTagIdAndUserId($tag_id, Auth::user()->id);
 
         //因為搜尋的日期沒有分秒，先將日期轉換成正確的搜尋條件，09:00 ~ 18:00 
-        $reange = TimeHelper::changeDateTimeFormat($start_time, $end_time);
-
+        $range = TimeHelper::changeDateTimeFormat($start_time, $end_time);
+        
         // 取得搜尋的區間為該主管不准假、已準的子單記錄 
-        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($reange[0], $reange[1], $get_leaves_id);
+        $result = LeaveDay::getLeavesIdByDateRangeAndLeavesId($range[0], $range[1], $get_leaves_id);
         return $result;
     }
 }

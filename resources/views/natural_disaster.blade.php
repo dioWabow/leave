@@ -90,7 +90,7 @@
                                             @foreach($natural_cancel as $natural_cancel_one)
                                             <tr>
                                                 <td>
-                                                    <img src="{{UrlHelper::getUserAvatarUrl($natural_cancel_one->avatar)}}" class="img-circle" width="50px">
+                                                    <img src="{{UrlHelper::getUserAvatarUrl($natural_cancel_one->avatar)}}" title="{{$natural_cancel_one->nickname}}" alt="{{$natural_cancel_one->nickname}}" class="img-circle" width="50px">
                                                 </td>
                                                 <td>{{$natural_cancel_one->nickname}}</td>
                                                 <td>{{ TimeHelper::changeViewTime($natural_cancel_one->start_time, $natural_cancel_one->end_time, 1) }}</td>

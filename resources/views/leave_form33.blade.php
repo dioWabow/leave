@@ -22,7 +22,7 @@
           @forelse($user_arr as $user)
             @if($user->id!=Auth::user()->id)
     					<li class='clickable-row' data-href="{{ route('leave_assist/create', ['id'=>$user->id]) }}">
-    						<span class="mailbox-attachment-icon has-img"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" alt="{{$user->nickname}}"></span>
+    						<span class="mailbox-attachment-icon has-img"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" title="{{$user->nickname}}" alt="{{$user->nickname}}"></span>
 
     						<div class="mailbox-attachment-info">
     							<a href="#" class="mailbox-attachment-name"><i class="fa fa-user"></i>{{$user->nickname}}</a>

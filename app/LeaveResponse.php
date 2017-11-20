@@ -20,9 +20,12 @@ class LeaveResponse extends BaseModel
         'system_memo',
     ];
 
-    public static function getLeavesIdByUserId($id)
+    public static function getLeavesIdByTagIdAndUserId($tag_id, $user_id)
     {
-        $result = self::where('user_id', $id)->groupBy('leave_id')->pluck('leave_id');
+        $result = self::where('user_id', $user_id)
+            ->whereIn('tag_id', $tag_id)
+            ->groupBy('leave_id')
+            ->pluck('leave_id');
         return $result;
     }
 

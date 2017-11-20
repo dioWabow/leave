@@ -25,7 +25,7 @@
 			<!-- Profile Image -->
 			<div class="box box-primary">
 				<div class="box-body box-profile">
-					<img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($model->fetchUser->avatar)}}" alt="{{$model->fetchUser->nickname}}">
+					<img class="profile-user-img img-responsive img-circle" src="{{UrlHelper::getUserAvatarUrl($model->fetchUser->avatar)}}" title="{{$model->fetchUser->nickname}}" alt="{{$model->fetchUser->nickname}}">
           <h3 class="profile-username text-center">{{$model->fetchUser->nickname}}</h3>
           <h3 class="text-center">
             <span class="label label-default bg-green">

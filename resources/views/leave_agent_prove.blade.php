@@ -46,7 +46,7 @@
 												<td>
 													<input type="checkbox" name="leave[leave_id][]" id="approve_check" class="flat-red check"  value="{{ $value->id }}">
 												</td>
-												<td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" class="img-circle" alt="{{ $value->fetchUser->nickname }}" width="50px"></td>
+												<td><img src="{{ UrlHelper::getUserAvatarUrl($value->fetchUser->avatar) }}?v={{ rand(1,99) }}" title="{{ $value->fetchUser->nickname }}" alt="{{ $value->fetchUser->nickname }}" class="img-circle" width="50px"></td>
 												<td>{{ TimeHelper::changeViewTime($value->start_time, $value->end_time, $value->user_id) }}</td>
 												<td>{{ $value->reason }}</td>
 												<td>{{ $value->hours }}</td>

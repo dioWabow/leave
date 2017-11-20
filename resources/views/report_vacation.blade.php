@@ -30,7 +30,7 @@
 									</form>
 									<thead>
 										<tr>
-											<th width="4%">請假者</th>
+											<th width="5%">請假者</th>
 											<th><a href="javascript:void(0)" onclick="changeSort('start_time');">時間</a></th>
 											<th>原因</th>
 											<th width="8%"><a href="javascript:void(0)" onclick="changeSort('hours');">時數(HR)</a></th>
@@ -39,7 +39,7 @@
 									<tbody>
                     @forelse($user_vacation_list as $list_data)
 										<tr class="clickable-row" data-href="{{ route('report/leave_detail', [ 'id' => $list_data->id ]) }}">
-											<td><img src="{{UrlHelper::getUserAvatarUrl($list_data->fetchUser->avatar)}}" class="img-circle" alt="{{$list_data->fetchUser->nickname}}" width="50px"></td>
+											<td><img src="{{UrlHelper::getUserAvatarUrl($list_data->fetchUser->avatar)}}" class="img-circle" title="{{$list_data->fetchUser->nickname}}" alt="{{$list_data->fetchUser->nickname}}" width="50px"></td>
 											<td> {{ TimeHelper::changeViewTime($list_data->start_time, $list_data->end_time, $list_data->user_id) }}</td>
 											<td>{{$list_data->reason}}</td>
 											<td>{{$list_data->hours}}</td>
