@@ -34,7 +34,7 @@
 				@if( Auth::getUser()->id == $user->id)
 				<h3 class="box-title">放假單</h3>
 				@else
-				<h3 class="box-title"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" class="img-circle" width="60px"> {{$user->nickname}} 放假單</h3>
+				<h3 class="box-title"><img src="{{UrlHelper::getUserAvatarUrl($user->avatar)}}" title="{{$user->nickname}}" alt="{{$user->nickname}}" class="img-circle" width="60px"> {{$user->nickname}} 放假單</h3>
 				@endif
 			</div>
 			<div class="box-body">

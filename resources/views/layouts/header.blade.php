@@ -49,7 +49,7 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{{ UrlHelper::getUserAvatarUrl(Auth::user()->avatar) }}" class="user-image" alt="{{ Auth::user()->nickname }}">
+              <img src="{{ UrlHelper::getUserAvatarUrl(Auth::user()->avatar) }}" class="user-image" title="{{ Auth::user()->nickname }}" alt="{{ Auth::user()->nickname }}">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{ Auth::user()->nickname }}</span>
             </a>
@@ -103,7 +103,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{ UrlHelper::getUserAvatarUrl(Auth::user()->avatar) }}" class="img-circle" alt="{{ Auth::user()->nickname }}">
+          <img src="{{ UrlHelper::getUserAvatarUrl(Auth::user()->avatar) }}" class="img-circle" title="{{ Auth::user()->nickname }}" alt="{{ Auth::user()->nickname }}">
         </div>
         <div class="pull-left info">
           <p>{{ Auth::user()->nickname }}</p>

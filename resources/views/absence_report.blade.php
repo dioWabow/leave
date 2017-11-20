@@ -59,7 +59,7 @@
 										@forelse($dataProvider as $leave)
 										<tr>
 											<td>
-												<img src="{{UrlHelper::getUserAvatarUrl($leave->fetchUser->avatar)}}" class="img-circle" alt="{{$leave->fetchUser->avatar}}" width="50px">
+												<img src="{{UrlHelper::getUserAvatarUrl($leave->fetchUser->avatar)}}" title="{{$leave->fetchUser->nickname}}" alt="{{$leave->fetchUser->nickname}}" class="img-circle" width="50px">
 											</td>
 											<td>{{$leave->fetchUser->nickname}}</td>
 											<td>{{$dataAll[$leave->user_id]}}</td>

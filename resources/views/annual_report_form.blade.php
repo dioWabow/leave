@@ -36,7 +36,7 @@
                   <tbody>
                     @forelse($dataProvider as $data)
                     <tr class="clickable-row" data-href="{{ route('annual_report/leave_detail', [ 'id' => $data->id ]) }}">
-                      <td><img src="{{UrlHelper::getUserAvatarUrl($data->fetchUser->avatar)}}" class="img-circle" alt="{{$data->fetchUser->avatar}}" width="50px"></td>
+                      <td><img src="{{UrlHelper::getUserAvatarUrl($data->fetchUser->avatar)}}" class="img-circle" title="{{$data->fetchUser->nickname}}" alt="{{$data->fetchUser->nickname}}" width="50px"></td>
                       <td>{{$data->fetchType->name}}</td>
                       <td>{{ TimeHelper::changeViewTime($data->start_time, $data->end_time, $data->user_id) }}</td>
                       <td>{{$data->reason}}</td>

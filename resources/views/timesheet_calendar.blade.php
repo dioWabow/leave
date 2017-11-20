@@ -24,14 +24,14 @@
         <ul class="nav nav-tabs">
           <li class="{{$chosed_user_id==Auth::user()->id ? 'active' : ''}} fonts">
               <a href="javascript:void(0);" onclick="test('{{Auth::user()->id}}')">
-              <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" width="50px"><br><span class="fonts">{{Auth::user()->nickname}}</span></a>
+              <img src="{{UrlHelper::getUserAvatarUrl(Auth::user()->avatar)}}" title="{{Auth::user()->nickname}}" alt="{{Auth::user()->nickname}}" width="50px"><br><span class="fonts">{{Auth::user()->nickname}}</span></a>
           </li>
           @foreach($timesheetpermissions as $timesheetpermission)
           @if($timesheetpermission->fetchUser->status)
             <li class="fonts {{$chosed_user_id==$timesheetpermission->fetchUser->id ? 'active' : ''}}">
 
                 <a href="javascript:void(0);" onclick="test('{{$timesheetpermission->fetchUser->id}}')">
-                  <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" width="50px" alt="{{$timesheetpermission->fetchUser->nickname}}"><br>
+                  <img src="{{UrlHelper::getUserAvatarUrl($timesheetpermission->fetchUser->avatar)}}" title="{{$timesheetpermission->fetchUser->nickname}}" alt="{{$timesheetpermission->fetchUser->nickname}}" width="50px"><br>
                   <span class="fonts">
                       {{$timesheetpermission->fetchUser->nickname}}
                   </span>
