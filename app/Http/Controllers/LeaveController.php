@@ -85,9 +85,10 @@ class LeaveController extends Controller
 
                 foreach ($users as $user) {
 
-                    if (!empty(User::find($user))&&User::find($user)->status != 0) {
+                    $temp_user = User::where('id',$user)->remember(0.2)->get()->first();
+                    if (!empty($temp_user) && $temp_user->status != 0) {
 
-                        $user_arr[] = User::find($user);
+                        $user_arr[] = $temp_user;
 
                     }
 
@@ -137,7 +138,7 @@ class LeaveController extends Controller
         }
 
         $user_id = (!empty($user_id)) ? $user_id : Auth::user()->id;
-        $user = User::find($user_id);
+        $user = User::where('id',$user_id)->remember(0.2)->get()->first();
 
         $data = $request->old('leave');
 
@@ -209,12 +210,12 @@ class LeaveController extends Controller
     public function postInsert(LeaveRequest $request)
     {
         $leave = $request->input('leave');
-        $user = User::find($leave['user_id']);
-
+        $user = User::where('id',$leave['user_id'])->remember(0.2)->get()->first();
+        
         $start = ' 09:00';
         $end = ' 18:00';
-
-        if (empty(Type::find($leave['type_id'])->available)) {
+        
+        if (empty(Type::where('id',$leave['type_id'])->remember(0.2)->get()->first()->available)) {
 
             return Redirect::back()->withInput()->withErrors(['msg' => '該假別已關閉']);
 
@@ -280,8 +281,8 @@ class LeaveController extends Controller
             if ($model->save()) {
 
                 $leave_day = [];
-
-                $exception = Type::find($model->type_id)->exception;
+                
+                $exception = Type::where('id',$model->type_id)->remember(0.2)->get()->first()->exception;
 
                 //如果請假不是同一天就拆單成兩天(除了有薪病假與病假外)
                 if (TimeHelper::changeDateFormat($model->start_time,'Y-m-d') != TimeHelper::changeDateFormat($model->end_time,'Y-m-d') && !in_array($exception, ['paid_sick','sick'])) {
@@ -1020,7 +1021,7 @@ class LeaveController extends Controller
 
         foreach ($leave_day_arr as $id) {
 
-            $leave_day = LeaveDay::find($id);
+            $leave_day = LeaveDay::where('id',$id)->remember(0.2)->get()->first();
             $eliminate_hours += $leave_day->hours;
 
             if ($system_memo == "銷假時間：") {
@@ -1073,7 +1074,7 @@ class LeaveController extends Controller
 
     private function loadModel($id) 
     {
-        $model = Leave::find($id);
+        $model = Leave::where('id',$id)->remember(0.2)->get()->first();
         if ($model===false) {
             throw new CHttpException(404,'資料不存在');
         }

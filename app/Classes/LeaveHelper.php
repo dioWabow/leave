@@ -404,7 +404,7 @@ class LeaveHelper
             
     public function getStartDateAndEndDate($type_id,$date)
     {
-        $reset_time = Type::find($type_id)->reset_time;
+        $reset_time = Type::where('id',$type_id)->remember(0.2)->get()->first()->reset_time;
 
         $dt = Carbon::parse($date);
         switch ($reset_time) {
@@ -478,8 +478,8 @@ class LeaveHelper
     }
 
     public function getRemainHours($type_id,$hours)
-    {
-        $remain_hours = Type::find($type_id)->hours;
+    {   
+        $remain_hours = Type::where('id',$type_id)->remember(0.2)->get()->first()->hours;
         return $remain_hours - $hours;
     }
 
@@ -541,7 +541,7 @@ class LeaveHelper
     {
         if (!empty($user_id)) {
 
-            $user = User::find($user_id);
+            $user = User::where('id',$user_id)->remember(0.2)->get()->first();
             $this->user_id = $user->id;
             $this->birthday = $user->birthday;
             $this->enter_date = $user->enter_date;
@@ -565,7 +565,7 @@ class LeaveHelper
         $start_time = $leave['start_time'];
         $end_time = $leave['end_time'];
         $date_list = (!empty($leave['date_list'])) ? $leave['date_list'] : [];
-        $leave_type = Type::find($leave['type_id']);
+        $leave_type = Type::where('id',$leave['type_id'])->remember(0.2)->get()->first();
         $leave_name = $leave_type->name;
 
         $response = '';
@@ -1368,27 +1368,28 @@ class LeaveHelper
                 $team_manger_id = UserTeam::getUserIdByTeamIdAndRole($leave_user_team_id,'manager')->first()->user_id;
 
                 //請假人的parent_team id
-                $team_parent_id = Team::find($leave_user_team_id)->parent_id;
+                $team_parent_id = Team::where('id',$leave_user_team_id)->remember(0.2)->get()->first()->parent_id;
 
                 if (empty($team_parent_id)) {
 
-                    $leave_prove_process['manager'] = User::find($team_manger_id);
+                    $leave_prove_process['manager'] = User::where('id',$team_manger_id)->remember(0.2)->get()->first();
 
                 } else {
 
-                    $leave_prove_process['minimanager'] = User::find($team_manger_id);
+                    $leave_prove_process['minimanager'] = User::where('id',$team_manger_id)->remember(0.2)->get()->first();
 
-                    $leave_prove_process['manager'] = User::find(UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id);
+                    $leave_prove_process['manager'] = User::where('id',UserTeam::getUserIdByTeamIdAndRole($team_parent_id,'manager')->first()->user_id)->remember(0.2)->get()->first();
 
                 }
 
             }
 
         }
+	       
+        $admin = User::getUserByRole('admin');
+        if (Leave::where('id',$id)->remember(0.2)->get()->first()->hours >= ConfigHelper::getConfigValueByKey('boss_days')*8 && count($admin) > 0 ) {
 	
-        if (Leave::find($id)->hours >= ConfigHelper::getConfigValueByKey('boss_days')*8 && count(User::getUserByRole('admin')) > 0 ) {
-	
-            $leave_prove_process['admin'] = User::getUserByRole('admin')->first();
+            $leave_prove_process['admin'] = $admin->first();
 
         }
 
@@ -1404,7 +1405,7 @@ class LeaveHelper
 
         while(true){
 
-            $leave = Leave::find($leave_id);
+            $leave = Leave::where('id',$leave_id)->remember(0.2)->get()->first();
 
             $leave_response = new LeaveResponse;
 

@@ -25,7 +25,7 @@ class TimesheetPermission extends BaseModel
 
     public static function getAllowUserIdByUserId($id)
     {
-        $result = self::where('user_id', $id)->get();
+        $result = self::where('user_id', $id)->remember(0.2)->get();
         return $result;
     }
 
