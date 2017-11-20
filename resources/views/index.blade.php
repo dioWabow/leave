@@ -60,7 +60,17 @@
 
               var events = [];
 
-              $.each(data, function(index, value) {
+              $.each(data.result, function(index, value) {
+                events.push({
+                    title: value['title'],
+                    start: value['start'], // will be parsed
+                    end: value['end'],
+                    backgroundColor: value['backgroundColor'],
+                    borderColor: value['borderColor']
+                });
+              });
+
+              $.each(data.holidies, function(index, value) {
                 events.push({
                     title: value['title'],
                     start: value['start'], // will be parsed

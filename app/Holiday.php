@@ -66,6 +66,12 @@ class Holiday extends BaseModel
         return $result;
     }
 
+    public static function getAllHoliday()
+    {
+        $result = self::get();
+        return $result;
+    }
+
     public static function isDayExist($date)
     {
         $query = self::OrderedBy();
