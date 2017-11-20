@@ -177,7 +177,7 @@ class DailyController extends Controller
        
         if (!TimeHelper::checkEditSheetDate($input['working_day'])){
             
-            return Redirect::back()->withInput()->withErrors(['msg' => '不可以新增小於七天前，大於一天後']);
+            return Redirect::route('sheet/daily/index')->withErrors(['msg' => '不可以新增小於七天前，大於一天後']);
 
         }
         
@@ -238,10 +238,9 @@ class DailyController extends Controller
 
         } else {
 
-            return Redirect::back()->withInput()->withErrors(['msg' => '不可以複製小於七天前，大於一天後']);
+            return Redirect::route('sheet/daily/index')->withErrors(['msg' => '不可以複製小於七天前，大於一天後']);
 
         }
-        
     }
 
     /**
@@ -255,6 +254,11 @@ class DailyController extends Controller
         $input = $request->input('daily');
         $input = self::checkDataValue($input);
         
+        if (!TimeHelper::checkEditSheetDate($input['working_day'])){
+            
+            return Redirect::route('sheet/daily/index')->withErrors(['msg' => '不可以修改小於七天前，大於一天後']);
+
+        }
         //更新資料
         $model = new Timesheet;
         $model = $this->loadModel($input['id']);

@@ -244,7 +244,7 @@ class TimeHelper
         $past = Carbon::parse('-7 day')->format('Y-m-d');
         $future = Carbon::parse('+1 day')->format('Y-m-d');
         
-        $confirm_date = ($working_day < $future && $working_day >= $past)? true : false ;
+        $confirm_date = ($working_day <= $future && $working_day >= $past)? true : false ;
         
         return $confirm_date;
     }
