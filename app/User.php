@@ -164,7 +164,7 @@ class User extends BaseModel
 
     public static function getUserByRole($role)
     {
-        $result = self::where('role',$role)->get();
+        $result = self::where('role',$role)->remember(0.2)->get();
         return $result;
     }
 

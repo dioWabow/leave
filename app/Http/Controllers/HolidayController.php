@@ -290,7 +290,7 @@ class HolidayController extends Controller
      */
     private static function loadModel($id)
     {
-        $model = Holiday::find($id);
+        $model = Holiday::where('id',$id)->remember(0.2)->get()->first();
 
         if ($model===false) {
 

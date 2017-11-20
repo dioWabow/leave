@@ -298,7 +298,7 @@ class SheetProjectController extends Controller
      */
     private static function loadModel($id)
     {
-        $model = Project::find($id);
+        $model = Project::where('id',$id)->remember(0.2)->get()->first();
 
         if ($model===false) {
 

@@ -43,9 +43,11 @@ class Timesheet extends BaseModel
     public function search($where = [])
     {
         $query = $this->OrderedBy();
+        $columns = array_map('strtolower', Schema::getColumnListing('timesheets'));
+
         foreach ($where as $key => $value) {
 
-            if (Schema::hasColumn('timesheets', $key) && isset($value)) {
+            if (in_array($key, $columns) && isset($value)) {
 
                 $query->where($key, $value);
 
@@ -82,9 +84,11 @@ class Timesheet extends BaseModel
     public function searchForTimesheetSearch($where = [],$allow_users_id)
     {
         $query = self::OrderedBy();
+        $columns = array_map('strtolower', Schema::getColumnListing('timesheets'));
+
         foreach ($where as $key => $value) {
             
-            if (Schema::hasColumn('timesheets', $key) && !empty($value)) {
+            if (in_array($key, $columns) && !empty($value)) {
 
                 $query->where($key, $value);
 

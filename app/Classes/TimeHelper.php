@@ -212,7 +212,7 @@ class TimeHelper
     //時間是否需要+-30分鐘
     public function changeTimeByArriveTime($date,$user_id,$operator)
     {
-        $user = User::find($user_id);
+        $user = User::where('id',$user_id)->remember(0.2)->get()->first();
         $date_new = ($user->arrive_time == '0900') ? $date : TimeHelper::changeDateValue($date,[$operator . ',30,minute'],'Y-m-d H:i:s');
         return $date_new;
     }

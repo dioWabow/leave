@@ -186,6 +186,7 @@ class UserTeam extends BaseModel
     {
         $result = self::where('team_id', $team_id)
             ->where('role' , $role)
+            ->remember(0.2)
             ->get();
         return $result;
     }
@@ -194,6 +195,7 @@ class UserTeam extends BaseModel
     {
         $result = self::where('user_id', $user_id)
             ->where('role' , $role)
+            ->remember(0.2)
             ->get();
         return $result;
     }

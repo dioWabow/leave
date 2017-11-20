@@ -198,7 +198,7 @@ class LeaveTypeController extends Controller
     
     private function loadModel($id)
     {
-        $model = Type::find($id);
+        $model = Type::where('id',$id)->remember(0.2)->get()->first();
 
         if ($model===false) {
 

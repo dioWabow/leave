@@ -93,7 +93,7 @@ class LeavedUserAnnualHoursController extends Controller
 
     private function loadUser($id) 
     {
-        $model = User::find($id);
+        $model = User::where('id',$id)->remember(0.2)->get()->first();
         if ($model===false) {
             throw new CHttpException(404,'資料不存在');
         }

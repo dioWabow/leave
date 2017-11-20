@@ -201,8 +201,8 @@ class TeamController extends Controller
      */
     private static function loadModel($id)
     {
-        $model = Team::find($id);
-
+        $model = Team::where('id',$id)->remember(0.2)->get()->first();
+        
         if ($model===false) {
 
             throw new CHttpException(404,'資料不存在');

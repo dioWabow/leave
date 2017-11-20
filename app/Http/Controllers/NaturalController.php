@@ -414,7 +414,7 @@ class NaturalController extends Controller
         foreach ($natural_leave_list as $key => $natural_leave) {
 
             $natural_leave_after['tag_id'] = 7;
-            $leave_model = Leave::find( $natural_leave->id );
+            $leave_model = Leave::where('id',$natural_leave->id)->remember(0.2)->get()->first();
             $leave_model->fill( $natural_leave_after );
             $leave_model->save();
 
@@ -432,8 +432,8 @@ class NaturalController extends Controller
     {
         if ($type == 'minus') {
             $leave_day_after['hours'] = ($leave_day_before->leave_hours - $leave_day_before->natural_hours);
-
-            $leave_day_model = LeaveDay::find($leave_day_before->id);
+            
+            $leave_day_model = LeaveDay::where('id',$leave_day_before->id)->remember(0.2)->get()->first();
             $leave_day_model->fill($leave_day_after);
             $leave_day_model->save();
 
@@ -441,14 +441,14 @@ class NaturalController extends Controller
 
             $leave_day_after['hours'] = ( $leave_before->hours - $leave_day_before->natural_hours );
 
-            $leave_model = Leave::find($leave_before->id);
+            $leave_model = Leave::where('id',$leave_before->id)->remember(0.2)->get()->first();
             $leave_model->fill($leave_day_after);
             $leave_model->save();
 
         }elseif ($type == 'add') {
             $leave_day_after['hours'] = ($leave_day_before->leave_hours + $leave_day_before->natural_hours);
-
-            $leave_day_model = LeaveDay::find($leave_day_before->id);
+            
+            $leave_day_model = LeaveDay::where('id',$leave_day_before->id)->remember(0.2)->get()->first();
             $leave_day_model->fill($leave_day_after);
             $leave_day_model->save();
 
@@ -456,7 +456,7 @@ class NaturalController extends Controller
 
             $leave_day_after['hours'] = ( $leave_before->hours + $leave_day_before->natural_hours );
 
-            $leave_model = Leave::find($leave_before->id);
+            $leave_model = Leave::where('id',$leave_before->id)->remember(0.2)->get()->first();
             $leave_model->fill($leave_day_after);
             $leave_model->save();
 

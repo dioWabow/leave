@@ -48,7 +48,11 @@
                 <li>
                   <a @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="disabled" @else class="on" @endif>
                     <span class="step_no">
-                      <img src="{{UrlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}" @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) class="pic_gray"  @endif>
+                    @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) 
+                      <img src="{{UrlHelper::getUserAvatarUrl($leave_prove->avatar)}}" title="{{$leave_prove->nickname}}" alt="{{$leave_prove->nickname}}"class="pic_gray">
+                    @else 
+                      <img src="{{UrlHelper::getUserAvatarUrl(App\LeaveResponse::getResponseByLeaveIdAndTagId($model->id,$leave_prove_tag_name[$key]['id'])->first()->fetchUser->avatar)}}" title="{{App\LeaveResponse::getResponseByLeaveIdAndTagId($model->id,$leave_prove_tag_name[$key]['id'])->first()->fetchUser->nickname}}" alt="{{App\LeaveResponse::getResponseByLeaveIdAndTagId($model->id,$leave_prove_tag_name[$key]['id'])->first()->fetchUser->nickname}}">
+                    @endif
                     </span>
                     <span class="step_descr @if(!in_array($leave_prove_tag_name[$key]['id'],$leave_response->pluck('tag_id')->toArray())) disabled @endif">
                         Step {{$index}}<br />
