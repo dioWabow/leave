@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\UserTeam;
 use App\Leave;
+use App\Holiday;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -36,6 +37,7 @@ class SiteController extends Controller
         $end_time = date('Y-m-d', strtotime("$end_time +2 month"));
 
         $result = [];
+        $holidies = [];
 
         if (isset($getRole) && !empty($getRole)) {
 
@@ -92,8 +94,33 @@ class SiteController extends Controller
             }
         }
 
+        $Holiday = new Holiday;
+
+        // 取出所有國定 假日 & 補班 資料整理後 丟到前台
+        $holiday_list = $Holiday->getAllHoliday();
+
+        foreach ($holiday_list as $holiday_key => $holiday_value) {
+            $holidies[$holiday_key]['title'] = $holiday_value['name'];
+            $holidies[$holiday_key]['start'] = $holiday_value['date'];
+            $holidies[$holiday_key]['end'] = $holiday_value['date'];
+
+            if($holiday_value['type'] == 'holiday') {
+
+                $holidies[$holiday_key]['backgroundColor'] = "#FF2626";
+                $holidies[$holiday_key]['borderColor'] = "#FF2626";
+
+            } else {
+
+                $holidies[$holiday_key]['backgroundColor'] = "#1C1CFF";
+                $holidies[$holiday_key]['borderColor'] = "#1C1CFF";
+
+            }
+        }
+
         return json_encode(
-            $result
+            array(
+                'result' => $result, 'holidies' => $holidies,
+            )
         );
     }
 
