@@ -40,7 +40,7 @@ class Config extends BaseModel
      */
     public static function getAllConfigValueArray() 
     {
-        $config = self::remember(0.2)->get();
+        $config = self::get();
         $result = [];
         foreach ($config as $key => $value) {
             $result[ $value->config_key ] = $value->config_value;
